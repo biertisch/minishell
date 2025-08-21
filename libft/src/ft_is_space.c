@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum.c                                       :+:      :+:    :+:   */
+/*   ft_is_space.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.c      +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 12:19:00 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/04/16 12:19:20 by beatde-a         ###   ########.fr       */
+/*   Created: 2025/08/21 16:20:58 by beatde-a          #+#    #+#             */
+/*   Updated: 2025/08/21 16:20:58 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-int	ft_isalnum(int c)
+int	ft_is_space(int c)
 {
-	return (ft_isalpha(c) || ft_isdigit(c));
+	return ((c >= 9 && c <= 13) || c == ' ');
 }

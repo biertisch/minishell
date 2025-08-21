@@ -12,48 +12,54 @@
 
 #include "../include/minishell.h"
 
-static void	split_env_entry(char *entry, char **key, char **value)
+char	*get_env_value(t_env *head, char *key)
 {
-	char	*equal;
-
-	equal = ft_strchr(entry, '=');
-	if (equal)
+	while (head)
 	{
-		*key = ft_substr(entry, 0, equal - entry);
-		*value = ft_strdup(equal + 1);
+		if (ft_strcmp(head->key, key) == 0)
+			return (head->value);
+		head = head->next;
 	}
-	else
+	return (NULL);
+}
+
+void	set_env_value(t_env *head, char *key, char *new_value)
+{
+	while (head)
 	{
-		*key = ft_strdup(entry);
-		*value = NULL;
+		if (ft_strcmp(head->key, key) == 0)
+		{
+			free(head->value);
+			head->value = ft_strdup(new_value);
+			return ;
+		}
+		head = head->next;
 	}
 }
 
-void	envp_to_list(t_data *data, char **envp)
+void	unset_env(t_env **head, char *key)
 {
-	int		i;
-	char	*key;
-	char	*value;
-	t_env	*new_node;
+	t_env	*trav;
+	t_env	*tmp;
 
-	i = 0;
-	while (envp[i])
+	if (!head || !*head)
+		return ;
+	while (*head && ft_strcmp((*head)->key, key) == 0)
 	{
-		split_env_entry(envp[i], &key, &value);
-		if (!key || (!value && ft_strchr(envp[i], '=')))
-			//error		
-		new_node = create_env_node(key, value);
-		if (!new_node)
-			//error
-		add_env_node(&data->env_list, new_node);
-		i++;
+		tmp = *head;
+		*head = (*head)->next;
+		free_env_node(&tmp);
+	}
+	trav = *head;
+	while (trav && trav->next)
+	{
+		if (ft_strcmp(trav->next->key, key) == 0)
+		{
+			tmp = trav->next;
+			trav->next = trav->next->next;
+			free_env_node(&tmp);
+		}
+		else
+			trav = trav->next;
 	}
 }
-
-//envp_to_array
-
-//get_env_value
-
-//set_env_value
-
-//unset_env

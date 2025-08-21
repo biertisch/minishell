@@ -13,6 +13,15 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+/*EXAMPLE OF MOCK_AST FOR EXECUTION 
+t_ast *cmd1 = create_ast_node(NODE_CMD, ft_split("ls -l", ' '), NULL);
+t_ast *cmd2 = create_ast_node(NODE_CMD, ft_split("grep main", ' '), NULL);
+t_ast *pipe = create_ast_node(NODE_PIPE, NULL, NULL);
+
+pipe->left = cmd1;
+pipe->right = cmd2; */
+
+//HEADERS
 # include "../libft/include/libft.h"
 # include <dirent.h>
 # include <fcntl.h>
@@ -30,18 +39,19 @@
 # include <termios.h>
 # include <unistd.h>
 
+//ENUMS
 typedef enum e_token_type
 {
-	WORD,
-	PIPE,
-	AND_IF,
-	OR_IF,
-	LPAREN,
-	RPAREN,
-	REDIR_IN,
-	REDIR_OUT,
-	APPEND,
-	HEREDOC
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_AND_IF,
+	TOKEN_OR_IF,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_APPEND,
+	TOKEN_HEREDOC,
+	TOKEN_LPAREN,
+	TOKEN_RPAREN
 }	t_token_type;
 
 typedef enum e_node_type
@@ -53,6 +63,7 @@ typedef enum e_node_type
 	NODE_SUBSHELL
 }	t_node_type;
 
+//STRUCTS
 typedef struct s_env
 {
 	char			*key;
@@ -67,14 +78,6 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_ast
-{
-	t_node_type		type;
-	void			*content;
-	struct s_ast	*left;
-	struct s_ast	*right;
-}	t_ast;
-
 typedef struct s_redir
 {
 	t_token_type	type;
@@ -88,25 +91,62 @@ typedef struct s_cmd
 	t_redir	*redirs;
 }	t_cmd;
 
-// maybe add struct with int *fd_open and int fd_open_counter
+typedef struct s_ast
+{
+	t_node_type		type;
+	t_cmd			*cmd;
+	struct s_ast	*left;
+	struct s_ast	*right;
+}	t_ast;
+
+//maybe add struct with int *fd_opened and int fd_open_counter
 
 typedef struct s_data
 {
-	char	*prompt;
+	char	*input;
 	char	**env;
 	t_env	*env_list;
-	t_token	*token_list;
-	t_ast	*ast_list;
+	t_token	*lexer_list;
+	t_ast	*parser_list;
 }	t_data;
+
+//PROTOTYPES
+//cleanup.c
+void	free_str_array(char ***arr);
+void	free_command_data(t_data *data);
+
+//env_convert.c
+void	envp_to_list(t_data *data, char **envp);
+void	env_list_to_array(t_data *data);
 
 //env_list.c
 t_env	*create_env_node(char *key, char *value);
 void	add_env_node(t_env **head, t_env *new_node);
-t_env	*get_last_node(t_env *head);
+t_env	*get_last_env_node(t_env *head);
 void	free_env_node(t_env **node);
 void	free_env_list(t_env **head);
 
 //env.c
-void	envp_to_list(t_data *data, char **envp);
+char	*get_env_value(t_env *head, char *key);
+void	set_env_value(t_env *head, char *key, char *new_value);
+void	unset_env(t_env **head, char *key);
+
+//expander.c
+
+//lexer_list.c
+t_token	*create_lexer_node(t_token_type type, char *value);
+void	add_lexer_node(t_token **head, t_token *new_node);
+t_token	*get_last_lexer_node(t_token *head);
+void	free_lexer_node(t_token **node);
+void	free_lexer_list(t_token **head);
+
+//lexer.c
+void	lexer(t_data *data);
+
+//parser_list.c
+t_ast	*create_parser_node(t_node_type type, char **argv, t_redir *redirs);
+void	free_parser_node(t_ast **node);
+
+//parser.c
 
 #endif

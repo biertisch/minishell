@@ -11,11 +11,15 @@ LIB = $(LIB_DIR)libft.a
 
 NAME = minishell
 
-SRC = $(SRC_DIR)env_list.c\
+SRC = 	$(SRC_DIR)cleanup.c\
+		$(SRC_DIR)env_convert.c\
+		$(SRC_DIR)env_list.c\
 		$(SRC_DIR)env.c\
 		$(SRC_DIR)expander.c\
+		$(SRC_DIR)lexer_list.c\
 		$(SRC_DIR)lexer.c\
 		$(SRC_DIR)main.c\
+		$(SRC_DIR)parser_list.c\
 		$(SRC_DIR)parser.c\
 
 OBJ = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))

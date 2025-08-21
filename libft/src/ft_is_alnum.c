@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isprint.c                                       :+:      :+:    :+:   */
+/*   ft_is_alnum.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42lisboa.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 12:21:00 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/04/16 12:21:03 by beatde-a         ###   ########.fr       */
+/*   Created: 2025/04/16 12:19:00 by beatde-a          #+#    #+#             */
+/*   Updated: 2025/04/16 12:19:20 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-int	ft_isprint(int c)
+int	ft_isalnum(int c)
 {
-	return (c >= 32 && c <= 126);
+	return (ft_is_alpha(c) || ft_is_digit(c));
 }
