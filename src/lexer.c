@@ -39,7 +39,7 @@ static char	*find_token_value(char *input) //add t_data *data to params
 	i = 0;
 	while (input[i])
 	{
-		if (!quote && (ft_is_space(input[i]) || is_operator(input[i])))
+		if (!quote && (ft_isspace(input[i]) || is_operator(input[i])))
 			break ;
 		if (!quote && (input[i] == '"' || input[i] == '\''))
 			quote = input[i];
@@ -89,7 +89,7 @@ void	lexer(t_data *data)
 	i = 0;
 	while (data->input[i])
 	{
-		while (ft_is_space(data->input[i]))
+		while (ft_isspace(data->input[i]))
 			i++;
 		if (!data->input[i])
 			break ;
