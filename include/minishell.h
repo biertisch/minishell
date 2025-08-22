@@ -22,7 +22,8 @@ pipe->left = cmd1;
 pipe->right = cmd2; */
 
 //HEADERS
-# include "../libft/include/libft.h"
+# include "../include/libft.h"
+# include "../include/printf.h"
 # include <dirent.h>
 # include <fcntl.h>
 # include <readline/readline.h>

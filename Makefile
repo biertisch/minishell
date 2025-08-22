@@ -1,51 +1,75 @@
-SRC_DIR = src/
-OBJ_DIR = obj/
-LIB_DIR = libft/
+NAME        = minishell
 
-CC = cc
-CFLAGS = -Wall -Werror -Wextra -g -Iinclude -I$(LIB_DIR)include
-LFLAGS = -lreadline
-RM = rm -rf
+SRC_FILES   = cleanup env env_convert env_list expander lexer lexer_list main parser parser_list
+SRC_DIR     = src
+OBJ_DIR     = obj
+INC_DIR     = include
 
-LIB = $(LIB_DIR)libft.a
+PRINTF_URL  = https://github.com/pdrlrnc/ft_printf.git
+PRINTF_DIR  = ft_printf
+PRINTF_LIB  = $(PRINTF_DIR)/libftprintf.a
 
-NAME = minishell
+CC          = cc -g -O0
+CFLAGS      = -Wall -Wextra -Werror -I$(INC_DIR)
+RM          = rm -rf
 
-SRC = 	$(SRC_DIR)cleanup.c\
-		$(SRC_DIR)env_convert.c\
-		$(SRC_DIR)env_list.c\
-		$(SRC_DIR)env.c\
-		$(SRC_DIR)expander.c\
-		$(SRC_DIR)lexer_list.c\
-		$(SRC_DIR)lexer.c\
-		$(SRC_DIR)main.c\
-		$(SRC_DIR)parser_list.c\
-		$(SRC_DIR)parser.c\
+RED=\033[0;31m
+ORANGE      := \033[38;5;208m
+YELLOW      := \033[38;5;226m
+GREEN       := \033[38;5;082m
+BLUE        := \033[38;5;027m
+INDIGO      := \033[38;5;057m
+VIOLET      := \033[38;5;129m
+DEF_COLOUR=\033[0m
 
-OBJ = $(patsubst $(SRC_DIR)%.c, $(OBJ_DIR)%.o, $(SRC))
+SRC         = $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_FILES)))
+OBJ         = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
+HDRS        = $(INC_DIR)/minishell.h $(INC_DIR)/printf.h $(INC_DIR)/libft.h
 
-all: $(NAME)
+.PHONY: all clean fclean re headers
 
-$(NAME): $(LIB) obj $(OBJ) 
-	$(CC) $(OBJ) -o $@ $(LIB) $(LFLAGS)
+all: $(PRINTF_LIB) headers $(NAME)
+	@echo "	\n\
+		$(RED) ___ ___  ____  ____   ____ _____ __ __    ___  _      _     $(DEF_COLOUR)\n\
+		$(ORANGE)|   |   ||    ||    \ |    / ___/|  |  |  /  _]| |    | |    $(DEF_COLOUR)\n\
+		$(YELLOW)| _   _ | |  | |  _  | |  (   \_ |  |  | /  [_ | |    | |    $(DEF_COLOUR)\n\
+		$(GREEN)|  \_/  | |  | |  |  | |  |\__  ||  _  ||    _]| |___ | |___ $(DEF_COLOUR)\n\
+		$(BLUE)|   |   | |  | |  |  | |  |/  \ ||  |  ||   [_ |     ||     |$(DEF_COLOUR)\n\
+		$(INDIGO)|   |   | |  | |  |  | |  |\    ||  |  ||     ||     ||     |$(DEF_COLOUR)\n\
+		$(VIOLET)|___|___||____||__|__||____|\___||__|__||_____||_____||_____|$(DEF_COLOUR)\n"
 
-$(LIB):
-	$(MAKE) -C $(LIB_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "tags\n.gitignore\n*.txt\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj" > .gitignore
 
-obj:
-	mkdir -p $(OBJ_DIR)
+$(OBJ_DIR):
+	@mkdir -p $@
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c 
-	$(CC) $(CFLAGS) -c $< -o $@
+$(NAME): $(OBJ) $(PRINTF_LIB)
+	@$(CC) $(CFLAGS) $(OBJ) -L$(PRINTF_DIR) -lftprintf -lreadline -o $(NAME)
+
+$(PRINTF_DIR):
+	@git clone --depth 1 $(PRINTF_URL) $(PRINTF_DIR)
+
+$(PRINTF_LIB): | $(PRINTF_DIR)
+	@$(MAKE) --no-print-directory -C $(PRINTF_DIR)
+
+headers: $(INC_DIR)/printf.h $(INC_DIR)/libft.h
+
+$(INC_DIR)/printf.h: $(PRINTF_LIB)
+	@mkdir -p $(INC_DIR)
+	@cp $(PRINTF_DIR)/include/printf.h $(INC_DIR)/printf.h
+
+$(INC_DIR)/libft.h: $(PRINTF_LIB)
+	@mkdir -p $(INC_DIR)
+	@cp $(PRINTF_DIR)/include/libft.h $(INC_DIR)/libft.h
 
 clean:
-	$(RM) $(OBJ_DIR)
-	$(MAKE) -C $(LIB_DIR) clean
+	@$(RM) $(OBJ_DIR)
 
 fclean: clean
-	$(RM) $(NAME)
-	$(MAKE) -C $(LIB_DIR) fclean
+	@$(RM) $(NAME)
+	@$(RM) $(INC_DIR)/printf.h $(INC_DIR)/libft.h 
+	@$(RM) -r $(PRINTF_DIR)
 
 re: fclean all
-
-.PHONY: all clean fclean re
