@@ -61,9 +61,9 @@
 		else if (head->type == TOKEN_APPEND)
 			printf("Type: TOKEN_APPEND\n");
 		else if (head->type == TOKEN_HEREDOC)
-			printf("Type: TOKEN_LPAREN\n");
-		else if (head->type == TOKEN_LPAREN)
 			printf("Type: TOKEN_HEREDOC\n");
+		else if (head->type == TOKEN_LPAREN)
+			printf("Type: TOKEN_LPAREN\n");
 		else if (head->type == TOKEN_RPAREN)
 			printf("Type: TOKEN_RPAREN\n");
 		if (head->value)

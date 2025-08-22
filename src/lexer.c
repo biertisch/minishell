@@ -12,15 +12,10 @@
 
 #include "../include/minishell.h"
 
-static int	update_index(t_token_type type, char *value)
+//move is_quote and is_operator to another file (eg utils.c)
+static int	is_quote(char c)
 {
-	if (type == TOKEN_AND_IF || type == TOKEN_OR_IF
-		|| type == TOKEN_HEREDOC || type == TOKEN_APPEND)
-		return (2);
-	else if (type == TOKEN_WORD)
-		return (ft_strlen(value));
-	else
-		return (1);
+	return (c == '"' || c == '\'');
 }
 
 static int	is_operator(char c)
@@ -29,9 +24,17 @@ static int	is_operator(char c)
 		|| c == '(' || c == ')');
 }
 
-static char	*find_token_value(char *input) //add t_data *data to params
+static void	update_quote_state(char c, char *quote)
 {
-	char	*res;
+	if (!*quote && is_quote(c))
+		*quote = c;
+	else if (*quote && c == *quote)
+		*quote = 0;
+}
+
+//add data to params to handle errors
+static int	get_token_value(char *input, char **value)
+{
 	char	quote;
 	int		i;
 
@@ -39,44 +42,60 @@ static char	*find_token_value(char *input) //add t_data *data to params
 	i = 0;
 	while (input[i])
 	{
+		//if (!quote && (input[i] == '\\' || input[i] == ';'))
+			//syntax error: unsupported character //CHECK WITH PEDRO -- perhaps add {}[]!:#%
+		if (is_quote(input[i]) && is_quote(input[i + 1]))
+		{
+			*value = NULL;
+			return (2);
+		}
 		if (!quote && (ft_isspace(input[i]) || is_operator(input[i])))
 			break ;
-		if (!quote && (input[i] == '"' || input[i] == '\''))
-			quote = input[i];
-		else if (quote && input[i] == quote)
-			quote = 0;
+		update_quote_state(input[i], &quote);
 		i++;
 	}
     //if (quote)
-		//error
-	res = ft_substr(input, 0, i);
-	//if (!res)
-		//error
-	return (res);
+		//syntax error: unclosed quote
+	*value = ft_substr(input, 0, i);
+	//if (!*value)
+		//system error: memory allocation failed
+	return (ft_strlen(*value));
 }
 
-static t_token_type	find_token_type(char *input)
+static int	update_index(t_token_type type)
+{
+	if (type == TOKEN_AND_IF || type == TOKEN_OR_IF
+		|| type == TOKEN_HEREDOC || type == TOKEN_APPEND)
+		return (2);
+	else if (type == TOKEN_WORD)
+		return (0);
+	else
+		return (1);
+}
+
+static int	get_token_type(char *input, t_token_type *type)
 {
 	if (ft_strncmp(input, "&&", 2) == 0)
-		return (TOKEN_AND_IF);
+		*type = TOKEN_AND_IF;
 	else if (ft_strncmp(input, "||", 2) == 0)
-		return (TOKEN_OR_IF);
+		*type = TOKEN_OR_IF;
 	else if (ft_strncmp(input, "<<", 2) == 0)
-		return (TOKEN_HEREDOC);
+		*type = TOKEN_HEREDOC;
 	else if (ft_strncmp(input, ">>", 2) == 0)
-		return (TOKEN_APPEND);
+		*type = TOKEN_APPEND;
 	else if (*input == '|')
-		return (TOKEN_PIPE);
+		*type = TOKEN_PIPE;
 	else if (*input == '<')
-		return (TOKEN_REDIR_IN);
+		*type = TOKEN_REDIR_IN;
 	else if (*input == '>')
-		return (TOKEN_REDIR_OUT);
+		*type = TOKEN_REDIR_OUT;
 	else if (*input == '(')
-		return (TOKEN_LPAREN);
+		*type = TOKEN_LPAREN;
 	else if (*input == ')')
-		return (TOKEN_RPAREN);
+		*type = TOKEN_RPAREN;
 	else
-		return (TOKEN_WORD);
+		*type = TOKEN_WORD;
+	return (update_index(*type));
 }
 
 void	lexer(t_data *data)
@@ -93,14 +112,17 @@ void	lexer(t_data *data)
 			i++;
 		if (!data->input[i])
 			break ;
-		type = find_token_type(data->input + i);
+		i += get_token_type(data->input + i, &type);
 		value = NULL;
 		if (type == TOKEN_WORD)
-			value = find_token_value(data->input + i);
-		i += update_index(type, value);
+		{
+			i += get_token_value(data->input + i, &value);
+			if (!value)
+				continue ;
+		}
 		new_node = create_lexer_node(type, value);
 		//if (!new_node)
-			//error
+			//system error: memory allocation failed
 		add_lexer_node(&data->lexer_list, new_node);
 	}
 }
