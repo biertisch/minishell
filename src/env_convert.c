@@ -41,10 +41,10 @@ void	envp_to_list(t_data *data, char **envp)
 	{
 		split_env_entry(envp[i], &key, &value);
 		//if (!key || (!value && ft_strchr(envp[i], '=')))
-			//error		
+			//error: access to envp
 		new_node = create_env_node(key, value);
 		//if (!new_node)
-			//error
+			//system error: memory allocation failed
 		add_env_node(&data->env_list, new_node);
 		i++;
 	}
@@ -89,13 +89,13 @@ void	env_list_to_array(t_data *data)
 	counter = count_nodes(trav);
 	data->env = malloc(sizeof(char *) * (counter + 1));
 	//if (!data->env)
-		//error
+		//system error: memory allocation failed
 	i = 0;
 	while (trav)
 	{
 		data->env[i] = join_key_value(trav);
 		//if (!data->env[i])
-			//error
+			//system error: memory allocation failed
 		trav = trav->next;
 		i++;
 	}

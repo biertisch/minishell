@@ -14,9 +14,9 @@
 # define MINISHELL_H
 
 /*EXAMPLE OF MOCK_AST FOR EXECUTION 
-t_ast *cmd1 = create_ast_node(NODE_CMD, ft_split("ls -l", ' '), NULL);
-t_ast *cmd2 = create_ast_node(NODE_CMD, ft_split("grep main", ' '), NULL);
-t_ast *pipe = create_ast_node(NODE_PIPE, NULL, NULL);
+t_ast *cmd1 = create_parser_node(NODE_CMD, ft_split("ls -l", ' '), NULL);
+t_ast *cmd2 = create_parser_node(NODE_CMD, ft_split("grep main", ' '), NULL);
+t_ast *pipe = create_parser_node(NODE_PIPE, NULL, NULL);
 
 pipe->left = cmd1;
 pipe->right = cmd2; */
