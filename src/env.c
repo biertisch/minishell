@@ -12,6 +12,7 @@
 
 #include "../include/minishell.h"
 
+/*useful to implement built-in export*/
 char	*get_env_value(t_env *head, char *key)
 {
 	while (head)
@@ -23,6 +24,7 @@ char	*get_env_value(t_env *head, char *key)
 	return (NULL);
 }
 
+/*useful to implement built-in export*/
 void	set_env_value(t_env *head, char *key, char *new_value)
 {
 	while (head)
@@ -30,13 +32,14 @@ void	set_env_value(t_env *head, char *key, char *new_value)
 		if (ft_strcmp(head->key, key) == 0)
 		{
 			free(head->value);
-			head->value = ft_strdup(new_value);
+			head->value = ft_strdup(new_value); //remove strdup if new_value is already malloc'ed
 			return ;
 		}
 		head = head->next;
 	}
 }
 
+/*useful to implement built-in unset*/
 void	unset_env(t_env **head, char *key)
 {
 	t_env	*trav;
