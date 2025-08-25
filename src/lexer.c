@@ -12,18 +12,8 @@
 
 #include "../include/minishell.h"
 
-//move is_quote and is_operator to another file (eg utils.c)
-static int	is_quote(char c)
-{
-	return (c == '"' || c == '\'');
-}
-
-static int	is_operator(char c)
-{
-	return (c == '|' || c == '&' || c == '<' || c == '>'
-		|| c == '(' || c == ')');
-}
-
+/*PURPOSE: check if char corresponds to opening or closing quote
+helper to get_token_value()*/
 static void	update_quote_state(char c, char *quote)
 {
 	if (!*quote && is_quote(c))
@@ -32,7 +22,12 @@ static void	update_quote_state(char c, char *quote)
 		*quote = 0;
 }
 
-//add data to params to handle errors
+//TODO add data to params to handle errors
+/*PURPOSE: identify token value (applies only to TOKEN_WORD)
+values are delimitated by blank space or operators
+handles quotes: keeps text between quotes together and skips empty quotes
+checks for errors: unsupported characters and unclosed quotes
+helper to lexer()*/
 static int	get_token_value(char *input, char **value)
 {
 	char	quote;
@@ -62,6 +57,8 @@ static int	get_token_value(char *input, char **value)
 	return (ft_strlen(*value));
 }
 
+/*PURPOSE: calculate how many chars to skip in lexer loop
+helper to get_token_type()*/
 static int	update_index(t_token_type type)
 {
 	if (type == TOKEN_AND_IF || type == TOKEN_OR_IF
@@ -73,6 +70,9 @@ static int	update_index(t_token_type type)
 		return (1);
 }
 
+/*PURPOSE: identify token type
+uses TOKEN_WORD as default for non-operators)
+helper to lexer()*/
 static int	get_token_type(char *input, t_token_type *type)
 {
 	if (ft_strncmp(input, "&&", 2) == 0)
@@ -98,6 +98,8 @@ static int	get_token_type(char *input, t_token_type *type)
 	return (update_index(*type));
 }
 
+/*PURPOSE: convert raw string into tokens in a singly linked list
+prepares user input for parser*/
 void	lexer(t_data *data)
 {
 	t_token			*new_node;

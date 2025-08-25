@@ -74,6 +74,9 @@
 } */
 //END OF TESTING
 
+/*PURPOSE: get user input
+handles ctrl+D (EOF)
+adds non-empty strings to history and tries to execute them as commands*/
 static void	readline_loop(t_data *data)
 {
 	while (1)

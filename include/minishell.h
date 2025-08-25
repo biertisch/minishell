@@ -13,13 +13,12 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-/*EXAMPLE OF MOCK_AST FOR EXECUTION 
-t_ast *cmd1 = create_parser_node(NODE_CMD, ft_split("ls -l", ' '), NULL);
-t_ast *cmd2 = create_parser_node(NODE_CMD, ft_split("grep main", ' '), NULL);
-t_ast *pipe = create_parser_node(NODE_PIPE, NULL, NULL);
-
-pipe->left = cmd1;
-pipe->right = cmd2; */
+/*EXAMPLE OF MOCK AST FOR EXECUTION (ls -l | grep main)
+t_cmd *cmd1 = create_command(ft_split("ls -l", ' '), NULL);
+t_cmd *cmd2 = create_command(ft_split("grep main", ' '), NULL);
+t_ast *left = create_parser_node(NODE_CMD, cmd1, NULL, NULL);
+t_ast *right = create_parser_node(NODE_CMD, cmd2, NULL, NULL);
+t_ast *pipe = create_parser_node(NODE_PIPE, NULL, left, right);*/
 
 //HEADERS
 # include "../include/libft.h"
@@ -149,5 +148,10 @@ t_ast	*create_parser_node(t_node_type type, char **argv, t_redir *redirs);
 void	free_parser_node(t_ast **node);
 
 //parser.c
+void	parser(t_data *data);
+
+//utils.c
+int	is_operator(char c);
+int	is_quote(char c);
 
 #endif

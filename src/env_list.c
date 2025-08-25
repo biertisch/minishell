@@ -12,6 +12,9 @@
 
 #include "../include/minishell.h"
 
+/*GENERAL PURPOSE:
+helper functions to handle singly linked list with environment variables*/
+
 t_env	*create_env_node(char *key, char *value)
 {
 	t_env	*new_node;

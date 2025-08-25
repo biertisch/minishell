@@ -12,7 +12,22 @@
 
 #include "../include/minishell.h"
 
-t_ast	*create_parser_node(t_node_type type, char **argv, t_redir *redirs)
+/*GENERAL PURPOSE: helper functions to handle binary AST for lexer*/
+
+t_cmd	*create_command(char **argv, t_redir *redirs)
+{
+	t_cmd	*command;
+	
+	command = malloc(sizeof(t_cmd));
+	if (!command)
+		return (NULL);
+	command->argv = argv;
+	command->redirs = redirs;
+	return (command);
+}
+
+t_ast	*create_parser_node(t_node_type type, t_cmd *cmd, t_ast *right,
+	t_ast *left)
 {
 	t_ast	*new_node;
 
@@ -20,21 +35,9 @@ t_ast	*create_parser_node(t_node_type type, char **argv, t_redir *redirs)
 	if (!new_node)
 		return (NULL);
 	new_node->type = type;
-	new_node->left = NULL;
-	new_node->right = NULL;
-	if (type == NODE_CMD)
-	{
-		new_node->cmd = malloc(sizeof(t_cmd));
-		if (!new_node->cmd)
-		{
-			free(new_node);
-			return (NULL);
-		}
-		new_node->cmd->argv = argv;
-		new_node->cmd->redirs = redirs;
-	}
-	else
-		new_node->cmd = NULL;
+	new_node->left = left;
+	new_node->right = right;
+	new_node->cmd = cmd;
 	return (new_node);
 }
 
