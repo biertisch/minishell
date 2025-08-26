@@ -1,0 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/26 14:16:22 by beatde-a          #+#    #+#             */
+/*   Updated: 2025/08/26 14:16:22 by beatde-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/minishell.h"
+
+/*PURPOSE: validate pointer after malloc*/
+void	validate_malloc(t_data *data, void *ptr)
+{
+	if (!ptr)
+	{
+		report_error("malloc", SYSTEM_ERR);
+		error_exit(data);
+	}
+}
+
+void	error_exit(t_data *data)
+{
+	write(2, "Fatal error. Leaving the programme...", 37);
+	free_all(data);
+	exit(EXIT_FAILURE);
+}
+
+int	report_error(char *error_msg, t_error error_code)
+{
+	if (!error_msg)
+		error_msg = "unkown error";
+	if (error_code == SYSTEM_ERR)
+	{
+		write(2, "System error: ", 14);
+		perror(error_msg);
+	}
+	else
+	{
+		if (error_code == SYNTAX_ERR)
+			write(2, "Syntax error: ", 14);
+		else
+			write(2, "Internal error: ", 16);
+		write(2, error_msg, ft_strlen(error_msg));
+		write(2, "\n", 1);
+	}
+	return (-1);
+}
