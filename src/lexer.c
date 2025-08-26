@@ -22,13 +22,12 @@ static void	update_quote_state(char c, char *quote)
 		*quote = 0;
 }
 
-//TODO add data to params to handle errors
 /*PURPOSE: identify token value (applies only to TOKEN_WORD)
 values are delimitated by blank space or operators
 handles quotes: keeps text between quotes together and skips empty quotes
 checks for errors: unsupported characters and unclosed quotes
 helper to lexer()*/
-static int	get_token_value(char *input, char **value)
+static int	get_token_value(t_data *data, char *input, char **value)
 {
 	char	quote;
 	int		i;
@@ -37,8 +36,8 @@ static int	get_token_value(char *input, char **value)
 	i = 0;
 	while (input[i])
 	{
-		//if (!quote && (input[i] == '\\' || input[i] == ';'))
-			//syntax error: unsupported character //CHECK WITH PEDRO -- perhaps add {}[]!:#%
+		if (!quote && (input[i] == '\\' || input[i] == ';'))
+			return (report_error("unsupported character", SYNTAX_ERR)); // CHECK perhaps add {}[]!:#%
 		if (is_quote(input[i]) && is_quote(input[i + 1]))
 		{
 			*value = NULL;
@@ -49,11 +48,10 @@ static int	get_token_value(char *input, char **value)
 		update_quote_state(input[i], &quote);
 		i++;
 	}
-    //if (quote)
-		//syntax error: unclosed quote
+    if (quote)
+		return (report_error("missing quote", SYNTAX_ERR));
 	*value = ft_substr(input, 0, i);
-	//if (!*value)
-		//system error: memory allocation failed
+	validate_malloc(data, value);
 	return (ft_strlen(*value));
 }
 
@@ -100,7 +98,7 @@ static int	get_token_type(char *input, t_token_type *type)
 
 /*PURPOSE: convert raw string into tokens in a singly linked list
 prepares user input for parser*/
-void	lexer(t_data *data)
+int	lexer(t_data *data)
 {
 	t_token			*new_node;
 	t_token_type	type;
@@ -118,13 +116,15 @@ void	lexer(t_data *data)
 		value = NULL;
 		if (type == TOKEN_WORD)
 		{
-			i += get_token_value(data->input + i, &value);
+			i += get_token_value(data, data->input + i, &value);
+			if (i == -1)
+				return (-1);
 			if (!value)
 				continue ;
 		}
 		new_node = create_lexer_node(type, value);
-		//if (!new_node)
-			//system error: memory allocation failed
+		validate_malloc(data, new_node);
 		add_lexer_node(&data->lexer_list, new_node);
 	}
+	return (0);
 }

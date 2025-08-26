@@ -32,7 +32,13 @@ void	free_command_data(t_data *data)
 	free(data->input);
 	data->input = NULL;
 	free_lexer_list(&data->lexer_list);
-	//free_parser_list(&data->parser_tree); 
+	free_parser_list(&data->parser_list); 
 }
 
-//free_all
+void	free_all(t_data *data)
+{
+	free_str_array(&data->env);
+	free_env_list(&data->env_list);
+	free_command_data(data);
+	rl_clear_history();
+}

@@ -44,11 +44,13 @@ void	envp_to_list(t_data *data, char **envp)
 	while (envp[i])
 	{
 		split_env_entry(envp[i], &key, &value);
-		//if (!key || (!value && ft_strchr(envp[i], '=')))
-			//error: access to envp
+		if (!key || !*key)
+		{
+			report_error("invalid environment variable key", INTERNAL_ERR);
+			continue ;
+		}
 		new_node = create_env_node(key, value);
-		//if (!new_node)
-			//system error: memory allocation failed
+		validate_malloc(data, new_node);
 		add_env_node(&data->env_list, new_node);
 		i++;
 	}
@@ -56,9 +58,9 @@ void	envp_to_list(t_data *data, char **envp)
 
 /*PURPOSE: count nodes of env_list
 helper to env_list_to_array()*/
-static size_t	count_nodes(t_env *head)
+static int	count_nodes(t_env *head)
 {
-	size_t	counter;
+	int	counter;
 
 	counter = 0;
 	while (head)
@@ -92,21 +94,19 @@ necessary to pass updated env to execve()*/
 void	env_list_to_array(t_data *data)
 {
 	t_env	*trav;
-	size_t	counter;
+	int		counter;
 	int		i;
 
 	free_str_array(&data->env);
 	trav = data->env_list;
 	counter = count_nodes(trav);
 	data->env = malloc(sizeof(char *) * (counter + 1));
-	//if (!data->env)
-		//system error: memory allocation failed
+	validate_malloc(data, data->env);
 	i = 0;
 	while (trav)
 	{
 		data->env[i] = join_key_value(trav);
-		//if (!data->env[i])
-			//system error: memory allocation failed
+		validate_malloc(data, data->env[i]);
 		trav = trav->next;
 		i++;
 	}

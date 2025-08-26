@@ -14,20 +14,8 @@
 
 /*GENERAL PURPOSE: helper functions to handle binary AST for lexer*/
 
-t_cmd	*create_command(char **argv, t_redir *redirs)
-{
-	t_cmd	*command;
-	
-	command = malloc(sizeof(t_cmd));
-	if (!command)
-		return (NULL);
-	command->argv = argv;
-	command->redirs = redirs;
-	return (command);
-}
-
-t_ast	*create_parser_node(t_node_type type, t_cmd *cmd, t_ast *right,
-	t_ast *left)
+t_ast	*create_parser_node(t_node_type type, t_cmd *cmd, t_ast *left,
+	t_ast *right)
 {
 	t_ast	*new_node;
 
@@ -41,6 +29,21 @@ t_ast	*create_parser_node(t_node_type type, t_cmd *cmd, t_ast *right,
 	return (new_node);
 }
 
+static void	free_redirs(t_redir **redir)
+{
+	t_redir *tmp;
+
+	if (!redir || !*redir)
+		return ;
+	while (*redir)
+	{
+		tmp = (*redir)->next;
+		free((*redir)->file);
+		free(*redir);
+		*redir = tmp;
+	}
+}
+
 void	free_parser_node(t_ast **node)
 {
 	if (!node || !*node)
@@ -48,11 +51,20 @@ void	free_parser_node(t_ast **node)
 	if ((*node)->type == NODE_CMD && (*node)->cmd)
 	{
 		free_str_array(&(*node)->cmd->argv);
-		//free_redirs
+		free_redirs(&(*node)->cmd->redirs);
 		free((*node)->cmd);
 	}
 	free(*node);
 	*node = NULL;
 }
 
-//free_ast
+void	free_parser_list(t_ast **node)
+{
+	if (!node || !*node)
+		return ;
+	if ((*node)->left)
+		free_parser_list(&(*node)->left);
+	if ((*node)->right)
+		free_parser_list(&(*node)->right);
+	free_parser_node(node);
+}

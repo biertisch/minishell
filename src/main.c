@@ -15,7 +15,7 @@
 //TESTING
 /* static void	print_env_list(t_env *head)
 {
-	printf("TESTING ENVP_TO_LIST()\n\n");
+	printf("TESTING ENVP_TO_LIST\n\n");
 
 	for (int i = 0; head; i++)
 	{
@@ -31,7 +31,7 @@
 
 /* static void	print_env_array(char **env)
 {
-	printf ("TESTING ENV_LIST_TO_ARRAY()\n\n");
+	printf ("TESTING ENV_LIST_TO_ARRAY\n\n");
 	for (int i = 0; env[i]; i++)
 	{
 		printf("STRING %i\n", i);
@@ -41,7 +41,7 @@
 
 /* static void	print_lexer_list(t_token *head)
 {
-	printf("TESTING LEXER()\n\n");
+	printf("TESTING LEXER\n\n");
 	
 	for (int i = 0; head; i++)
 	{
@@ -72,28 +72,68 @@
 		head = head->next;
 	}
 } */
+
+/* static void print_parser_node(t_ast *node, int depth, char *pos)
+{
+	if (!node)
+		return ;
+
+	printf("NODE %i %s\n", depth, pos);
+	if (node->type == NODE_CMD)
+		printf("Type: NODE_CMD\n");
+	else if (node->type == NODE_PIPE)
+		printf("Type: NODE_PIPE\n");
+	else if (node->type == NODE_AND_IF)
+		printf("Type: NODE_AND_IF\n");
+	else if (node->type == NODE_OR_IF)
+		printf("Type: NODE_OR_IF\n");
+	else if (node->type == NODE_SUBSHELL)
+		printf("Type: NODE_SUBSHELL\n");
+	if (node->cmd)
+	{
+		if (node->cmd->argv)
+			for (int i = 0; node->cmd->argv[i]; i++)
+				printf("Command argv[%i] = %s\n", i, node->cmd->argv[i]);
+		t_redir *redir = node->cmd->redirs;
+		while (redir)
+		{
+			printf("Redir: \n");
+			if (redir->type == TOKEN_REDIR_IN)
+				printf("Type: TOKEN_REDIR_IN\n");
+			else if (redir->type == TOKEN_REDIR_OUT)
+				printf("Type: TOKEN_REDIR_OUT\n");
+			else if (redir->type == TOKEN_APPEND)
+				printf("Type: TOKEN_APPEND\n");
+			else if (redir->type == TOKEN_HEREDOC)
+				printf("Type: TOKEN_HEREDOC\n");
+			printf("File: %s\n", redir->file);
+			redir = redir->next;
+		}
+	}
+	printf("\n");
+	print_parser_node(node->left, depth + 1, "left");
+	print_parser_node(node->right, depth + 1, "right");
+}
+
+static void print_parser_list(t_ast *head)
+{
+	printf("TESTING PARSER\n\n");
+	print_parser_node(head, 0, "head");
+
+} */
 //END OF TESTING
 
-/*PURPOSE: get user input
-handles ctrl+D (EOF)
-adds non-empty strings to history and tries to execute them as commands*/
-static void	readline_loop(t_data *data)
+static void	process_input(t_data *data)
 {
-	while (1)
-	{
-		data->input = readline("minishell$ ");
-		if (!data->input)
-			break ;
-		if (data->input[0])
-		{
-			add_history(data->input);
-			lexer(data);
-			//parser(data);
-			//expand(data);
-			//execute(data); //TODO PEDRO
-		}
-		free_command_data(data);
-	}
+	add_history(data->input);
+	if (lexer(data))
+		return ;
+	if (parser(data))
+		return ;
+	//if (expand(data))
+		//return ;
+	//if (execute(data)) //TODO PEDRO
+		//return ;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -105,7 +145,20 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	//setup_signals //TODO PEDRO
 	envp_to_list(&data, envp);
-	readline_loop(&data);
-	//free_all(&data);
-	return (0);
+	while (1)
+	{
+		data.input = readline("minishell$ ");
+		if (!data.input)
+			break ;
+		if (data.input[0])
+			process_input(&data);
+		free_command_data(&data);
+	}
+	free_all(&data);
+	return (EXIT_SUCCESS);
 }
+
+/*TODO
+- add comments
+- parser: handle single ')'
+- parser: run more tests*/
