@@ -9,6 +9,8 @@ PRINTF_URL  = https://github.com/pdrlrnc/ft_printf.git
 PRINTF_DIR  = ft_printf
 PRINTF_LIB  = $(PRINTF_DIR)/libftprintf.a
 
+LIBFT_DIR = libft
+
 CC          = cc -g -O0
 CFLAGS      = -Wall -Wextra -Werror -I$(INC_DIR)
 RM          = rm -rf
@@ -70,6 +72,7 @@ clean:
 fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) $(INC_DIR)/printf.h $(INC_DIR)/libft.h 
+	@$(RM) -r $(LIBFT_DIR)
 	@$(RM) -r $(PRINTF_DIR)
 
 re: fclean all
