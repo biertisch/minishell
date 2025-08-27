@@ -12,8 +12,8 @@
 
 #include "../include/minishell.h"
 
-/*PURPOSE: split envp entry into key and value
-helper to envp_to_list()*/
+//PURPOSE: split envp entry into key and value
+//helper to envp_to_list()
 static void	split_env_entry(const char *entry, char **key, char **value)
 {
 	char	*equal;
@@ -31,8 +31,8 @@ static void	split_env_entry(const char *entry, char **key, char **value)
 	}
 }
 
-/*PURPOSE: convert envp to singly linked list
-helpful to implement built-in export and unset*/
+//PURPOSE: convert envp to singly linked list
+//helpful to implement built-in export and unset
 void	envp_to_list(t_data *data, char **envp)
 {
 	int		i;
@@ -56,8 +56,8 @@ void	envp_to_list(t_data *data, char **envp)
 	}
 }
 
-/*PURPOSE: count nodes of env_list
-helper to env_list_to_array()*/
+//PURPOSE: count nodes of env_list
+//helper to env_list_to_array()
 static int	count_nodes(t_env *head)
 {
 	int	counter;
@@ -71,8 +71,8 @@ static int	count_nodes(t_env *head)
 	return (counter);
 }
 
-/*PURPOSE: join env key and value into a single string
-helper to env_list_to_array()*/
+//PURPOSE: join env key and value into a single string
+//helper to env_list_to_array()
 static char	*join_key_value(t_env *node)
 {
 	char	*res;
@@ -88,9 +88,9 @@ static char	*join_key_value(t_env *node)
 	return (res);
 }
 
-/*PURPOSE: convert env list back to an array of strings
-follows same format as envp
-necessary to pass updated env to execve()*/
+//PURPOSE: convert env list back to an array of strings
+//follows same format as envp
+//necessary to pass updated env to execve()
 void	env_list_to_array(t_data *data)
 {
 	t_env	*trav;

@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-/*PURPOSE: clean up string array*/
+//PURPOSE: clean up string array
 void	free_str_array(char ***arr)
 {
 	int	i;
@@ -26,13 +26,13 @@ void	free_str_array(char ***arr)
 	*arr = NULL;
 }
 
-/*PURPOSE: clean up data after each iteration of readline loop*/
+//PURPOSE: clean up data after each iteration of readline loop
 void	free_command_data(t_data *data)
 {
 	free(data->input);
 	data->input = NULL;
 	free_lexer_list(&data->lexer_list);
-	free_parser_list(&data->parser_list); 
+	free_parser_list(&data->parser_list);
 }
 
 void	free_all(t_data *data)

@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-/*GENERAL PURPOSE: helper functions to handle singly linked list with tokens*/
+//GENERAL PURPOSE: helper functions to handle singly linked list with tokens
 
 t_token	*create_lexer_node(t_token_type type, char *value)
 {

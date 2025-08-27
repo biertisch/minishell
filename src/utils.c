@@ -12,13 +12,18 @@
 
 #include "../include/minishell.h"
 
+int	is_logical_op(t_token_type token_type)
+{
+	return (token_type == TOKEN_AND_IF || token_type == TOKEN_OR_IF);
+}
+
 int	is_redir(t_token_type token_type)
 {
 	return (token_type == TOKEN_REDIR_IN || token_type == TOKEN_REDIR_OUT
 		|| token_type == TOKEN_APPEND || token_type == TOKEN_HEREDOC);
 }
 
-/*PURPOSE: convert token type into AST node type*/
+//PURPOSE: convert token type into AST node type
 t_node_type	get_node_type(t_token_type token_type)
 {
 	if (token_type == TOKEN_WORD)

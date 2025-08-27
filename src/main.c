@@ -158,7 +158,6 @@ int	main(int argc, char **argv, char **envp)
 	return (EXIT_SUCCESS);
 }
 
-/*TODO
-- add comments
-- parser: handle single ')'
-- parser: run more tests*/
+//TO THINK ABOUT
+//-How to handle word after redirection (eg echo > file hello)
+//-Which characters are unsupported?

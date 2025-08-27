@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-/*useful to implement built-in export*/
+//useful to implement built-in export
 char	*get_env_value(t_env *head, char *key)
 {
 	while (head)
@@ -24,7 +24,7 @@ char	*get_env_value(t_env *head, char *key)
 	return (NULL);
 }
 
-/*useful to implement built-in export*/
+//useful to implement built-in export
 void	set_env_value(t_env *head, char *key, char *new_value)
 {
 	while (head)
@@ -39,7 +39,7 @@ void	set_env_value(t_env *head, char *key, char *new_value)
 	}
 }
 
-/*useful to implement built-in unset*/
+//useful to implement built-in unset
 void	unset_env(t_env **head, char *key)
 {
 	t_env	*trav;

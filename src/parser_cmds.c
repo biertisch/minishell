@@ -28,7 +28,7 @@ static t_redir	*create_redir(t_token_type type, char *file, t_redir *next)
 t_cmd	*create_command(char **argv, t_redir *redirs)
 {
 	t_cmd	*command;
-	
+
 	command = malloc(sizeof(t_cmd));
 	if (!command)
 		return (NULL);
@@ -54,7 +54,7 @@ t_redir	*get_command_redirs(t_data *data, t_token **token)
 	*token = (*token)->next;
 	redir = create_redir(type, file, get_command_redirs(data, token));
 	validate_malloc(data, redir);
-	return (redir);	
+	return (redir);
 }
 
 static int	count_words(t_token *token)
