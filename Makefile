@@ -1,6 +1,6 @@
 NAME        = minishell
 
-SRC_FILES   = cleanup env env_convert env_list error expander lexer lexer_list main parser parser_list parser_cmds utils
+SRC_FILES   = cleanup env env_convert env_list error expander lexer lexer_list lexer_word main parser parser_list parser_cmds utils
 SRC_DIR     = src
 OBJ_DIR     = obj
 INC_DIR     = include
@@ -8,6 +8,8 @@ INC_DIR     = include
 PRINTF_URL  = https://github.com/pdrlrnc/ft_printf.git
 PRINTF_DIR  = ft_printf
 PRINTF_LIB  = $(PRINTF_DIR)/libftprintf.a
+
+LIBFT_DIR = libft
 
 CC          = cc -g -O0
 CFLAGS      = -Wall -Wextra -Werror -I$(INC_DIR)
@@ -70,6 +72,7 @@ clean:
 fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) $(INC_DIR)/printf.h $(INC_DIR)/libft.h 
+	@$(RM) -r $(LIBFT_DIR)
 	@$(RM) -r $(PRINTF_DIR)
 
 re: fclean all

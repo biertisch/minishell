@@ -12,51 +12,8 @@
 
 #include "../include/minishell.h"
 
-/*PURPOSE: check if char corresponds to opening or closing quote
-helper to get_token_value()*/
-static void	update_quote_state(char c, char *quote)
-{
-	if (!*quote && is_quote(c))
-		*quote = c;
-	else if (*quote && c == *quote)
-		*quote = 0;
-}
-
-/*PURPOSE: identify token value (applies only to TOKEN_WORD)
-values are delimitated by blank space or operators
-handles quotes: keeps text between quotes together and skips empty quotes
-checks for errors: unsupported characters and unclosed quotes
-helper to lexer()*/
-static int	get_token_value(t_data *data, char *input, char **value)
-{
-	char	quote;
-	int		i;
-
-	quote = 0;
-	i = 0;
-	while (input[i])
-	{
-		if (!quote && (input[i] == '\\' || input[i] == ';'))
-			return (report_error("unsupported character", SYNTAX_ERR)); // CHECK perhaps add {}[]!:#%
-		if (is_quote(input[i]) && is_quote(input[i + 1]))
-		{
-			*value = NULL;
-			return (2);
-		}
-		if (!quote && (ft_isspace(input[i]) || is_operator(input[i])))
-			break ;
-		update_quote_state(input[i], &quote);
-		i++;
-	}
-    if (quote)
-		return (report_error("missing quote", SYNTAX_ERR));
-	*value = ft_substr(input, 0, i);
-	validate_malloc(data, value);
-	return (ft_strlen(*value));
-}
-
-/*PURPOSE: calculate how many chars to skip in lexer loop
-helper to get_token_type()*/
+//PURPOSE: calculate how many chars to skip in lexer loop
+//helper to get_token_type()
 static int	update_index(t_token_type type)
 {
 	if (type == TOKEN_AND_IF || type == TOKEN_OR_IF
@@ -68,10 +25,10 @@ static int	update_index(t_token_type type)
 		return (1);
 }
 
-/*PURPOSE: identify token type
-uses TOKEN_WORD as default for non-operators)
-helper to lexer()*/
-static int	get_token_type(char *input, t_token_type *type)
+//PURPOSE: identify token type
+//uses TOKEN_WORD as default for non-operators)
+//helper to lexer()
+static void	get_token_type(char *input, t_token_type *type, int *index)
 {
 	if (ft_strncmp(input, "&&", 2) == 0)
 		*type = TOKEN_AND_IF;
@@ -93,14 +50,22 @@ static int	get_token_type(char *input, t_token_type *type)
 		*type = TOKEN_RPAREN;
 	else
 		*type = TOKEN_WORD;
-	return (update_index(*type));
+	*index += update_index(*type);
 }
 
-/*PURPOSE: convert raw string into tokens in a singly linked list
-prepares user input for parser*/
+static void	add_token(t_data *data, t_token_type type, char *value)
+{
+	t_token	*new_node;
+
+	new_node = create_lexer_node(type, value);
+	validate_malloc(data, new_node);
+	add_lexer_node(&data->lexer_list, new_node);
+}
+
+//PURPOSE: convert raw string into tokens in a singly linked list
+//prepares user input for parser
 int	lexer(t_data *data)
 {
-	t_token			*new_node;
 	t_token_type	type;
 	char			*value;
 	int				i;
@@ -112,19 +77,16 @@ int	lexer(t_data *data)
 			i++;
 		if (!data->input[i])
 			break ;
-		i += get_token_type(data->input + i, &type);
+		get_token_type(data->input + i, &type, &i);
 		value = NULL;
 		if (type == TOKEN_WORD)
 		{
-			i += get_token_value(data, data->input + i, &value);
-			if (i == -1)
+			if (get_token_value(data, data->input + i, &value, &i))
 				return (-1);
 			if (!value)
 				continue ;
 		}
-		new_node = create_lexer_node(type, value);
-		validate_malloc(data, new_node);
-		add_lexer_node(&data->lexer_list, new_node);
+		add_token(data, type, value);
 	}
 	return (0);
 }

@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-/*PURPOSE: validate pointer after malloc*/
+//PURPOSE: validate pointer after malloc
 void	validate_malloc(t_data *data, void *ptr)
 {
 	if (!ptr)
@@ -24,7 +24,7 @@ void	validate_malloc(t_data *data, void *ptr)
 
 void	error_exit(t_data *data)
 {
-	write(2, "Fatal error. Leaving the programme...", 37);
+	write(2, "fatal error: leaving minishell...", 33);
 	free_all(data);
 	exit(EXIT_FAILURE);
 }
@@ -35,15 +35,15 @@ int	report_error(char *error_msg, t_error error_code)
 		error_msg = "unkown error";
 	if (error_code == SYSTEM_ERR)
 	{
-		write(2, "System error: ", 14);
+		write(2, "system error: ", 14);
 		perror(error_msg);
 	}
 	else
 	{
 		if (error_code == SYNTAX_ERR)
-			write(2, "Syntax error: ", 14);
+			write(2, "syntax error: ", 14);
 		else
-			write(2, "Internal error: ", 16);
+			write(2, "internal error: ", 16);
 		write(2, error_msg, ft_strlen(error_msg));
 		write(2, "\n", 1);
 	}
