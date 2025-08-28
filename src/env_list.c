@@ -19,7 +19,7 @@ t_env	*create_env_node(char *key, char *value)
 {
 	t_env	*new_node;
 
-	new_node = malloc(sizeof(t_list));
+	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
 	new_node->key = key;

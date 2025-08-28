@@ -24,7 +24,7 @@ void	validate_malloc(t_data *data, void *ptr)
 
 void	error_exit(t_data *data)
 {
-	write(2, "fatal error: leaving minishell...", 33);
+	write(2, "fatal error: leaving minishell...\n", 33);
 	free_all(data);
 	exit(EXIT_FAILURE);
 }

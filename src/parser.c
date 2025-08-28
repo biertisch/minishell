@@ -23,7 +23,7 @@ static t_ast	*parse_subshell(t_data *data, t_token **token)
 	if (!node->left)
 		return (NULL);
 	if (!(*token) || (*token)->type != TOKEN_RPAREN)
-		return (report_error("missing closing parenthesis", SYNTAX_ERR), NULL);
+		return (report_error("missing parenthesis", SYNTAX_ERR), NULL);
 	*token = (*token)->next;
 	return (node);
 }
@@ -36,17 +36,15 @@ static t_ast	*parse_command(t_data *data, t_token **token)
 	char	**argv;
 	t_redir	*redirs;
 
-	if (!(*token))
+	argv = NULL;
+	redirs = NULL;
+	if (!*token || (!is_command_token((*token)->type)
+		&& (*token)->type != TOKEN_LPAREN))
 		return (report_error("missing command", SYNTAX_ERR), NULL);
-	if ((*token)->type != TOKEN_WORD && (*token)->type != TOKEN_LPAREN
-		&& !is_redir((*token)->type))
-		return (report_error("unexpected token", SYNTAX_ERR), NULL);
 	if ((*token)->type == TOKEN_LPAREN)
 		return (parse_subshell(data, token));
-	argv = get_command_argv(data, token);
-	redirs = get_command_redirs(data, token);
-	if (!argv && !redirs)
-		return (report_error("empty command", SYNTAX_ERR), NULL);
+	if (get_command_data(data, token, &argv, &redirs))
+		return (NULL);
 	cmd = create_command(argv, redirs);
 	validate_malloc(data, cmd);
 	node = create_parser_node(NODE_CMD, cmd, NULL, NULL);
@@ -114,7 +112,7 @@ int	parser(t_data *data)
 
 	token = data->lexer_list;
 	data->parser_list = parse_and_or(data, &token);
-	if (token)
+	if (token && token->type == TOKEN_RPAREN)
 		return (report_error("unexpected token", SYNTAX_ERR));
 	if (!data->parser_list)
 		return (-1);

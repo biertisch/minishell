@@ -62,6 +62,8 @@
 			printf("Type: TOKEN_APPEND\n");
 		else if (head->type == TOKEN_HEREDOC)
 			printf("Type: TOKEN_HEREDOC\n");
+		else if (head->type == TOKEN_FD)
+			printf("Type: TOKEN_FD\n");
 		else if (head->type == TOKEN_LPAREN)
 			printf("Type: TOKEN_LPAREN\n");
 		else if (head->type == TOKEN_RPAREN)
@@ -106,6 +108,7 @@
 				printf("Type: TOKEN_APPEND\n");
 			else if (redir->type == TOKEN_HEREDOC)
 				printf("Type: TOKEN_HEREDOC\n");
+			printf("FD: %d\n", redir->fd);
 			printf("File: %s\n", redir->file);
 			redir = redir->next;
 		}
@@ -159,5 +162,7 @@ int	main(int argc, char **argv, char **envp)
 }
 
 //TO THINK ABOUT
-//-How to handle word after redirection (eg echo > file hello)
-//-Which characters are unsupported?
+//-How to handle word after redirection? eg echo > file hello
+//-Which characters are unsupported? eg {}[]!:#%
+//-How to handle <& and >&?
+//-How to handle "echo hello | >file cat"
