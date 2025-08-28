@@ -43,6 +43,7 @@ typedef enum e_token_type
 	TOKEN_REDIR_OUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
+	TOKEN_FD,
 	TOKEN_LPAREN,
 	TOKEN_RPAREN
 }	t_token_type;
@@ -81,6 +82,7 @@ typedef struct s_token
 typedef struct s_redir
 {
 	t_token_type	type;
+	int				fd;
 	char			*file;
 	struct s_redir	*next;
 }	t_redir;
@@ -149,17 +151,19 @@ t_token		*get_last_lexer_node(t_token *head);
 void		add_lexer_node(t_token **head, t_token *new_node);
 t_token		*create_lexer_node(t_token_type type, char *value);
 
-//lexer_word.c
-int			get_token_value(t_data *data, char *input, char **value,
-				int *index);
+//lexer_utils.c
+int			is_operator(char *s);
+int			is_quote(char c);
+int			is_fd(char *input);
 
 //parser.c
 int			parser(t_data *data);
 t_ast		*parse_and_or(t_data *data, t_token **token);
 
 //parser_cmds.c
-char		**get_command_argv(t_data *data, t_token **token);
-t_redir		*get_command_redirs(t_data *data, t_token **token);
+int			get_command_data(t_data *data, t_token **token, char ***argv,
+				t_redir **redirs);
+t_redir		*get_redirs(t_data *data, t_token **token);
 t_cmd		*create_command(char **argv, t_redir *redirs);
 
 //parser_list.c
@@ -168,11 +172,11 @@ void		free_parser_node(t_ast **node);
 t_ast		*create_parser_node(t_node_type type, t_cmd *cmd, t_ast *left,
 				t_ast *right);
 
-//utils.c
-int			is_operator(char c);
-int			is_quote(char c);
+//parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
 int			is_redir(t_token_type token_type);
 int			is_logical_op(t_token_type token_type);
+int			is_command_token(t_token_type token_type);
+int			count_argv(t_token *token);
 
 #endif

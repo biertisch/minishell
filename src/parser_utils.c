@@ -1,16 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/25 11:38:05 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/25 11:38:05 by beatde-a         ###   ########.fr       */
+/*   Created: 2025/08/28 11:00:45 by beatde-a          #+#    #+#             */
+/*   Updated: 2025/08/28 11:00:45 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	count_argv(t_token *token)
+{
+	int	count;
+
+	count = 0;
+	while (token && is_command_token(token->type))
+	{
+		if (is_redir(token->type) && token->next
+			&& token->next->type == TOKEN_WORD)
+			token = token->next;
+		else if (token->type == TOKEN_WORD)
+			count++;
+		token = token->next;
+	}
+	return (count);
+}
+
+int	is_command_token(t_token_type token_type)
+{
+	return (token_type == TOKEN_WORD || token_type == TOKEN_FD
+		|| is_redir(token_type));
+}
 
 int	is_logical_op(t_token_type token_type)
 {
@@ -38,15 +61,4 @@ t_node_type	get_node_type(t_token_type token_type)
 		return (NODE_SUBSHELL);
 	else
 		return (-1);
-}
-
-int	is_quote(char c)
-{
-	return (c == '"' || c == '\'');
-}
-
-int	is_operator(char c)
-{
-	return (c == '|' || c == '&' || c == '<' || c == '>'
-		|| c == '(' || c == ')');
 }

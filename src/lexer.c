@@ -12,6 +12,38 @@
 
 #include "../include/minishell.h"
 
+//PURPOSE: identify token value (applies only to TOKEN_WORD and TOKEN_FD)
+//values are delimitated by blank space or operators
+//keeps text between quotes together
+//checks for errors: unsupported characters and unclosed quotes
+//helper to lexer()
+static int	get_token_value(t_data *data, char *input, char **value, int *index)
+{
+	char	quote;
+	int		i;
+
+	quote = 0;
+	i = 0;
+	while (input[i])
+	{
+		if (!quote && (input[i] == '\\' || input[i] == ';'))
+			return (report_error("unsupported character", SYNTAX_ERR));
+		if (!quote && (ft_isspace(input[i]) || is_operator(input + i)))
+			break ;
+		if (!quote && is_quote(input[i]))
+			quote = input[i];
+		else if (quote && input[i] == quote)
+			quote = 0;
+		i++;
+	}
+	if (quote)
+		return (report_error("missing quote", SYNTAX_ERR));
+	*value = ft_substr(input, 0, i);
+	validate_malloc(data, value);
+	*index += ft_strlen(*value);
+	return (0);
+}
+
 //PURPOSE: calculate how many chars to skip in lexer loop
 //helper to get_token_type()
 static int	update_index(t_token_type type)
@@ -19,7 +51,7 @@ static int	update_index(t_token_type type)
 	if (type == TOKEN_AND_IF || type == TOKEN_OR_IF
 		|| type == TOKEN_HEREDOC || type == TOKEN_APPEND)
 		return (2);
-	else if (type == TOKEN_WORD)
+	else if (type == TOKEN_WORD || type == TOKEN_FD)
 		return (0);
 	else
 		return (1);
@@ -30,13 +62,13 @@ static int	update_index(t_token_type type)
 //helper to lexer()
 static void	get_token_type(char *input, t_token_type *type, int *index)
 {
-	if (ft_strncmp(input, "&&", 2) == 0)
+	if (!ft_strncmp(input, "&&", 2))
 		*type = TOKEN_AND_IF;
-	else if (ft_strncmp(input, "||", 2) == 0)
+	else if (!ft_strncmp(input, "||", 2))
 		*type = TOKEN_OR_IF;
-	else if (ft_strncmp(input, "<<", 2) == 0)
+	else if (!ft_strncmp(input, "<<", 2))
 		*type = TOKEN_HEREDOC;
-	else if (ft_strncmp(input, ">>", 2) == 0)
+	else if (!ft_strncmp(input, ">>", 2))
 		*type = TOKEN_APPEND;
 	else if (*input == '|')
 		*type = TOKEN_PIPE;
@@ -48,6 +80,8 @@ static void	get_token_type(char *input, t_token_type *type, int *index)
 		*type = TOKEN_LPAREN;
 	else if (*input == ')')
 		*type = TOKEN_RPAREN;
+	else if (is_fd(input))
+		*type = TOKEN_FD;
 	else
 		*type = TOKEN_WORD;
 	*index += update_index(*type);
@@ -79,7 +113,7 @@ int	lexer(t_data *data)
 			break ;
 		get_token_type(data->input + i, &type, &i);
 		value = NULL;
-		if (type == TOKEN_WORD)
+		if (type == TOKEN_WORD || type == TOKEN_FD)
 		{
 			if (get_token_value(data, data->input + i, &value, &i))
 				return (-1);

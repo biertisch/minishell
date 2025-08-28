@@ -29,18 +29,16 @@ t_ast	*create_parser_node(t_node_type type, t_cmd *cmd, t_ast *left,
 	return (new_node);
 }
 
-static void	free_redirs(t_redir **redir)
+static void	free_redirs(t_redir *redir)
 {
 	t_redir	*tmp;
 
-	if (!redir || !*redir)
-		return ;
-	while (*redir)
+	while (redir)
 	{
-		tmp = (*redir)->next;
-		free((*redir)->file);
-		free(*redir);
-		*redir = tmp;
+		tmp = redir->next;
+		free(redir->file);
+		free(redir);
+		redir = tmp;
 	}
 }
 
@@ -51,7 +49,7 @@ void	free_parser_node(t_ast **node)
 	if ((*node)->type == NODE_CMD && (*node)->cmd)
 	{
 		free_str_array(&(*node)->cmd->argv);
-		free_redirs(&(*node)->cmd->redirs);
+		free_redirs((*node)->cmd->redirs);
 		free((*node)->cmd);
 	}
 	free(*node);
