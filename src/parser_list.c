@@ -12,8 +12,6 @@
 
 #include "../include/minishell.h"
 
-//GENERAL PURPOSE: helper functions to handle binary AST for lexer
-
 t_ast	*create_parser_node(t_node_type type, t_cmd *cmd, t_ast *left,
 	t_ast *right)
 {
@@ -46,7 +44,7 @@ void	free_parser_node(t_ast **node)
 {
 	if (!node || !*node)
 		return ;
-	if ((*node)->type == NODE_CMD && (*node)->cmd)
+	if ((*node)->cmd)
 	{
 		free_str_array(&(*node)->cmd->argv);
 		free_redirs((*node)->cmd->redirs);

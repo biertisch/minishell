@@ -12,10 +12,11 @@
 
 #include "../include/minishell.h"
 
-//TESTING
+//----------------TESTING----------------
+//------------------ENVP-----------------
 /* static void	print_env_list(t_env *head)
 {
-	printf("TESTING ENVP_TO_LIST\n\n");
+	printf("-----TESTING ENVP_TO_LIST-----\n\n");
 
 	for (int i = 0; head; i++)
 	{
@@ -31,17 +32,17 @@
 
 /* static void	print_env_array(char **env)
 {
-	printf ("TESTING ENV_LIST_TO_ARRAY\n\n");
+	printf ("-----TESTING ENV_LIST_TO_ARRAY-----\n\n");
 	for (int i = 0; env[i]; i++)
 	{
 		printf("STRING %i\n", i);
 		printf("%s\n\n", env[i]);
 	}
 } */
-
+//-----------------LEXER-----------------
 /* static void	print_lexer_list(t_token *head)
 {
-	printf("TESTING LEXER\n\n");
+	printf("-----TESTING LEXER-----\n\n");
 	
 	for (int i = 0; head; i++)
 	{
@@ -74,7 +75,7 @@
 		head = head->next;
 	}
 } */
-
+//-----------------PARSER-----------------
 /* static void print_parser_node(t_ast *node, int depth, char *pos)
 {
 	if (!node)
@@ -120,11 +121,11 @@
 
 static void print_parser_list(t_ast *head)
 {
-	printf("TESTING PARSER\n\n");
+	printf("-----TESTING PARSER-----\n\n");
 	print_parser_node(head, 0, "head");
 
 } */
-//END OF TESTING
+//-----------------END OF TESTING-----------------
 
 static void	process_input(t_data *data)
 {
@@ -162,7 +163,7 @@ int	main(int argc, char **argv, char **envp)
 }
 
 //TO THINK ABOUT
-//-How to handle word after redirection? eg echo > file hello
-//-Which characters are unsupported? eg {}[]!:#%
+//-Which characters are unsupported beyond \ and ;? eg {}[]!:#%
 //-How to handle <& and >&?
 //-How to handle "echo hello | >file cat"
+//-Avoid double error messages

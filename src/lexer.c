@@ -12,11 +12,10 @@
 
 #include "../include/minishell.h"
 
-//PURPOSE: identify token value (applies only to TOKEN_WORD and TOKEN_FD)
-//values are delimitated by blank space or operators
-//keeps text between quotes together
-//checks for errors: unsupported characters and unclosed quotes
-//helper to lexer()
+//applies only to TOKEN_WORD and TOKEN_FD
+//assumes value is delimitated by blank space or operators
+//groups text within quotes as a single value
+//checks for unsupported characters and unclosed quotes
 static int	get_token_value(t_data *data, char *input, char **value, int *index)
 {
 	char	quote;
@@ -44,8 +43,6 @@ static int	get_token_value(t_data *data, char *input, char **value, int *index)
 	return (0);
 }
 
-//PURPOSE: calculate how many chars to skip in lexer loop
-//helper to get_token_type()
 static int	update_index(t_token_type type)
 {
 	if (type == TOKEN_AND_IF || type == TOKEN_OR_IF
@@ -57,9 +54,6 @@ static int	update_index(t_token_type type)
 		return (1);
 }
 
-//PURPOSE: identify token type
-//uses TOKEN_WORD as default for non-operators)
-//helper to lexer()
 static void	get_token_type(char *input, t_token_type *type, int *index)
 {
 	if (!ft_strncmp(input, "&&", 2))
@@ -96,8 +90,7 @@ static void	add_token(t_data *data, t_token_type type, char *value)
 	add_lexer_node(&data->lexer_list, new_node);
 }
 
-//PURPOSE: convert raw string into tokens in a singly linked list
-//prepares user input for parser
+//converts user input into a list of tokens
 int	lexer(t_data *data)
 {
 	t_token_type	type;

@@ -174,8 +174,8 @@ t_ast		*create_parser_node(t_node_type type, t_cmd *cmd, t_ast *left,
 
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
-int			is_redir(t_token_type token_type);
-int			is_logical_op(t_token_type token_type);
+int			is_redir_token(t_token_type token_type);
+int			is_logical_token(t_token_type token_type);
 int			is_command_token(t_token_type token_type);
 int			count_argv(t_token *token);
 
