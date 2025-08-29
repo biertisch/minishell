@@ -12,7 +12,6 @@
 
 #include "../include/minishell.h"
 
-//PURPOSE: validate pointer after malloc
 void	validate_malloc(t_data *data, void *ptr)
 {
 	if (!ptr)

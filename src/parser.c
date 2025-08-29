@@ -12,9 +12,14 @@
 
 #include "../include/minishell.h"
 
+//calls parse_and_or() for left node
+//allows redirection (eg (ls)>file)
+//checks for missing ')' and commands after subshell (eg (ls)ls)
 static t_ast	*parse_subshell(t_data *data, t_token **token)
 {
 	t_ast	*node;
+	char	**argv;
+	t_redir	*redirs;
 
 	*token = (*token)->next;
 	node = create_parser_node(NODE_SUBSHELL, NULL, NULL, NULL);
@@ -25,10 +30,22 @@ static t_ast	*parse_subshell(t_data *data, t_token **token)
 	if (!(*token) || (*token)->type != TOKEN_RPAREN)
 		return (report_error("missing parenthesis", SYNTAX_ERR), NULL);
 	*token = (*token)->next;
+	if (*token && is_command_token((*token)->type))
+	{
+		if ((*token)->type == TOKEN_WORD)
+			return (report_error("unexpected token", SYNTAX_ERR), NULL);
+		argv = NULL;
+		redirs = NULL;
+		if (get_command_data(data, token, &argv, &redirs))
+			return (NULL);
+		node->cmd = create_command(argv, redirs);
+		validate_malloc(data, node->cmd);
+	}
 	return (node);
 }
 
-//PURPOSE: parse word tokens into commands
+//calls parse_subshell() if it finds '('
+//checks for missing commands
 static t_ast	*parse_command(t_data *data, t_token **token)
 {
 	t_ast	*node;
@@ -39,7 +56,7 @@ static t_ast	*parse_command(t_data *data, t_token **token)
 	argv = NULL;
 	redirs = NULL;
 	if (!*token || (!is_command_token((*token)->type)
-		&& (*token)->type != TOKEN_LPAREN))
+			&& (*token)->type != TOKEN_LPAREN))
 		return (report_error("missing command", SYNTAX_ERR), NULL);
 	if ((*token)->type == TOKEN_LPAREN)
 		return (parse_subshell(data, token));
@@ -52,10 +69,9 @@ static t_ast	*parse_command(t_data *data, t_token **token)
 	return (node);
 }
 
-//PURPOSE: parse pipe operator (|)
 //handles multiple pipe operators from left to right
 //calls parse_command() for left and right nodes
-//verifies if there is at least one command on each side of the pipe
+//returns NULL if left or right node is empty
 static t_ast	*parse_pipe(t_data *data, t_token **token)
 {
 	t_ast	*left;
@@ -76,10 +92,9 @@ static t_ast	*parse_pipe(t_data *data, t_token **token)
 	return (left);
 }
 
-//PURPOSE: parse logical operators (&& and ||)
 //handles multiple logical operators from left to right
 //calls parse_pipe() for left and right nodes
-//verifies if there is at least one command on each side of the operator
+//returns NULL if left or right node is empty
 t_ast	*parse_and_or(t_data *data, t_token **token)
 {
 	t_ast		*left;
@@ -89,8 +104,7 @@ t_ast	*parse_and_or(t_data *data, t_token **token)
 	left = parse_pipe(data, token);
 	if (!left)
 		return (NULL);
-	while (*token && ((*token)->type == TOKEN_AND_IF
-			|| (*token)->type == TOKEN_OR_IF))
+	while (*token && is_logical_token((*token)->type))
 	{
 		type = get_node_type((*token)->type);
 		*token = (*token)->next;
@@ -103,9 +117,9 @@ t_ast	*parse_and_or(t_data *data, t_token **token)
 	return (left);
 }
 
-//PURPOSE: process lexer list, examining relationship between tokens
-//& build abstract syntax tree (AST) based on operator precedence
+//builds an abstract syntax tree (AST) based on operator precedence
 //from lowest precendece to highest: logical operators -> pipe -> commands
+//checks for stray ')'
 int	parser(t_data *data)
 {
 	t_token	*token;

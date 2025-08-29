@@ -12,12 +12,14 @@
 
 #include "../include/minishell.h"
 
+//classifies a substring as TOKEN_FD if it is only composed of digits
+//and comes immediately before a redirection operator (no spaces allowed)
 int	is_fd(char *input)
 {
 	while (*input && ft_isdigit(*input))
 		input++;
 	if (*input && (*input == '<' || *input == '>'
-		|| !ft_strncmp(input, "<<", 2) || !ft_strncmp(input, ">>", 2)))
+			|| !ft_strncmp(input, "<<", 2) || !ft_strncmp(input, ">>", 2)))
 		return (1);
 	return (0);
 }
@@ -29,7 +31,7 @@ int	is_quote(char c)
 
 int	is_operator(char *s)
 {
-	return (*s == '|' || *s == '<' || *s == '>'	|| *s == '(' || *s == ')'
+	return (*s == '|' || *s == '<' || *s == '>' || *s == '(' || *s == ')'
 		|| !ft_strncmp(s, "<<", 2) || !ft_strncmp(s, ">>", 2)
 		|| !ft_strncmp(s, "&&", 2));
 }

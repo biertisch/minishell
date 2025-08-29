@@ -12,6 +12,8 @@
 
 #include "../include/minishell.h"
 
+//counts all TOKEN_WORD as argv, except for
+//the one immediately after a redirection operator
 int	count_argv(t_token *token)
 {
 	int	count;
@@ -19,7 +21,7 @@ int	count_argv(t_token *token)
 	count = 0;
 	while (token && is_command_token(token->type))
 	{
-		if (is_redir(token->type) && token->next
+		if (is_redir_token(token->type) && token->next
 			&& token->next->type == TOKEN_WORD)
 			token = token->next;
 		else if (token->type == TOKEN_WORD)
@@ -32,21 +34,21 @@ int	count_argv(t_token *token)
 int	is_command_token(t_token_type token_type)
 {
 	return (token_type == TOKEN_WORD || token_type == TOKEN_FD
-		|| is_redir(token_type));
+		|| is_redir_token(token_type));
 }
 
-int	is_logical_op(t_token_type token_type)
+int	is_logical_token(t_token_type token_type)
 {
 	return (token_type == TOKEN_AND_IF || token_type == TOKEN_OR_IF);
 }
 
-int	is_redir(t_token_type token_type)
+int	is_redir_token(t_token_type token_type)
 {
 	return (token_type == TOKEN_REDIR_IN || token_type == TOKEN_REDIR_OUT
 		|| token_type == TOKEN_APPEND || token_type == TOKEN_HEREDOC);
 }
 
-//PURPOSE: convert token type into AST node type
+//converts lexer token type into parser node type
 t_node_type	get_node_type(t_token_type token_type)
 {
 	if (token_type == TOKEN_WORD)

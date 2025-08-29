@@ -24,7 +24,10 @@ t_cmd	*create_command(char **argv, t_redir *redirs)
 	return (command);
 }
 
-static t_redir	*create_redir(t_token_type type, int fd, char *file, t_redir *next)
+//if fd is not explict, sets 0 as default fd for '<' and '<<'
+//and 1 as default fd for '>' and '>>'
+static t_redir	*create_redir(t_token_type type, int fd, char *file,
+	t_redir *next)
 {
 	t_redir	*redir;
 
@@ -45,6 +48,8 @@ static t_redir	*create_redir(t_token_type type, int fd, char *file, t_redir *nex
 	return (redir);
 }
 
+//recursively creates and fills t_redir* for cmd struct
+//checks for missing filename after redirection operator
 t_redir	*get_redirs(t_data *data, t_token **token)
 {
 	t_redir			*redir;
@@ -52,7 +57,8 @@ t_redir	*get_redirs(t_data *data, t_token **token)
 	int				fd;
 	char			*file;
 
-	if (!*token || (!is_redir((*token)->type) && (*token)->type != TOKEN_FD))
+	if (!*token || (!is_redir_token((*token)->type)
+			&& (*token)->type != TOKEN_FD))
 		return (NULL);
 	fd = -1;
 	if ((*token)->type == TOKEN_FD)
@@ -72,11 +78,11 @@ t_redir	*get_redirs(t_data *data, t_token **token)
 	return (redir);
 }
 
-static char **allocate_argv(t_data *data, t_token **token)
+static char	**allocate_argv(t_data *data, t_token **token)
 {
 	char	**argv;
 	int		count;
-	
+
 	count = count_argv(*token);
 	if (count <= 0)
 		return (NULL);
@@ -85,7 +91,12 @@ static char **allocate_argv(t_data *data, t_token **token)
 	return (argv);
 }
 
-int	get_command_data(t_data *data, t_token **token, char ***argv, t_redir **redirs)
+//gets argv and redir for cmd struct
+//counts all TOKEN_WORD as part of argv except for
+//the TOKEN_WORD immediately after redirection operator
+//checks for empty commands (with no argv and no redir)
+int	get_command_data(t_data *data, t_token **token, char ***argv,
+	t_redir **redirs)
 {
 	int		i;
 
@@ -93,7 +104,7 @@ int	get_command_data(t_data *data, t_token **token, char ***argv, t_redir **redi
 	i = 0;
 	while (*token && is_command_token((*token)->type))
 	{
-		if (is_redir((*token)->type) || (*token)->type == TOKEN_FD)
+		if (is_redir_token((*token)->type) || (*token)->type == TOKEN_FD)
 			*redirs = get_redirs(data, token);
 		else if ((*token)->type == TOKEN_WORD)
 		{
@@ -109,6 +120,6 @@ int	get_command_data(t_data *data, t_token **token, char ***argv, t_redir **redi
 	if (*argv)
 		(*argv)[i] = NULL;
 	if (!*argv && !*redirs)
-		return (report_error("empty command", SYNTAX_ERR));
+		return (report_error("invalid command", SYNTAX_ERR));
 	return (0);
 }
