@@ -161,9 +161,3 @@ int	main(int argc, char **argv, char **envp)
 	free_all(&data);
 	return (EXIT_SUCCESS);
 }
-
-//TO THINK ABOUT
-//-Which characters are unsupported beyond \ and ;? eg {}[]!:#%
-//-How to handle <& and >&?
-//-How to handle "echo hello | >file cat"
-//-Avoid double error messages
