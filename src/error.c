@@ -12,11 +12,34 @@
 
 #include "../include/minishell.h"
 
-void	validate_malloc(t_data *data, void *ptr)
+void	validate_malloc(t_data *data, void *ptr, void *to_free)
 {
 	if (!ptr)
 	{
 		report_error("malloc", SYSTEM_ERR);
+		free(to_free);
+		error_exit(data);
+	}
+}
+
+void	validate_malloc_env(t_data *data, void *ptr, t_env *node)
+{
+	if (!ptr)
+	{
+		report_error("malloc", SYSTEM_ERR);
+		free_env_node(&node);
+		error_exit(data);
+	}
+}
+
+void	validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
+	t_tree *right)
+{
+	if (!ptr)
+	{
+		report_error("malloc", SYSTEM_ERR);
+		free_parser_tree(&left);
+		free_parser_tree(&right);
 		error_exit(data);
 	}
 }

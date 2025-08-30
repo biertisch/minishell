@@ -12,20 +12,22 @@
 
 #include "../include/minishell.h"
 
-static void	split_env_entry(const char *entry, char **key, char **value)
+static void	split_env_entry(t_data *data, char *entry, t_env *node)
 {
 	char	*equal;
 
 	equal = ft_strchr(entry, '=');
 	if (equal)
 	{
-		*key = ft_substr(entry, 0, equal - entry);
-		*value = ft_strdup(equal + 1);
+		node->key = ft_substr(entry, 0, equal - entry);
+		validate_malloc_env(data, node->key, node);
+		node->value = ft_strdup(equal + 1);
+		validate_malloc_env(data, node->value, node);
 	}
 	else
 	{
-		*key = ft_strdup(entry);
-		*value = NULL;
+		node->key = ft_strdup(entry);
+		validate_malloc(data, node->key, node);
 	}
 }
 
@@ -33,24 +35,24 @@ static void	split_env_entry(const char *entry, char **key, char **value)
 void	envp_to_list(t_data *data, char **envp)
 {
 	int		i;
-	char	*key;
-	char	*value;
-	t_env	*new_node;
+	t_env	*node;
 
 	if (!envp || !*envp)
 		return ;
 	i = 0;
 	while (envp[i])
 	{
-		split_env_entry(envp[i], &key, &value);
-		if (!key || !*key)
+		node = create_env_node();
+		validate_malloc(data, node, NULL);
+		split_env_entry(data, envp[i], node);
+		if (!node->key[0])
 		{
 			report_error("invalid environment variable key", INTERNAL_ERR);
+			free_env_node(&node);
+			i++;
 			continue ;
 		}
-		new_node = create_env_node(key, value);
-		validate_malloc(data, new_node);
-		add_env_node(&data->env_list, new_node);
+		add_env_node(&data->env_list, node);
 		i++;
 	}
 }
@@ -90,16 +92,16 @@ void	env_list_to_array(t_data *data)
 	int		counter;
 	int		i;
 
-	free_str_array(&data->env);
+	free_string_array(&data->env);
 	trav = data->env_list;
 	counter = count_nodes(trav);
 	data->env = malloc(sizeof(char *) * (counter + 1));
-	validate_malloc(data, data->env);
+	validate_malloc(data, data->env, NULL);
 	i = 0;
 	while (trav)
 	{
 		data->env[i] = join_key_value(trav);
-		validate_malloc(data, data->env[i]);
+		validate_malloc(data, data->env[i], NULL);
 		trav = trav->next;
 		i++;
 	}

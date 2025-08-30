@@ -47,28 +47,28 @@
 	for (int i = 0; head; i++)
 	{
 		printf("NODE %i\n", i);
-		if (head->type == TOKEN_WORD)
-			printf("Type: TOKEN_WORD\n");
-		else if (head->type == TOKEN_PIPE)
-			printf("Type: TOKEN_PIPE\n");
-		else if (head->type == TOKEN_AND_IF)
-			printf("Type: TOKEN_AND_IF\n");
-		else if (head->type == TOKEN_OR_IF)
-			printf("Type: TOKEN_OR_IF\n");
-		else if (head->type == TOKEN_REDIR_IN)
-			printf("Type: TOKEN_REDIR_IN\n");
-		else if (head->type == TOKEN_REDIR_OUT)
-			printf("Type: TOKEN_REDIR_OUT\n");
-		else if (head->type == TOKEN_APPEND)
-			printf("Type: TOKEN_APPEND\n");
-		else if (head->type == TOKEN_HEREDOC)
-			printf("Type: TOKEN_HEREDOC\n");
-		else if (head->type == TOKEN_FD)
-			printf("Type: TOKEN_FD\n");
-		else if (head->type == TOKEN_LPAREN)
-			printf("Type: TOKEN_LPAREN\n");
-		else if (head->type == TOKEN_RPAREN)
-			printf("Type: TOKEN_RPAREN\n");
+		if (head->type == WORD)
+			printf("Type: WORD\n");
+		else if (head->type == PIPE)
+			printf("Type: PIPE\n");
+		else if (head->type == AND)
+			printf("Type: AND\n");
+		else if (head->type == OR)
+			printf("Type: OR\n");
+		else if (head->type == REDIR_IN)
+			printf("Type: REDIR_IN\n");
+		else if (head->type == REDIR_OUT)
+			printf("Type: REDIR_OUT\n");
+		else if (head->type == APPEND)
+			printf("Type: APPEND\n");
+		else if (head->type == HEREDOC)
+			printf("Type: HEREDOC\n");
+		else if (head->type == FD)
+			printf("Type: FD\n");
+		else if (head->type == LPAREN)
+			printf("Type: LPAREN\n");
+		else if (head->type == RPAREN)
+			printf("Type: RPAREN\n");
 		if (head->value)
 			printf("Value: %s\n", head->value);
 		printf("\n");
@@ -76,7 +76,7 @@
 	}
 } */
 //-----------------PARSER-----------------
-/* static void print_parser_node(t_ast *node, int depth, char *pos)
+/* static void print_parser_node(t_tree *node, int depth, char *pos)
 {
 	if (!node)
 		return ;
@@ -86,40 +86,37 @@
 		printf("Type: NODE_CMD\n");
 	else if (node->type == NODE_PIPE)
 		printf("Type: NODE_PIPE\n");
-	else if (node->type == NODE_AND_IF)
-		printf("Type: NODE_AND_IF\n");
-	else if (node->type == NODE_OR_IF)
-		printf("Type: NODE_OR_IF\n");
+	else if (node->type == NODE_AND)
+		printf("Type: NODE_AND\n");
+	else if (node->type == NODE_OR)
+		printf("Type: NODE_OR\n");
 	else if (node->type == NODE_SUBSHELL)
 		printf("Type: NODE_SUBSHELL\n");
-	if (node->cmd)
+	if (node->argv)
+		for (int i = 0; node->argv[i]; i++)
+			printf("Command argv[%i] = %s\n", i, node->argv[i]);
+	t_redir *redir = node->redir;
+	while (redir)
 	{
-		if (node->cmd->argv)
-			for (int i = 0; node->cmd->argv[i]; i++)
-				printf("Command argv[%i] = %s\n", i, node->cmd->argv[i]);
-		t_redir *redir = node->cmd->redirs;
-		while (redir)
-		{
-			printf("Redir: \n");
-			if (redir->type == TOKEN_REDIR_IN)
-				printf("Type: TOKEN_REDIR_IN\n");
-			else if (redir->type == TOKEN_REDIR_OUT)
-				printf("Type: TOKEN_REDIR_OUT\n");
-			else if (redir->type == TOKEN_APPEND)
-				printf("Type: TOKEN_APPEND\n");
-			else if (redir->type == TOKEN_HEREDOC)
-				printf("Type: TOKEN_HEREDOC\n");
-			printf("FD: %d\n", redir->fd);
-			printf("File: %s\n", redir->file);
-			redir = redir->next;
-		}
+		printf("Redir: \n");
+		if (redir->type == REDIR_IN)
+			printf("Type: REDIR_IN\n");
+		else if (redir->type == REDIR_OUT)
+			printf("Type: REDIR_OUT\n");
+		else if (redir->type == APPEND)
+			printf("Type: APPEND\n");
+		else if (redir->type == HEREDOC)
+			printf("Type: HEREDOC\n");
+		printf("FD: %d\n", redir->fd);
+		printf("File: %s\n", redir->file);
+		redir = redir->next;
 	}
 	printf("\n");
 	print_parser_node(node->left, depth + 1, "left");
 	print_parser_node(node->right, depth + 1, "right");
 }
 
-static void print_parser_list(t_ast *head)
+static void print_parser_tree(t_tree *head)
 {
 	printf("-----TESTING PARSER-----\n\n");
 	print_parser_node(head, 0, "head");

@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-//applies only to TOKEN_WORD and TOKEN_FD
+//applies only to WORD and FD
 //assumes value is delimitated by blank space or operators
 //groups text within quotes as a single value
 //checks for unsupported characters and unclosed quotes
@@ -38,17 +38,17 @@ static int	get_token_value(t_data *data, char *input, char **value, int *index)
 	if (quote)
 		return (report_error("missing quote", SYNTAX_ERR));
 	*value = ft_substr(input, 0, i);
-	validate_malloc(data, value);
+	validate_malloc(data, value, NULL);
 	*index += ft_strlen(*value);
 	return (0);
 }
 
 static int	update_index(t_token_type type)
 {
-	if (type == TOKEN_AND_IF || type == TOKEN_OR_IF
-		|| type == TOKEN_HEREDOC || type == TOKEN_APPEND)
+	if (type == AND || type == OR
+		|| type == HEREDOC || type == APPEND)
 		return (2);
-	else if (type == TOKEN_WORD || type == TOKEN_FD)
+	else if (type == WORD || type == FD)
 		return (0);
 	else
 		return (1);
@@ -57,27 +57,27 @@ static int	update_index(t_token_type type)
 static void	get_token_type(char *input, t_token_type *type, int *index)
 {
 	if (!ft_strncmp(input, "&&", 2))
-		*type = TOKEN_AND_IF;
+		*type = AND;
 	else if (!ft_strncmp(input, "||", 2))
-		*type = TOKEN_OR_IF;
+		*type = OR;
 	else if (!ft_strncmp(input, "<<", 2))
-		*type = TOKEN_HEREDOC;
+		*type = HEREDOC;
 	else if (!ft_strncmp(input, ">>", 2))
-		*type = TOKEN_APPEND;
+		*type = APPEND;
 	else if (*input == '|')
-		*type = TOKEN_PIPE;
+		*type = PIPE;
 	else if (*input == '<')
-		*type = TOKEN_REDIR_IN;
+		*type = REDIR_IN;
 	else if (*input == '>')
-		*type = TOKEN_REDIR_OUT;
+		*type = REDIR_OUT;
 	else if (*input == '(')
-		*type = TOKEN_LPAREN;
+		*type = LPAREN;
 	else if (*input == ')')
-		*type = TOKEN_RPAREN;
+		*type = RPAREN;
 	else if (is_fd(input))
-		*type = TOKEN_FD;
+		*type = FD;
 	else
-		*type = TOKEN_WORD;
+		*type = WORD;
 	*index += update_index(*type);
 }
 
@@ -86,7 +86,7 @@ static void	add_token(t_data *data, t_token_type type, char *value)
 	t_token	*new_node;
 
 	new_node = create_lexer_node(type, value);
-	validate_malloc(data, new_node);
+	validate_malloc(data, new_node, value);
 	add_lexer_node(&data->lexer_list, new_node);
 }
 
@@ -97,6 +97,7 @@ int	lexer(t_data *data)
 	char			*value;
 	int				i;
 
+	value = NULL;
 	i = 0;
 	while (data->input[i])
 	{
@@ -106,7 +107,7 @@ int	lexer(t_data *data)
 			break ;
 		get_token_type(data->input + i, &type, &i);
 		value = NULL;
-		if (type == TOKEN_WORD || type == TOKEN_FD)
+		if (type == WORD || type == FD)
 		{
 			if (get_token_value(data, data->input + i, &value, &i))
 				return (-1);

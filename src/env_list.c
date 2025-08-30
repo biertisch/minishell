@@ -12,15 +12,15 @@
 
 #include "../include/minishell.h"
 
-t_env	*create_env_node(char *key, char *value)
+t_env	*create_env_node(void)
 {
 	t_env	*new_node;
 
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
-	new_node->key = key;
-	new_node->value = value;
+	new_node->key = NULL;
+	new_node->value = NULL;
 	new_node->next = NULL;
 	return (new_node);
 }
