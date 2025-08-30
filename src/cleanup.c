@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-void	free_str_array(char ***arr)
+void	free_string_array(char ***arr)
 {
 	int	i;
 
@@ -31,12 +31,12 @@ void	free_command_data(t_data *data)
 	free(data->input);
 	data->input = NULL;
 	free_lexer_list(&data->lexer_list);
-	free_parser_list(&data->parser_list);
+	free_parser_tree(&data->parser_tree);
 }
 
 void	free_all(t_data *data)
 {
-	free_str_array(&data->env);
+	free_string_array(&data->env);
 	free_env_list(&data->env_list);
 	free_command_data(data);
 	rl_clear_history();

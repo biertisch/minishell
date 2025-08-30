@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_list.c                                      :+:      :+:    :+:   */
+/*   parser_tree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,22 +12,22 @@
 
 #include "../include/minishell.h"
 
-t_ast	*create_parser_node(t_node_type type, t_cmd *cmd, t_ast *left,
-	t_ast *right)
+t_tree	*create_parser_node(t_node_type type, t_tree *left, t_tree *right)
 {
-	t_ast	*new_node;
+	t_tree	*new_node;
 
-	new_node = malloc(sizeof(t_ast));
+	new_node = malloc(sizeof(t_tree));
 	if (!new_node)
 		return (NULL);
 	new_node->type = type;
 	new_node->left = left;
 	new_node->right = right;
-	new_node->cmd = cmd;
+	new_node->argv = NULL;
+	new_node->redir = NULL;
 	return (new_node);
 }
 
-static void	free_redirs(t_redir *redir)
+void	free_redir(t_redir *redir)
 {
 	t_redir	*tmp;
 
@@ -40,27 +40,23 @@ static void	free_redirs(t_redir *redir)
 	}
 }
 
-void	free_parser_node(t_ast **node)
+void	free_parser_node(t_tree **node)
 {
 	if (!node || !*node)
 		return ;
-	if ((*node)->cmd)
-	{
-		free_str_array(&(*node)->cmd->argv);
-		free_redirs((*node)->cmd->redirs);
-		free((*node)->cmd);
-	}
+	free_string_array(&(*node)->argv);
+	free_redir((*node)->redir);
 	free(*node);
 	*node = NULL;
 }
 
-void	free_parser_list(t_ast **node)
+void	free_parser_tree(t_tree **node)
 {
 	if (!node || !*node)
 		return ;
 	if ((*node)->left)
-		free_parser_list(&(*node)->left);
+		free_parser_tree(&(*node)->left);
 	if ((*node)->right)
-		free_parser_list(&(*node)->right);
+		free_parser_tree(&(*node)->right);
 	free_parser_node(node);
 }

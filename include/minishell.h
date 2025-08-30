@@ -35,25 +35,25 @@
 //ENUMS
 typedef enum e_token_type
 {
-	TOKEN_WORD,
-	TOKEN_PIPE,
-	TOKEN_AND_IF,
-	TOKEN_OR_IF,
-	TOKEN_REDIR_IN,
-	TOKEN_REDIR_OUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_FD,
-	TOKEN_LPAREN,
-	TOKEN_RPAREN
+	WORD,
+	PIPE,
+	AND,
+	OR,
+	REDIR_IN,
+	REDIR_OUT,
+	APPEND,
+	HEREDOC,
+	FD,
+	LPAREN,
+	RPAREN
 }	t_token_type;
 
 typedef enum e_node_type
 {
 	NODE_CMD,
 	NODE_PIPE,
-	NODE_AND_IF,
-	NODE_OR_IF,
+	NODE_AND,
+	NODE_OR,
 	NODE_SUBSHELL
 }	t_node_type;
 
@@ -87,19 +87,14 @@ typedef struct s_redir
 	struct s_redir	*next;
 }	t_redir;
 
-typedef struct s_cmd
-{
-	char			**argv;
-	t_redir			*redirs;
-}	t_cmd;
-
-typedef struct s_ast
+typedef struct s_tree
 {
 	t_node_type		type;
-	t_cmd			*cmd;
-	struct s_ast	*left;
-	struct s_ast	*right;
-}	t_ast;
+	char			**argv;
+	t_redir			*redir;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}	t_tree;
 
 //maybe add struct with int *fd_opened and int fd_open_counter
 
@@ -109,14 +104,14 @@ typedef struct s_data
 	char			**env;
 	t_env			*env_list;
 	t_token			*lexer_list;
-	t_ast			*parser_list;
+	t_tree			*parser_tree;
 }	t_data;
 
 //PROTOTYPES
 //cleanup.c
 void		free_all(t_data *data);
 void		free_command_data(t_data *data);
-void		free_str_array(char ***arr);
+void		free_string_array(char ***arr);
 
 //env.c
 void		unset_env(t_env **head, char *key);
@@ -132,12 +127,15 @@ void		free_env_list(t_env **head);
 void		free_env_node(t_env **node);
 t_env		*get_last_env_node(t_env *head);
 void		add_env_node(t_env **head, t_env *new_node);
-t_env		*create_env_node(char *key, char *value);
+t_env		*create_env_node(void);
 
 //error.c
 int			report_error(char *error_msg, t_error error_code);
 void		error_exit(t_data *data);
-void		validate_malloc(t_data *data, void *ptr);
+void		validate_malloc(t_data *data, void *ptr, void *to_free);
+void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
+				t_tree *right);
+void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
 
 //expander.c
 
@@ -151,32 +149,28 @@ t_token		*get_last_lexer_node(t_token *head);
 void		add_lexer_node(t_token **head, t_token *new_node);
 t_token		*create_lexer_node(t_token_type type, char *value);
 
-//lexer_utils.c
-int			is_operator(char *s);
-int			is_quote(char c);
-int			is_fd(char *input);
-
 //parser.c
 int			parser(t_data *data);
-t_ast		*parse_and_or(t_data *data, t_token **token);
+t_tree		*parse_and_or(t_data *data, t_token **token);
 
-//parser_cmds.c
-int			get_command_data(t_data *data, t_token **token, char ***argv,
-				t_redir **redirs);
-t_redir		*get_redirs(t_data *data, t_token **token);
-t_cmd		*create_command(char **argv, t_redir *redirs);
+//parser_cmd.c
+int			get_command_data(t_data *data, t_token **token, t_tree *node);
+int			is_command_token(t_token_type token_type);
 
-//parser_list.c
-void		free_parser_list(t_ast **node);
-void		free_parser_node(t_ast **node);
-t_ast		*create_parser_node(t_node_type type, t_cmd *cmd, t_ast *left,
-				t_ast *right);
+//parser_redir.c
+t_redir		*get_redir(t_data *data, t_token **token);
+int			is_redir_token(t_token_type token_type);
+
+//parser_tree.c
+void		free_parser_tree(t_tree **node);
+void		free_parser_node(t_tree **node);
+void		free_redir(t_redir *redir);
+t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);
 
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
-int			is_redir_token(t_token_type token_type);
-int			is_logical_token(t_token_type token_type);
-int			is_command_token(t_token_type token_type);
-int			count_argv(t_token *token);
+int			is_operator(char *s);
+int			is_quote(char c);
+int			is_fd(char *input);
 
 #endif

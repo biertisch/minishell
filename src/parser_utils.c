@@ -12,54 +12,42 @@
 
 #include "../include/minishell.h"
 
-//counts all TOKEN_WORD as argv, except for
-//the one immediately after a redirection operator
-int	count_argv(t_token *token)
+//classifies a substring as FD if it is only composed of digits
+//and comes immediately before a redirection operator (no spaces allowed)
+int	is_fd(char *input)
 {
-	int	count;
-
-	count = 0;
-	while (token && is_command_token(token->type))
-	{
-		if (is_redir_token(token->type) && token->next
-			&& token->next->type == TOKEN_WORD)
-			token = token->next;
-		else if (token->type == TOKEN_WORD)
-			count++;
-		token = token->next;
-	}
-	return (count);
+	while (*input && ft_isdigit(*input))
+		input++;
+	if (*input && (*input == '<' || *input == '>'
+			|| !ft_strncmp(input, "<<", 2) || !ft_strncmp(input, ">>", 2)))
+		return (1);
+	return (0);
 }
 
-int	is_command_token(t_token_type token_type)
+int	is_quote(char c)
 {
-	return (token_type == TOKEN_WORD || token_type == TOKEN_FD
-		|| is_redir_token(token_type));
+	return (c == '"' || c == '\'');
 }
 
-int	is_logical_token(t_token_type token_type)
+int	is_operator(char *s)
 {
-	return (token_type == TOKEN_AND_IF || token_type == TOKEN_OR_IF);
-}
-
-int	is_redir_token(t_token_type token_type)
-{
-	return (token_type == TOKEN_REDIR_IN || token_type == TOKEN_REDIR_OUT
-		|| token_type == TOKEN_APPEND || token_type == TOKEN_HEREDOC);
+	return (*s == '|' || *s == '<' || *s == '>' || *s == '(' || *s == ')'
+		|| !ft_strncmp(s, "<<", 2) || !ft_strncmp(s, ">>", 2)
+		|| !ft_strncmp(s, "&&", 2));
 }
 
 //converts lexer token type into parser node type
 t_node_type	get_node_type(t_token_type token_type)
 {
-	if (token_type == TOKEN_WORD)
+	if (token_type == WORD)
 		return (NODE_CMD);
-	else if (token_type == TOKEN_PIPE)
+	else if (token_type == PIPE)
 		return (NODE_PIPE);
-	else if (token_type == TOKEN_AND_IF)
-		return (NODE_AND_IF);
-	else if (token_type == TOKEN_OR_IF)
-		return (NODE_OR_IF);
-	else if (token_type == TOKEN_LPAREN || token_type == TOKEN_RPAREN)
+	else if (token_type == AND)
+		return (NODE_AND);
+	else if (token_type == OR)
+		return (NODE_OR);
+	else if (token_type == LPAREN || token_type == RPAREN)
 		return (NODE_SUBSHELL);
 	else
 		return (-1);
