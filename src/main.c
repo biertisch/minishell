@@ -131,8 +131,8 @@ static void	process_input(t_data *data)
 		return ;
 	if (parser(data))
 		return ;
-	//if (expand(data))
-		//return ;
+	if (expand(data, data->parser_tree))
+		return ;
 	//if (execute(data)) //TODO PEDRO
 		//return ;
 }

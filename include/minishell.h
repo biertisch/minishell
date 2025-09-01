@@ -103,6 +103,7 @@ typedef struct s_data
 	char			*input;
 	char			**env;
 	t_env			*env_list;
+	int				last_exit_status;
 	t_token			*lexer_list;
 	t_tree			*parser_tree;
 }	t_data;
@@ -117,6 +118,8 @@ void		free_string_array(char ***arr);
 void		unset_env(t_env **head, char *key);
 void		set_env_value(t_env *head, char *key, char *new_value);
 char		*get_env_value(t_env *head, char *key);
+char		*get_env_key(char *arg);
+char		*replace_key_value(char *arg, int i, char *key, char *value);
 
 //env_convert.c
 void		env_list_to_array(t_data *data);
@@ -138,6 +141,7 @@ void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
 
 //expander.c
+int			expand(t_data *data, t_tree *node);
 
 //lexer.c
 int			lexer(t_data *data);
