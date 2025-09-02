@@ -1,7 +1,20 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
+#    Updated: 2025/09/02 12:39:39 by pedde-so         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME        = minishell
 
 SRC_FILES   = cleanup env env_convert env_list error expander lexer lexer_list\
-				main parser parser_cmd parser_redir parser_tree parser_utils
+				main parser parser_cmd parser_redir parser_tree parser_utils\
+				signal_handler executor stack
 SRC_DIR     = src
 OBJ_DIR     = obj
 INC_DIR     = include
@@ -43,6 +56,7 @@ all: $(PRINTF_LIB) headers $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
+	@ctags -R .
 	@echo "tags\n.gitignore\n*.txt\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj" > .gitignore
 
 $(OBJ_DIR):
@@ -69,6 +83,7 @@ $(INC_DIR)/libft.h: $(PRINTF_LIB)
 
 clean:
 	@$(RM) $(OBJ_DIR)
+	@$(RM) tags
 
 fclean: clean
 	@$(RM) $(NAME)

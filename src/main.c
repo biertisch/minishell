@@ -76,7 +76,7 @@
 	}
 } */
 //-----------------PARSER-----------------
-/* static void print_parser_node(t_tree *node, int depth, char *pos)
+ static void print_parser_node(t_tree *node, int depth, char *pos)
 {
 	if (!node)
 		return ;
@@ -121,7 +121,7 @@ static void print_parser_tree(t_tree *head)
 	printf("-----TESTING PARSER-----\n\n");
 	print_parser_node(head, 0, "head");
 
-} */
+} 
 //-----------------END OF TESTING-----------------
 
 static void	process_input(t_data *data)
@@ -131,10 +131,11 @@ static void	process_input(t_data *data)
 		return ;
 	if (parser(data))
 		return ;
+	print_parser_tree(data->parser_tree);
 	//if (expand(data))
 		//return ;
-	//if (execute(data)) //TODO PEDRO
-		//return ;
+	if (execute(data))
+		return ;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -144,7 +145,7 @@ int	main(int argc, char **argv, char **envp)
 	ft_bzero(&data, sizeof(t_data));
 	(void)argc;
 	(void)argv;
-	//setup_signals //TODO PEDRO
+	setup_signals();
 	envp_to_list(&data, envp);
 	while (1)
 	{

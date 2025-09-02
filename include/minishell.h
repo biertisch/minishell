@@ -64,6 +64,15 @@ typedef enum e_error
 	INTERNAL_ERR
 }	t_error;
 
+typedef enum e_phase
+{
+	ENTERED,
+	LAUNCH_LEFT,
+	LAUNCH_RIGHT,
+	WAIT,
+	DONE
+}	t_phase;
+
 //STRUCTS
 typedef struct s_env
 {
@@ -95,6 +104,19 @@ typedef struct s_tree
 	struct s_tree	*left;
 	struct s_tree	*right;
 }	t_tree;
+
+typedef struct s_stack
+{
+	t_phase		phase;
+	t_node_type	type;
+	t_tree		*node;
+	int			in_fd;
+	int			out_fd;
+	int			pipe[2];
+	pid_t		child_pid[2];
+	int		child_count;
+	struct s_stack		*next;
+}	t_stack;
 
 //maybe add struct with int *fd_opened and int fd_open_counter
 
@@ -136,6 +158,9 @@ void		validate_malloc(t_data *data, void *ptr, void *to_free);
 void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 				t_tree *right);
 void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
+void		free_stack(t_stack *stack);
+void		check_for_errors(int status, t_data *data, t_stack *stack,
+				char *command_name);
 
 //expander.c
 
@@ -172,5 +197,17 @@ t_node_type	get_node_type(t_token_type token_type);
 int			is_operator(char *s);
 int			is_quote(char c);
 int			is_fd(char *input);
+
+//signal_handler.c
+void		setup_signals(void);
+void		sigint_handler(int sig);
+
+//executor.c
+int			execute(t_data *data);
+int			execute_pipe(t_data *data, t_stack *stack);
+int			execute_pipe_entered(t_data *data, t_stack *stack);
+
+//stack.c
+t_stack		*create_stack(t_data *data);
 
 #endif

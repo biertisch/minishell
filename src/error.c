@@ -71,3 +71,29 @@ int	report_error(char *error_msg, t_error error_code)
 	}
 	return (-1);
 }
+
+void	check_for_errors(int status, t_data *data, t_stack *stack, char *command_name)
+{
+	if (status == -1)
+	{
+		perror(command_name);
+		free_stack(stack);
+		free_all(data);
+	}
+}
+
+void	free_stack(t_stack *stack)
+{
+	t_stack	*next;
+	t_stack	*old_next;
+
+	old_next = stack;
+	next = stack->next;
+	while (next)
+	{
+		free(old_next);
+		old_next = next;
+		next = next->next;
+	}
+	free(old_next);
+}
