@@ -27,6 +27,7 @@
 # include <sys/ioctl.h>
 # include <sys/resource.h>
 # include <sys/stat.h>
+# include <sys/types.h>
 # include <sys/wait.h>
 # include <termcap.h>
 # include <termios.h>
@@ -103,7 +104,7 @@ typedef struct s_data
 	char			*input;
 	char			**env;
 	t_env			*env_list;
-	int				last_exit_status;
+	int				exit_status;
 	t_token			*lexer_list;
 	t_tree			*parser_tree;
 }	t_data;
@@ -139,6 +140,8 @@ void		validate_malloc(t_data *data, void *ptr, void *to_free);
 void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 				t_tree *right);
 void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
+void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
+				DIR *dir_stream);
 
 //expander.c
 int			expand(t_data *data, t_tree *node);
@@ -176,5 +179,9 @@ t_node_type	get_node_type(t_token_type token_type);
 int			is_operator(char *s);
 int			is_quote(char c);
 int			is_fd(char *input);
+
+//wildcard.c
+int			expand_wildcard(t_data *data, char **arg);
+int			has_wildcard(const char *arg);
 
 #endif

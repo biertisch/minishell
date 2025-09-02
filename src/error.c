@@ -44,6 +44,19 @@ void	validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 	}
 }
 
+void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
+	DIR *dir_stream)
+{
+	if (!ptr)
+	{
+		report_error("malloc", SYSTEM_ERR);
+		ft_lstclear(&node, free);
+		if (dir_stream)
+			closedir(dir_stream);
+		error_exit(data);
+	}
+}
+
 void	error_exit(t_data *data)
 {
 	write(2, "fatal error: leaving minishell...\n", 33);

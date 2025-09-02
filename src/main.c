@@ -14,21 +14,21 @@
 
 //----------------TESTING----------------
 //------------------ENVP-----------------
-/* static void	print_env_list(t_env *head)
-{
-	printf("-----TESTING ENVP_TO_LIST-----\n\n");
+// static void	print_env_list(t_env *head)
+// {
+// 	printf("-----TESTING ENVP_TO_LIST-----\n\n");
 
-	for (int i = 0; head; i++)
-	{
-		printf("NODE %i\n", i);
-		if (head->key)
-			printf("%s", head->key);
-		if (head->value)
-			printf("=%s", head->value);
-		printf("\n\n");
-		head = head->next;
-	}
-} */
+// 	for (int i = 0; head; i++)
+// 	{
+// 		printf("NODE %i\n", i);
+// 		if (head->key)
+// 			printf("%s", head->key);
+// 		if (head->value)
+// 			printf("=%s", head->value);
+// 		printf("\n\n");
+// 		head = head->next;
+// 	}
+// }
 
 /* static void	print_env_array(char **env)
 {
@@ -76,52 +76,52 @@
 	}
 } */
 //-----------------PARSER-----------------
-/* static void print_parser_node(t_tree *node, int depth, char *pos)
-{
-	if (!node)
-		return ;
+// static void print_parser_node(t_tree *node, int depth, char *pos)
+// {
+// 	if (!node)
+// 		return ;
 
-	printf("NODE %i %s\n", depth, pos);
-	if (node->type == NODE_CMD)
-		printf("Type: NODE_CMD\n");
-	else if (node->type == NODE_PIPE)
-		printf("Type: NODE_PIPE\n");
-	else if (node->type == NODE_AND)
-		printf("Type: NODE_AND\n");
-	else if (node->type == NODE_OR)
-		printf("Type: NODE_OR\n");
-	else if (node->type == NODE_SUBSHELL)
-		printf("Type: NODE_SUBSHELL\n");
-	if (node->argv)
-		for (int i = 0; node->argv[i]; i++)
-			printf("Command argv[%i] = %s\n", i, node->argv[i]);
-	t_redir *redir = node->redir;
-	while (redir)
-	{
-		printf("Redir: \n");
-		if (redir->type == REDIR_IN)
-			printf("Type: REDIR_IN\n");
-		else if (redir->type == REDIR_OUT)
-			printf("Type: REDIR_OUT\n");
-		else if (redir->type == APPEND)
-			printf("Type: APPEND\n");
-		else if (redir->type == HEREDOC)
-			printf("Type: HEREDOC\n");
-		printf("FD: %d\n", redir->fd);
-		printf("File: %s\n", redir->file);
-		redir = redir->next;
-	}
-	printf("\n");
-	print_parser_node(node->left, depth + 1, "left");
-	print_parser_node(node->right, depth + 1, "right");
-}
+// 	printf("NODE %i %s\n", depth, pos);
+// 	if (node->type == NODE_CMD)
+// 		printf("Type: NODE_CMD\n");
+// 	else if (node->type == NODE_PIPE)
+// 		printf("Type: NODE_PIPE\n");
+// 	else if (node->type == NODE_AND)
+// 		printf("Type: NODE_AND\n");
+// 	else if (node->type == NODE_OR)
+// 		printf("Type: NODE_OR\n");
+// 	else if (node->type == NODE_SUBSHELL)
+// 		printf("Type: NODE_SUBSHELL\n");
+// 	if (node->argv)
+// 		for (int i = 0; node->argv[i]; i++)
+// 			printf("Command argv[%i] = %s\n", i, node->argv[i]);
+// 	t_redir *redir = node->redir;
+// 	while (redir)
+// 	{
+// 		printf("Redir: \n");
+// 		if (redir->type == REDIR_IN)
+// 			printf("Type: REDIR_IN\n");
+// 		else if (redir->type == REDIR_OUT)
+// 			printf("Type: REDIR_OUT\n");
+// 		else if (redir->type == APPEND)
+// 			printf("Type: APPEND\n");
+// 		else if (redir->type == HEREDOC)
+// 			printf("Type: HEREDOC\n");
+// 		printf("FD: %d\n", redir->fd);
+// 		printf("File: %s\n", redir->file);
+// 		redir = redir->next;
+// 	}
+// 	printf("\n");
+// 	print_parser_node(node->left, depth + 1, "left");
+// 	print_parser_node(node->right, depth + 1, "right");
+// }
 
-static void print_parser_tree(t_tree *head)
-{
-	printf("-----TESTING PARSER-----\n\n");
-	print_parser_node(head, 0, "head");
+// static void print_parser_tree(t_tree *head)
+// {
+// 	printf("-----TESTING PARSER-----\n\n");
+// 	print_parser_node(head, 0, "head");
 
-} */
+// }
 //-----------------END OF TESTING-----------------
 
 static void	process_input(t_data *data)

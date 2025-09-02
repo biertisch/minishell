@@ -29,16 +29,11 @@ static void	remove_outer_quotes(t_data *data, char **arg)
 	*arg = tmp;
 }
 
-/* static int	expand_wildcard(t_data *data, char **arg)
-{
-
-} */
-
 static void	expand_exit_status(t_data *data, char **arg, int i)
 {
 	char	*value;
 
-	value = ft_itoa(data->last_exit_status);
+	value = ft_itoa(data->exit_status);
 	validate_malloc(data, value, NULL);
 	*arg = replace_key_value(*arg, i, "?", value);
 	validate_malloc(data, *arg, value);
@@ -91,11 +86,10 @@ int	expand(t_data *data, t_tree *node)
 		while (node->argv[i])
 		{
 			if (node->argv[i][0] != '\'')
-			{
 				expand_dollar(data, &node->argv[i]);
-				//if (expand_wildcard(data, &node->argv[i]))
-				//	return (-1);
-			}
+			if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i]))
+				if (expand_wildcard(data, &node->argv, i))
+					return (-1);
 			remove_outer_quotes(data, &node->argv[i]);
 			i++;
 		}
@@ -104,6 +98,3 @@ int	expand(t_data *data, t_tree *node)
 	expand(data, node->right);
 	return (0);
 }
-
-// (if not single quotes) expand wildcards * in current directory
-// if wildcard is undefined, report error and return 
