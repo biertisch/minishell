@@ -6,23 +6,32 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/02 16:36:41 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/02 18:26:27 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//match each entry against the pattern
 //replace the argument with the list of matches
-static int	filter_matches(t_data *data, t_list **head, char *wildcard)
+
+//match each entry against the pattern
+
+static void	filter_matches(t_data *data, t_list **head, char *wildcard)
 {
 	t_list	*curr;
 	t_list	*prev;
 	t_list	*tmp;
 
+	while (*head && !match_wildcard((*head)->content, wildcard))
+	{
+		tmp = *head;
+		*head = (*head)->next;
+		ft_lstdelone(tmp, free);
+	}
+	if (!*head)
+		return ;
 	prev = *head;
 	curr = (*head)->next;
-
 	while (curr)
 	{
 		if (!match_wildcard((*head)->content, wildcard))
@@ -30,25 +39,11 @@ static int	filter_matches(t_data *data, t_list **head, char *wildcard)
 			tmp = curr;
 			prev->next = curr->next;
 			curr = curr->next;
-			prev 
 			ft_lstdelone(tmp, free);
 		}
+		prev = curr;
+		curr = curr->next;
 	}
-
-	
-	while (*head && !match_wildcard((*head)->content, wildcard))
-	{
-		tmp = *head;
-		*head = (*head)->next;
-		ft_lstdelone(tmp, free);
-	}
-	if (*head)
-		trav = (*head)->next;
-	while (trav)
-	{
-		
-	}
-	
 }
 
 static t_list	*get_entries(t_data *data, DIR *dir_stream)
