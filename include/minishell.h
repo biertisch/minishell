@@ -181,7 +181,10 @@ int			is_quote(char c);
 int			is_fd(char *input);
 
 //wildcard.c
-int			expand_wildcard(t_data *data, char **arg);
+int			expand_wildcard(t_data *data, char ***argv, int i);
 int			has_wildcard(const char *arg);
+
+//wildcard_match.c
+int			match_wildcard(char *entry, char *wildcard);
 
 #endif
