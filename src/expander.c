@@ -12,48 +12,6 @@
 
 #include "../include/minishell.h"
 
-static void	copy_without_quotes(char *dest, char *src, int open, int close)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (src[i])
-	{
-		if (i != open && i != close)
-		{
-			dest[j] = src[i];
-			j++;
-		}
-		i++;
-	}
-	dest[j] = '\0';
-}
-
-static void	remove_outer_quotes(t_data *data, char **arg)
-{
-	char	*tmp;
-	char	c;
-	int		open;
-	int		close;
-
-	open = 0;
-	while ((*arg)[open] && !is_quote((*arg)[open]))
-		open++;
-	if (!(*arg)[open])
-		return ;
-	c = (*arg)[open];
-	close = ft_strlen(*arg) - 1;
-	while (close > open && (*arg)[close] != c)
-		close--;
-	tmp = malloc(sizeof(char) * (ft_strlen(*arg) - 1));
-	validate_malloc(data, tmp, NULL);
-	copy_without_quotes(tmp, *arg, open, close);
-	free(*arg);
-	*arg = tmp;
-}
-
 static int	expand_redir(t_data *data, t_tree *node)
 {
 	t_redir	*trav;
@@ -76,7 +34,7 @@ static int	expand_redir(t_data *data, t_tree *node)
 			if (entries)
 				trav->file = update_redir(data, trav->file, entries);
 		}
-		remove_outer_quotes(data, &trav->file);
+		remove_quotes(data, &trav->file);
 		trav = trav->next;
 	}
 	return (0);
@@ -99,7 +57,7 @@ static int	expand_argv(t_data *data, t_tree *node)
 			if (entries)
 				node->argv = update_argv(data, node->argv, i, entries);
 		}
-		remove_outer_quotes(data, &node->argv[i]);
+		remove_quotes(data, &node->argv[i]);
 		i++;
 	}
 	return (0);

@@ -133,6 +133,7 @@ static void	process_input(t_data *data)
 		return ;
 	if (expand(data, data->parser_tree))
 		return ;
+	// print_parser_tree(data->parser_tree); //testing
 	//if (execute(data)) //TODO PEDRO
 		//return ;
 }

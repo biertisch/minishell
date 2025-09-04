@@ -149,6 +149,9 @@ int			expand(t_data *data, t_tree *node);
 //expander_dollar.c
 void		expand_dollar(t_data *data, char **arg);
 
+//expander_quotes.c
+void		remove_quotes(t_data *data, char **arg);
+
 //lexer.c
 int			lexer(t_data *data);
 
