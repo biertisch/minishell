@@ -42,6 +42,27 @@ int	execute_pipe_entered(t_data *data, t_stack *stack)
 	right_in = (stack->pipe)[0];
 	right_out = stack->out_fd;
 	stack->phase = LAUNCH_LEFT;
-	//push_stack(stack, stack->node->left, left_in, left_out);
+	push_stack(&stack, stack->node->left, left_in, left_out, data);
+	print_stack(stack);
+	consume_stack(data, &stack);
+	if (stack->node->right)
+		push_stack(&stack, stack->node->right, right_in, right_out, data);
+	consume_stack(data, &stack);
 	return (0);
+}
+
+void	consume_stack(t_data *data, t_stack **stack)
+{
+	pid_t	pid;
+
+	if ((*stack)->type == NODE_CMD)
+	{
+		pid = fork();
+		if (pid < 0)
+			check_for_errors(-1, data, *stack, "fork");
+		else if (pid == 0)
+			child(data, stack);
+		//else
+		//	parent(stack, pid);
+	}
 }

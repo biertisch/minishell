@@ -31,7 +31,7 @@
 # include <termcap.h>
 # include <termios.h>
 # include <unistd.h>
-
+# include <errno.h>
 //ENUMS
 typedef enum e_token_type
 {
@@ -206,8 +206,25 @@ void		sigint_handler(int sig);
 int			execute(t_data *data);
 int			execute_pipe(t_data *data, t_stack *stack);
 int			execute_pipe_entered(t_data *data, t_stack *stack);
+void		consume_stack(t_data *data, t_stack **stack);
 
 //stack.c
 t_stack		*create_stack(t_data *data);
+void		push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *data);
+int			has_pipe_ancestor(t_stack *stack);
+void		print_stack(t_stack *stack);
+
+//child.c
+void		child(t_data *data, t_stack **stack);
+void		child_redir_in(t_data *data, t_stack **stack);
+void		child_no_redir(t_data *data, t_stack **stack);
+void		child_redir_out(t_data *data, t_stack **stack);
+
+//executor_utils.c
+char		*correct_path(t_data * data, char *cmd);
+char		*run_curr_dir(char *cmd);
+
+//main.c - needed to uncomment function to print node because i need it lol
+void 		print_parser_node(t_tree *node, int depth, char *pos);
 
 #endif

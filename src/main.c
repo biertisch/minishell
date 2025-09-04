@@ -76,7 +76,7 @@
 	}
 } */
 //-----------------PARSER-----------------
- static void print_parser_node(t_tree *node, int depth, char *pos)
+void print_parser_node(t_tree *node, int depth, char *pos)
 {
 	if (!node)
 		return ;
