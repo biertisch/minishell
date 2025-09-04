@@ -141,10 +141,13 @@ void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 				t_tree *right);
 void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
 void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
-				DIR *dir_stream);
+				char **new_argv);
 
 //expander.c
 int			expand(t_data *data, t_tree *node);
+
+//expander_dollar.c
+void		expand_dollar(t_data *data, char **arg);
 
 //lexer.c
 int			lexer(t_data *data);
@@ -181,8 +184,12 @@ int			is_quote(char c);
 int			is_fd(char *input);
 
 //wildcard.c
-int			expand_wildcard(t_data *data, char ***argv, int i);
 int			has_wildcard(const char *arg);
+int			expand_wildcard(t_data *data, char *pattern, t_list **entries);
+char		*update_redir(t_data *data, char *file, t_list *entry);
+
+//wildcard_argv.c
+char		**update_argv(t_data *data, char **argv, int i, t_list *entries);
 
 //wildcard_match.c
 int			match_wildcard(char *entry, char *wildcard);

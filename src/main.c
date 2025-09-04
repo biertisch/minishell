@@ -145,7 +145,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	//setup_signals //TODO PEDRO
-	envp_to_list(&data, envp);
+	envp_to_list(&data, envp); //protect if shell starts without env variables (create them?)
 	while (1)
 	{
 		data.input = readline("minishell$ ");

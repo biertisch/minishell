@@ -12,88 +12,110 @@
 
 #include "../include/minishell.h"
 
+static void	copy_without_quotes(char *dest, char *src, int open, int close)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (src[i])
+	{
+		if (i != open && i != close)
+		{
+			dest[j] = src[i];
+			j++;
+		}
+		i++;
+	}
+	dest[j] = '\0';
+}
+
 static void	remove_outer_quotes(t_data *data, char **arg)
 {
-	char	*set;
 	char	*tmp;
+	char	c;
+	int		open;
+	int		close;
 
-	if (**arg == '\'')
-		set = "'";
-	else if (**arg == '"')
-		set = "\"";
-	else
+	open = 0;
+	while ((*arg)[open] && !is_quote((*arg)[open]))
+		open++;
+	if (!(*arg)[open])
 		return ;
-	tmp = ft_strtrim(*arg, set);
+	c = (*arg)[open];
+	close = ft_strlen(*arg) - 1;
+	while (close > open && (*arg)[close] != c)
+		close--;
+	tmp = malloc(sizeof(char) * (ft_strlen(*arg) - 1));
 	validate_malloc(data, tmp, NULL);
+	copy_without_quotes(tmp, *arg, open, close);
 	free(*arg);
 	*arg = tmp;
 }
 
-static void	expand_exit_status(t_data *data, char **arg, int i)
+static int	expand_redir(t_data *data, t_tree *node)
 {
-	char	*value;
+	t_redir	*trav;
+	t_list	*entries;
 
-	value = ft_itoa(data->exit_status);
-	validate_malloc(data, value, NULL);
-	*arg = replace_key_value(*arg, i, "?", value);
-	validate_malloc(data, *arg, value);
-	free(value);
+	trav = node->redir;
+	while (trav)
+	{
+		if (trav->file[0] != '\'')
+			expand_dollar(data, &trav->file);
+		if (!is_quote(trav->file[0]) && has_wildcard(trav->file))
+		{
+			if (expand_wildcard(data, trav->file, &entries))
+				return (-1);
+			if (entries && entries->next)
+			{
+				ft_lstclear(&entries, free);
+				return (report_error("ambiguous redirect", INTERNAL_ERR));
+			}
+			if (entries)
+				trav->file = update_redir(data, trav->file, entries);
+		}
+		remove_outer_quotes(data, &trav->file);
+		trav = trav->next;
+	}
+	return (0);
 }
 
-static void	expand_variable(t_data *data, char **arg, int i)
+static int	expand_argv(t_data *data, t_tree *node)
 {
-	char	*key;
-	char	*value;
-
-	key = get_env_key((*arg) + i + 1);
-	validate_malloc(data, key, NULL);
-	value = get_env_value(data->env_list, key);
-	if (!value)
-		value = "";
-	*arg = replace_key_value(*arg, i, key, value);
-	validate_malloc(data, *arg, key);
-	free(key);
-}
-
-static void	expand_dollar(t_data *data, char **arg)
-{
-	int	i;
+	int		i;
+	t_list	*entries;
 
 	i = 0;
-	while ((*arg)[i])
+	while (node->argv[i])
 	{
-		if ((*arg)[i] == '$')
+		if (node->argv[i][0] != '\'')
+			expand_dollar(data, &node->argv[i]);
+		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i]))
 		{
-			if ((*arg)[i + 1] == '?')
-				expand_exit_status(data, arg, i);
-			else
-				expand_variable(data, arg, i);
-			i = -1;
+			if (expand_wildcard(data, node->argv[i], &entries))
+				return (-1);
+			if (entries)
+				node->argv = update_argv(data, node->argv, i, entries);
 		}
+		remove_outer_quotes(data, &node->argv[i]);
 		i++;
 	}
+	return (0);
 }
 
+//change to avoid recursion?
 int	expand(t_data *data, t_tree *node)
 {
-	int	i;
-
 	if (!node)
 		return (-1);
 	if (node->type == NODE_CMD && node->argv)
-	{
-		i = 0;
-		while (node->argv[i])
-		{
-			if (node->argv[i][0] != '\'')
-				expand_dollar(data, &node->argv[i]);
-			if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i]))
-				if (expand_wildcard(data, &node->argv, i))
-					return (-1);
-			remove_outer_quotes(data, &node->argv[i]);
-			i++;
-		}
-	}
+		if (expand_argv(data, node))
+			return (-1);
+	if ((node->type == NODE_CMD || node->type == NODE_SUBSHELL) && node->redir)
+		if (expand_redir(data, node))
+			return (-1);
 	expand(data, node->left);
 	expand(data, node->right);
 	return (0);

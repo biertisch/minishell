@@ -65,7 +65,7 @@ void	set_env_value(t_env *head, char *key, char *new_value)
 		if (!ft_strcmp(head->key, key))
 		{
 			free(head->value);
-			head->value = ft_strdup(new_value); //remove strdup if new_value is already malloc'ed
+			head->value = new_value; //strdup if new_value is not malloc'ed
 			return ;
 		}
 		head = head->next;

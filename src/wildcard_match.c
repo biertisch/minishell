@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 14:39:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/03 15:03:12 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/04 11:26:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ static void	advance_both(int *i, int *j)
 	(*j)++;
 }
 
-static int	is_hidden_file(char *entry, char *wildcard)
+static int	is_hidden_file(char *entry, char *pattern)
 {
-	return ((entry[0] == '.' && wildcard[0] != '.') || !ft_strcmp(entry, ".")
+	return ((entry[0] == '.' && pattern[0] != '.') || !ft_strcmp(entry, ".")
 		|| !ft_strcmp(entry, ".."));
 }
 
-int	match_wildcard(char *entry, char *wildcard)
+int	match_wildcard(char *entry, char *pattern)
 {
 	int	i;
 	int	j;
@@ -48,20 +48,20 @@ int	match_wildcard(char *entry, char *wildcard)
 	i = 0;
 	j = 0;
 	star = -1;
-	if (is_hidden_file(entry, wildcard))
+	if (is_hidden_file(entry, pattern))
 		return (0);
 	while (entry[i])
 	{
-		if (entry[i] == wildcard[j])
+		if (entry[i] == pattern[j])
 			advance_both(&i, &j);
-		else if (wildcard[j] == '*')
+		else if (pattern[j] == '*')
 			record_star(&j, &star);
 		else if (!backtrack_on_mismatch(&i, &j, &star))
 			return (0);
 	}
-	while (wildcard[j] && wildcard[j] == '*')
+	while (pattern[j] && pattern[j] == '*')
 		j++;
-	if (wildcard[j])
+	if (pattern[j])
 		return (0);
 	return (1);
 }
