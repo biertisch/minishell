@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/04 12:43:51 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/04 18:22:26 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	expand_dollar(t_data *data, char **arg)
 	i = 0;
 	while ((*arg)[i])
 	{
-		if ((*arg)[i] == '$')
+		if ((*arg)[i] == '$' && (*arg)[i + 1] && (*arg)[i + 1] != ' ')
 		{
 			if ((*arg)[i + 1] == '?')
 				expand_exit_status(data, arg, i);
