@@ -21,6 +21,7 @@ char	*correct_path(t_data *data, char *cmd)
 
 	if (!cmd)
 		return (NULL);
+	printf("%s\n\n\n\n\n", get_env_value(data->env_list, "PATH"));
 	paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
 	i = 0;
 	full_path = ft_strchr(cmd, '/');

@@ -58,6 +58,17 @@ int	has_pipe_ancestor(t_stack *stack)
 	return (0);
 }
 
+void	pop(t_stack **stack)
+{
+	t_stack *new_head;
+
+	if (stack == NULL || *stack == NULL)
+		return ;
+	new_head = (*stack)->next;
+	free((*stack));
+	*stack = new_head;
+}
+
 //use ONLY for debug
 void	print_stack(t_stack *stack)
 {

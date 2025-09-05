@@ -213,6 +213,7 @@ t_stack		*create_stack(t_data *data);
 void		push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *data);
 int			has_pipe_ancestor(t_stack *stack);
 void		print_stack(t_stack *stack);
+void		pop(t_stack **stack);
 
 //child.c
 void		child(t_data *data, t_stack **stack);

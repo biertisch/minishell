@@ -71,7 +71,7 @@ int	report_error(char *error_msg, t_error error_code)
 	}
 	return (-1);
 }
-
+//error_exit error.c
 void	check_for_errors(int status, t_data *data, t_stack *stack, char *command_name)
 {
 	if (status == -1)
@@ -79,6 +79,7 @@ void	check_for_errors(int status, t_data *data, t_stack *stack, char *command_na
 		perror(command_name);
 		free_stack(stack);
 		free_all(data);
+		exit(EXIT_FAILURE);
 	}
 }
 
