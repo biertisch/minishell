@@ -52,6 +52,7 @@ typedef enum e_token_type
 typedef enum e_node_type
 {
 	NODE_CMD,
+	NODE_BUILTIN,
 	NODE_PIPE,
 	NODE_AND,
 	NODE_OR,
@@ -110,6 +111,9 @@ typedef struct s_data
 }	t_data;
 
 //PROTOTYPES
+// builtin.c
+void		process_builtin(t_data *data, t_tree *head);
+
 //cleanup.c
 void		free_all(t_data *data);
 void		free_command_data(t_data *data);
@@ -185,6 +189,7 @@ t_node_type	get_node_type(t_token_type token_type);
 int			is_operator(char *s);
 int			is_quote(char c);
 int			is_fd(char *input);
+int			is_builtin(char *cmd);
 
 //wildcard.c
 int			has_wildcard(const char *arg);

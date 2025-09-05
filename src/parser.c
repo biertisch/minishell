@@ -57,6 +57,8 @@ static t_tree	*parse_command(t_data *data, t_token **token)
 	validate_malloc(data, node, NULL);
 	if (get_command_data(data, token, node))
 		return (free_parser_node(&node), NULL);
+	if (is_builtin(node->argv[0]))
+		node->type = NODE_BUILTIN;
 	return (node);
 }
 

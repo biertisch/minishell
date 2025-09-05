@@ -40,41 +40,41 @@
 	}
 } */
 //-----------------LEXER-----------------
-/* static void	print_lexer_list(t_token *head)
-{
-	printf("-----TESTING LEXER-----\n\n");
-	
-	for (int i = 0; head; i++)
-	{
-		printf("NODE %i\n", i);
-		if (head->type == WORD)
-			printf("Type: WORD\n");
-		else if (head->type == PIPE)
-			printf("Type: PIPE\n");
-		else if (head->type == AND)
-			printf("Type: AND\n");
-		else if (head->type == OR)
-			printf("Type: OR\n");
-		else if (head->type == REDIR_IN)
-			printf("Type: REDIR_IN\n");
-		else if (head->type == REDIR_OUT)
-			printf("Type: REDIR_OUT\n");
-		else if (head->type == APPEND)
-			printf("Type: APPEND\n");
-		else if (head->type == HEREDOC)
-			printf("Type: HEREDOC\n");
-		else if (head->type == FD)
-			printf("Type: FD\n");
-		else if (head->type == LPAREN)
-			printf("Type: LPAREN\n");
-		else if (head->type == RPAREN)
-			printf("Type: RPAREN\n");
-		if (head->value)
-			printf("Value: %s\n", head->value);
-		printf("\n");
-		head = head->next;
-	}
-} */
+// static void	print_lexer_list(t_token *head)
+// {
+// 	printf("-----TESTING LEXER-----\n\n");
+// 
+// 	for (int i = 0; head; i++)
+// 	{
+// 		printf("NODE %i\n", i);
+// 		if (head->type == WORD)
+// 			printf("Type: WORD\n");
+// 		else if (head->type == PIPE)
+// 			printf("Type: PIPE\n");
+// 		else if (head->type == AND)
+// 			printf("Type: AND\n");
+// 		else if (head->type == OR)
+// 			printf("Type: OR\n");
+// 		else if (head->type == REDIR_IN)
+// 			printf("Type: REDIR_IN\n");
+// 		else if (head->type == REDIR_OUT)
+// 			printf("Type: REDIR_OUT\n");
+// 		else if (head->type == APPEND)
+// 			printf("Type: APPEND\n");
+// 		else if (head->type == HEREDOC)
+// 			printf("Type: HEREDOC\n");
+// 		else if (head->type == FD)
+// 			printf("Type: FD\n");
+// 		else if (head->type == LPAREN)
+// 			printf("Type: LPAREN\n");
+// 		else if (head->type == RPAREN)
+// 			printf("Type: RPAREN\n");
+// 		if (head->value)
+// 			printf("Value: %s\n", head->value);
+// 		printf("\n");
+// 		head = head->next;
+// 	}
+// }
 //-----------------PARSER-----------------
 // static void print_parser_node(t_tree *node, int depth, char *pos)
 // {
@@ -84,6 +84,8 @@
 // 	printf("NODE %i %s\n", depth, pos);
 // 	if (node->type == NODE_CMD)
 // 		printf("Type: NODE_CMD\n");
+// 	else if (node->type == NODE_BUILTIN)
+// 		printf("Type: NODE_BUILTIN\n");
 // 	else if (node->type == NODE_PIPE)
 // 		printf("Type: NODE_PIPE\n");
 // 	else if (node->type == NODE_AND)
@@ -120,7 +122,6 @@
 // {
 // 	printf("-----TESTING PARSER-----\n\n");
 // 	print_parser_node(head, 0, "head");
-
 // }
 //-----------------END OF TESTING-----------------
 
@@ -133,7 +134,6 @@ static void	process_input(t_data *data)
 		return ;
 	if (expand(data, data->parser_tree))
 		return ;
-	// print_parser_tree(data->parser_tree); //testing
 	//if (execute(data)) //TODO PEDRO
 		//return ;
 }
@@ -145,8 +145,8 @@ int	main(int argc, char **argv, char **envp)
 	ft_bzero(&data, sizeof(t_data));
 	(void)argc;
 	(void)argv;
-	//setup_signals //TODO PEDRO
-	envp_to_list(&data, envp); //protect if shell starts without env variables (create them?)
+	//setup_signals //TODO BEATRIZ
+	envp_to_list(&data, envp);
 	while (1)
 	{
 		data.input = readline("minishell$ ");
@@ -159,3 +159,9 @@ int	main(int argc, char **argv, char **envp)
 	free_all(&data);
 	return (EXIT_SUCCESS);
 }
+
+// TODO BEATRIZ
+// - update exit status after errors
+// - handle empty envp
+// - setup signals
+// - check recursion

@@ -1,8 +1,8 @@
 NAME        = minishell
 
-SRC_FILES   = cleanup env env_convert env_list error expander expander_dollar expander_quotes\
-				lexer lexer_list main parser parser_cmd parser_redir parser_tree parser_utils\
-				wildcard wildcard_argv wildcard_match
+SRC_FILES   = builtin cleanup env env_convert env_list error expander expander_dollar expander_quotes\
+				lexer lexer_list main parser parser_cmd parser_redir parser_tree parser_utils wildcard\
+				wildcard_argv wildcard_match
 SRC_DIR     = src
 OBJ_DIR     = obj
 INC_DIR     = include

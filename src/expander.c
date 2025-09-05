@@ -68,10 +68,11 @@ int	expand(t_data *data, t_tree *node)
 {
 	if (!node)
 		return (-1);
-	if (node->type == NODE_CMD && node->argv)
+	if ((node->type == NODE_CMD || node->type == NODE_BUILTIN) && node->argv)
 		if (expand_argv(data, node))
 			return (-1);
-	if ((node->type == NODE_CMD || node->type == NODE_SUBSHELL) && node->redir)
+	if ((node->type == NODE_CMD || node->type == NODE_BUILTIN
+			|| node->type == NODE_SUBSHELL) && node->redir)
 		if (expand_redir(data, node))
 			return (-1);
 	expand(data, node->left);
