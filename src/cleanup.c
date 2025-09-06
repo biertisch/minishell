@@ -41,3 +41,19 @@ void	free_all(t_data *data)
 	free_command_data(data);
 	rl_clear_history();
 }
+
+void	free_stack(t_stack *stack)
+{
+	t_stack	*next;
+	t_stack	*old_next;
+
+	old_next = stack;
+	next = stack->next;
+	while (next)
+	{
+		free(old_next);
+		old_next = next;
+		next = next->next;
+	}
+	free(old_next);
+}

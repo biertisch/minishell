@@ -12,9 +12,6 @@
 
 #include "../include/minishell.h"
 
-<<<<<<< HEAD
-//useful to implement built-in export
-=======
 //used in variable expansion
 char	*replace_key_value(char *arg, int i, char *key, char *value)
 {
@@ -49,7 +46,6 @@ char	*get_env_key(char *arg)
 }
 
 //used variable expansion and built-in export
->>>>>>> origin/dev
 char	*get_env_value(t_env *head, char *key)
 {
 	while (head)
@@ -61,11 +57,7 @@ char	*get_env_value(t_env *head, char *key)
 	return (NULL);
 }
 
-<<<<<<< HEAD
-//useful to implement built-in export
-=======
 //used in built-in export
->>>>>>> origin/dev
 void	set_env_value(t_env *head, char *key, char *new_value)
 {
 	while (head)
@@ -73,22 +65,14 @@ void	set_env_value(t_env *head, char *key, char *new_value)
 		if (!ft_strcmp(head->key, key))
 		{
 			free(head->value);
-<<<<<<< HEAD
-			head->value = ft_strdup(new_value); //remove strdup if new_value is already malloc'ed
-=======
 			head->value = new_value; //strdup if new_value is not malloc'ed
->>>>>>> origin/dev
 			return ;
 		}
 		head = head->next;
 	}
 }
 
-<<<<<<< HEAD
-//useful to implement built-in unset
-=======
 //used in built-in unset
->>>>>>> origin/dev
 void	unset_env(t_env **head, char *key)
 {
 	t_env	*trav;

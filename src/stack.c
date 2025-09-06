@@ -70,6 +70,7 @@ void	pop(t_stack **stack)
 }
 
 //use ONLY for debug
+/**
 void	print_stack(t_stack *stack)
 {
 	while (stack)
@@ -78,4 +79,4 @@ void	print_stack(t_stack *stack)
 		print_parser_node(stack->node, 0, "cona");
 		stack = stack->next;
 	}
-}
+}*/

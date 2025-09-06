@@ -44,11 +44,6 @@ void	validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 	}
 }
 
-<<<<<<< HEAD
-void	error_exit(t_data *data)
-{
-	write(2, "fatal error: leaving minishell...\n", 33);
-=======
 void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 	char **new_argv)
 {
@@ -64,7 +59,6 @@ void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 void	error_exit(t_data *data)
 {
 	write(2, "fatal error: leaving minishell...\n", 34);
->>>>>>> origin/dev
 	free_all(data);
 	exit(EXIT_FAILURE);
 }
@@ -89,8 +83,7 @@ int	report_error(char *error_msg, t_error error_code)
 	}
 	return (-1);
 }
-<<<<<<< HEAD
-//error_exit error.c
+
 void	check_for_errors(int status, t_data *data, t_stack *stack, char *command_name)
 {
 	if (status == -1)
@@ -101,21 +94,3 @@ void	check_for_errors(int status, t_data *data, t_stack *stack, char *command_na
 		exit(EXIT_FAILURE);
 	}
 }
-
-void	free_stack(t_stack *stack)
-{
-	t_stack	*next;
-	t_stack	*old_next;
-
-	old_next = stack;
-	next = stack->next;
-	while (next)
-	{
-		free(old_next);
-		old_next = next;
-		next = next->next;
-	}
-	free(old_next);
-}
-=======
->>>>>>> origin/dev

@@ -12,8 +12,6 @@
 
 #include "../include/minishell.h"
 
-<<<<<<< HEAD
-=======
 int	is_builtin(char *cmd)
 {
 	return (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
@@ -22,7 +20,6 @@ int	is_builtin(char *cmd)
 		|| !ft_strcmp(cmd, "exit"));
 }
 
->>>>>>> origin/dev
 //classifies a substring as FD if it is only composed of digits
 //and comes immediately before a redirection operator (no spaces allowed)
 int	is_fd(char *input)
