@@ -27,6 +27,7 @@
 # include <sys/ioctl.h>
 # include <sys/resource.h>
 # include <sys/stat.h>
+# include <sys/types.h>
 # include <sys/wait.h>
 # include <termcap.h>
 # include <termios.h>
@@ -51,6 +52,7 @@ typedef enum e_token_type
 typedef enum e_node_type
 {
 	NODE_CMD,
+	NODE_BUILTIN,
 	NODE_PIPE,
 	NODE_AND,
 	NODE_OR,
@@ -125,11 +127,15 @@ typedef struct s_data
 	char			*input;
 	char			**env;
 	t_env			*env_list;
+	int				exit_status;
 	t_token			*lexer_list;
 	t_tree			*parser_tree;
 }	t_data;
 
 //PROTOTYPES
+// builtin.c
+void		process_builtin(t_data *data, t_tree *head);
+
 //cleanup.c
 void		free_all(t_data *data);
 void		free_command_data(t_data *data);
@@ -139,6 +145,8 @@ void		free_string_array(char ***arr);
 void		unset_env(t_env **head, char *key);
 void		set_env_value(t_env *head, char *key, char *new_value);
 char		*get_env_value(t_env *head, char *key);
+char		*get_env_key(char *arg);
+char		*replace_key_value(char *arg, int i, char *key, char *value);
 
 //env_convert.c
 void		env_list_to_array(t_data *data);
@@ -161,8 +169,17 @@ void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
 void		free_stack(t_stack *stack);
 void		check_for_errors(int status, t_data *data, t_stack *stack,
 				char *command_name);
+void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
+				char **new_argv);
 
 //expander.c
+int			expand(t_data *data, t_tree *node);
+
+//expander_dollar.c
+void		expand_dollar(t_data *data, char **arg);
+
+//expander_quotes.c
+void		remove_quotes(t_data *data, char **arg);
 
 //lexer.c
 int			lexer(t_data *data);
@@ -227,5 +244,17 @@ char		*run_curr_dir(char *cmd);
 
 //main.c - needed to uncomment function to print node because i need it lol
 void 		print_parser_node(t_tree *node, int depth, char *pos);
+int			is_builtin(char *cmd);
+
+//wildcard.c
+int			has_wildcard(const char *arg);
+int			expand_wildcard(t_data *data, char *pattern, t_list **entries);
+char		*update_redir(t_data *data, char *file, t_list *entry);
+
+//wildcard_argv.c
+char		**update_argv(t_data *data, char **argv, int i, t_list *entries);
+
+//wildcard_match.c
+int			match_wildcard(char *entry, char *wildcard);
 
 #endif

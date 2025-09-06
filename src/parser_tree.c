@@ -50,6 +50,10 @@ void	free_parser_node(t_tree **node)
 	*node = NULL;
 }
 
+<<<<<<< HEAD
+=======
+//perhaps change to avoid recursion
+>>>>>>> origin/dev
 void	free_parser_tree(t_tree **node)
 {
 	if (!node || !*node)
