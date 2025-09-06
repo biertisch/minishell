@@ -32,12 +32,15 @@ CFLAGS      = -Wall -Wextra -Werror -I$(INC_DIR)
 RM          = rm -rf
 
 RED=\033[0;31m
+GREEN	    := \033[92;5;118m
 ORANGE      := \033[38;5;208m
 YELLOW      := \033[38;5;226m
 GREEN       := \033[38;5;082m
 BLUE        := \033[38;5;027m
 INDIGO      := \033[38;5;057m
 VIOLET      := \033[38;5;129m
+BLINK       := \033[5m
+CURSIVE	    := \033[33;3m
 DEF_COLOUR=\033[0m
 
 SRC         = $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_FILES)))
@@ -55,6 +58,7 @@ all: $(PRINTF_LIB) headers $(NAME)
 		$(BLUE)|   |   | |  | |  |  | |  |/  \ ||  |  ||   [_ |     ||     |$(DEF_COLOUR)\n\
 		$(INDIGO)|   |   | |  | |  |  | |  |\    ||  |  ||     ||     ||     |$(DEF_COLOUR)\n\
 		$(VIOLET)|___|___||____||__|__||____|\___||__|__||_____||_____||_____|$(DEF_COLOUR)\n"
+	@printf "$(BLINK)$(CURSIVE)$(GREEN)\t\t\t\t\t\t- Minishell ready :)$(DEF_COLOUR)\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@

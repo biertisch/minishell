@@ -61,3 +61,10 @@ void	free_parser_tree(t_tree **node)
 		free_parser_tree(&(*node)->right);
 	free_parser_node(node);
 }
+
+int	count_tree_nodes(t_tree *root)
+{
+	if (!root)
+		return (0);
+	return (1 + count_tree_nodes(root->left) + count_tree_nodes(root->right));
+}

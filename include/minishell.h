@@ -208,6 +208,7 @@ void		free_parser_tree(t_tree **node);
 void		free_parser_node(t_tree **node);
 void		free_redir(t_redir *redir);
 t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);
+int			count_tree_nodes(t_tree *root);
 
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
@@ -221,9 +222,17 @@ void		sigint_handler(int sig);
 
 //executor.c
 int			execute(t_data *data);
+int			execute_stack(t_data *data, t_stack *stack);
+int			execute_cmd(t_data *data, t_stack *stack);
 int			execute_pipe(t_data *data, t_stack *stack);
 int			execute_pipe_entered(t_data *data, t_stack *stack);
-void		consume_stack(t_data *data, t_stack **stack);
+int			execute_pipe_launch_left(t_data *data, t_stack *stack);
+int			execute_pipe_launch_right(t_data *data, t_stack *stack);
+int			execute_pipe_wait(t_stack *stack);
+int			execute_pipe_done(t_stack *stack);
+int			execute_cmd_entered(t_data *data, t_stack *stack);
+int			execute_cmd_done(t_stack *stack);
+
 
 //stack.c
 t_stack		*create_stack(t_data *data);
@@ -243,7 +252,6 @@ char		*correct_path(t_data * data, char *cmd);
 char		*run_curr_dir(char *cmd);
 
 //main.c - needed to uncomment function to print node because i need it lol
-void 		print_parser_node(t_tree *node, int depth, char *pos);
 int			is_builtin(char *cmd);
 
 //wildcard.c
