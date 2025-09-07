@@ -117,7 +117,7 @@
  	print_parser_node(node->right, depth + 1, "right");
  }
 
- static void print_parser_tree(t_tree *head)
+void print_parser_tree(t_tree *head)
  {
  	printf("-----TESTING PARSER-----\n\n");
  	print_parser_node(head, 0, "head");
@@ -152,7 +152,6 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		if (data.input[0])
 			process_input(&data);
-		print_parser_tree(data.parser_tree);
 		free_command_data(&data);
 	}
 	free_all(&data);

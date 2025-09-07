@@ -222,16 +222,16 @@ void		sigint_handler(int sig);
 
 //executor.c
 int			execute(t_data *data);
-int			execute_stack(t_data *data, t_stack *stack);
-int			execute_cmd(t_data *data, t_stack *stack);
-int			execute_pipe(t_data *data, t_stack *stack);
-int			execute_pipe_entered(t_data *data, t_stack *stack);
-int			execute_pipe_launch_left(t_data *data, t_stack *stack);
-int			execute_pipe_launch_right(t_data *data, t_stack *stack);
-int			execute_pipe_wait(t_stack *stack);
-int			execute_pipe_done(t_stack *stack);
-int			execute_cmd_entered(t_data *data, t_stack *stack);
-int			execute_cmd_done(t_stack *stack);
+int			execute_stack(t_data *data, t_stack **stack);
+int			execute_cmd(t_data *data, t_stack **stack);
+int			execute_pipe(t_data *data, t_stack **stack);
+int			execute_pipe_entered(t_data *data, t_stack **stack);
+int			execute_pipe_launch_left(t_data *data, t_stack **stack);
+int			execute_pipe_launch_right(t_data *data, t_stack **stack);
+int			execute_pipe_wait(t_stack **stack);
+int			execute_pipe_done(t_stack **stack);
+int			execute_cmd_entered(t_data *data, t_stack **stack);
+int			execute_cmd_done(t_stack **stack);
 
 
 //stack.c
@@ -240,6 +240,7 @@ void		push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *d
 int			has_pipe_ancestor(t_stack *stack);
 //void		print_stack(t_stack *stack);
 void		pop(t_stack **stack);
+t_stack		**get_first_pipe(t_stack **stack);
 
 //child.c
 void		child(t_data *data, t_stack **stack);
@@ -252,6 +253,7 @@ char		*correct_path(t_data * data, char *cmd);
 char		*run_curr_dir(char *cmd);
 
 //main.c - needed to uncomment function to print node because i need it lol
+void 		print_parser_tree(t_tree *head);
 int			is_builtin(char *cmd);
 
 //wildcard.c
@@ -264,5 +266,8 @@ char		**update_argv(t_data *data, char **argv, int i, t_list *entries);
 
 //wildcard_match.c
 int			match_wildcard(char *entry, char *wildcard);
+
+//parent.c
+int			parent(t_stack **stack, pid_t pid);
 
 #endif

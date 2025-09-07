@@ -21,6 +21,9 @@ t_stack	*create_stack(t_data *data)
 	head->phase = ENTERED;
 	head->type = (data->parser_tree)->type;
 	head->node = data->parser_tree;
+	head->child_count = 0;
+	head->child_pid[0] = -1;
+	head->child_pid[1] = -1;
 	head->in_fd = STDIN_FILENO;
 	head->out_fd = STDOUT_FILENO;
 	head->next = NULL;
@@ -67,6 +70,20 @@ void	pop(t_stack **stack)
 	new_head = (*stack)->next;
 	free((*stack));
 	*stack = new_head;
+}
+
+t_stack	**get_first_pipe(t_stack **stack)
+{
+	t_stack	**head;
+
+	head = stack;
+	while (head && (*head))
+	{
+		if ((*head)->type == NODE_PIPE)
+			return (head);
+		head = &((*head)->next);
+	}
+	return (NULL);
 }
 
 //use ONLY for debug
