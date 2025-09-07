@@ -22,6 +22,7 @@ t_stack	*create_stack(t_data *data)
 	head->type = (data->parser_tree)->type;
 	head->node = data->parser_tree;
 	head->child_count = 0;
+	head->old_fd = -1;
 	head->child_pid[0] = -1;
 	head->child_pid[1] = -1;
 	head->in_fd = STDIN_FILENO;
@@ -42,7 +43,8 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	new_head->in_fd = in_fd;
 	new_head->out_fd = out_fd;
 //	if (new_head->type == NODE_PIPE && !has_pipe_ancestor(stack)) //is this check required?
-		new_head->child_count = 0;
+	new_head->child_count = 0;
+	new_head->old_fd = -1;
 	new_head->next = *stack;
 	*stack = new_head;
 }
