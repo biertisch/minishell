@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:10 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/20 10:38:10 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/08 17:06:51 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 // static void	print_lexer_list(t_token *head)
 // {
 // 	printf("-----TESTING LEXER-----\n\n");
-// 
+
 // 	for (int i = 0; head; i++)
 // 	{
 // 		printf("NODE %i\n", i);
@@ -161,7 +161,6 @@ int	main(int argc, char **argv, char **envp)
 }
 
 // TODO BEATRIZ
-// - update exit status after errors
 // - handle empty envp
 // - setup signals
 // - check recursion

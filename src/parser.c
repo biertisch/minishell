@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/20 10:38:24 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/08 16:54:33 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,12 @@ static t_tree	*parse_subshell(t_data *data, t_token **token)
 	validate_malloc(data, node, NULL);
 	node->left = parse_and_or(data, token);
 	if (!node->left)
-		return (free_parser_node(&node), NULL);
+		return (empty_subshell(token, node));
 	if (!*token || (*token)->type != RPAREN)
-	{
-		report_error("missing parenthesis", SYNTAX_ERR);
-		return (free_parser_tree(&node), NULL);
-	}
+		return (invalid_sequence(data, *token, node));
 	*token = (*token)->next;
 	if (*token && ((*token)->type == WORD || (*token)->type == LPAREN))
-	{
-		report_error("unexpected token", SYNTAX_ERR);
-		return (free_parser_tree(&node), NULL);
-	}
+		return (invalid_sequence(data, *token, node));
 	if (*token && (is_redir_token((*token)->type) || (*token)->type == FD)
 		&& get_command_data(data, token, node))
 		return (free_parser_tree(&node), NULL);
@@ -48,16 +42,17 @@ static t_tree	*parse_command(t_data *data, t_token **token)
 {
 	t_tree	*node;
 
-	if (!*token || (!is_command_token((*token)->type)
-			&& (*token)->type != LPAREN))
-		return (report_error("missing command", SYNTAX_ERR), NULL);
+	if (!*token)
+		return (syntax_error(data, ERR_2, "newline"), NULL);
+	if (!is_command_token((*token)->type) && (*token)->type != LPAREN)
+		return (syntax_error(data, ERR_2, (*token)->value), NULL);
 	if ((*token)->type == LPAREN)
 		return (parse_subshell(data, token));
 	node = create_parser_node(NODE_CMD, NULL, NULL);
 	validate_malloc(data, node, NULL);
 	if (get_command_data(data, token, node))
 		return (free_parser_node(&node), NULL);
-	if (is_builtin(node->argv[0]))
+	if (node->argv && is_builtin(node->argv[0]))
 		node->type = NODE_BUILTIN;
 	return (node);
 }
@@ -124,7 +119,7 @@ int	parser(t_data *data)
 	token = data->lexer_list;
 	data->parser_tree = parse_and_or(data, &token);
 	if (token && token->type == RPAREN)
-		return (report_error("unexpected token", SYNTAX_ERR));
+		return (syntax_error(data, ERR_2, token->value));
 	if (!data->parser_tree)
 		return (-1);
 	return (0);

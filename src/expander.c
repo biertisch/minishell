@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/20 10:38:18 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/08 17:08:26 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	expand_redir(t_data *data, t_tree *node)
 			if (entries && entries->next)
 			{
 				ft_lstclear(&entries, free);
-				return (report_error("ambiguous redirect", INTERNAL_ERR));
+				return (internal_error(data, ERR_3, NULL, trav->file));
 			}
 			if (entries)
 				trav->file = update_redir(data, trav->file, entries);

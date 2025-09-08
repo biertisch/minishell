@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/20 10:04:14 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/08 17:06:25 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,15 @@
 # include <termios.h>
 # include <unistd.h>
 
+# define ERR_0 "unsupported character"
+# define ERR_1 "missing quote"
+# define ERR_2 "syntax error near unexpected token"
+# define ERR_3 "ambiguous redirect"
+# define ERR_4 "invalid option"
+# define ERR_5 "too many arguments"
+# define ERR_6 "no such file or directory"
+# define ERR_7 "invalid environment variable"
+
 //ENUMS
 typedef enum e_token_type
 {
@@ -58,13 +67,6 @@ typedef enum e_node_type
 	NODE_OR,
 	NODE_SUBSHELL
 }	t_node_type;
-
-typedef enum e_error
-{
-	SYSTEM_ERR,
-	SYNTAX_ERR,
-	INTERNAL_ERR
-}	t_error;
 
 //STRUCTS
 typedef struct s_env
@@ -112,7 +114,7 @@ typedef struct s_data
 
 //PROTOTYPES
 // builtin.c
-void		process_builtin(t_data *data, t_tree *head);
+int			validate_builtin(t_data *data, t_tree *node);
 
 //cleanup.c
 void		free_all(t_data *data);
@@ -138,7 +140,9 @@ void		add_env_node(t_env **head, t_env *new_node);
 t_env		*create_env_node(void);
 
 //error.c
-int			report_error(char *error_msg, t_error error_code);
+int			system_error(t_data *data, char *function);
+int			syntax_error(t_data *data, char *desc, char *token);
+int			internal_error(t_data *data, char *desc, char *cmd, char *arg);
 void		error_exit(t_data *data);
 void		validate_malloc(t_data *data, void *ptr, void *to_free);
 void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
@@ -166,6 +170,13 @@ t_token		*get_last_lexer_node(t_token *head);
 void		add_lexer_node(t_token **head, t_token *new_node);
 t_token		*create_lexer_node(t_token_type type, char *value);
 
+//lexer_utils.c
+int			is_fd(char *input);
+int			is_quote(char c);
+int			is_operator(char *s);
+int			get_operator_len(char *s);
+int			is_unsupported_char(t_data *data, char quote, char input);
+
 //parser.c
 int			parser(t_data *data);
 t_tree		*parse_and_or(t_data *data, t_token **token);
@@ -175,8 +186,12 @@ int			get_command_data(t_data *data, t_token **token, t_tree *node);
 int			is_command_token(t_token_type token_type);
 
 //parser_redir.c
-t_redir		*get_redir(t_data *data, t_token **token);
+int			get_redir(t_data *data, t_token **token, t_tree *node);
 int			is_redir_token(t_token_type token_type);
+
+//parser_subshell.c
+t_tree		*empty_subshell(t_token **token, t_tree *node);
+t_tree		*invalid_sequence(t_data *data, t_token *token, t_tree *node);
 
 //parser_tree.c
 void		free_parser_tree(t_tree **node);
@@ -186,9 +201,6 @@ t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);
 
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
-int			is_operator(char *s);
-int			is_quote(char c);
-int			is_fd(char *input);
 int			is_builtin(char *cmd);
 
 //wildcard.c

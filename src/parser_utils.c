@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 11:00:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/28 11:00:45 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/08 16:20:29 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,6 @@ int	is_builtin(char *cmd)
 		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
 		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env")
 		|| !ft_strcmp(cmd, "exit"));
-}
-
-//classifies a substring as FD if it is only composed of digits
-//and comes immediately before a redirection operator (no spaces allowed)
-int	is_fd(char *input)
-{
-	while (*input && ft_isdigit(*input))
-		input++;
-	if (*input && (*input == '<' || *input == '>'
-			|| !ft_strncmp(input, "<<", 2) || !ft_strncmp(input, ">>", 2)))
-		return (1);
-	return (0);
-}
-
-int	is_quote(char c)
-{
-	return (c == '"' || c == '\'');
-}
-
-int	is_operator(char *s)
-{
-	return (*s == '|' || *s == '<' || *s == '>' || *s == '(' || *s == ')'
-		|| !ft_strncmp(s, "<<", 2) || !ft_strncmp(s, ">>", 2)
-		|| !ft_strncmp(s, "&&", 2));
 }
 
 //converts lexer token type into parser node type

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:37:43 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/21 12:37:43 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/08 14:52:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ void	free_string_array(char ***arr)
 		return ;
 	i = 0;
 	while ((*arr)[i])
-		free((*arr)[i++]);
+	{
+		free((*arr)[i]);
+		i++;
+	}
 	free(*arr);
 	*arr = NULL;
 }
