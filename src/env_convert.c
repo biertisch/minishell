@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:51:27 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/08 14:39:51 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/09 14:23:48 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	envp_to_list(t_data *data, char **envp)
 		split_env_entry(data, envp[i], node);
 		if (!node->key[0])
 		{
-			internal_error(data, ERR_7, NULL, NULL);
+			internal_error(data, ERR_0, NULL, NULL);
 			free_env_node(&node);
 			i++;
 			continue ;

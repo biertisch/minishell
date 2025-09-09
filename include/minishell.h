@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/08 17:06:25 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/09 17:38:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,19 @@
 # include <termios.h>
 # include <unistd.h>
 
-# define ERR_0 "unsupported character"
-# define ERR_1 "missing quote"
+# define VALID 0
+# define INVALID 1
+# define INCOMPLETE 2
+# define INCOMPLETE_EOF 3
+# define ERR_0 "invalid environment variable"
+# define ERR_1 "unsupported character"
 # define ERR_2 "syntax error near unexpected token"
 # define ERR_3 "ambiguous redirect"
 # define ERR_4 "invalid option"
 # define ERR_5 "too many arguments"
 # define ERR_6 "no such file or directory"
-# define ERR_7 "invalid environment variable"
+# define ERR_7 "unexpected EOF while looking for matching"
+# define ERR_8 "syntax error: unexpected end of file"
 
 //ENUMS
 typedef enum e_token_type
@@ -113,6 +118,13 @@ typedef struct s_data
 }	t_data;
 
 //PROTOTYPES
+//test.c ---- DELETE WHEN COMPLETE
+void		print_env_list(t_env *head);
+void		print_env_array(char **env);
+void		print_lexer_list(t_token *head);
+void		print_parser_tree(t_tree *head);
+void		test_builtin(t_data *data, t_tree *head);
+
 // builtin.c
 int			validate_builtin(t_data *data, t_tree *node);
 
@@ -144,12 +156,6 @@ int			system_error(t_data *data, char *function);
 int			syntax_error(t_data *data, char *desc, char *token);
 int			internal_error(t_data *data, char *desc, char *cmd, char *arg);
 void		error_exit(t_data *data);
-void		validate_malloc(t_data *data, void *ptr, void *to_free);
-void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
-				t_tree *right);
-void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
-void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
-				char **new_argv);
 
 //expander.c
 int			expand(t_data *data, t_tree *node);
@@ -159,6 +165,11 @@ void		expand_dollar(t_data *data, char **arg);
 
 //expander_quotes.c
 void		remove_quotes(t_data *data, char **arg);
+
+//input.c
+void		prompt_input(t_data *data);
+int			process_input(t_data *data);
+int			prompt_continuation(t_data *data, char target);
 
 //lexer.c
 int			lexer(t_data *data);
@@ -177,9 +188,17 @@ int			is_operator(char *s);
 int			get_operator_len(char *s);
 int			is_unsupported_char(t_data *data, char quote, char input);
 
+//malloc.c
+void		validate_malloc(t_data *data, void *ptr, void *to_free);
+void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
+				t_tree *right);
+void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
+void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
+				char **new_argv);
+
 //parser.c
 int			parser(t_data *data);
-t_tree		*parse_and_or(t_data *data, t_token **token);
+int			parse_and_or(t_data *data, t_token **token, t_tree **root);
 
 //parser_cmd.c
 int			get_command_data(t_data *data, t_token **token, t_tree *node);
@@ -190,8 +209,8 @@ int			get_redir(t_data *data, t_token **token, t_tree *node);
 int			is_redir_token(t_token_type token_type);
 
 //parser_subshell.c
-t_tree		*empty_subshell(t_token **token, t_tree *node);
-t_tree		*invalid_sequence(t_data *data, t_token *token, t_tree *node);
+int			empty_subshell(t_token **token, t_tree *node, int res);
+int			invalid_sequence(t_data *data, t_token *token, t_tree *node);
 
 //parser_tree.c
 void		free_parser_tree(t_tree **node);
@@ -202,6 +221,9 @@ t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
 int			is_builtin(char *cmd);
+
+//signal.c
+void		handle_eof(t_data *data);
 
 //wildcard.c
 int			has_wildcard(const char *arg);

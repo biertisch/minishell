@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:23:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/08 16:23:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/09 16:07:52 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ int	is_quote(char c)
 
 int	is_unsupported_char(t_data *data, char quote, char input)
 {
-	if (!quote && (input == '\\'))
-		return (internal_error(data, ERR_0, NULL, "'\\'"));
-	if (!quote && (input == ';'))
-		return (internal_error(data, ERR_0, NULL, "';'"));
+	if (!quote && input == '\\')
+		return (internal_error(data, ERR_1, NULL, "'\\'"));
+	if (!quote && input == ';')
+		return (internal_error(data, ERR_1, NULL, "';'"));
 	return (0);
 }

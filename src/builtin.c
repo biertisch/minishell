@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:17:33 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/08 17:07:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/09 10:43:19 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,3 @@ int	validate_builtin(t_data *data, t_tree *node)
 	}
 	return (0);
 }
-
-// void test_builtin(t_data *data, t_tree *head)
-// {
-// 	if (!head)
-// 		return ;
-// 	validate_builtin(data, head);
-// 	test_builtin(data, head->left);
-// 	test_builtin(data, head->right);
-// }
