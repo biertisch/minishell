@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/09 16:59:50 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/10 12:26:46 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	get_token_value(t_data *data, char *input, char **value, int *index)
 		i++;
 	}
 	if (quote)
-		return (prompt_continuation(data, quote));
+		return (syntax_error(data, ERR_2, NULL));
 	if (i == 0 && is_operator(input + i))
 		i = get_operator_len(input + i);
 	*value = ft_substr(input, 0, i);

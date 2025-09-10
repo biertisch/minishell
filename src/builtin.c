@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:17:33 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/09 10:43:19 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/10 11:51:21 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ static int	validate_env(t_data *data, char **argv)
 {
 	if (argv[1] && is_flag(argv[1]))
 	{
-		internal_error(data, ERR_4, argv[0], argv[1]);
+		internal_error(data, ERR_5, argv[0], argv[1]);
 		data->exit_status = 125;
 		return (-1);
 	}
 	if (argv[1])
 	{
-		internal_error(data, ERR_6, argv[0], argv[1]);
+		internal_error(data, ERR_7, argv[0], argv[1]);
 		data->exit_status = 127;
 		return (-1);
 	}
@@ -43,7 +43,7 @@ static int	validate_flags(t_data *data, char **argv, char *allowed)
 	while (argv[i])
 	{
 		if (is_flag(argv[i]) && (!allowed || ft_strcmp(argv[i], allowed)))
-			return (internal_error(data, ERR_4, argv[0], argv[i]));
+			return (internal_error(data, ERR_5, argv[0], argv[i]));
 		i++;
 	}
 	return (0);
@@ -64,9 +64,9 @@ int	validate_builtin(t_data *data, t_tree *node)
 	if (!ft_strcmp(node->argv[0], "cd"))
 	{
 		if (node->argv[1] && node->argv[2])
-			return (internal_error(data, ERR_5, node->argv[0], NULL));
+			return (internal_error(data, ERR_4, node->argv[0], NULL));
 		if (node->argv[1] && is_flag(node->argv[1]))
-			return (internal_error(data, ERR_4, node->argv[0], node->argv[1]));
+			return (internal_error(data, ERR_5, node->argv[0], node->argv[1]));
 	}
 	return (0);
 }

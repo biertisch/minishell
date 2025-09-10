@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:51:27 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/09 14:23:48 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/10 11:38:53 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,17 @@ static void	split_env_entry(t_data *data, char *entry, t_env *node)
 }
 
 //helpful to implement built-in export and unset
-void	envp_to_list(t_data *data, char **envp)
+int	envp_to_list(t_data *data, char **envp, char **argv)
 {
 	int		i;
 	t_env	*node;
 
 	if (!envp || !*envp)
-		return ;
+		return (generate_minimal_env(data, argv));
 	i = 0;
 	while (envp[i])
 	{
-		node = create_env_node();
+		node = create_env_node(NULL, NULL);
 		validate_malloc(data, node, NULL);
 		split_env_entry(data, envp[i], node);
 		if (!node->key[0])
@@ -55,6 +55,7 @@ void	envp_to_list(t_data *data, char **envp)
 		add_env_node(&data->env_list, node);
 		i++;
 	}
+	return (0);
 }
 
 static int	count_nodes(t_env *head)

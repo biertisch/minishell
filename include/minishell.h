@@ -6,14 +6,13 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/09 17:38:54 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/10 16:08:36 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-//HEADERS
 # include "../include/libft.h"
 # include "../include/printf.h"
 # include <dirent.h>
@@ -33,21 +32,23 @@
 # include <termios.h>
 # include <unistd.h>
 
+# define PROMPT "minishell$ "
+# define CONTINUE_PROMPT "> "
 # define VALID 0
 # define INVALID 1
 # define INCOMPLETE 2
 # define INCOMPLETE_EOF 3
 # define ERR_0 "invalid environment variable"
 # define ERR_1 "unsupported character"
-# define ERR_2 "syntax error near unexpected token"
-# define ERR_3 "ambiguous redirect"
-# define ERR_4 "invalid option"
-# define ERR_5 "too many arguments"
-# define ERR_6 "no such file or directory"
-# define ERR_7 "unexpected EOF while looking for matching"
-# define ERR_8 "syntax error: unexpected end of file"
+# define ERR_2 "syntax error: missing quote"
+# define ERR_3 "syntax error near unexpected token"
+# define ERR_4 "ambiguous redirect"
+# define ERR_5 "invalid option"
+# define ERR_6 "too many arguments"
+# define ERR_7 "no such file or directory"
+# define ERR_8 "unexpected EOF while looking for matching"
+# define ERR_9 "syntax error: unexpected end of file"
 
-//ENUMS
 typedef enum e_token_type
 {
 	WORD,
@@ -73,7 +74,6 @@ typedef enum e_node_type
 	NODE_SUBSHELL
 }	t_node_type;
 
-//STRUCTS
 typedef struct s_env
 {
 	char			*key;
@@ -117,7 +117,8 @@ typedef struct s_data
 	t_tree			*parser_tree;
 }	t_data;
 
-//PROTOTYPES
+extern volatile sig_atomic_t	g_sigint_received;
+
 //test.c ---- DELETE WHEN COMPLETE
 void		print_env_list(t_env *head);
 void		print_env_array(char **env);
@@ -134,22 +135,21 @@ void		free_command_data(t_data *data);
 void		free_string_array(char ***arr);
 
 //env.c
+int			generate_minimal_env(t_data *data, char **argv);
 void		unset_env(t_env **head, char *key);
 void		set_env_value(t_env *head, char *key, char *new_value);
 char		*get_env_value(t_env *head, char *key);
-char		*get_env_key(char *arg);
-char		*replace_key_value(char *arg, int i, char *key, char *value);
 
 //env_convert.c
 void		env_list_to_array(t_data *data);
-void		envp_to_list(t_data *data, char **envp);
+int			envp_to_list(t_data *data, char **envp, char **argv);
 
 //env_list.c
 void		free_env_list(t_env **head);
 void		free_env_node(t_env **node);
 t_env		*get_last_env_node(t_env *head);
 void		add_env_node(t_env **head, t_env *new_node);
-t_env		*create_env_node(void);
+t_env		*create_env_node(char *key, char *value);
 
 //error.c
 int			system_error(t_data *data, char *function);
@@ -223,6 +223,8 @@ t_node_type	get_node_type(t_token_type token_type);
 int			is_builtin(char *cmd);
 
 //signal.c
+void		setup_signals(void);
+void		sigint_handler(int sig);
 void		handle_eof(t_data *data);
 
 //wildcard.c

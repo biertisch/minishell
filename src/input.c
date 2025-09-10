@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/09 17:39:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/10 15:50:15 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,18 @@ static char	*update_input(t_data *data, char *line, char target)
 	return (append_line);
 }
 
-static int	incomplete_eof(t_data *data, char target)
+static int	signal_interruption(t_data *data, char *line, char target)
 {
+	if (g_sigint_received)
+	{
+		g_sigint_received = 0;
+		free (line);
+		return (INVALID);
+	}
 	if (target && is_quote(target))
-		syntax_error(data, ERR_7, &target);
+		syntax_error(data, ERR_8, &target);
 	else
-		syntax_error(data, ERR_8, NULL);
+		syntax_error(data, ERR_9, NULL);
 	return (INCOMPLETE_EOF);
 }
 
@@ -51,10 +57,11 @@ int	prompt_continuation(t_data *data, char target)
 
 	while (1)
 	{
-		line = readline("> ");
-		if (!line)
-			return (incomplete_eof(data, target));
-		data->input = update_input(data, line, target);
+		line = readline(CONTINUE_PROMPT);
+		if (!line || g_sigint_received)
+			return (signal_interruption(data, line, target));
+		if (is_quote(target) || line[0])
+			data->input = update_input(data, line, target);
 		if ((target && ft_strchr(line, target)) || (!target && line[0]))
 		{
 			free(line);
@@ -71,10 +78,10 @@ int	process_input(t_data *data)
 
 	add_history(data->input);
 	res = lexer(data);
-	if (res)
+	if (res || !data->lexer_list)
 		return (res);
 	res = parser(data);
-	if (res)
+	if (res || !data->parser_tree)
 		return (res);
 	res = expand(data, data->parser_tree);
 	if (res)
@@ -89,9 +96,11 @@ void	prompt_input(t_data *data)
 
 	while (1)
 	{
-		data->input = readline("minishell$ ");
+		data->input = readline(PROMPT);
 		if (!data->input)
 			handle_eof(data);
+		if (g_sigint_received)
+			g_sigint_received = 0;
 		if (data->input[0])
 		{
 			status = process_input(data);
