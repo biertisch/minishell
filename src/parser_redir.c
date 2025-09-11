@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 10:22:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/10 11:52:12 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:00:12 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ static t_redir	*parse_single_redir(t_data *data, t_token **token,
 	type = (*token)->type;
 	*token = (*token)->next;
 	if (!*token)
-		return (syntax_error(data, ERR_3, "newline"), NULL);
+		return (syntax_error(data, ERR_2, "newline"), NULL);
 	if ((*token)->type != WORD)
-		return (syntax_error(data, ERR_3, (*token)->value), NULL);
+		return (syntax_error(data, ERR_2, (*token)->value), NULL);
 	redir = create_redir(type, fd, (*token)->value);
 	if (!redir)
 	{

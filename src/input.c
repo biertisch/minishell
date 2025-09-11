@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/10 15:50:15 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:05:04 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,17 @@ static char	*update_input(t_data *data, char *line, char target)
 
 static int	signal_interruption(t_data *data, char *line, char target)
 {
-	if (g_sigint_received)
+	if (g_sig_received == SIGINT)
 	{
-		g_sigint_received = 0;
-		free (line);
-		return (INVALID);
+		g_sig_received = 0;
+		free_command_data(data);
+		data->input = line;
+		return (INCOMPLETE);
 	}
 	if (target && is_quote(target))
-		syntax_error(data, ERR_8, &target);
+		syntax_error(data, ERR_7, &target);
 	else
-		syntax_error(data, ERR_9, NULL);
+		syntax_error(data, ERR_8, NULL);
 	return (INCOMPLETE_EOF);
 }
 
@@ -58,11 +59,11 @@ int	prompt_continuation(t_data *data, char target)
 	while (1)
 	{
 		line = readline(CONTINUE_PROMPT);
-		if (!line || g_sigint_received)
+		if (!line || g_sig_received)
 			return (signal_interruption(data, line, target));
-		if (is_quote(target) || line[0])
+		if (is_quote(target) || *line)
 			data->input = update_input(data, line, target);
-		if ((target && ft_strchr(line, target)) || (!target && line[0]))
+		if ((target && ft_strchr(line, target)) || (!target && *line))
 		{
 			free(line);
 			break ;
@@ -99,12 +100,12 @@ void	prompt_input(t_data *data)
 		data->input = readline(PROMPT);
 		if (!data->input)
 			handle_eof(data);
-		if (g_sigint_received)
-			g_sigint_received = 0;
-		if (data->input[0])
+		if (g_sig_received)
+			g_sig_received = 0;
+		if (*data->input)
 		{
 			status = process_input(data);
-			if (status == INCOMPLETE)
+			if (status == INCOMPLETE && data->input)
 				process_input(data);
 			else if (status == INCOMPLETE_EOF)
 				handle_eof(data);

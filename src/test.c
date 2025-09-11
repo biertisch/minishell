@@ -139,11 +139,11 @@ void	print_parser_tree(t_tree *head)
 }
 
 //----------------------BUILTIN------------------
-void	test_builtin(t_data *data, t_tree *head)
+void	test_builtin_validation(t_data *data, t_tree *head)
 {
 	if (!head)
 		return ;
 	validate_builtin(data, head);
-	test_builtin(data, head->left);
-	test_builtin(data, head->right);
+	test_builtin_validation(data, head->left);
+	test_builtin_validation(data, head->right);
 }

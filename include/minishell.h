@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/10 16:08:36 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:57:03 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,13 @@
 # define INCOMPLETE_EOF 3
 # define ERR_0 "invalid environment variable"
 # define ERR_1 "unsupported character"
-# define ERR_2 "syntax error: missing quote"
-# define ERR_3 "syntax error near unexpected token"
-# define ERR_4 "ambiguous redirect"
-# define ERR_5 "invalid option"
-# define ERR_6 "too many arguments"
-# define ERR_7 "no such file or directory"
-# define ERR_8 "unexpected EOF while looking for matching"
-# define ERR_9 "syntax error: unexpected end of file"
+# define ERR_2 "syntax error near unexpected token"
+# define ERR_3 "ambiguous redirect"
+# define ERR_4 "invalid option"
+# define ERR_5 "too many arguments"
+# define ERR_6 "No such file or directory"
+# define ERR_7 "unexpected EOF while looking for matching"
+# define ERR_8 "syntax error: unexpected end of file"
 
 typedef enum e_token_type
 {
@@ -117,14 +116,14 @@ typedef struct s_data
 	t_tree			*parser_tree;
 }	t_data;
 
-extern volatile sig_atomic_t	g_sigint_received;
+extern volatile sig_atomic_t	g_sig_received;
 
 //test.c ---- DELETE WHEN COMPLETE
 void		print_env_list(t_env *head);
 void		print_env_array(char **env);
 void		print_lexer_list(t_token *head);
 void		print_parser_tree(t_tree *head);
-void		test_builtin(t_data *data, t_tree *head);
+void		test_builtin_validation(t_data *data, t_tree *head);
 
 // builtin.c
 int			validate_builtin(t_data *data, t_tree *node);
@@ -226,6 +225,7 @@ int			is_builtin(char *cmd);
 void		setup_signals(void);
 void		sigint_handler(int sig);
 void		handle_eof(t_data *data);
+void		setup_signals_child(void);
 
 //wildcard.c
 int			has_wildcard(const char *arg);
