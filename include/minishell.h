@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/11 14:57:03 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/12 11:45:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ t_node_type	get_node_type(t_token_type token_type);
 int			is_builtin(char *cmd);
 
 //signal.c
-void		setup_signals(void);
+void		setup_signals(int argc);
 void		sigint_handler(int sig);
 void		handle_eof(t_data *data);
 void		setup_signals_child(void);
