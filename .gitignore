@@ -1,10 +1,9 @@
 tags
+.gitignore
+*.txt
 .vscode
 ft_printf
 include/libft.h
 include/printf.h
 minishell
 obj
-*.txt
-*.pdf
-*.png

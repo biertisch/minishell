@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:23:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/09 16:07:52 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/15 12:09:16 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,4 @@ int	is_fd(char *input)
 int	is_quote(char c)
 {
 	return (c == '"' || c == '\'');
-}
-
-int	is_unsupported_char(t_data *data, char quote, char input)
-{
-	if (!quote && input == '\\')
-		return (internal_error(data, ERR_1, NULL, "'\\'"));
-	if (!quote && input == ';')
-		return (internal_error(data, ERR_1, NULL, "';'"));
-	return (0);
 }
