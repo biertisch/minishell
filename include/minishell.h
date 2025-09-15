@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/12 11:45:37 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/15 13:55:06 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@
 # include <termios.h>
 # include <unistd.h>
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
+
 # define PROMPT "minishell$ "
 # define CONTINUE_PROMPT "> "
 # define VALID 0
@@ -39,14 +43,14 @@
 # define INCOMPLETE 2
 # define INCOMPLETE_EOF 3
 # define ERR_0 "invalid environment variable"
-# define ERR_1 "unsupported character"
-# define ERR_2 "syntax error near unexpected token"
-# define ERR_3 "ambiguous redirect"
-# define ERR_4 "invalid option"
-# define ERR_5 "too many arguments"
-# define ERR_6 "No such file or directory"
-# define ERR_7 "unexpected EOF while looking for matching"
-# define ERR_8 "syntax error: unexpected end of file"
+# define ERR_1 "syntax error near unexpected token"
+# define ERR_2 "ambiguous redirect"
+# define ERR_3 "invalid option"
+# define ERR_4 "too many arguments"
+# define ERR_5 "No such file or directory"
+# define ERR_6 "unexpected EOF while looking for matching"
+# define ERR_7 "syntax error: unexpected end of file"
+# define ERR_8 "syntax error: missing quote"
 
 typedef enum e_token_type
 {
@@ -170,6 +174,9 @@ void		prompt_input(t_data *data);
 int			process_input(t_data *data);
 int			prompt_continuation(t_data *data, char target);
 
+//get_next_line.c
+char		*get_next_line(int fd);
+
 //lexer.c
 int			lexer(t_data *data);
 
@@ -185,7 +192,6 @@ int			is_fd(char *input);
 int			is_quote(char c);
 int			is_operator(char *s);
 int			get_operator_len(char *s);
-int			is_unsupported_char(t_data *data, char quote, char input);
 
 //malloc.c
 void		validate_malloc(t_data *data, void *ptr, void *to_free);

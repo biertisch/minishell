@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/11 15:05:04 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/15 13:29:19 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ static int	signal_interruption(t_data *data, char *line, char target)
 		return (INCOMPLETE);
 	}
 	if (target && is_quote(target))
-		syntax_error(data, ERR_7, &target);
+		syntax_error(data, ERR_6, &target);
 	else
-		syntax_error(data, ERR_8, NULL);
+		syntax_error(data, ERR_7, NULL);
 	return (INCOMPLETE_EOF);
 }
 
@@ -87,6 +87,7 @@ int	process_input(t_data *data)
 	res = expand(data, data->parser_tree);
 	if (res)
 		return (res);
+	print_parser_tree(data->parser_tree); // TESTING
 	//execute //TODO PEDRO
 	return (VALID);
 }
