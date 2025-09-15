@@ -31,9 +31,11 @@ int	execute_stack(t_data *data, t_stack **stack)
 	print_parser_tree(data->parser_tree);
 	while (i < tree_nodes_count)
 	{
+		ft_printf("execute_stack i=%d\n", i);
+		print_stack(*stack);
 		if ((*stack)->type == NODE_PIPE)
 			i += execute_pipe(data, stack);
-		if ((*stack)->type == NODE_CMD)
+		else if ((*stack)->type == NODE_CMD)
 			i += execute_cmd(data, stack);
 	}
 	return (0);
@@ -96,13 +98,17 @@ int	execute_pipe_launch_right(t_data *data, t_stack **stack)
 
 int	execute_pipe_wait(t_stack **stack)
 {
+	/*
 	int	status;
 
 	if ((*stack)->child_pid[0] != -1)
 		waitpid((*stack)->child_pid[0], &status, 0); 
 	if ((*stack)->child_pid[1] != -1)
 		waitpid((*stack)->child_pid[1], &status, 0);
+
+	*/
 	(*stack)->phase = DONE;
+	(void)stack;
 	return (0);
 }
 

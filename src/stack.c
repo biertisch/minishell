@@ -88,14 +88,44 @@ t_stack	**get_first_pipe(t_stack **stack)
 	return (NULL);
 }
 
-//use ONLY for debug
-/**
+static char	*type_to_string(t_node_type type)
+{
+	if (type == NODE_CMD)
+		return "NODE_CMD";
+	if (type == NODE_BUILTIN)
+		return "NODE_BUILTIN";
+	if (type == NODE_PIPE)
+		return "NODE_PIPE";
+	else
+		return "ERROR_TYPE";
+}
+
+static char	*phase_to_string(t_phase phase)
+{
+	if (phase == ENTERED)
+		return "ENTERED";
+	if (phase == LAUNCH_LEFT)
+		return "LAUNCH_LEFT";
+	if (phase == LAUNCH_RIGHT)
+		return "LAUNCH_RIGHT";
+	if (phase == WAIT)
+		return "WAIT";
+	if (phase == DONE)
+		return "DONE";
+	else
+		return "ERROR_PHASE";
+}
+
 void	print_stack(t_stack *stack)
 {
+	int	i;
+
+	i = 0;
 	while (stack)
 	{
-		ft_printf("hey!\n\n\n\n");
-		print_parser_node(stack->node, 0, "cona");
+		ft_printf("level %d: TYPE=%s PHASE=%s\n", i, type_to_string(stack->type), phase_to_string(stack->phase));
+		i++;
 		stack = stack->next;
 	}
-}*/
+	ft_printf("STACK DONE!\n");
+}
