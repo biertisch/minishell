@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:10 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/12 11:44:34 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/15 16:28:20 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
+	(void)argc;
 	ft_bzero(&data, sizeof(t_data));
-	setup_signals(argc);
+	setup_signals();
 	envp_to_list(&data, envp, argv);
 	prompt_input(&data);
 	free_all(&data);

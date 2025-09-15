@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/15 14:01:22 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/15 16:10:46 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 	if (res)
 		return (empty_subshell(token, node, res));
 	if (!*token)
-		return (prompt_continuation(data, ')'));
+		return (free_parser_tree(&node), prompt_continuation(data, ')'));
 	if ((*token)->type != RPAREN)
 		return (invalid_sequence(data, *token, node));
 	*token = (*token)->next;
@@ -64,7 +64,7 @@ static int	parse_command(t_data *data, t_token **token, t_tree **root)
 
 //handles multiple pipe operators from left to right
 //calls parse_command() for left and right nodes
-//returns NULL if left or right node is empty
+//returns INVALID if left or right node is empty
 static int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree	*left;
@@ -91,7 +91,7 @@ static int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 
 //handles multiple logical operators from left to right
 //calls parse_pipe() for left and right nodes
-//returns NULL if left or right node is empty
+//returns INVALID if left or right node is empty
 int	parse_and_or(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree		*left;
@@ -120,7 +120,7 @@ int	parse_and_or(t_data *data, t_token **token, t_tree **root)
 
 //builds an abstract syntax tree (AST) based on operator precedence
 //from lowest precendece to highest: logical operators -> pipe -> commands
-//checks for stray ')'
+//checks for stray parentheses
 int	parser(t_data *data)
 {
 	t_token	*token;
@@ -130,7 +130,7 @@ int	parser(t_data *data)
 	res = parse_and_or(data, &token, &data->parser_tree);
 	if (res)
 		return (res);
-	if (token && token->type == RPAREN) 
+	if (token && token->type == RPAREN)
 		return (syntax_error(data, ERR_1, token->value));
 	if (token && token->type == LPAREN)
 	{
@@ -138,7 +138,7 @@ int	parser(t_data *data)
 		if (!token)
 			return (syntax_error(data, ERR_1, "newline"));
 		else
-			return (syntax_error(data, ERR_1, token->value));		
+			return (syntax_error(data, ERR_1, token->value));
 	}
 	return (VALID);
 }

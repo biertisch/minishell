@@ -6,17 +6,17 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/12 12:06:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/15 17:41:05 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	setup_signals(int argc)
+void	setup_signals(void)
 {
 	struct sigaction	sa;
 
-	if (argc == 1 && isatty(STDIN_FILENO)) //check argc?
+	if (isatty(STDIN_FILENO)) //check argc as well?
 	{
 		sa.sa_handler = sigint_handler;
 		sigemptyset(&sa.sa_mask);
@@ -31,9 +31,9 @@ void	setup_signals(int argc)
 void	sigint_handler(int sig)
 {
 	g_sig_received = sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
+	write(1, "\n", STDOUT_FILENO);
 	rl_on_new_line();
+	rl_replace_line("", 0);
 	rl_redisplay();
 }
 

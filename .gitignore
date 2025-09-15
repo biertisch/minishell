@@ -7,3 +7,5 @@ include/libft.h
 include/printf.h
 minishell
 obj
+*.pdf
+*.png
