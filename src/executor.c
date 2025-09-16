@@ -108,6 +108,8 @@ int	execute_pipe_wait(t_stack **stack)
 
 int	execute_pipe_done(t_stack **stack)
 {
+	close((*stack)->pipe[0]);
+	close((*stack)->pipe[1]);
 	pop(stack);
 	return (1);
 }
