@@ -80,16 +80,10 @@ int	execute_pipe_entered(t_data *data, t_stack **stack)
 
 int	execute_pipe_launch_right(t_data *data, t_stack **stack)
 {
-
 	int	right_in;
 	int	right_out;
 	
-
-	check_for_errors(pipe((*stack)->pipe), data, *stack, "pipe");
-	if ((*stack)->old_fd != -1)
-		right_in = (*stack)->old_fd;
-	else
-		right_in = ((*stack)->pipe)[0];
+	right_in = (*stack)->old_fd;
 	right_out = (*stack)->out_fd;
 	(*stack)->phase = LAUNCH_RIGHT;
 	push_stack(stack, (*stack)->node->right, right_in, right_out, data);
