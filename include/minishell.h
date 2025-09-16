@@ -243,6 +243,7 @@ int			has_pipe_ancestor(t_stack *stack);
 void		pop(t_stack **stack);
 t_stack		**get_first_pipe(t_stack **stack);
 void		print_stack(t_stack *stack);
+void		print_top(t_stack *stack);
 
 //child.c
 void		child(t_data *data, t_stack **stack);

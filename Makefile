@@ -97,5 +97,6 @@ fclean: clean
 	@$(RM) $(INC_DIR)/printf.h $(INC_DIR)/libft.h 
 	@$(RM) -r $(LIBFT_DIR)
 	@$(RM) -r $(PRINTF_DIR)
+	@$(RM) outfile*
 
 re: fclean all

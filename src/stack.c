@@ -116,6 +116,12 @@ static char	*phase_to_string(t_phase phase)
 		return "ERROR_PHASE";
 }
 
+void	print_top(t_stack *stack)
+{
+
+	ft_printf("STACK TOP: [TYPE=%s PHASE=%s]\n", type_to_string(stack->type), phase_to_string(stack->phase));
+}
+
 void	print_stack(t_stack *stack)
 {
 	int	i;
