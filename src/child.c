@@ -32,9 +32,7 @@ void	child_redir_in(t_data *data, t_stack **stack)
 	((*stack)->node->redir)->fd = open((*stack)->node->redir->file, O_RDONLY);
 	if (((*stack)->node->redir)->fd < 0)
 		check_for_errors(-1, data, *stack, "open");
-	printf("About to dup2 %d -> %d\t:35\n", ((*stack)->node->redir)->fd, STDIN_FILENO);
 	check_for_errors(dup2(((*stack)->node->redir)->fd, STDIN_FILENO), data, *stack, "dup2");
-	printf("About to dup2 %d -> %d\t:37\n", (*stack)->out_fd, STDOUT_FILENO);
 	check_for_errors(dup2((*stack)->out_fd, STDOUT_FILENO), data, *stack, "dup2");
 	close(((*stack)->node->redir)->fd);
 	close((*stack)->out_fd);
@@ -46,13 +44,11 @@ void	child_no_redir(t_data *data, t_stack **stack)
 {
 	if ((*stack)->in_fd != STDIN_FILENO)
 	{
-		printf("About to dup2 %d -> %d\t:47\n", (*stack)->in_fd, STDIN_FILENO);
 		check_for_errors(dup2((*stack)->in_fd, STDIN_FILENO), data, *stack, "dup2");
 		close((*stack)->in_fd);
 	}
 	if ((*stack)->out_fd != STDOUT_FILENO)
 	{
-		printf("About to dup2 %d -> %d\t:49\n", (*stack)->out_fd, STDOUT_FILENO);
 		check_for_errors(dup2((*stack)->out_fd, STDOUT_FILENO), data, *stack, "dup2");
 		close((*stack)->out_fd);
 	}
@@ -65,9 +61,7 @@ void	child_redir_out(t_data *data, t_stack **stack)
 	((*stack)->node->redir)->fd = open(((*stack)->node->redir)->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (((*stack)->node->redir)->fd < 0)
 		check_for_errors(-1, data, *stack, "open");
-	printf("About to dup2 %d -> %d\t:62\n", (*stack)->in_fd, STDIN_FILENO);
 	check_for_errors(dup2((*stack)->in_fd, STDIN_FILENO), data, *stack, "dup2");
-	printf("About to dup2 %d -> %d\t:64\n", ((*stack)->node->redir)->fd, STDOUT_FILENO);
 	check_for_errors(dup2(((*stack)->node->redir)->fd, STDOUT_FILENO), data, *stack, "dup2");
 	close(((*stack)->node->redir)->fd);
 	close((*stack)->in_fd);
