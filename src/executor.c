@@ -106,11 +106,18 @@ int	execute_pipe_wait(t_stack **stack)
 
 int	execute_pipe_done(t_stack **stack)
 {
+	if (!(*stack)->next)
+	{
+		close((*stack)->pipe[0]);
+		close((*stack)->pipe[1]);
+		close((*stack)->old_fd);
+		return (1);
+	}
 	if ((*stack)->pipe[0] != (*stack)->old_fd)
 		close((*stack)->pipe[0]);
 	if ((*stack)->pipe[1] != (*stack)->old_fd)
 		close((*stack)->pipe[1]);
-	if ((*stack)->next && (*stack)->next->type == NODE_PIPE)
+	if ((*stack)->next->type == NODE_PIPE)
 		(*stack)->next->old_fd = (*stack)->old_fd;
 	pop(stack);
 	return (1);

@@ -48,6 +48,8 @@ void	child_no_redir(t_data *data, t_stack **stack)
 	check_for_errors(dup2((*stack)->in_fd, STDIN_FILENO), data, *stack, "dup2");
 	printf("About to dup2 %d -> %d\t:49\n", (*stack)->out_fd, STDOUT_FILENO);
 	check_for_errors(dup2((*stack)->out_fd, STDOUT_FILENO), data, *stack, "dup2");
+	close((*stack)->in_fd);
+	close((*stack)->out_fd);
 	check_for_errors(execve((*stack)->node->argv[0], (*stack)->node->argv, data->env), data, *stack, "execve");
 }
 
