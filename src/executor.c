@@ -82,7 +82,7 @@ int	execute_pipe_launch_right(t_data *data, t_stack **stack)
 	int	right_out;
 	
 	right_in = (*stack)->old_fd;
-	right_out = (*stack)->out_fd;
+	right_out = (*stack)->pipe[1];
 	(*stack)->phase = LAUNCH_RIGHT;
 	push_stack(stack, (*stack)->node->right, right_in, right_out, data);
 	return (0);
@@ -106,8 +106,12 @@ int	execute_pipe_wait(t_stack **stack)
 
 int	execute_pipe_done(t_stack **stack)
 {
-	close((*stack)->pipe[0]);
-	close((*stack)->pipe[1]);
+	if ((*stack)->pipe[0] != (*stack)->old_fd)
+		close((*stack)->pipe[0]);
+	if ((*stack)->pipe[1] != (*stack)->old_fd)
+		close((*stack)->pipe[1]);
+	if ((*stack)->next && (*stack)->next->type == NODE_PIPE)
+		(*stack)->next->old_fd = (*stack)->old_fd;
 	pop(stack);
 	return (1);
 }
