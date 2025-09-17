@@ -95,6 +95,22 @@ t_stack **get_next_pipe(t_stack **stack)
 	return (get_first_pipe(&(*stack)->next)); 
 }
 
+void	close_all_pipe_ends(t_stack **stack)
+{
+	t_stack **head;
+
+	head = stack;
+	while (head && (*head))
+	{
+		if ((*head)->type == NODE_PIPE)
+		{
+			close((*head)->pipe[0]);
+			close((*head)->pipe[1]);
+		}
+		head = &((*head)->next);	
+	}
+}
+
 static char	*type_to_string(t_node_type type)
 {
 	if (type == NODE_CMD)
