@@ -110,7 +110,6 @@ int	execute_pipe_done(t_stack **stack)
 {
 	static int	i;
 	
-	print_stack(*stack);
 	if (!(*stack)->next)
 	{
 		printf("[%d]closing pipe[0]=%d, pipe[1]=%d, old_fd=%d\n\n", i, (*stack)->pipe[0], (*stack)->pipe[1], (*stack)->old_fd);
