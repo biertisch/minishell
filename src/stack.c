@@ -88,6 +88,13 @@ t_stack	**get_first_pipe(t_stack **stack)
 	return (NULL);
 }
 
+t_stack **get_next_pipe(t_stack **stack)
+{
+  	if (!stack || !*stack)
+		return NULL;
+	return (get_first_pipe(&(*stack)->next)); 
+}
+
 static char	*type_to_string(t_node_type type)
 {
 	if (type == NODE_CMD)
@@ -129,7 +136,11 @@ void	print_stack(t_stack *stack)
 	i = 0;
 	while (stack)
 	{
-		ft_printf("level %d: TYPE=%s PHASE=%s\n", i, type_to_string(stack->type), phase_to_string(stack->phase));
+		printf("\nlevel %d: TYPE=%s PHASE=%s", i, type_to_string(stack->type), phase_to_string(stack->phase));
+		if (stack->type == NODE_PIPE)
+			printf(" PIPE[0]=%d PIPE[1]=%d OLD_FD=%d\n", stack->pipe[0], stack->pipe[1], stack->old_fd);
+		else
+			printf("\n");
 		i++;
 		stack = stack->next;
 	}

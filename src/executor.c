@@ -28,7 +28,6 @@ int	execute_stack(t_data *data, t_stack **stack)
 
 	tree_nodes_count = count_tree_nodes(data->parser_tree);
 	i = 0;
-	print_parser_tree(data->parser_tree);
 	while (i < tree_nodes_count)
 	{
 		if ((*stack)->type == NODE_PIPE)
@@ -67,12 +66,15 @@ int	execute_pipe_entered(t_data *data, t_stack **stack)
 {
 	int	left_in;
 	int	left_out;
+	static int	i;
 
 	check_for_errors(pipe((*stack)->pipe), data, *stack, "pipe");
+	printf("[pipe %d] made fds %d,%d\n", i, (*stack)->pipe[0], (*stack)->pipe[1]);
 	left_in = (*stack)->in_fd;
 	left_out = ((*stack)->pipe)[1];
 	(*stack)->phase = LAUNCH_LEFT;
 	push_stack(stack, (*stack)->node->left, left_in, left_out, data);
+	i++;
 	return (0);
 }
 
@@ -106,20 +108,39 @@ int	execute_pipe_wait(t_stack **stack)
 
 int	execute_pipe_done(t_stack **stack)
 {
+	static int	i;
+	
+	print_stack(*stack);
 	if (!(*stack)->next)
 	{
+		printf("[%d]closing pipe[0]=%d, pipe[1]=%d, old_fd=%d\n\n", i, (*stack)->pipe[0], (*stack)->pipe[1], (*stack)->old_fd);
 		close((*stack)->pipe[0]);
 		close((*stack)->pipe[1]);
 		close((*stack)->old_fd);
 		return (1);
 	}
 	if ((*stack)->pipe[0] != (*stack)->old_fd)
+	{
+		printf("[%d]closing pipe[0]=%d\n", i, (*stack)->pipe[0]);
 		close((*stack)->pipe[0]);
+	}
 	if ((*stack)->pipe[1] != (*stack)->old_fd)
+	{
+		printf("[%d]closing pipe[1]=%d\n", i, (*stack)->pipe[1]);
 		close((*stack)->pipe[1]);
+	}
 	if ((*stack)->next->type == NODE_PIPE)
+	{
+		printf("next->old_fd = %d\told_fd = %d\n", (*stack)->next->old_fd, (*stack)->old_fd);
 		(*stack)->next->old_fd = (*stack)->old_fd;
+	}
+	else
+	{
+		printf("[%d]closing old_fd[0]=%d\n", i, (*stack)->old_fd);
+		close((*stack)->old_fd);
+	}
 	pop(stack);
+	i++;
 	return (1);
 }
 
