@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 15:24:57 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/09 15:25:14 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 10:21:36 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void	validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 	if (!ptr)
 	{
 		system_error(data, "malloc");
-		free_parser_tree(&left);
-		free_parser_tree(&right);
+		free_parser_tree(data, &left);
+		free_parser_tree(data, &right);
 		error_exit(data);
 	}
 }

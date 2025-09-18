@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:51:27 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/10 11:38:53 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:12:55 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static void	split_env_entry(t_data *data, char *entry, t_env *node)
 	}
 }
 
-//helpful to implement built-in export and unset
 int	envp_to_list(t_data *data, char **envp, char **argv)
 {
 	int		i;
@@ -86,7 +85,6 @@ static char	*join_key_value(t_env *node)
 	return (res);
 }
 
-//helpful to pass updated env to execve()
 void	env_list_to_array(t_data *data)
 {
 	t_env	*trav;

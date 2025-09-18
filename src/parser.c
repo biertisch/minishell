@@ -6,15 +6,14 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/15 16:10:46 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:21:58 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//calls parse_and_or() for left node
-//allows redirection (eg (ls)>file)
-//checks for missing ')' and commands after subshell (eg (ls)ls)
+//calls parse_and_or() for left node, allows redirection,
+//checks for unclosed parenthesis (INCOMPLETE) and invalid sequences (INVALID)
 static int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree	*node;
@@ -25,23 +24,23 @@ static int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 	validate_malloc(data, node, NULL);
 	res = parse_and_or(data, token, &node->left);
 	if (res)
-		return (empty_subshell(token, node, res));
+		return (empty_subshell(data, token, node, res));
 	if (!*token)
-		return (free_parser_tree(&node), prompt_continuation(data, ')'));
-	if ((*token)->type != RPAREN)
+		return (free_parser_tree(data, &node), prompt_continuation(data, ')'));
+	if ((*token)->type != RPAREN) //is this needed?
 		return (invalid_sequence(data, *token, node));
 	*token = (*token)->next;
 	if (*token && ((*token)->type == WORD || (*token)->type == LPAREN))
 		return (invalid_sequence(data, *token, node));
 	if (*token && (is_redir_token((*token)->type) || (*token)->type == FD)
 		&& get_command_data(data, token, node))
-		return (free_parser_tree(&node), INVALID);
+		return (free_parser_tree(data, &node), INVALID);
 	*root = node;
 	return (VALID);
 }
 
 //calls parse_subshell() if it finds '('
-//checks for missing commands
+//& checks for missing commands (INCOMPLETE at end or INVALID otherwise)
 static int	parse_command(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree	*node;
@@ -62,9 +61,6 @@ static int	parse_command(t_data *data, t_token **token, t_tree **root)
 	return (VALID);
 }
 
-//handles multiple pipe operators from left to right
-//calls parse_command() for left and right nodes
-//returns INVALID if left or right node is empty
 static int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree	*left;
@@ -80,7 +76,7 @@ static int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 		*token = (*token)->next;
 		res = parse_command(data, token, &right);
 		if (res)
-			return (free_parser_tree(&left), res);
+			return (free_parser_tree(data, &left), res);
 		tmp = create_parser_node(NODE_PIPE, left, right);
 		validate_malloc_tree(data, tmp, left, right);
 		left = tmp;
@@ -89,9 +85,6 @@ static int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 	return (VALID);
 }
 
-//handles multiple logical operators from left to right
-//calls parse_pipe() for left and right nodes
-//returns INVALID if left or right node is empty
 int	parse_and_or(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree		*left;
@@ -109,7 +102,7 @@ int	parse_and_or(t_data *data, t_token **token, t_tree **root)
 		*token = (*token)->next;
 		res = parse_pipe(data, token, &right);
 		if (res)
-			return (free_parser_tree(&left), res);
+			return (free_parser_tree(data, &left), res);
 		tmp = create_parser_node(type, left, right);
 		validate_malloc_tree(data, tmp, left, right);
 		left = tmp;
@@ -120,7 +113,7 @@ int	parse_and_or(t_data *data, t_token **token, t_tree **root)
 
 //builds an abstract syntax tree (AST) based on operator precedence
 //from lowest precendece to highest: logical operators -> pipe -> commands
-//checks for stray parentheses
+//& checks for stray parentheses at the end
 int	parser(t_data *data)
 {
 	t_token	*token;

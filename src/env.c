@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:15 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/10 11:38:20 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:13:21 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	generate_minimal_env(t_data *data, char **argv)
 	return (0);
 }
 
-//used in variable expansion and built-in export
 char	*get_env_value(t_env *head, char *key)
 {
 	while (head)
@@ -67,7 +66,6 @@ char	*get_env_value(t_env *head, char *key)
 	return (NULL);
 }
 
-//used in built-in export
 void	set_env_value(t_env *head, char *key, char *new_value)
 {
 	while (head)
@@ -82,7 +80,6 @@ void	set_env_value(t_env *head, char *key, char *new_value)
 	}
 }
 
-//used in built-in unset
 void	unset_env(t_env **head, char *key)
 {
 	t_env	*trav;

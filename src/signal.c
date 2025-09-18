@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/15 17:41:05 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:22:58 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	setup_signals(void)
 
 	if (isatty(STDIN_FILENO)) //check argc as well?
 	{
-		sa.sa_handler = sigint_handler;
+		sa.sa_handler = signal_handler;
 		sigemptyset(&sa.sa_mask);
-		sa.sa_flags = SA_RESTART;
+		sa.sa_flags = 0;
 		sigaction(SIGINT, &sa, NULL);
 		sa.sa_handler = SIG_IGN;
 		sigaction(SIGQUIT, &sa, NULL);
@@ -28,23 +28,9 @@ void	setup_signals(void)
 	}
 }
 
-void	sigint_handler(int sig)
+void	signal_handler(int sig)
 {
 	g_sig_received = sig;
-	write(1, "\n", STDOUT_FILENO);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-void	handle_eof(t_data *data)
-{
-	if (!ft_strcmp(get_env_value(data->env_list, "SHLVL"), "1"))
-		printf("logout\n");
-	else
-		printf("exit\n");
-	free_all(data);
-	exit(EXIT_SUCCESS);
 }
 
 void	setup_signals_child(void)
@@ -56,4 +42,31 @@ void	setup_signals_child(void)
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
 	sigaction(SIGTERM, &sa, NULL);
+}
+
+//readline handler for prompt_continuation
+int	rl_sigint_continuation(void)
+{
+	if (g_sig_received == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_done = 1;
+		return (1);
+	}
+	return (0);
+}
+
+//readline handler for prompt_input
+int	rl_sigint_main(void)
+{
+	if (g_sig_received == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	return (0);
 }

@@ -6,15 +6,14 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/15 16:07:55 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:15:23 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//assumes value is delimitated by blank space or operators
-//groups text within quotes
-//checks for unclosed quotes
+//assumes value is delimitated by blank space or operators,
+//groups text within quotes && checks for unclosed quotes
 static int	get_token_value(t_data *data, char *input, char **value, int *index)
 {
 	char	quote;

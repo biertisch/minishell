@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/15 16:27:56 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:14:24 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,15 @@ typedef enum e_node_type
 	NODE_SUBSHELL
 }	t_node_type;
 
+typedef enum e_phase
+{
+	ENTERED,
+	LAUNCH_LEFT,
+	LAUNCH_RIGHT,
+	WAIT,
+	DONE
+}	t_phase;
+
 typedef struct s_env
 {
 	char			*key;
@@ -108,14 +117,29 @@ typedef struct s_tree
 	struct s_tree	*right;
 }	t_tree;
 
+typedef struct s_stack
+{
+	t_phase			phase;
+	t_node_type		type;
+	t_tree			*node;
+	int				in_fd;
+	int				out_fd;
+	int				old_fd;
+	int				pipe[2];
+	pid_t			child_pid[2];
+	int				child_count;
+	struct s_stack	*next;
+}	t_stack;
+
 typedef struct s_data
 {
 	char			*input;
 	char			**env;
 	t_env			*env_list;
-	int				exit_status;
 	t_token			*lexer_list;
 	t_tree			*parser_tree;
+	t_stack			*stack;
+	int				exit_status;
 }	t_data;
 
 extern volatile sig_atomic_t	g_sig_received;
@@ -133,6 +157,8 @@ int			validate_builtin(t_data *data, t_tree *node);
 //cleanup.c
 void		free_all(t_data *data);
 void		free_command_data(t_data *data);
+void		free_stack(t_stack *stack);
+void		free_redir(t_redir *redir);
 void		free_string_array(char ***arr);
 
 //env.c
@@ -159,7 +185,7 @@ int			internal_error(t_data *data, char *desc, char *cmd, char *arg);
 void		error_exit(t_data *data);
 
 //expander.c
-int			expand(t_data *data, t_tree *node);
+int			expand(t_data *data);
 
 //expander_dollar.c
 void		expand_dollar(t_data *data, char **arg);
@@ -169,11 +195,7 @@ void		remove_quotes(t_data *data, char **arg);
 
 //input.c
 void		prompt_input(t_data *data);
-int			process_input(t_data *data);
 int			prompt_continuation(t_data *data, char target);
-
-//get_next_line.c
-char		*get_next_line(int fd);
 
 //lexer.c
 int			lexer(t_data *data);
@@ -212,14 +234,18 @@ int			get_redir(t_data *data, t_token **token, t_tree *node);
 int			is_redir_token(t_token_type token_type);
 
 //parser_subshell.c
-int			empty_subshell(t_token **token, t_tree *node, int res);
+int			empty_subshell(t_data *data, t_token **token, t_tree *node,
+				int res);
 int			invalid_sequence(t_data *data, t_token *token, t_tree *node);
 
 //parser_tree.c
-void		free_parser_tree(t_tree **node);
+void		free_parser_tree(t_data *data, t_tree **root);
 void		free_parser_node(t_tree **node);
-void		free_redir(t_redir *redir);
 t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);
+
+//parser_tree2.c
+int			push_left_until_cmd(t_data *data, int (*f_sub)(t_data *, t_tree *));
+void		push_right_once(t_data *data);
 
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
@@ -227,9 +253,20 @@ int			is_builtin(char *cmd);
 
 //signal.c
 void		setup_signals(void);
-void		sigint_handler(int sig);
-void		handle_eof(t_data *data);
+void		signal_handler(int sig);
 void		setup_signals_child(void);
+int			rl_sigint_main(void);
+int			rl_sigint_continuation(void);
+
+//stack.c
+t_stack		*create_stack(t_data *data);
+void		push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd,
+				t_data *data);
+void		pop(t_stack **stack);
+int			has_pipe_ancestor(t_stack *stack);
+t_stack		**get_first_pipe(t_stack **stack);
+void		print_top(t_stack *stack);
+void		print_stack(t_stack *stack);
 
 //wildcard.c
 int			has_wildcard(const char *arg);

@@ -6,11 +6,21 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/15 17:40:54 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:05:55 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static void	handle_eof(t_data *data)
+{
+	if (!ft_strcmp(get_env_value(data->env_list, "SHLVL"), "1"))
+		printf("logout\n");
+	else
+		printf("exit\n");
+	free_all(data);
+	exit(EXIT_SUCCESS);
+}
 
 static char	*update_input(t_data *data, char *line, char target)
 {
@@ -36,31 +46,42 @@ static char	*update_input(t_data *data, char *line, char target)
 	return (append_line);
 }
 
-static int	signal_interruption(t_data *data, char *line, char target)
+static int	process_input(t_data *data)
 {
-	if (g_sig_received == SIGINT)
-	{
-		g_sig_received = 0;
-		free_command_data(data);
-		data->input = line;
-		return (INCOMPLETE);
-	}
-	if (target && is_quote(target))
-		syntax_error(data, ERR_6, &target);
-	else
-		syntax_error(data, ERR_7, NULL);
-	return (INCOMPLETE_EOF);
+	int	res;
+
+	add_history(data->input);
+	res = lexer(data);
+	if (res || !data->lexer_list)
+		return (res);
+	res = parser(data);
+	if (res || !data->parser_tree)
+		return (res);
+	res = expand(data);
+	if (res)
+		return (res);
+	print_parser_tree(data->parser_tree); // TESTING
+	//execute //TODO PEDRO
+	return (VALID);
 }
 
 int	prompt_continuation(t_data *data, char target)
 {
 	char	*line;
 
+	rl_signal_event_hook = rl_sigint_continuation;
 	while (1)
 	{
 		line = readline(CONTINUE_PROMPT);
-		if (!line || g_sig_received)
-			return (signal_interruption(data, line, target));
+		if (g_sig_received == SIGINT)
+		{
+			g_sig_received = 0;
+			free_command_data(data);
+			free(line);
+			return (INCOMPLETE);
+		}
+		if (!line)
+			return (syntax_error(data, ERR_7, NULL));
 		if (is_quote(target) || *line)
 			data->input = update_input(data, line, target);
 		if ((target && ft_strchr(line, target)) || (!target && *line))
@@ -73,41 +94,26 @@ int	prompt_continuation(t_data *data, char target)
 	return (INCOMPLETE);
 }
 
-int	process_input(t_data *data)
-{
-	int	res;
-
-	add_history(data->input);
-	res = lexer(data);
-	if (res || !data->lexer_list)
-		return (res);
-	res = parser(data);
-	if (res || !data->parser_tree)
-		return (res);
-	res = expand(data, data->parser_tree);
-	if (res)
-		return (res);
-	print_parser_tree(data->parser_tree); // TESTING
-	//execute //TODO PEDRO
-	return (VALID);
-}
-
 void	prompt_input(t_data *data)
 {
 	int	status;
 
+	rl_signal_event_hook = rl_sigint_main;
 	while (1)
 	{
 		data->input = readline(PROMPT);
 		if (!data->input)
 			handle_eof(data);
-		if (g_sig_received)
+		if (g_sig_received == SIGINT)
 			g_sig_received = 0;
 		if (*data->input)
 		{
 			status = process_input(data);
 			if (status == INCOMPLETE && data->input)
+			{
 				process_input(data);
+				rl_signal_event_hook = rl_sigint_main;
+			}
 			else if (status == INCOMPLETE_EOF)
 				handle_eof(data);
 		}

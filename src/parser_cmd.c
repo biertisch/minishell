@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 11:10:37 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/08 15:55:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:15:45 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static char	**allocate_argv(t_data *data, t_token **token, t_tree *node)
 
 //counts all WORDS as part of argv except for
 //the WORD immediately after redirection operator
-//checks for empty commands (with no argv and no redir)
+//& checks for empty commands (with no argv and no redir)
 int	get_command_data(t_data *data, t_token **token, t_tree *node)
 {
 	int	i;
