@@ -80,7 +80,7 @@ void	free_parser_tree(t_data *data, t_tree **root)
 		return ;
 	if (clean_right_branch(data))
 		return ;
-	free_stack(data->stack);
+	free_stack(&data->stack);
 	data->stack = NULL; //incorporate into free_stack
 	*root = NULL;
 }

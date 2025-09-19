@@ -12,14 +12,13 @@
 
 NAME        = minishell
 
-SRC_FILES   = builtin cleanup env env_convert env_list error expander expander_dollar expander_quotes\
-				input lexer lexer_list lexer_utils main parser parser_cmd parser_redir parser_subshell\
-				parser_tree parser_utils signal wildcard wildcard_argv wildcard_match test stack parser_tree2
-SRC_FILES   = env env_convert env_list error expander lexer lexer_list\
-				main parser parser_cmd parser_redir parser_tree parser_utils\
-				signal_handler executor stack child parent executor_utils\
-				builtin cleanup expander_dollar expander_quotes wildcard\
-				wildcard_argv wildcard_match executor_pipe
+SRC_FILES   = builtin cleanup env env_convert env_list error expander\
+		expander_dollar expander_quotes input lexer lexer_list\
+		lexer_utils main parser parser_cmd parser_redir parser_subshell\
+		parser_tree parser_utils wildcard wildcard_argv wildcard_match\
+		test stack parser_tree2 signal executor child parent\
+		executor_utils executor_pipe
+
 SRC_DIR     = src
 OBJ_DIR     = obj
 INC_DIR     = include

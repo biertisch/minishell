@@ -40,7 +40,7 @@ typedef struct s_tree
 }	t_tree;
 
 //expander.c
-int			expand(t_data *data, t_tree *node);
+int			expand(t_data *data);
 
 //expander_dollar.c
 void		expand_dollar(t_data *data, char **arg);
@@ -58,30 +58,42 @@ t_token		*get_last_lexer_node(t_token *head);
 void		add_lexer_node(t_token **head, t_token *new_node);
 t_token		*create_lexer_node(t_token_type type, char *value);
 
+//lexer_utils.c
+int			is_fd(char *input);
+int			is_quote(char c);
+int			is_operator(char *s);
+int			get_operator_len(char *s);
+
 //parser.c
 int			parser(t_data *data);
-t_tree		*parse_and_or(t_data *data, t_token **token);
+int			parse_and_or(t_data *data, t_token **token, t_tree **root);
 
 //parser_cmd.c
 int			get_command_data(t_data *data, t_token **token, t_tree *node);
 int			is_command_token(t_token_type token_type);
 
 //parser_redir.c
-t_redir		*get_redir(t_data *data, t_token **token);
+int			get_redir(t_data *data, t_token **token, t_tree *node);
 int			is_redir_token(t_token_type token_type);
 
+//parser_subshell.c
+int			empty_subshell(t_data *data, t_token **token, t_tree *node,
+				int res);
+int			invalid_sequence(t_data *data, t_token *token, t_tree *node);
+
 //parser_tree.c
-void		free_parser_tree(t_tree **node);
+void		free_parser_tree(t_data *data, t_tree **root);
 void		free_parser_node(t_tree **node);
-void		free_redir(t_redir *redir);
 t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);
 int			count_tree_nodes(t_tree *root);
 
+//parser_tree2.c
+int			push_left_until_cmd(t_data *data, int (*f_sub)(t_data *, t_tree *));
+void		push_right_once(t_data *data);
+
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
-int			is_operator(char *s);
-int			is_quote(char c);
-int			is_fd(char *input);
+int			is_builtin(char *cmd);
 
 //wildcard.c
 int			has_wildcard(const char *arg);

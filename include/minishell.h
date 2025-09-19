@@ -13,7 +13,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-//HEADERS
 # include "../include/struct_def.h"
 # include "../include/libft.h"
 # include "../include/printf.h"
@@ -36,10 +35,6 @@
 # include <termios.h>
 # include <unistd.h>
 # include <errno.h>
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
 
 # define PROMPT "minishell$ "
 # define CONTINUE_PROMPT "> "
@@ -64,32 +59,6 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef struct s_token
-{
-	t_token_type	type;
-	char			*value;
-	struct s_token	*next;
-}	t_token;
-
-typedef struct s_redir
-{
-	t_token_type	type;
-	int				fd;
-	char			*file;
-	struct s_redir	*next;
-}	t_redir;
-
-typedef struct s_tree
-{
-	t_node_type		type;
-	char			**argv;
-	t_redir			*redir;
-	struct s_tree	*left;
-	struct s_tree	*right;
-}	t_tree;
-
-//maybe add struct with int *fd_opened and int fd_open_counter
-
 typedef struct s_data
 {
 	char			*input;
@@ -113,7 +82,6 @@ void		test_builtin_validation(t_data *data, t_tree *head);
 //cleanup.c
 void		free_all(t_data *data);
 void		free_command_data(t_data *data);
-void		free_stack(t_stack *stack);
 void		free_redir(t_redir *redir);
 void		free_string_array(char ***arr);
 void		free_stack(t_stack **stack);
@@ -149,17 +117,12 @@ void		check_for_errors(int status, t_data *data, t_stack *stack,
 void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 				char **new_argv);
 
-//expander.c
-int			expand(t_data *data, t_tree *node);
-
 //input.c
 void		prompt_input(t_data *data);
 int			prompt_continuation(t_data *data, char target);
 
-int			is_builtin(char *cmd);
-
-void		setup_signals(void);
 //signal.c
+void		setup_signals(void);
 void		signal_handler(int sig);
 void		setup_signals_child(void);
 int			rl_sigint_main(void);

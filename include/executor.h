@@ -30,7 +30,7 @@ typedef struct s_stack
 }	t_stack;
 
 // builtin.c
-void		process_builtin(t_data *data, t_tree *head);
+int			validate_builtin(t_data *data, t_tree *node);
 
 //executor.c
 int			execute(t_data *data);
