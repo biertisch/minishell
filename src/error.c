@@ -89,7 +89,7 @@ void	check_for_errors(int status, t_data *data, t_stack *stack, char *command_na
 	if (status == -1)
 	{
 		perror(command_name);
-		free_stack(stack);
+		free_stack(&stack);
 		free_all(data);
 		exit(EXIT_FAILURE);
 	}

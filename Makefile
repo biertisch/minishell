@@ -45,7 +45,8 @@ DEF_COLOUR=\033[0m
 
 SRC         = $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_FILES)))
 OBJ         = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
-HDRS        = $(INC_DIR)/minishell.h $(INC_DIR)/printf.h $(INC_DIR)/libft.h
+HDRS        = $(INC_DIR)/minishell.h $(INC_DIR)/printf.h $(INC_DIR)/libft.h $(INC_DIR)/parser.h $(INC_DIR)/executor.h
+
 
 .PHONY: all clean fclean re headers
 
