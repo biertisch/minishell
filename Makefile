@@ -1,8 +1,24 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
+#    Updated: 2025/09/02 12:39:39 by pedde-so         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME        = minishell
 
-SRC_FILES   = builtin cleanup env env_convert env_list error expander expander_dollar expander_quotes\
-				input lexer lexer_list lexer_utils main malloc parser parser_cmd parser_redir parser_subshell\
-				parser_tree parser_utils signal wildcard wildcard_argv wildcard_match test stack parser_tree2
+SRC_FILES   = builtin cleanup env env_convert env_list error expander\
+		expander_dollar expander_quotes input lexer lexer_list\
+		lexer_utils main parser parser_cmd parser_redir parser_subshell\
+		parser_tree parser_utils wildcard wildcard_argv wildcard_match\
+		test stack parser_tree2 signal executor child parent\
+		executor_utils executor_pipe
+
 SRC_DIR     = src
 OBJ_DIR     = obj
 INC_DIR     = include
@@ -18,17 +34,21 @@ CFLAGS      = -Wall -Wextra -Werror -I$(INC_DIR)
 RM          = rm -rf
 
 RED=\033[0;31m
+GREEN	    := \033[92;5;118m
 ORANGE      := \033[38;5;208m
 YELLOW      := \033[38;5;226m
 GREEN       := \033[38;5;082m
 BLUE        := \033[38;5;027m
 INDIGO      := \033[38;5;057m
 VIOLET      := \033[38;5;129m
+BLINK       := \033[5m
+CURSIVE	    := \033[33;3m
 DEF_COLOUR=\033[0m
 
 SRC         = $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_FILES)))
 OBJ         = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
-HDRS        = $(INC_DIR)/minishell.h $(INC_DIR)/printf.h $(INC_DIR)/libft.h
+HDRS        = $(INC_DIR)/minishell.h $(INC_DIR)/printf.h $(INC_DIR)/libft.h $(INC_DIR)/parser.h $(INC_DIR)/executor.h
+
 
 .PHONY: all clean fclean re headers
 
@@ -41,10 +61,13 @@ all: $(PRINTF_LIB) headers $(NAME)
 		$(BLUE)|   |   | |  | |  |  | |  |/  \ ||  |  ||   [_ |     ||     |$(DEF_COLOUR)\n\
 		$(INDIGO)|   |   | |  | |  |  | |  |\    ||  |  ||     ||     ||     |$(DEF_COLOUR)\n\
 		$(VIOLET)|___|___||____||__|__||____|\___||__|__||_____||_____||_____|$(DEF_COLOUR)\n"
+	@printf "$(BLINK)$(CURSIVE)$(GREEN)\t\t\t\t\t\t- Minishell ready :)$(DEF_COLOUR)\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
-	@echo "tags\n.gitignore\n*.txt\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n*.pdf\n*.png" > .gitignore
+	@ctags -R .
+	@echo "tags\n.gitignore\n*.txt\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\noutfile*" > .gitignore
+	@echo "* text=auto eol=lf" > .gitattributes
 
 $(OBJ_DIR):
 	@mkdir -p $@
@@ -70,11 +93,13 @@ $(INC_DIR)/libft.h: $(PRINTF_LIB)
 
 clean:
 	@$(RM) $(OBJ_DIR)
+	@$(RM) tags
 
 fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) $(INC_DIR)/printf.h $(INC_DIR)/libft.h
 	@$(RM) -r $(LIBFT_DIR)
 	@$(RM) -r $(PRINTF_DIR)
+	@$(RM) outfile*
 
 re: fclean all

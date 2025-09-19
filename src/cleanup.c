@@ -41,16 +41,15 @@ void	free_redir(t_redir *redir)
 	}
 }
 
-//change to **stack and set to NULL
-void	free_stack(t_stack *stack)
+void	free_stack(t_stack **stack)
 {
 	t_stack	*next;
 	t_stack	*old_next;
 
-	if (!stack) //added B
+	if (!stack || !*stack)
 		return ;
-	old_next = stack;
-	next = stack->next;
+	old_next = *stack;
+	next = (*stack)->next;
 	while (next)
 	{
 		free(old_next);
@@ -58,6 +57,7 @@ void	free_stack(t_stack *stack)
 		next = next->next;
 	}
 	free(old_next);
+	*stack = NULL;
 }
 
 //called after every iteration of main loop
@@ -66,8 +66,7 @@ void	free_command_data(t_data *data)
 	free(data->input);
 	data->input = NULL;
 	free_lexer_list(&data->lexer_list);
-	free_stack(data->stack);
-	data->stack = NULL; // incorporate in free_stack
+	free_stack(&data->stack);
 	free_parser_tree(data, &data->parser_tree);
 }
 
