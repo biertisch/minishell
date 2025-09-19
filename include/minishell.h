@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 12:14:24 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/19 12:17:16 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,12 @@ int			system_error(t_data *data, char *function);
 int			syntax_error(t_data *data, char *desc, char *token);
 int			internal_error(t_data *data, char *desc, char *cmd, char *arg);
 void		error_exit(t_data *data);
+void		validate_malloc(t_data *data, void *ptr, void *to_free);
+void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
+				t_tree *right);
+void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
+void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
+				char **new_argv);
 
 //expander.c
 int			expand(t_data *data);
@@ -212,14 +218,6 @@ int			is_fd(char *input);
 int			is_quote(char c);
 int			is_operator(char *s);
 int			get_operator_len(char *s);
-
-//malloc.c
-void		validate_malloc(t_data *data, void *ptr, void *to_free);
-void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
-				t_tree *right);
-void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
-void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
-				char **new_argv);
 
 //parser.c
 int			parser(t_data *data);
