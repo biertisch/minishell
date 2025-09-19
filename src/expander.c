@@ -108,7 +108,6 @@ int	expand(t_data *data)
 		return (-1);
 	if (expand_right_branch(data))
 		return (-1);
-	free_stack(data->stack);
-	data->stack = NULL; //incorporate into free_stack
+	free_stack(&data->stack);
 	return (0);
 }

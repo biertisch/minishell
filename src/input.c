@@ -54,16 +54,13 @@ static int	process_input(t_data *data)
 	res = lexer(data);
 	if (res || !data->lexer_list)
 		return (res);
-	print_lexer_list(data->lexer_list); // TESTING
 	res = parser(data);
 	if (res || !data->parser_tree)
 		return (res);
-	print_parser_tree(data->parser_tree); // TESTING
 	res = expand(data);
 	if (res)
 		return (res);
-	print_parser_tree(data->parser_tree); // TESTING
-	//execute //TODO PEDRO
+	execute(data);
 	return (VALID);
 }
 

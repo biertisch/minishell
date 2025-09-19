@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:15:44 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/18 12:23:43 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/02 15:15:45 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	t_stack *new_head;
 
 	new_head = malloc(sizeof(t_stack));
-	validate_malloc(data, new_head, NULL); //potential memory leak if stack isn't in data
+	validate_malloc(data, new_head, NULL);
 	new_head->phase = ENTERED;
 	new_head->type = node->type;
 	new_head->node = node;
@@ -92,7 +92,7 @@ t_stack **get_next_pipe(t_stack **stack)
 {
   	if (!stack || !*stack)
 		return NULL;
-	return (get_first_pipe(&(*stack)->next));
+	return (get_first_pipe(&(*stack)->next)); 
 }
 
 void	close_all_pipe_ends(t_stack **stack)
@@ -107,7 +107,7 @@ void	close_all_pipe_ends(t_stack **stack)
 			close((*head)->pipe[0]);
 			close((*head)->pipe[1]);
 		}
-		head = &((*head)->next);
+		head = &((*head)->next);	
 	}
 }
 
