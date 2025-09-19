@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 10:22:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/30 10:22:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/15 12:11:21 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,14 @@ static t_redir	*parse_single_redir(t_data *data, t_token **token,
 	}
 	type = (*token)->type;
 	*token = (*token)->next;
-	if (!*token || (*token)->type != WORD)
-		return (NULL);
+	if (!*token)
+		return (syntax_error(data, ERR_1, "newline"), NULL);
+	if ((*token)->type != WORD)
+		return (syntax_error(data, ERR_1, (*token)->value), NULL);
 	redir = create_redir(type, fd, (*token)->value);
 	if (!redir)
 	{
-		report_error("malloc", SYSTEM_ERR);
+		system_error(data, "malloc");
 		free_redir(head);
 		error_exit(data);
 	}
@@ -68,28 +70,22 @@ static t_redir	*parse_single_redir(t_data *data, t_token **token,
 	return (redir);
 }
 
-//checks for missing filename after redirection operator
-t_redir	*get_redir(t_data *data, t_token **token)
+int	get_redir(t_data *data, t_token **token, t_tree *node)
 {
-	t_redir			*head;
 	t_redir			*last;
 	t_redir			*curr;
 
-	head = NULL;
-	last = NULL;
+	last = node->redir;
 	while (*token && (is_redir_token((*token)->type) || (*token)->type == FD))
 	{
-		curr = parse_single_redir(data, token, head);
+		curr = parse_single_redir(data, token, node->redir);
 		if (!curr)
-		{
-			free_redir(head);
-			return (report_error("missing filename", SYNTAX_ERR), NULL);
-		}
-		if (!head)
-			head = curr;
+			return (-1);
+		if (!node->redir)
+			node->redir = curr;
 		else
 			last->next = curr;
 		last = curr;
 	}
-	return (head);
+	return (0);
 }

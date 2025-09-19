@@ -6,16 +6,14 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/20 10:38:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:15:23 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//applies only to WORD and FD
-//assumes value is delimitated by blank space or operators
-//groups text within quotes as a single value
-//checks for unsupported characters and unclosed quotes
+//assumes value is delimitated by blank space or operators,
+//groups text within quotes && checks for unclosed quotes
 static int	get_token_value(t_data *data, char *input, char **value, int *index)
 {
 	char	quote;
@@ -25,8 +23,6 @@ static int	get_token_value(t_data *data, char *input, char **value, int *index)
 	i = 0;
 	while (input[i])
 	{
-		if (!quote && (input[i] == '\\' || input[i] == ';'))
-			return (report_error("unsupported character", SYNTAX_ERR));
 		if (!quote && (ft_isspace(input[i]) || is_operator(input + i)))
 			break ;
 		if (!quote && is_quote(input[i]))
@@ -36,49 +32,39 @@ static int	get_token_value(t_data *data, char *input, char **value, int *index)
 		i++;
 	}
 	if (quote)
-		return (report_error("missing quote", SYNTAX_ERR));
+		return (syntax_error(data, ERR_8, NULL));
+	if (i == 0 && is_operator(input + i))
+		i = get_operator_len(input + i);
 	*value = ft_substr(input, 0, i);
 	validate_malloc(data, value, NULL);
 	*index += ft_strlen(*value);
-	return (0);
+	return (VALID);
 }
 
-static int	update_index(t_token_type type)
-{
-	if (type == AND || type == OR
-		|| type == HEREDOC || type == APPEND)
-		return (2);
-	else if (type == WORD || type == FD)
-		return (0);
-	else
-		return (1);
-}
-
-static void	get_token_type(char *input, t_token_type *type, int *index)
+static t_token_type	get_token_type(char *input)
 {
 	if (!ft_strncmp(input, "&&", 2))
-		*type = AND;
+		return (AND);
 	else if (!ft_strncmp(input, "||", 2))
-		*type = OR;
+		return (OR);
 	else if (!ft_strncmp(input, "<<", 2))
-		*type = HEREDOC;
+		return (HEREDOC);
 	else if (!ft_strncmp(input, ">>", 2))
-		*type = APPEND;
+		return (APPEND);
 	else if (*input == '|')
-		*type = PIPE;
+		return (PIPE);
 	else if (*input == '<')
-		*type = REDIR_IN;
+		return (REDIR_IN);
 	else if (*input == '>')
-		*type = REDIR_OUT;
+		return (REDIR_OUT);
 	else if (*input == '(')
-		*type = LPAREN;
+		return (LPAREN);
 	else if (*input == ')')
-		*type = RPAREN;
+		return (RPAREN);
 	else if (is_fd(input))
-		*type = FD;
+		return (FD);
 	else
-		*type = WORD;
-	*index += update_index(*type);
+		return (WORD);
 }
 
 static void	add_token(t_data *data, t_token_type type, char *value)
@@ -96,25 +82,21 @@ int	lexer(t_data *data)
 	t_token_type	type;
 	char			*value;
 	int				i;
+	int				res;
 
-	value = NULL;
 	i = 0;
 	while (data->input[i])
 	{
+		value = NULL;
 		while (ft_isspace(data->input[i]))
 			i++;
 		if (!data->input[i])
 			break ;
-		get_token_type(data->input + i, &type, &i);
-		value = NULL;
-		if (type == WORD || type == FD)
-		{
-			if (get_token_value(data, data->input + i, &value, &i))
-				return (-1);
-			if (!value)
-				continue ;
-		}
+		type = get_token_type(data->input + i);
+		res = get_token_value(data, data->input + i, &value, &i);
+		if (res)
+			return (res);
 		add_token(data, type, value);
 	}
-	return (0);
+	return (VALID);
 }

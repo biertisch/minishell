@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:49:50 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/21 10:49:50 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 11:52:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,6 @@ t_tree	*create_parser_node(t_node_type type, t_tree *left, t_tree *right)
 	return (new_node);
 }
 
-void	free_redir(t_redir *redir)
-{
-	t_redir	*tmp;
-
-	while (redir)
-	{
-		tmp = redir->next;
-		free(redir->file);
-		free(redir);
-		redir = tmp;
-	}
-}
-
 void	free_parser_node(t_tree **node)
 {
 	if (!node || !*node)
@@ -50,16 +37,52 @@ void	free_parser_node(t_tree **node)
 	*node = NULL;
 }
 
-//perhaps change to avoid recursion
-void	free_parser_tree(t_tree **node)
+static int	clean_left_branch(t_data *data)
 {
-	if (!node || !*node)
+	if (!data->stack || !data->stack->node)
+		return (-1); //issue warning?
+	if (push_left_until_cmd(data, NULL))
+		return (-1);
+	free_parser_node(&data->stack->node);
+	pop(&data->stack);
+	return (0);
+}
+
+static int	clean_right_branch(t_data *data)
+{
+	if (!data->stack || !data->stack->node)
+		return (0);
+	while (data->stack)
+	{
+		if (data->stack->phase == DONE)
+		{
+			free_parser_node(&data->stack->node);
+			pop(&data->stack);
+			continue ;
+		}
+		if (data->stack->node->right)
+		{
+			data->stack->phase = DONE;
+			push_right_once(data);
+			if (clean_left_branch(data))
+				return (-1);
+		}
+	}
+	return (0);
+}
+
+void	free_parser_tree(t_data *data, t_tree **root)
+{
+	if (!root || !*root)
 		return ;
-	if ((*node)->left)
-		free_parser_tree(&(*node)->left);
-	if ((*node)->right)
-		free_parser_tree(&(*node)->right);
-	free_parser_node(node);
+	push_stack(&data->stack, *root, 0, 0, data);
+	if (clean_left_branch(data))
+		return ;
+	if (clean_right_branch(data))
+		return ;
+	free_stack(data->stack);
+	data->stack = NULL; //incorporate into free_stack
+	*root = NULL;
 }
 
 int	count_tree_nodes(t_tree *root)

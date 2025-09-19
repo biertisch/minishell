@@ -12,6 +12,9 @@
 
 NAME        = minishell
 
+SRC_FILES   = builtin cleanup env env_convert env_list error expander expander_dollar expander_quotes\
+				input lexer lexer_list lexer_utils main parser parser_cmd parser_redir parser_subshell\
+				parser_tree parser_utils signal wildcard wildcard_argv wildcard_match test stack parser_tree2
 SRC_FILES   = env env_convert env_list error expander lexer lexer_list\
 				main parser parser_cmd parser_redir parser_tree parser_utils\
 				signal_handler executor stack child parent executor_utils\
@@ -95,7 +98,7 @@ clean:
 
 fclean: clean
 	@$(RM) $(NAME)
-	@$(RM) $(INC_DIR)/printf.h $(INC_DIR)/libft.h 
+	@$(RM) $(INC_DIR)/printf.h $(INC_DIR)/libft.h
 	@$(RM) -r $(LIBFT_DIR)
 	@$(RM) -r $(PRINTF_DIR)
 	@$(RM) outfile*

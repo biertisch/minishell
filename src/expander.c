@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/20 10:38:18 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 11:48:10 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	expand_redir(t_data *data, t_tree *node)
 			if (entries && entries->next)
 			{
 				ft_lstclear(&entries, free);
-				return (report_error("ambiguous redirect", INTERNAL_ERR));
+				return (internal_error(data, ERR_2, NULL, trav->file));
 			}
 			if (entries)
 				trav->file = update_redir(data, trav->file, entries);
@@ -63,19 +63,52 @@ static int	expand_argv(t_data *data, t_tree *node)
 	return (0);
 }
 
-//change to avoid recursion?
-int	expand(t_data *data, t_tree *node)
+static int	expand_left_branch(t_data *data)
 {
-	if (!node)
+	if (!data->stack || !data->stack->node)
+		return (-1); //issue warning?
+	if (push_left_until_cmd(data, expand_redir))
 		return (-1);
-	if ((node->type == NODE_CMD || node->type == NODE_BUILTIN) && node->argv)
-		if (expand_argv(data, node))
+	if (data->stack->node->argv)
+		if (expand_argv(data, data->stack->node))
 			return (-1);
-	if ((node->type == NODE_CMD || node->type == NODE_BUILTIN
-			|| node->type == NODE_SUBSHELL) && node->redir)
-		if (expand_redir(data, node))
+	if (data->stack->node->redir)
+		if (expand_redir(data, data->stack->node))
 			return (-1);
-	expand(data, node->left);
-	expand(data, node->right);
+	pop(&data->stack);
+	return (0);
+}
+
+static int	expand_right_branch(t_data *data)
+{
+	if (!data->stack || !data->stack->node)
+		return (0);
+	while (data->stack)
+	{
+		if (data->stack->phase == DONE)
+		{
+			pop(&data->stack);
+			continue ;
+		}
+		if (data->stack->node->right)
+		{
+			data->stack->phase = DONE;
+			push_right_once(data);
+			if (expand_left_branch(data))
+				return (-1);
+		}
+	}
+	return (0);
+}
+
+int	expand(t_data *data)
+{
+	push_stack(&data->stack, data->parser_tree, 0, 0, data);
+	if (expand_left_branch(data))
+		return (-1);
+	if (expand_right_branch(data))
+		return (-1);
+	free_stack(data->stack);
+	data->stack = NULL; //incorporate into free_stack
 	return (0);
 }

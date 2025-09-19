@@ -6,126 +6,132 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/20 10:38:24 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:21:58 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//calls parse_and_or() for left node
-//allows redirection (eg (ls)>file)
-//checks for missing ')' and commands after subshell (eg (ls)ls)
-static t_tree	*parse_subshell(t_data *data, t_token **token)
+//calls parse_and_or() for left node, allows redirection,
+//checks for unclosed parenthesis (INCOMPLETE) and invalid sequences (INVALID)
+static int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree	*node;
+	int		res;
 
 	*token = (*token)->next;
 	node = create_parser_node(NODE_SUBSHELL, NULL, NULL);
 	validate_malloc(data, node, NULL);
-	node->left = parse_and_or(data, token);
-	if (!node->left)
-		return (free_parser_node(&node), NULL);
-	if (!*token || (*token)->type != RPAREN)
-	{
-		report_error("missing parenthesis", SYNTAX_ERR);
-		return (free_parser_tree(&node), NULL);
-	}
+	res = parse_and_or(data, token, &node->left);
+	if (res)
+		return (empty_subshell(data, token, node, res));
+	if (!*token)
+		return (free_parser_tree(data, &node), prompt_continuation(data, ')'));
+	if ((*token)->type != RPAREN) //is this needed?
+		return (invalid_sequence(data, *token, node));
 	*token = (*token)->next;
 	if (*token && ((*token)->type == WORD || (*token)->type == LPAREN))
-	{
-		report_error("unexpected token", SYNTAX_ERR);
-		return (free_parser_tree(&node), NULL);
-	}
+		return (invalid_sequence(data, *token, node));
 	if (*token && (is_redir_token((*token)->type) || (*token)->type == FD)
 		&& get_command_data(data, token, node))
-		return (free_parser_tree(&node), NULL);
-	return (node);
+		return (free_parser_tree(data, &node), INVALID);
+	*root = node;
+	return (VALID);
 }
 
 //calls parse_subshell() if it finds '('
-//checks for missing commands
-static t_tree	*parse_command(t_data *data, t_token **token)
+//& checks for missing commands (INCOMPLETE at end or INVALID otherwise)
+static int	parse_command(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree	*node;
 
-	if (!*token || (!is_command_token((*token)->type)
-			&& (*token)->type != LPAREN))
-		return (report_error("missing command", SYNTAX_ERR), NULL);
+	if (!*token)
+		return (prompt_continuation(data, 0));
+	if (!is_command_token((*token)->type) && (*token)->type != LPAREN)
+		return (syntax_error(data, ERR_1, (*token)->value));
 	if ((*token)->type == LPAREN)
-		return (parse_subshell(data, token));
+		return (parse_subshell(data, token, root));
 	node = create_parser_node(NODE_CMD, NULL, NULL);
 	validate_malloc(data, node, NULL);
 	if (get_command_data(data, token, node))
-		return (free_parser_node(&node), NULL);
-	if (is_builtin(node->argv[0]))
+		return (free_parser_node(&node), INVALID);
+	if (node->argv && is_builtin(node->argv[0]))
 		node->type = NODE_BUILTIN;
-	return (node);
+	*root = node;
+	return (VALID);
 }
 
-//handles multiple pipe operators from left to right
-//calls parse_command() for left and right nodes
-//returns NULL if left or right node is empty
-static t_tree	*parse_pipe(t_data *data, t_token **token)
+static int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree	*left;
 	t_tree	*right;
 	t_tree	*tmp;
+	int		res;
 
-	left = parse_command(data, token);
-	if (!left)
-		return (NULL);
+	res = parse_command(data, token, &left);
+	if (res)
+		return (res);
 	while (*token && (*token)->type == PIPE)
 	{
 		*token = (*token)->next;
-		right = parse_command(data, token);
-		if (!right)
-			return (free_parser_tree(&left), NULL);
+		res = parse_command(data, token, &right);
+		if (res)
+			return (free_parser_tree(data, &left), res);
 		tmp = create_parser_node(NODE_PIPE, left, right);
 		validate_malloc_tree(data, tmp, left, right);
 		left = tmp;
 	}
-	return (left);
+	*root = left;
+	return (VALID);
 }
 
-//handles multiple logical operators from left to right
-//calls parse_pipe() for left and right nodes
-//returns NULL if left or right node is empty
-t_tree	*parse_and_or(t_data *data, t_token **token)
+int	parse_and_or(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree		*left;
 	t_tree		*right;
 	t_tree		*tmp;
 	t_node_type	type;
+	int			res;
 
-	left = parse_pipe(data, token);
-	if (!left)
-		return (NULL);
+	res = parse_pipe(data, token, &left);
+	if (res)
+		return (res);
 	while (*token && ((*token)->type == AND || (*token)->type == OR))
 	{
 		type = get_node_type((*token)->type);
 		*token = (*token)->next;
-		right = parse_pipe(data, token);
-		if (!right)
-			return (free_parser_tree(&left), NULL);
+		res = parse_pipe(data, token, &right);
+		if (res)
+			return (free_parser_tree(data, &left), res);
 		tmp = create_parser_node(type, left, right);
 		validate_malloc_tree(data, tmp, left, right);
 		left = tmp;
 	}
-	return (left);
+	*root = left;
+	return (VALID);
 }
 
 //builds an abstract syntax tree (AST) based on operator precedence
 //from lowest precendece to highest: logical operators -> pipe -> commands
-//checks for stray ')'
+//& checks for stray parentheses at the end
 int	parser(t_data *data)
 {
 	t_token	*token;
+	int		res;
 
 	token = data->lexer_list;
-	data->parser_tree = parse_and_or(data, &token);
+	res = parse_and_or(data, &token, &data->parser_tree);
+	if (res)
+		return (res);
 	if (token && token->type == RPAREN)
-		return (report_error("unexpected token", SYNTAX_ERR));
-	if (!data->parser_tree)
-		return (-1);
-	return (0);
+		return (syntax_error(data, ERR_1, token->value));
+	if (token && token->type == LPAREN)
+	{
+		token = token->next;
+		if (!token)
+			return (syntax_error(data, ERR_1, "newline"));
+		else
+			return (syntax_error(data, ERR_1, token->value));
+	}
+	return (VALID);
 }

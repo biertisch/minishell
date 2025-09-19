@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parser_subshell.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/20 10:38:10 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/15 16:28:20 by beatde-a         ###   ########.fr       */
+/*   Created: 2025/09/08 15:37:28 by beatde-a          #+#    #+#             */
+/*   Updated: 2025/09/18 10:19:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-volatile sig_atomic_t	g_sig_received = 0;
-
-//accept arguments or issue warning?
-int	main(int argc, char **argv, char **envp)
+int	empty_subshell(t_data *data, t_token **token, t_tree *node, int res)
 {
-	t_data	data;
+	if (*token && (*token)->type == RPAREN)
+		*token = (*token)->next;
+	free_parser_tree(data, &node);
+	return (res);
+}
 
-	(void)argc;
-	ft_bzero(&data, sizeof(t_data));
-	setup_signals();
-	envp_to_list(&data, envp, argv);
-	prompt_input(&data);
-	free_all(&data);
-	return (EXIT_SUCCESS);
+int	invalid_sequence(t_data *data, t_token *token, t_tree *node)
+{
+	free_parser_tree(data, &node);
+	return (syntax_error(data, ERR_1, token->value));
 }

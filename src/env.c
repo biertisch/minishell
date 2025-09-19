@@ -6,46 +6,55 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:15 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/20 10:38:15 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:13:21 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//used in variable expansion
-char	*replace_key_value(char *arg, int i, char *key, char *value)
+static t_env	*generate_env_pwd(t_data *data)
 {
-	char	*new_arg;
-	int		new_len;
+	t_env	*node;
 
-	new_len = ft_strlen(arg) - ft_strlen(key) - 1 + ft_strlen(value);
-	new_arg = malloc(sizeof(char) * (new_len + 1));
-	if (!new_arg)
-		return (NULL);
-	ft_strlcpy(new_arg, arg, i + 1);
-	ft_strlcat(new_arg, value, new_len + 1);
-	ft_strlcat(new_arg, arg + i + 1 + ft_strlen(key), new_len + 1);
-	free(arg);
-	return (new_arg);
+	node = create_env_node(NULL, NULL);
+	validate_malloc(data, node, NULL);
+	node->key = ft_strdup("PWD");
+	validate_malloc_env(data, node->key, node);
+	node->value = getcwd(NULL, 0);
+	if (!node->value)
+	{
+		system_error(data, "getcwd");
+		free_env_node(&node);
+		error_exit(data);
+	}
+	return (node);
 }
 
-//used in variable expansion
-char	*get_env_key(char *arg)
+int	generate_minimal_env(t_data *data, char **argv)
 {
-	char	*key;
-	int		key_len;
+	t_env	*pwd;
+	t_env	*shlvl;
+	t_env	*underscore;
 
-	key_len = 0;
-	while (arg[key_len] && (ft_isalnum(arg[key_len]) || arg[key_len] == '_'))
-		key_len++;
-	key = malloc(sizeof(char) * (key_len + 1));
-	if (!key)
-		return (NULL);
-	ft_strlcpy(key, arg, key_len + 1);
-	return (key);
+	pwd = generate_env_pwd(data);
+	add_env_node(&data->env_list, pwd);
+	shlvl = create_env_node(NULL, NULL);
+	validate_malloc(data, shlvl, NULL);
+	shlvl->key = ft_strdup("SHLVL");
+	validate_malloc_env(data, shlvl->key, shlvl);
+	shlvl->value = ft_strdup("1");
+	validate_malloc_env(data, shlvl->value, shlvl);
+	add_env_node(&data->env_list, shlvl);
+	underscore = create_env_node(NULL, NULL);
+	validate_malloc(data, underscore, NULL);
+	underscore->key = ft_strdup("_");
+	validate_malloc_env(data, underscore->key, underscore);
+	underscore->value = ft_strdup(argv[0]);
+	validate_malloc_env(data, underscore->value, underscore);
+	add_env_node(&data->env_list, underscore);
+	return (0);
 }
 
-//used variable expansion and built-in export
 char	*get_env_value(t_env *head, char *key)
 {
 	while (head)
@@ -57,7 +66,6 @@ char	*get_env_value(t_env *head, char *key)
 	return (NULL);
 }
 
-//used in built-in export
 void	set_env_value(t_env *head, char *key, char *new_value)
 {
 	while (head)
@@ -72,7 +80,6 @@ void	set_env_value(t_env *head, char *key, char *new_value)
 	}
 }
 
-//used in built-in unset
 void	unset_env(t_env **head, char *key)
 {
 	t_env	*trav;
