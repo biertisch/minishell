@@ -17,9 +17,9 @@ int	execute_pipe(t_data *data, t_stack **stack)
 	if ((*stack)->phase == ENTERED)
 		return (execute_pipe_entered(data, stack));
 	if ((*stack)->phase == LAUNCH_LEFT)
-		return (execute_pipe_launch_right(data, stack));
+		return (execute_pipe_launch_left(data, stack));
 	if ((*stack)->phase == LAUNCH_RIGHT)
-		return ((*stack)->phase = WAIT, 0);
+		return (execute_pipe_launch_right(data, stack));
 	if ((*stack)->phase == WAIT)
 		return (execute_pipe_wait(stack));
 	if ((*stack)->phase == DONE)
@@ -40,7 +40,7 @@ int	execute_pipe_entered(t_data *data, t_stack **stack)
 	return (0);
 }
 
-int	execute_pipe_launch_right(t_data *data, t_stack **stack)
+int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 {
 	int	right_in;
 	int	right_out;
@@ -52,11 +52,30 @@ int	execute_pipe_launch_right(t_data *data, t_stack **stack)
 	return (0);
 }
 
+int	execute_pipe_launch_right(t_data *data, t_stack **stack)
+{
+	(void)data;
+	close((*stack)->pipe[0]);
+	close((*stack)->pipe[1]);
+	(*stack)->phase = WAIT;
+	return (0);
+}
+
 int	execute_pipe_wait(t_stack **stack)
 {
+	int		status;
+	pid_t	res;
+
+	if ((*stack)->child_count == 1)
+		res = waitpid((*stack)->child_pid[0], &status, 0);
+	else
+		res = waitpid((*stack)->child_pid[1], &status, 0);
+	if (WIFEXITED(status))
+		(*stack)->exit_status = WEXITSTATUS(status);
+	//for now it stays like this but i still need to check signals
 	(*stack)->phase = DONE;
-	(void)stack;
-	return (0);
+	return(0);
+		
 }
 
 int	execute_pipe_done(t_stack **stack)

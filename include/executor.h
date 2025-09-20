@@ -38,11 +38,6 @@ int			execute(t_data *data);
 int			execute_stack(t_data *data, t_stack **stack);
 int			execute_cmd(t_data *data, t_stack **stack);
 int			execute_pipe(t_data *data, t_stack **stack);
-int			execute_pipe_entered(t_data *data, t_stack **stack);
-int			execute_pipe_launch_left(t_data *data, t_stack **stack);
-int			execute_pipe_launch_right(t_data *data, t_stack **stack);
-int			execute_pipe_wait(t_stack **stack);
-int			execute_pipe_done(t_stack **stack);
 int			execute_cmd_entered(t_data *data, t_stack **stack);
 int			execute_cmd_done(t_stack **stack);
 
@@ -51,7 +46,6 @@ int			execute_cmd_done(t_stack **stack);
 t_stack		*create_stack(t_data *data);
 void		push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *data);
 int			has_pipe_ancestor(t_stack *stack);
-//void		print_stack(t_stack *stack);
 void		pop(t_stack **stack);
 t_stack		**get_first_pipe(t_stack **stack);
 void		print_stack(t_stack *stack);
@@ -71,7 +65,13 @@ char		*run_curr_dir(char *cmd);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
-int			parent_launch_right(t_stack **first_pipe);
+
+//executor_pipe.c
+int			execute_pipe_entered(t_data *data, t_stack **stack);
+int			execute_pipe_launch_left(t_data *data, t_stack **stack);
+int			execute_pipe_launch_right(t_data *data, t_stack **stack);
+int			execute_pipe_wait(t_stack **stack);
+int			execute_pipe_done(t_stack **stack);
 
 //executor_and.c
 int			execute_and(t_data *data, t_stack **stack);
