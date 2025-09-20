@@ -34,6 +34,8 @@ int	execute_stack(t_data *data, t_stack **stack)
 			i += execute_pipe(data, stack);
 		else if ((*stack)->type == NODE_CMD)
 			i += execute_cmd(data, stack);
+		else if	((*stack)->type == NODE_AND)
+			i += execute_and(data, stack);
 	}
 	pop(stack);
 	return (0);

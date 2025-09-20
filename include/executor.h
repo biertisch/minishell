@@ -24,8 +24,9 @@ typedef struct s_stack
 	int			out_fd;
 	int			old_fd;
 	int			pipe[2];
+	int			child_count;
+	int			exit_status;
 	pid_t		child_pid[2];
-	int		child_count;
 	struct s_stack		*next;
 }	t_stack;
 
@@ -70,5 +71,13 @@ char		*run_curr_dir(char *cmd);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
+int			parent_launch_right(t_stack **first_pipe);
+
+//executor_and.c
+int			execute_and(t_data *data, t_stack **stack);
+int			execute_and_entered(t_data *data, t_stack **stack);
+int			execute_and_launch_left(t_data *data, t_stack **stack);
+int			execute_and_launch_right(t_data *data, t_stack **stack);
+int			execute_and_done(t_data *data, t_stack **stack);
 
 #endif
