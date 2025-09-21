@@ -155,7 +155,7 @@ static char	*phase_to_string(t_phase phase)
 void	print_top(t_stack *stack)
 {
 
-	ft_printf("STACK TOP: [TYPE=%s PHASE=%s]\n", type_to_string(stack->type), phase_to_string(stack->phase));
+	ft_printf("STACK TOP: [TYPE=%s PHASE=%s PIPE[0]=%d PIPE[1]=%d OLD_FD=%d]\n", type_to_string(stack->type), phase_to_string(stack->phase), stack->pipe[0], stack->pipe[1], stack->old_fd);
 }
 
 void	print_stack(t_stack *stack)
