@@ -15,7 +15,7 @@
 int	execute(t_data *data)
 {
 	t_stack	*stack;
-
+	
 	stack = create_stack(data);
 	execute_stack(data, &stack);
 	return (1);
@@ -53,7 +53,7 @@ int	execute_cmd(t_data *data, t_stack **stack)
 int	execute_cmd_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
-
+	
 	pid = fork();
 	if (pid < 0)
 		check_for_errors(-1, data, *stack, "fork");

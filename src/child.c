@@ -35,10 +35,12 @@ void	child_redir_in(t_data *data, t_stack **stack)
 		check_for_errors(-1, data, *stack, "open");
 	check_for_errors(dup2(((*stack)->node
 				->redir)->fd, STDIN_FILENO), data, *stack, "dup2");
+	if ((*stack)->out_fd != STDOUT_FILENO)
 	check_for_errors(dup2((*stack)
 			->out_fd, STDOUT_FILENO), data, *stack, "dup2");
 	close(((*stack)->node->redir)->fd);
-	close((*stack)->out_fd);
+	if ((*stack)->out_fd != STDOUT_FILENO)
+		close((*stack)->out_fd);
 	close_all_pipe_ends(stack);
 	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
 }
@@ -52,7 +54,10 @@ void	child_no_redir(t_data *data, t_stack **stack)
 		close((*stack)->in_fd);
 	}
 	if ((*stack)->out_fd != STDOUT_FILENO)
+	{
+		check_for_errors(dup2((*stack)->out_fd, STDOUT_FILENO), data, *stack, "dup2");
 		close((*stack)->out_fd);
+	}
 	close_all_pipe_ends(stack);
 	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
 }

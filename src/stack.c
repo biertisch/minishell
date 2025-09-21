@@ -22,7 +22,6 @@ t_stack	*create_stack(t_data *data)
 	head->type = (data->parser_tree)->type;
 	head->node = data->parser_tree;
 	head->child_count = 0;
-	head->old_fd = -1;
 	head->child_pid[0] = -1;
 	head->child_pid[1] = -1;
 	head->in_fd = STDIN_FILENO;
@@ -44,7 +43,6 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	new_head->out_fd = out_fd;
 //	if (new_head->type == NODE_PIPE && !has_pipe_ancestor(stack)) //is this check required?
 	new_head->child_count = 0;
-	new_head->old_fd = -1;
 	new_head->next = *stack;
 	*stack = new_head;
 }
@@ -155,7 +153,7 @@ static char	*phase_to_string(t_phase phase)
 void	print_top(t_stack *stack)
 {
 
-	ft_printf("STACK TOP: [TYPE=%s PHASE=%s PIPE[0]=%d PIPE[1]=%d OLD_FD=%d]\n", type_to_string(stack->type), phase_to_string(stack->phase), stack->pipe[0], stack->pipe[1], stack->old_fd);
+	ft_printf("STACK TOP: [TYPE=%s PHASE=%s PIPE[0]=%d PIPE[1]=%d]\n", type_to_string(stack->type), phase_to_string(stack->phase), stack->pipe[0], stack->pipe[1]);
 }
 
 void	print_stack(t_stack *stack)
@@ -167,7 +165,7 @@ void	print_stack(t_stack *stack)
 	{
 		printf("\nlevel %d: TYPE=%s PHASE=%s", i, type_to_string(stack->type), phase_to_string(stack->phase));
 		if (stack->type == NODE_PIPE)
-			printf(" PIPE[0]=%d PIPE[1]=%d OLD_FD=%d\n", stack->pipe[0], stack->pipe[1], stack->old_fd);
+			printf(" PIPE[0]=%d PIPE[1]=%d\n", stack->pipe[0], stack->pipe[1]);
 		else
 			printf("\n");
 		i++;

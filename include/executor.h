@@ -22,7 +22,6 @@ typedef struct s_stack
 	t_tree		*node;
 	int			in_fd;
 	int			out_fd;
-	int			old_fd;
 	int			pipe[2];
 	int			child_count;
 	int			exit_status;
