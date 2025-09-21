@@ -46,7 +46,7 @@ int	execute_cmd(t_data *data, t_stack **stack)
 	if ((*stack)->phase == ENTERED)
 		return (execute_cmd_entered(data, stack));
 	if ((*stack)->phase == DONE)
-		return (execute_cmd_done(stack));
+		return (execute_cmd_done(&data, stack));
 	return (0);
 }
 
@@ -65,8 +65,10 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 	return (0);
 }
 
-int	execute_cmd_done(t_stack **stack)
+int	execute_cmd_done(t_data **data, t_stack **stack)
 {
+	if (stack_size(*stack) == 1)
+		(*data)->exit_status = (*stack)->exit_status;
 	pop(stack);
 	return (1);
 }

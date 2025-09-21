@@ -40,8 +40,7 @@ void	child_redir_in(t_data *data, t_stack **stack)
 	close(((*stack)->node->redir)->fd);
 	close((*stack)->out_fd);
 	close_all_pipe_ends(stack);
-	check_for_errors(execve((*stack)->node->argv[0], (*stack)
-			->node->argv, data->env), data, *stack, "execve");
+	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
 }
 
 void	child_no_redir(t_data *data, t_stack **stack)
@@ -59,8 +58,7 @@ void	child_no_redir(t_data *data, t_stack **stack)
 		close((*stack)->out_fd);
 	}
 	close_all_pipe_ends(stack);
-	check_for_errors(execve((*stack)->node->argv[0], (*stack)
-			->node->argv, data->env), data, *stack, "execve");
+	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
 }
 
 void	child_redir_out(t_data *data, t_stack **stack)
@@ -75,6 +73,5 @@ void	child_redir_out(t_data *data, t_stack **stack)
 	close(((*stack)->node->redir)->fd);
 	close((*stack)->in_fd);
 	close_all_pipe_ends(stack);
-	check_for_errors(execve((*stack)->node->argv[0], (*stack)
-			->node->argv, data->env), data, *stack, "execve");
+	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
 }

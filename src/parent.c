@@ -25,5 +25,18 @@ int	parent(t_stack **stack, pid_t pid)
 				close((*first_pipe)->old_fd);
 		(*first_pipe)->old_fd = (*first_pipe)->pipe[0];
 	}
+	else if (stack_size(*stack) == 1)
+		return (parent_single_command(stack, pid));
+	return (1);
+}
+
+int	parent_single_command(t_stack **stack, pid_t pid)
+{
+	int		status;
+	pid_t	res;
+
+	res = waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		(*stack)->exit_status = WEXITSTATUS(status);
 	return (1);
 }

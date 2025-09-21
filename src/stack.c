@@ -95,6 +95,19 @@ t_stack **get_next_pipe(t_stack **stack)
 	return (get_first_pipe(&(*stack)->next)); 
 }
 
+int	stack_size(t_stack *stack)
+{
+	int	size;
+
+	size = 0;
+	while (stack)
+	{
+		stack = stack->next;
+		size++;
+	}
+	return (size);
+}
+
 void	close_all_pipe_ends(t_stack **stack)
 {
 	t_stack **head;

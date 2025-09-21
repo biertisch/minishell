@@ -74,8 +74,7 @@ int	execute_pipe_wait(t_stack **stack)
 		(*stack)->exit_status = WEXITSTATUS(status);
 	//for now it stays like this but i still need to check signals
 	(*stack)->phase = DONE;
-	return(0);
-		
+	return (0);
 }
 
 int	execute_pipe_done(t_stack **stack)

@@ -39,7 +39,7 @@ int			execute_stack(t_data *data, t_stack **stack);
 int			execute_cmd(t_data *data, t_stack **stack);
 int			execute_pipe(t_data *data, t_stack **stack);
 int			execute_cmd_entered(t_data *data, t_stack **stack);
-int			execute_cmd_done(t_stack **stack);
+int			execute_cmd_done(t_data **data, t_stack **stack);
 
 
 //stack.c
@@ -52,6 +52,7 @@ void		print_stack(t_stack *stack);
 void		print_top(t_stack *stack);
 t_stack 	**get_next_pipe(t_stack **stack);
 void		close_all_pipe_ends(t_stack **stack);
+int			stack_size(t_stack *stack);
 
 //child.c
 void		child(t_data *data, t_stack **stack);
@@ -65,6 +66,7 @@ char		*run_curr_dir(char *cmd);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
+int			parent_single_command(t_stack **stack, pid_t pid);
 
 //executor_pipe.c
 int			execute_pipe_entered(t_data *data, t_stack **stack);
