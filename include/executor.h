@@ -72,7 +72,7 @@ int			execute_pipe_entered(t_data *data, t_stack **stack);
 int			execute_pipe_launch_left(t_data *data, t_stack **stack);
 int			execute_pipe_launch_right(t_data *data, t_stack **stack);
 int			execute_pipe_wait(t_stack **stack);
-int			execute_pipe_done(t_stack **stack);
+int			execute_pipe_done(t_data **data, t_stack **stack);
 
 //executor_and.c
 int			execute_and(t_data *data, t_stack **stack);

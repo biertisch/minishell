@@ -23,7 +23,7 @@ int	execute_pipe(t_data *data, t_stack **stack)
 	if ((*stack)->phase == WAIT)
 		return (execute_pipe_wait(stack));
 	if ((*stack)->phase == DONE)
-		return (execute_pipe_done(stack));
+		return (execute_pipe_done(&data, stack));
 	return (0);
 }
 
@@ -69,21 +69,26 @@ int	execute_pipe_wait(t_stack **stack)
 	int		status;
 	pid_t	res;
 
-	if ((*stack)->child_count == 1)
-		res = waitpid((*stack)->child_pid[0], &status, 0);
-	else
-		res = waitpid((*stack)->child_pid[1], &status, 0);
-	if (WIFEXITED(status))
-		(*stack)->exit_status = WEXITSTATUS(status);
+	if (!get_next_pipe(stack))
+	{
+		if ((*stack)->child_count == 1)
+			res = waitpid((*stack)->child_pid[0], &status, 0);
+		else
+			res = waitpid((*stack)->child_pid[1], &status, 0);
+		if (WIFEXITED(status))
+			(*stack)->exit_status = WEXITSTATUS(status);
+	}
 	//for now it stays like this but i still need to check signals
 	(*stack)->phase = DONE;
 	return (0);
 }
 
-int	execute_pipe_done(t_stack **stack)
+int	execute_pipe_done(t_data **data, t_stack **stack)
 {
 	close((*stack)->pipe[0]);
 	close((*stack)->pipe[1]);
+	if (!get_next_pipe(stack))
+		(*data)->exit_status = (*stack)->exit_status;	
 	pop(stack);
 	return (1);
 }
