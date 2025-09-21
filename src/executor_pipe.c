@@ -88,7 +88,11 @@ int	execute_pipe_done(t_data **data, t_stack **stack)
 	close((*stack)->pipe[0]);
 	close((*stack)->pipe[1]);
 	if (!get_next_pipe(stack))
-		(*data)->exit_status = (*stack)->exit_status;	
+	{
+		(*data)->exit_status = (*stack)->exit_status;
+		while (errno != ECHILD)
+			wait(NULL);
+	}
 	pop(stack);
 	return (1);
 }

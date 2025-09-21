@@ -67,7 +67,7 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 
 int	execute_cmd_done(t_data **data, t_stack **stack)
 {
-	if (stack_size(*stack) == 1)
+	if (stack_size(*stack) == 1 || !get_first_pipe(stack))
 		(*data)->exit_status = (*stack)->exit_status;
 	pop(stack);
 	return (1);

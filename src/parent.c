@@ -19,7 +19,7 @@ int	parent(t_stack **stack, pid_t pid)
 	first_pipe = get_first_pipe(stack);
 	if (first_pipe && *first_pipe)
 		(*first_pipe)->child_pid[(*first_pipe)->child_count++] = pid;
-	else if (stack_size(*stack) == 1)
+	else 
 		return (parent_single_command(stack, pid));
 	return (1);
 }
