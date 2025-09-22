@@ -6,13 +6,13 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 12:22:58 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/22 10:22:31 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	setup_signals(void)
+void	setup_signals(t_data *data)
 {
 	struct sigaction	sa;
 
@@ -21,10 +21,22 @@ void	setup_signals(void)
 		sa.sa_handler = signal_handler;
 		sigemptyset(&sa.sa_mask);
 		sa.sa_flags = 0;
-		sigaction(SIGINT, &sa, NULL);
+		if (sigaction(SIGINT, &sa, NULL))
+		{
+			system_error(data, "sigaction");
+			error_exit(data);
+		}
 		sa.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &sa, NULL);
-		sigaction(SIGTERM, &sa, NULL);
+		if (sigaction(SIGQUIT, &sa, NULL))
+		{
+			system_error(data, "sigaction");
+			error_exit(data);
+		}
+		if (sigaction(SIGTERM, &sa, NULL))
+		{
+			system_error(data, "sigaction");
+			error_exit(data);
+		}
 	}
 }
 
@@ -33,15 +45,27 @@ void	signal_handler(int sig)
 	g_sig_received = sig;
 }
 
-void	setup_signals_child(void)
+void	setup_signals_child(t_data *data)
 {
 	struct sigaction	sa;
 
 	sa.sa_handler = SIG_DFL;
 	sigemptyset(&sa.sa_mask);
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
-	sigaction(SIGTERM, &sa, NULL);
+	if (sigaction(SIGINT, &sa, NULL))
+	{
+		system_error(data, "sigaction");
+		error_exit(data);
+	}
+	if (sigaction(SIGQUIT, &sa, NULL))
+	{
+		system_error(data, "sigaction");
+		error_exit(data);
+	}
+	if (sigaction(SIGTERM, &sa, NULL))
+	{
+		system_error(data, "sigaction");
+		error_exit(data);
+	}
 }
 
 //readline handler for prompt_continuation

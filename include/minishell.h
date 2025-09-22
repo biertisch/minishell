@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/19 12:17:16 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/22 10:22:27 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,9 @@ void		prompt_input(t_data *data);
 int			prompt_continuation(t_data *data, char target);
 
 //signal.c
-void		setup_signals(void);
+void		setup_signals(t_data *data);
 void		signal_handler(int sig);
-void		setup_signals_child(void);
+void		setup_signals_child(t_data *data);
 int			rl_sigint_main(void);
 int			rl_sigint_continuation(void);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 13:34:32 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/04 13:34:33 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/09/22 10:23:29 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ char	*correct_path(t_data *data, char *cmd)
 
 char	*run_curr_dir(char *cmd)
 {
-	int		access_res;
+	// int		access_res;
 
-	access_res = access(cmd, F_OK | X_OK);
+	// access_res = access(cmd, F_OK | X_OK);
 	if (errno == EACCES)
 	{
 		ft_printf("%s: Permission denied\n", cmd);
