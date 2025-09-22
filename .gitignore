@@ -9,3 +9,5 @@ minishell
 obj
 .gitattributes
 outfile*
+*.pdf
+*.png
