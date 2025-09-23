@@ -98,6 +98,7 @@ int			choose_and_execute_builtin(t_data *data, t_stack **stack);
 int			execute_echo(t_data *data, t_stack **stack);
 int		execute_echo_option(t_data *data, t_stack **stack);
 int		execute_echo_no_option(t_data *data, t_stack **stack);
+int		write_fail(void);
 
 
 #endif

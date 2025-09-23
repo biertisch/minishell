@@ -15,7 +15,7 @@
 int	execute(t_data *data)
 {
 	t_stack	*stack;
-	
+
 	stack = create_stack(data);
 	execute_stack(data, &stack);
 	return (1);
