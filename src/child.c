@@ -17,8 +17,11 @@ void	child(t_data *data, t_stack **stack)
 	char	*full_path;
 
 	env_list_to_array(data);
-	full_path = correct_path(data, (*stack)->node->argv[0]);
-	(*stack)->node->argv[0] = full_path;
+	if ((*stack)->type == NODE_CMD)
+	{
+		full_path = correct_path(data, (*stack)->node->argv[0]);
+		(*stack)->node->argv[0] = full_path;
+	}
 	if ((*stack)->node->redir && ((*stack)->node->redir)->type == REDIR_IN)
 		child_redir_in(data, stack);
 	else if ((*stack)->node->redir && ((*stack)
@@ -42,7 +45,10 @@ void	child_redir_in(t_data *data, t_stack **stack)
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		close((*stack)->out_fd);
 	close_all_pipe_ends(stack);
-	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
+	if ((*stack)->type == NODE_CMD)
+		execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
+	else
+		choose_and_execute_builtin(data, stack);
 }
 
 void	child_no_redir(t_data *data, t_stack **stack)
@@ -59,7 +65,10 @@ void	child_no_redir(t_data *data, t_stack **stack)
 		close((*stack)->out_fd);
 	}
 	close_all_pipe_ends(stack);
-	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
+	if ((*stack)->type == NODE_CMD)
+		execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
+	else
+		choose_and_execute_builtin(data, stack);
 }
 
 void	child_redir_out(t_data *data, t_stack **stack)
@@ -74,5 +83,8 @@ void	child_redir_out(t_data *data, t_stack **stack)
 	close(((*stack)->node->redir)->fd);
 	close((*stack)->in_fd);
 	close_all_pipe_ends(stack);
-	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
+	if ((*stack)->type == NODE_CMD)
+		execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
+	else
+		choose_and_execute_builtin(data, stack);
 }

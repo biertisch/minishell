@@ -17,7 +17,8 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		lexer_utils main parser parser_cmd parser_redir parser_subshell\
 		parser_tree parser_utils wildcard wildcard_argv wildcard_match\
 		test stack parser_tree2 signal executor child parent\
-		executor_utils executor_pipe executor_and executor_or
+		executor_utils executor_pipe executor_and executor_or executor_builtin\
+		executor_echo
 
 SRC_DIR     = src
 OBJ_DIR     = obj

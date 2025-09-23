@@ -88,5 +88,16 @@ int			execute_or_launch_left(t_data *data, t_stack **stack);
 int			execute_or_launch_right(t_data *data, t_stack **stack);
 int			execute_or_done(t_data *data, t_stack **stack);
 
+//executor_builtin.c
+int			execute_builtin(t_data *data, t_stack **stack);
+int			execute_builtin_entered(t_data *data, t_stack **stack);
+int			execute_builtin_done(t_data **data, t_stack **stack);
+int			choose_and_execute_builtin(t_data *data, t_stack **stack);
+
+//executor_echo
+int			execute_echo(t_data *data, t_stack **stack);
+int		execute_echo_option(t_data *data, t_stack **stack);
+int		execute_echo_no_option(t_data *data, t_stack **stack);
+
 
 #endif

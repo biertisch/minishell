@@ -79,6 +79,8 @@ int	execute_pipe_wait(t_stack **stack)
 			(*stack)->exit_status = WEXITSTATUS(status);
 	}
 	//for now it stays like this but i still need to check signals
+	while (errno != ECHILD)
+		wait(NULL);
 	(*stack)->phase = DONE;
 	return (0);
 }
