@@ -81,4 +81,12 @@ int			execute_and_launch_left(t_data *data, t_stack **stack);
 int			execute_and_launch_right(t_data *data, t_stack **stack);
 int			execute_and_done(t_data *data, t_stack **stack);
 
+//executor_or.c
+int			execute_or(t_data *data, t_stack **stack);
+int			execute_or_entered(t_data *data, t_stack **stack);
+int			execute_or_launch_left(t_data *data, t_stack **stack);
+int			execute_or_launch_right(t_data *data, t_stack **stack);
+int			execute_or_done(t_data *data, t_stack **stack);
+
+
 #endif

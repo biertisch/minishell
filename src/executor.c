@@ -36,6 +36,8 @@ int	execute_stack(t_data *data, t_stack **stack)
 			i += execute_cmd(data, stack);
 		else if	((*stack)->type == NODE_AND)
 			i += execute_and(data, stack);
+		else if ((*stack)->type == NODE_OR)
+			i += execute_or(data, stack);
 	}
 	pop(stack);
 	return (0);
