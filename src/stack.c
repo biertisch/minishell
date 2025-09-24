@@ -47,6 +47,20 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	*stack = new_head;
 }
 
+t_stack	**get_first_log_operator(t_stack **stack)
+{
+	t_stack **head;
+
+	head = stack;
+	while (head && (*head))
+	{
+		if ((*head)->type == NODE_OR || (*head)->type == NODE_AND)
+			return (head);
+		head = &((*head)->next);
+	}
+	return (NULL);
+}
+
 int	has_pipe_ancestor(t_stack *stack)
 {
 	t_stack	*curr;

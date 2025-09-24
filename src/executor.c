@@ -40,6 +40,8 @@ int	execute_stack(t_data *data, t_stack **stack)
 			i += execute_or(data, stack);
 		else if ((*stack)->type == NODE_BUILTIN)
 			i += execute_builtin(data, stack);
+		else if ((*stack)->type == NODE_SUBSHELL)
+			i += execute_subshell(data, stack);
 	}
 	pop(stack);
 	return (0);
@@ -71,7 +73,9 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 
 int	execute_cmd_done(t_data **data, t_stack **stack)
 {
-	if (stack_size(*stack) == 1 || !get_first_pipe(stack))
+	if ((*stack)->next && (*stack)->next->type == NODE_SUBSHELL)
+		exit((*stack)->exit_status);
+	else if (stack_size(*stack) == 1 || !get_first_pipe(stack))
 		(*data)->exit_status = (*stack)->exit_status;
 	pop(stack);
 	return (1);
