@@ -60,6 +60,7 @@ void		child(t_data *data, t_stack **stack);
 void		child_redir_in(t_data *data, t_stack **stack);
 void		child_no_redir(t_data *data, t_stack **stack);
 void		child_redir_out(t_data *data, t_stack **stack);
+void		child_heredoc(t_data *data, t_stack **stack);
 
 //executor_utils.c
 char		*correct_path(t_data * data, char *cmd);
@@ -98,14 +99,23 @@ int			choose_and_execute_builtin(t_data *data, t_stack **stack);
 
 //executor_echo
 int			execute_echo(t_data *data, t_stack **stack);
-int		execute_echo_option(t_data *data, t_stack **stack);
-int		execute_echo_no_option(t_data *data, t_stack **stack);
-int		write_fail(void);
+int			execute_echo_option(t_data *data, t_stack **stack);
+int			execute_echo_no_option(t_data *data, t_stack **stack);
+int			write_fail(void);
 
 //executor_subshell
-int		execute_subshell(t_data *data, t_stack **stack);
-int		execute_subshell_entered(t_data **data, t_stack **stack);
-int		execute_subshell_done(t_data **data, t_stack **stack);
+int			execute_subshell(t_data *data, t_stack **stack);
+int			execute_subshell_entered(t_data **data, t_stack **stack);
+int			execute_subshell_done(t_data **data, t_stack **stack);
 
+//get_next_line.c
+char	*get_next_line(int fd);
+
+//get_next_line_utils.c
+int			ft_find_init_nl(char *buff);
+char		*ft_handle_new_line(char *buff, char *result, int i);
+char		*ft_process_buffer(char *buff, int i);
+char		*get_next_line_cont(int fd, char *buffer, char *result, int bytes_read);
+char		*ft_gnl_realloc(char *result, int i, int *r);
 
 #endif

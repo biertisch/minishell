@@ -16,6 +16,7 @@ int	execute(t_data *data)
 {
 	t_stack	*stack;
 
+	print_parser_tree(data->parser_tree);
 	stack = create_stack(data);
 	execute_stack(data, &stack);
 	return (1);

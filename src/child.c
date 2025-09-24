@@ -25,6 +25,8 @@ void	child(t_data *data, t_stack **stack)
 	}
 	if ((*stack)->node->redir && ((*stack)->node->redir)->type == REDIR_IN)
 		child_redir_in(data, stack);
+	if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
+		child_heredoc(data, stack);
 	else if ((*stack)->node->redir && (((*stack)
 			->node->redir)->type == REDIR_OUT || ((*stack)
 			->node->redir)->type == APPEND))
@@ -102,4 +104,21 @@ void	child_redir_out(t_data *data, t_stack **stack)
 	}
 	else
 		choose_and_execute_builtin(data, stack);
+}
+
+void	child_heredoc(t_data *data, t_stack **stack)
+{
+	char	*res;
+	char	*line;
+
+	(void)data;
+	line = get_next_line(STDIN_FILENO);
+	res = ft_calloc(ft_strlen(line), sizeof(char));
+	while (ft_strcmp(line, (*stack)->node->redir->file))
+	{
+		ft_strdup_append(NULL, res, line);
+		free(line);
+		line = get_next_line(STDIN_FILENO);
+	}
+	printf("%s\n", res);
 }
