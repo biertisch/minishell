@@ -92,6 +92,8 @@ int	execute_pipe_done(t_data **data, t_stack **stack)
 		(*data)->exit_status = (*stack)->exit_status;
 		while (errno != ECHILD)
 			wait(NULL);
+		if ((*stack)->next)
+			setup_next_to_top(data, stack);
 	}
 	pop(stack);
 	return (1);

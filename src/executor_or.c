@@ -21,7 +21,7 @@ int	execute_or(t_data *data, t_stack **stack)
 	if ((*stack)->phase == LAUNCH_RIGHT)
 		return (execute_or_launch_right(data, stack));
 	if ((*stack)->phase == DONE)
-		return (execute_or_done(data, stack));
+		return (execute_or_done(&data, stack));
 	return (1);
 }
 
@@ -35,7 +35,6 @@ int	execute_or_entered(t_data *data, t_stack **stack)
 int	execute_or_launch_left(t_data *data, t_stack **stack)
 {
 	(*stack)->phase = LAUNCH_RIGHT;
-	(*stack)->exit_status = data->exit_status;
 	if ((*stack)->exit_status)
 		push_stack(stack, (*stack)->node->right, STDIN_FILENO, STDOUT_FILENO, data);
 	return (0);
@@ -43,16 +42,19 @@ int	execute_or_launch_left(t_data *data, t_stack **stack)
 
 int	execute_or_launch_right(t_data *data, t_stack **stack)
 {
-	if ((!(*stack)->exit_status || !data->exit_status))
-		data->exit_status = 0;
+	(void)data;
 	(*stack)->phase = DONE;
 	return (0);
 }
 
-int	execute_or_done(t_data *data, t_stack **stack)
+int	execute_or_done(t_data **data, t_stack **stack)
 {
 	int	right_tree_size;
 
+	if ((*stack)->next)
+		setup_next_to_top(data, stack);
+	else 
+		(*data)->exit_status = (*stack)->exit_status;
 	if (!(*stack)->exit_status)
 	{
 		right_tree_size = count_tree_nodes((*stack)->node->right);
@@ -61,6 +63,5 @@ int	execute_or_done(t_data *data, t_stack **stack)
 	}
 	else
 		pop(stack);
-	(void)data;
 	return (1);
 }

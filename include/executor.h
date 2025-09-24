@@ -53,6 +53,7 @@ t_stack 	**get_next_pipe(t_stack **stack);
 void		close_all_pipe_ends(t_stack **stack);
 int			stack_size(t_stack *stack);
 t_stack		**get_first_log_operator(t_stack **stack);
+int		setup_next_to_top(t_data **data, t_stack **stack);
 
 //child.c
 void		child(t_data *data, t_stack **stack);
@@ -80,14 +81,14 @@ int			execute_and(t_data *data, t_stack **stack);
 int			execute_and_entered(t_data *data, t_stack **stack);
 int			execute_and_launch_left(t_data *data, t_stack **stack);
 int			execute_and_launch_right(t_data *data, t_stack **stack);
-int			execute_and_done(t_data *data, t_stack **stack);
+int			execute_and_done(t_data **data, t_stack **stack);
 
 //executor_or.c
 int			execute_or(t_data *data, t_stack **stack);
 int			execute_or_entered(t_data *data, t_stack **stack);
 int			execute_or_launch_left(t_data *data, t_stack **stack);
 int			execute_or_launch_right(t_data *data, t_stack **stack);
-int			execute_or_done(t_data *data, t_stack **stack);
+int			execute_or_done(t_data **data, t_stack **stack);
 
 //executor_builtin.c
 int			execute_builtin(t_data *data, t_stack **stack);
@@ -103,8 +104,8 @@ int		write_fail(void);
 
 //executor_subshell
 int		execute_subshell(t_data *data, t_stack **stack);
-int		execute_subshell_entered(t_data *data, t_stack **stack);
-int		execute_subshell_done(t_data *data, t_stack **stack);
+int		execute_subshell_entered(t_data **data, t_stack **stack);
+int		execute_subshell_done(t_data **data, t_stack **stack);
 
 
 #endif

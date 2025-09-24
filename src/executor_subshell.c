@@ -15,13 +15,13 @@
 int	execute_subshell(t_data *data, t_stack **stack)
 {
 	if ((*stack)->phase == ENTERED)
-		return (execute_subshell_entered(data, stack));
+		return (execute_subshell_entered(&data, stack));
 	else if ((*stack)->phase == DONE)
-		return (execute_subshell_done(data, stack));
+		return (execute_subshell_done(&data, stack));
 	return (0);
 }
 
-int	execute_subshell_entered(t_data *data, t_stack **stack)
+int	execute_subshell_entered(t_data **data, t_stack **stack)
 {
 	pid_t	pid;
 	pid_t	res;
@@ -33,7 +33,7 @@ int	execute_subshell_entered(t_data *data, t_stack **stack)
 	if (pid == 0)
 	{
 		setup_signals_child();
-		push_stack(stack, (*stack)->node->left, STDIN_FILENO, STDOUT_FILENO, data);
+		push_stack(stack, (*stack)->node->left, STDIN_FILENO, STDOUT_FILENO, *data);
 	}
 	else
 	{
@@ -44,13 +44,15 @@ int	execute_subshell_entered(t_data *data, t_stack **stack)
 	return (0);
 }
 
-int	execute_subshell_done(t_data *data, t_stack **stack)
+int	execute_subshell_done(t_data **data, t_stack **stack)
 {
 	int	left_tree_size;
 
-	(void)data;
+	if ((*stack)->next)
+		setup_next_to_top(data, stack);
+	else
+		(*data)->exit_status = (*stack)->exit_status;
 	left_tree_size = count_tree_nodes((*stack)->node->left);
-	data->exit_status = (*stack)->exit_status;
 	pop(stack);
 	return (1 + left_tree_size);
 
