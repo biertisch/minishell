@@ -25,8 +25,9 @@ void	child(t_data *data, t_stack **stack)
 	}
 	if ((*stack)->node->redir && ((*stack)->node->redir)->type == REDIR_IN)
 		child_redir_in(data, stack);
-	else if ((*stack)->node->redir && ((*stack)
-			->node->redir)->type == REDIR_OUT)
+	else if ((*stack)->node->redir && (((*stack)
+			->node->redir)->type == REDIR_OUT || ((*stack)
+			->node->redir)->type == APPEND))
 		child_redir_out(data, stack);
 	else
 		child_no_redir(data, stack);
@@ -80,8 +81,12 @@ void	child_no_redir(t_data *data, t_stack **stack)
 
 void	child_redir_out(t_data *data, t_stack **stack)
 {
-	((*stack)->node->redir)->fd = open(((*stack)->node
+	if ((*stack)->node->redir->type == REDIR_OUT)
+		((*stack)->node->redir)->fd = open(((*stack)->node
 				->redir)->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else
+		((*stack)->node->redir)->fd = open(((*stack)->node
+				->redir)->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (((*stack)->node->redir)->fd < 0)
 		check_for_errors(-1, data, *stack, "open");
 	check_for_errors(dup2((*stack)->in_fd, STDIN_FILENO), data, *stack, "dup2");
