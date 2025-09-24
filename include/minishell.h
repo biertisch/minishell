@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/22 10:22:27 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/24 16:36:00 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@
 # define ERR_6 "unexpected EOF while looking for matching"
 # define ERR_7 "syntax error: unexpected end of file"
 # define ERR_8 "syntax error: missing quote"
+# define ERR_9 "arithmetic operations not supported"
 
 typedef struct s_env
 {
