@@ -16,7 +16,6 @@ int	execute(t_data *data)
 {
 	t_stack	*stack;
 
-	print_parser_tree(data->parser_tree);
 	stack = create_stack(data);
 	execute_stack(data, &stack);
 	return (1);
@@ -60,14 +59,24 @@ int	execute_cmd(t_data *data, t_stack **stack)
 int	execute_cmd_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
-	
-	pid = fork();
-	if (pid < 0)
-		check_for_errors(-1, data, *stack, "fork");
-	else if (pid == 0)
-		child(data, stack);
+
+	//check if it has a command if not just dummy this shit
+	if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC && !(*stack)->node->argv)
+		dummy_heredoc(stack);
 	else
-		parent(stack, pid);
+	{
+		if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
+			pipe((*stack)->pipe);
+		pid = fork();
+		if (pid < 0)
+			check_for_errors(-1, data, *stack, "fork");
+		else if (pid == 0)
+			child(data, stack);
+		else if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
+			parent_heredoc(stack, pid);
+		else
+			parent(stack, pid);
+	}
 	(*stack)->phase = DONE;
 	return (0);
 }
@@ -79,5 +88,23 @@ int	execute_cmd_done(t_data **data, t_stack **stack)
 	else if (stack_size(*stack) == 1 || !get_first_pipe(stack))
 		(*data)->exit_status = (*stack)->exit_status;
 	pop(stack);
+	return (1);
+}
+
+int	dummy_heredoc(t_stack **stack)
+{
+	char	*line;
+	char	*heredoc;
+
+	heredoc = ft_strdup_append(NULL, ft_strdup((*stack)->node->redir->file), "\n");
+	line = get_next_line(STDIN_FILENO);
+	while (ft_strcmp(line, heredoc))
+	{
+		free(line);
+		line = get_next_line(STDIN_FILENO);
+
+	}
+	free(line);
+	free(heredoc);
 	return (1);
 }

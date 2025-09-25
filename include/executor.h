@@ -39,6 +39,7 @@ int			execute_cmd(t_data *data, t_stack **stack);
 int			execute_pipe(t_data *data, t_stack **stack);
 int			execute_cmd_entered(t_data *data, t_stack **stack);
 int			execute_cmd_done(t_data **data, t_stack **stack);
+int			dummy_heredoc(t_stack **stack);
 
 
 //stack.c
@@ -69,6 +70,8 @@ char		*run_curr_dir(char *cmd);
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
 int			parent_single_command(t_stack **stack, pid_t pid);
+int			parent_heredoc(t_stack **stack, pid_t pid);
+int			heredoc_loop(t_stack **stack, char *heredoc, char *res);
 
 //executor_pipe.c
 int			execute_pipe_entered(t_data *data, t_stack **stack);

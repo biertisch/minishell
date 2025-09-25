@@ -69,6 +69,7 @@ int	execute_pipe_wait(t_stack **stack)
 	int		status;
 	pid_t	res;
 
+	status = 0;
 	if (!get_next_pipe(stack))
 	{
 		if ((*stack)->child_count == 1)

@@ -18,7 +18,7 @@ void	child(t_data *data, t_stack **stack)
 
 	env_list_to_array(data);
 	setup_signals_child();
-	if ((*stack)->type == NODE_CMD)
+	if ((*stack)->type == NODE_CMD && (*stack)->node->argv)
 	{
 		full_path = correct_path(data, (*stack)->node->argv[0]);
 		(*stack)->node->argv[0] = full_path;
@@ -108,17 +108,16 @@ void	child_redir_out(t_data *data, t_stack **stack)
 
 void	child_heredoc(t_data *data, t_stack **stack)
 {
-	char	*res;
-	char	*line;
-
 	(void)data;
-	line = get_next_line(STDIN_FILENO);
-	res = ft_calloc(ft_strlen(line), sizeof(char));
-	while (ft_strcmp(line, (*stack)->node->redir->file))
+	dup2((*stack)->pipe[0], STDIN_FILENO);
+	if ((*stack)->out_fd != STDOUT_FILENO)
 	{
-		ft_strdup_append(NULL, res, line);
-		free(line);
-		line = get_next_line(STDIN_FILENO);
+		dup2((*stack)->out_fd, STDOUT_FILENO);
+		close((*stack)->out_fd);
 	}
-	printf("%s\n", res);
+	close((*stack)->pipe[0]);
+	close((*stack)->pipe[1]);
+	close_all_pipe_ends(stack);
+	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
+	exit(1);
 }
