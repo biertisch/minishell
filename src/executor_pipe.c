@@ -33,6 +33,7 @@ int	execute_pipe_entered(t_data *data, t_stack **stack)
 	int	left_out;
 
 	check_for_errors(pipe((*stack)->pipe), data, *stack, "pipe");
+	printf("pipe created pipe[0]=%d pipe[1]=%d\n", (*stack)->pipe[0], (*stack)->pipe[1]);
 	left_in = (*stack)->in_fd;
 	left_out = ((*stack)->pipe)[1];
 	(*stack)->phase = LAUNCH_LEFT;

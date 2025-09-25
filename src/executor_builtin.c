@@ -49,5 +49,7 @@ int	choose_and_execute_builtin(t_data *data, t_stack **stack)
 {
 	if (!ft_strcmp((*stack)->node->argv[0], "echo"))
 		execute_echo(data, stack);
+	if (!ft_strcmp((*stack)->node->argv[0], "env"))
+		execute_env(data, stack);
 	return (0);
 }

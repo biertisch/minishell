@@ -121,4 +121,7 @@ char		*ft_process_buffer(char *buff, int i);
 char		*get_next_line_cont(int fd, char *buffer, char *result, int bytes_read);
 char		*ft_gnl_realloc(char *result, int i, int *r);
 
+//executor_env.c
+int			execute_env(t_data *data, t_stack **stack);
+
 #endif
