@@ -21,7 +21,7 @@ Developed as part of the 42 curriculum, the project deepens our understanding of
 * **Parser**: builds an **Abstract Syntax Tree (AST)** to represent command structure.
 * **Variable Expansion**:
 	* environment variables (`$VAR`)
-	* last exit stats (`$?`)
+	* last exit status (`$?`)
 	* wildcards (`*`) for the working directory (**bonus feature**)
 * **Redirections**:
 	* input (`<`)
