@@ -55,7 +55,11 @@ void	child_redir_in(t_data *data, t_stack **stack)
 		exit(1);
 	}
 	else
+	{
+		(*stack)->in_fd = STDIN_FILENO;
+		(*stack)->out_fd = STDOUT_FILENO;
 		choose_and_execute_builtin(data, stack);
+	}
 }
 
 void	child_no_redir(t_data *data, t_stack **stack)
@@ -78,7 +82,11 @@ void	child_no_redir(t_data *data, t_stack **stack)
 		exit(1);
 	}
 	else
+	{
+		(*stack)->in_fd = STDIN_FILENO;
+		(*stack)->out_fd = STDOUT_FILENO;
 		choose_and_execute_builtin(data, stack);
+	}
 }
 
 void	child_redir_out(t_data *data, t_stack **stack)
@@ -103,7 +111,11 @@ void	child_redir_out(t_data *data, t_stack **stack)
 		exit(1);
 	}
 	else
+	{
+		(*stack)->in_fd = STDIN_FILENO;
+		(*stack)->out_fd = STDOUT_FILENO;
 		choose_and_execute_builtin(data, stack);
+	}
 }
 
 void	child_heredoc(t_data *data, t_stack **stack)

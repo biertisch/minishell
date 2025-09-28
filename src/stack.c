@@ -96,6 +96,19 @@ int	has_pipe_ancestor(t_stack *stack)
 	return (0);
 }
 
+int	has_subshell_ancestor(t_stack *stack)
+{
+	t_stack	*curr;
+
+	curr = stack;
+	while (curr)
+	{
+		if (curr->type == NODE_SUBSHELL)
+			return (1);
+		curr = curr->next;
+	}
+	return (0);
+}
 void	pop(t_stack **stack)
 {
 	t_stack *new_head;

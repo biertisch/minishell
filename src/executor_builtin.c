@@ -25,13 +25,16 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
 
-	(*stack)->in_fd = STDIN_FILENO;
-	(*stack)->out_fd = STDOUT_FILENO;
-	pid = fork();
-	if (pid == 0)
-		child(data, stack);
+	if (!has_subshell_ancestor(*stack) && !ft_strcmp((*stack)->node->argv[0], "cd"))
+		execute_cd(data, stack);
 	else
-		parent(stack, pid);
+	{
+		pid = fork();
+		if (pid == 0)
+			child(data, stack);
+		else
+			parent(stack, pid);
+	}
 	(*stack)->phase = DONE;
 	return (0);
 }
@@ -53,5 +56,9 @@ int	choose_and_execute_builtin(t_data *data, t_stack **stack)
 		execute_echo(data, stack);
 	if (!ft_strcmp((*stack)->node->argv[0], "env"))
 		execute_env(data, stack);
+	if (!ft_strcmp((*stack)->node->argv[0], "cd"))
+		execute_cd(data, stack);
+	if (!ft_strcmp((*stack)->node->argv[0], "pwd"))
+		execute_pwd(data, stack);
 	return (0);
 }
