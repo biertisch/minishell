@@ -127,6 +127,7 @@ int			execute_env(t_data *data, t_stack **stack);
 
 //executor_cd.c
 int			execute_cd(t_data *data, t_stack **stack);
+int			cd_fail(char *dir);
 
 //executor_pwd.c
 int			execute_pwd(t_data *data, t_stack **stack);
