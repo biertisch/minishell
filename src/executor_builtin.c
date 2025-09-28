@@ -1,12 +1,12 @@
-
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   executor_builtin.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/23 13:26:26 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/23 13:26:28 by pedde-so         ###   ########.fr       */
+/*   Created: 2025/09/28 10:31:38 by pedde-so          #+#    #+#             */
+/*   Updated: 2025/09/28 10:31:39 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
 
+	(*stack)->in_fd = STDIN_FILENO;
+	(*stack)->out_fd = STDOUT_FILENO;
 	pid = fork();
 	if (pid == 0)
 		child(data, stack);

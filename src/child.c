@@ -60,7 +60,6 @@ void	child_redir_in(t_data *data, t_stack **stack)
 
 void	child_no_redir(t_data *data, t_stack **stack)
 {
-	printf("child_fds IN=%d OUT=%d\n", (*stack)->in_fd, (*stack)->out_fd);
 	if ((*stack)->in_fd != STDIN_FILENO)
 	{
 		check_for_errors(dup2((*stack)

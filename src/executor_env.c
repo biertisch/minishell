@@ -18,7 +18,6 @@ int	execute_env(t_data *data, t_stack **stack)
 	int	i;
 
 	i = 0;
-	printf("out_fd=%d\n", (*stack)->out_fd);
 	while ((data->env[i]))
 	{
 		write_res = write((*stack)->out_fd, data->env[i], ft_strlen(data->env[i]));
