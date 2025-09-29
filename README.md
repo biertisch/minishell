@@ -6,9 +6,9 @@
 
 Minishell is a **Bash-like command interpreter** created by [biertisch](https://github.com/biertisch) and [pdrlrnc](https://github.com/pdrlrnc).
 
-A **shell** is a programme that lets users interact with the operating system through commands. Minishell re-creates core Bash behaviour: **command parsing and execution**, **redirections**, **pipes**, **logical operators**, **parentheses**, plus **environment** and **signal handling**.
+A **shell** allows users to interact with the operating system by entering commands. Minishell implements essential Bash functionality, including **command parsing and execution**, **redirections**, **pipes**, **logical operators**, **parentheses**, and **environment** and **signal handling**.
 
-Developed as part of the 42 curriculum, the project deepens our understanding of **process control** and **file manipulation** in C. It lays the foundation for **systems programming** by challenging students to build their own (minimal) shell from scratch.
+Developed as part of the 42 curriculum, the project strengthens students' understanding of **process control** and **file manipulation** in C, while providing hands-on experience in **systems programming**.
 
 >**Note**: Minishell is in **testing phase** - some features may malfunction in specific cases.
 
