@@ -57,12 +57,12 @@ make
 ### Usage
 ```
 ./minishell
-minishell$ [type your command]
+[type your command]
 ```
 
 Example:
 ```
-minishell$ ls | grep ".c" && echo "Found C source files in $PWD"
+ls | grep ".c" && echo "Found C source files in $PWD"
 ```
 
 Shortcuts:
