@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/30 18:59:45 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/30 19:07:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	handle_eof(t_data *data)
 {
-	printf("exit\n");
+	write(1, "exit\n", 5);
 	free_all(data);
 	exit(EXIT_SUCCESS);
 }
