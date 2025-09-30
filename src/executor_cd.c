@@ -18,18 +18,11 @@ int	execute_cd(t_data *data, t_stack **stack)
 	char	*curr_pwd;
 	char	*new_pwd;
 
-	curr_pwd = ft_strdup(get_pwd(data));
-	if (*((*stack)->node->argv[1]) == '\\')
-		new_pwd = ft_strdup((*stack)->node->argv[1]);
-	else
-	{
-		new_pwd = malloc(ft_strlen(curr_pwd) + ft_strlen((*stack)->node->argv[1]) + 2);
-		new_pwd = ft_strjoin(curr_pwd, "/");
-		new_pwd = ft_strdup_append(NULL, new_pwd, (*stack)->node->argv[1]);
-	}
+	curr_pwd = ft_strdup(getcwd(NULL, 0));
 	chdir_res = chdir((*stack)->node->argv[1]);
 	if (chdir_res)
 		cd_fail((*stack)->node->argv[1]);
+	new_pwd = ft_strdup(getcwd(NULL, 0));
 	set_env_value(data->env_list, "OLDPWD", curr_pwd);
 	set_env_value(data->env_list, "PWD", new_pwd);
 	if (has_subshell_ancestor(*stack))
@@ -48,7 +41,7 @@ int	cd_fail(char *dir)
 		err_mess = ft_strdup("cd: ");
 		err_mess = ft_strdup_append(NULL, err_mess, dir);
 		err_mess = ft_strdup_append(NULL, err_mess, ": No such file or directory\n");
-		write(STDERR_FILENO, err_mess, 33);
+		write(STDERR_FILENO, err_mess, 38);
 		free(err_mess);
 	}
 	if (errno == ENOTDIR)
@@ -57,7 +50,7 @@ int	cd_fail(char *dir)
 		err_mess = ft_strdup("cd: ");
 		err_mess = ft_strdup_append(NULL, err_mess, dir);
 		err_mess = ft_strdup_append(NULL, err_mess, ": Not a directory\n");
-		write(STDERR_FILENO, err_mess, 22);
+		write(STDERR_FILENO, err_mess, 30);
 		free(err_mess);
 	}
 	if (errno == EACCES)
@@ -66,7 +59,7 @@ int	cd_fail(char *dir)
 		err_mess = ft_strdup("cd: ");
 		err_mess = ft_strdup_append(NULL, err_mess, dir);
 		err_mess = ft_strdup_append(NULL, err_mess, ": Permission denied\n");
-		write(STDERR_FILENO, err_mess, 16);
+		write(STDERR_FILENO, err_mess, 27);
 		free(err_mess);
 	}
 	return (1);

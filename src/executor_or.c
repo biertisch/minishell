@@ -28,7 +28,7 @@ int	execute_or(t_data *data, t_stack **stack)
 int	execute_or_entered(t_data *data, t_stack **stack)
 {
 	(*stack)->phase = LAUNCH_LEFT;
-	push_stack(stack, (*stack)->node->left, STDIN_FILENO, STDOUT_FILENO, data);
+	push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, data);
 	return (0);
 }
 
@@ -36,7 +36,7 @@ int	execute_or_launch_left(t_data *data, t_stack **stack)
 {
 	(*stack)->phase = LAUNCH_RIGHT;
 	if ((*stack)->exit_status)
-		push_stack(stack, (*stack)->node->right, STDIN_FILENO, STDOUT_FILENO, data);
+		push_stack(stack, (*stack)->node->right, (*stack)->in_fd, (*stack)->out_fd, data);
 	return (0);
 }
 
