@@ -28,7 +28,7 @@ int	execute_and(t_data *data, t_stack **stack)
 int	execute_and_entered(t_data *data, t_stack **stack)
 {
 	(*stack)->phase = LAUNCH_LEFT;
-	push_stack(stack, (*stack)->node->left, STDIN_FILENO, STDOUT_FILENO, data);
+	push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, data);
 	return (0);
 }
 
@@ -36,7 +36,7 @@ int	execute_and_launch_left(t_data *data, t_stack **stack)
 {
 	(*stack)->phase = LAUNCH_RIGHT;
 	if (!(*stack)->exit_status)
-		push_stack(stack, (*stack)->node->right, STDIN_FILENO, STDOUT_FILENO, data);
+		push_stack(stack, (*stack)->node->right, (*stack)->in_fd, (*stack)->out_fd, data);
 	return (0);
 }
 
@@ -57,8 +57,9 @@ int	execute_and_done(t_data **data, t_stack **stack)
 		(*data)->exit_status = (*stack)->exit_status;
 	if (!(*data)->exit_status)
 	{
+		right_tree_size = count_tree_nodes((*stack)->node->right);
 		pop(stack);
-		return (1);
+		return (1 + right_tree_size);
 	}
 	else
 	{

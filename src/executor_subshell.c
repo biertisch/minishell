@@ -33,7 +33,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	if (pid == 0)
 	{
 		setup_signals_child();
-		push_stack(stack, (*stack)->node->left, STDIN_FILENO, STDOUT_FILENO, *data);
+		push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);
 	}
 	else
 	{

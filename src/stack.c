@@ -120,6 +120,20 @@ void	pop(t_stack **stack)
 	*stack = new_head;
 }
 
+t_stack	**get_first_subshell(t_stack **stack)
+{
+	t_stack	**head;
+
+	head = stack;
+	while (head && (*head))
+	{
+		if ((*head)->type == NODE_SUBSHELL)
+			return (head);
+		head = &((*head)->next);
+	}
+	return (NULL);
+}
+
 t_stack	**get_first_pipe(t_stack **stack)
 {
 	t_stack	**head;
