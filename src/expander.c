@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 11:48:10 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/30 18:54:47 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ static int	expand_argv(t_data *data, t_tree *node)
 	{
 		if (node->argv[i][0] != '\'')
 			expand_dollar(data, &node->argv[i]);
+		if (!is_quote(node->argv[i][0]))
+			expand_tilde(data, &node->argv[i]);
 		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i]))
 		{
 			if (expand_wildcard(data, node->argv[i], &entries))

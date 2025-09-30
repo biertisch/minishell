@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/09/22 10:41:30 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/09/30 18:14:48 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		lexer_utils main parser parser_cmd parser_redir parser_subshell\
 		parser_tree parser_utils wildcard wildcard_argv wildcard_match\
 		test stack parser_tree2 signal executor child parent\
-		executor_utils executor_pipe
+		executor_utils executor_pipe expand_tilde
 
 SRC_DIR     = src
 OBJ_DIR     = obj
