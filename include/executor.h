@@ -134,4 +134,7 @@ int			cd_fail(char *dir);
 int			execute_pwd(t_data *data, t_stack **stack);
 char		*get_pwd(t_data *data);
 
+//executor_exit.c
+int			execute_exit(t_data *data, t_stack **stack);
+
 #endif

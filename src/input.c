@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-static void	handle_eof(t_data *data)
+void	handle_eof(t_data *data)
 {
 	if (!ft_strcmp(get_env_value(data->env_list, "SHLVL"), "1"))
 		printf("logout\n");
