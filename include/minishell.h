@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/24 16:36:00 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/30 19:45:34 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@
 # include <unistd.h>
 # include <errno.h>
 
-# define PROMPT "minishell$ "
 # define CONTINUE_PROMPT "> "
 # define VALID 0
 # define INVALID 1
@@ -63,6 +62,7 @@ typedef struct s_env
 typedef struct s_data
 {
 	char			*input;
+	char			*prompt;
 	char			**env;
 	t_env			*env_list;
 	t_token			*lexer_list;
@@ -128,5 +128,8 @@ void		signal_handler(int sig);
 void		setup_signals_child(t_data *data);
 int			rl_sigint_main(void);
 int			rl_sigint_continuation(void);
+
+//input_prompt.c
+void		update_prompt(t_data *data);
 
 #endif

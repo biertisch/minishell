@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:57:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/30 18:55:00 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/30 19:55:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	*replace_tilde_value(char *arg, int key_len, char *value)
 	return (new_arg);
 }
 
-static char *get_value(t_data *data, char *arg, int *key_len)
+static char	*get_value(t_data *data, char *arg, int *key_len)
 {
 	if (!ft_strcmp(arg, "~+") || !ft_strncmp(arg, "~+/", 3))
 	{

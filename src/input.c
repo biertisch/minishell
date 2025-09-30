@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/30 19:07:54 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/30 19:47:55 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	process_input(t_data *data)
 	res = expand(data);
 	if (res)
 		return (res);
-	execute(data);
+		// execute(data);
 	return (VALID);
 }
 
@@ -97,7 +97,8 @@ void	prompt_input(t_data *data)
 	rl_signal_event_hook = rl_sigint_main;
 	while (1)
 	{
-		data->input = readline(PROMPT);
+		update_prompt(data);
+		data->input = readline(data->prompt);
 		if (!data->input)
 			handle_eof(data);
 		if (g_sig_received == SIGINT)

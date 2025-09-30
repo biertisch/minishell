@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:37:43 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 11:45:36 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/30 19:13:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,5 @@ void	free_all(t_data *data)
 	free_env_list(&data->env_list);
 	free_command_data(data);
 	rl_clear_history();
+	free(data->prompt);
 }
