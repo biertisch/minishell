@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/30 18:55:41 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/30 18:59:45 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 
 static void	handle_eof(t_data *data)
 {
-	if (!ft_strcmp(get_env_value(data->env_list, "SHLVL"), "1"))
-		printf("logout\n");
-	else
-		printf("exit\n");
+	printf("exit\n");
 	free_all(data);
 	exit(EXIT_SUCCESS);
 }
