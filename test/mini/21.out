@@ -1,5 +1,0 @@
-grep main << EOF >> test/file1
-int main() {
-return 0;
-}
-EOF

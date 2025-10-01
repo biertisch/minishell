@@ -1,5 +1,0 @@
-cat << EOF > test/file1
-line1
-line2
-line3
-EOF

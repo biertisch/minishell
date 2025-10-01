@@ -3,28 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   executor_pwd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 12:20:02 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/28 12:20:03 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/01 18:09:33 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// B: deleted variable because of warning
 int	execute_pwd(t_data *data, t_stack **stack)
 {
-	int	write_res;
-	
-	write_res = write((*stack)->out_fd, get_pwd(data), ft_strlen(get_pwd(data)));
-	write_res = write((*stack)->out_fd, "\n", 1);
+	write((*stack)->out_fd, get_pwd(data), ft_strlen(get_pwd(data)));
+	write((*stack)->out_fd, "\n", 1);
 	(void)stack;
 	exit(0);
 	return (1);
 }
 
 char	*get_pwd(t_data *data)
-{	
+{
 	while ((data->env_list))
 	{
 		if (!ft_strcmp(data->env_list->key, "PWD"))

@@ -1,6 +1,0 @@
---- test/bash/62.err	2025-10-01 16:17:32.727162575 +0100
-+++ test/mini/62.err	2025-10-01 16:17:32.727162575 +0100
-@@ -1,2 +1 @@
--bash: line 1: syntax error near unexpected token `|'
--bash: line 1: `| | |'
-+minishell: syntax error near unexpected token '|'

@@ -1,4 +1,0 @@
---- test/bash/10.err	2025-10-01 16:17:32.383158979 +0100
-+++ test/mini/10.err	2025-10-01 16:17:32.383158979 +0100
-@@ -0,0 +1 @@
-+/usr/bin/printf: warning: ignoring excess arguments, starting with ‘hello’
