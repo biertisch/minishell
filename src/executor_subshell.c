@@ -32,7 +32,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	pid = fork();
 	if (pid == 0)
 	{
-		setup_signals_child();
+		setup_signals_child(*data);
 		push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);
 	}
 	else

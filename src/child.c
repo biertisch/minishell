@@ -17,7 +17,7 @@ void	child(t_data *data, t_stack **stack)
 	char	*full_path;
 
 	env_list_to_array(data);
-	setup_signals_child();
+	setup_signals_child(data);
 	if ((*stack)->type == NODE_CMD && (*stack)->node->argv)
 	{
 		full_path = correct_path(data, (*stack)->node->argv[0]);

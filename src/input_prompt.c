@@ -22,7 +22,7 @@ static void	build_prompt(char *prompt, char *user, char *hostname, char *pwd)
 	ft_strlcat(prompt, "$ ", ft_strlen(prompt) + 3);
 }
 
-static char	*get_pwd(t_data *data)
+static char	*get_prompt_pwd(t_data *data)
 {
 	char	*pwd;
 	char	*home;
@@ -64,7 +64,7 @@ void	update_prompt(t_data *data)
 		free(data->prompt);
 	user = get_value(data, "USER");
 	hostname = get_value(data, "HOSTNAME");
-	pwd = get_pwd(data);
+	pwd = get_prompt_pwd(data);
 	data->prompt = malloc(ft_strlen(user) + ft_strlen(hostname)
 			+ ft_strlen(pwd) + 5);
 	validate_malloc(data, data->prompt, NULL);
