@@ -40,6 +40,7 @@ static char	*get_prompt_pwd(t_data *data)
 	{
 		pwd[0] = '~';
 		ft_memmove(pwd + 1, pwd + home_len, ft_strlen(pwd) - home_len);
+		pwd[ft_strlen(pwd) - home_len + 1] = '\0';
 	}
 	return (pwd);
 }
