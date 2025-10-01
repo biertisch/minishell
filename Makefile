@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/01 18:12:24 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/10/01 19:00:22 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ all: $(PRINTF_LIB) headers $(NAME)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@ctags -R .
-	@echo "tags\n.gitignore\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\noutfile*\n*.pdf\n*.png" > .gitignore
+	@echo "tags\n.gitignore\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\noutfile*\n*.pdf\n*.png\ntest/bash\ntest/minishell\ntest/diffs" > .gitignore
 	@echo "* text=auto eol=lf" > .gitattributes
 
 $(OBJ_DIR):

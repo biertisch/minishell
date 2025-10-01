@@ -4,7 +4,7 @@ MINISHELL=./minishell
 TEST_DIR=test
 TESTS=$TEST_DIR/tests.sh
 BASH_OUT=$TEST_DIR/bash
-MINI_OUT=$TEST_DIR/mini
+MINI_OUT=$TEST_DIR/minishell
 DIFF_OUT=$TEST_DIR/diffs
 TEST_FILES="$TEST_DIR/file1 $TEST_DIR/file2"
 
