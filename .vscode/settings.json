@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"*.h": "c"
+	},
+	"makefile.configureOnOpen": false,
+	"files.eol": "\n"
+}
