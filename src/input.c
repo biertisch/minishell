@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-static void	handle_eof(t_data *data)
+void	handle_eof(t_data *data)
 {
 	write(1, "exit\n", 5);
 	free_all(data);

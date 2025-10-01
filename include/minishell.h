@@ -50,6 +50,7 @@
 # define ERR_6 "unexpected EOF while looking for matching"
 # define ERR_7 "syntax error: unexpected end of file"
 # define ERR_8 "syntax error: missing quote"
+# define BUFFER_SIZE 20
 # define ERR_9 "arithmetic operations not supported"
 
 typedef struct s_env

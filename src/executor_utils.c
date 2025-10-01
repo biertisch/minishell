@@ -39,7 +39,7 @@ char	*correct_path(t_data *data, char *cmd)
 				free(full_path);
 		}
 	}
-	ft_printf("%s: command not found\n", cmd);
+	ft_printf("%s: command not found\n", cmd + 1);
 	return (NULL);
 }
 
