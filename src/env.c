@@ -12,11 +12,33 @@
 
 #include "../include/minishell.h"
 
+int	is_valid_var_name(char *s)
+{
+	if (!s || (!ft_isalpha(*s) && *s != '_'))
+		return (0);
+	while (*s)
+	{
+		if (!ft_isalnum(*s) && *s !=  '_')
+			return (0);
+		s++;
+	}
+	return (1);
+}
+
+int	is_new_var(char *arg)
+{
+	if (!arg || (!ft_isalpha(*arg) && *arg != '_'))
+		return (0);
+	while (*arg && (ft_isalnum(*arg) || *arg == '_'))
+		arg++;
+	return (*arg == '=');
+}
+
 static t_env	*generate_env_pwd(t_data *data)
 {
 	t_env	*node;
 
-	node = create_env_node(NULL, NULL);
+	node = create_env_node(NULL, NULL, 1);
 	validate_malloc(data, node, NULL);
 	node->key = ft_strdup("PWD");
 	validate_malloc_env(data, node->key, node);
@@ -38,14 +60,14 @@ int	generate_minimal_env(t_data *data, char **argv)
 
 	pwd = generate_env_pwd(data);
 	add_env_node(&data->env_list, pwd);
-	shlvl = create_env_node(NULL, NULL);
+	shlvl = create_env_node(NULL, NULL, 1);
 	validate_malloc(data, shlvl, NULL);
 	shlvl->key = ft_strdup("SHLVL");
 	validate_malloc_env(data, shlvl->key, shlvl);
 	shlvl->value = ft_strdup("1");
 	validate_malloc_env(data, shlvl->value, shlvl);
 	add_env_node(&data->env_list, shlvl);
-	underscore = create_env_node(NULL, NULL);
+	underscore = create_env_node(NULL, NULL, 1);
 	validate_malloc(data, underscore, NULL);
 	underscore->key = ft_strdup("_");
 	validate_malloc_env(data, underscore->key, underscore);
@@ -73,7 +95,7 @@ void	set_env_value(t_env *head, char *key, char *new_value)
 		if (!ft_strcmp(head->key, key))
 		{
 			free(head->value);
-			head->value = new_value; //strdup if new_value is not malloc'ed
+			head->value = new_value;
 			return ;
 		}
 		head = head->next;

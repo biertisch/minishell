@@ -41,7 +41,7 @@ int	envp_to_list(t_data *data, char **envp, char **argv)
 	i = 0;
 	while (envp[i])
 	{
-		node = create_env_node(NULL, NULL);
+		node = create_env_node(NULL, NULL, 1);
 		validate_malloc(data, node, NULL);
 		split_env_entry(data, envp[i], node);
 		if (!node->key[0])
@@ -64,7 +64,8 @@ static int	count_nodes(t_env *head)
 	counter = 0;
 	while (head)
 	{
-		counter++;
+		if (head->exported)
+			counter++;
 		head = head->next;
 	}
 	return (counter);
@@ -99,10 +100,13 @@ void	env_list_to_array(t_data *data)
 	i = 0;
 	while (trav)
 	{
-		data->env[i] = join_key_value(trav);
-		validate_malloc(data, data->env[i], NULL);
+		if (trav->exported)
+		{
+			data->env[i] = join_key_value(trav);
+			validate_malloc(data, data->env[i], NULL);
+			i++;
+		}
 		trav = trav->next;
-		i++;
 	}
 	data->env[i] = NULL;
 }
