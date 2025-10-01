@@ -137,4 +137,8 @@ char		*get_pwd(t_data *data);
 //executor_exit.c
 int			execute_exit(t_data *data, t_stack **stack);
 
+//executor_unset.c
+int			execute_unset(t_data *data, t_stack **stack);
+int			check_unset_input(t_stack **stack);
+
 #endif
