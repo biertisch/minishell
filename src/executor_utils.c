@@ -45,9 +45,9 @@ char	*correct_path(t_data *data, char *cmd)
 
 char	*run_curr_dir(char *cmd)
 {
-	// int		access_res;
+	int		access_res;
 
-	// access_res = access(cmd, F_OK | X_OK);
+	access_res = access(cmd, F_OK | X_OK);
 	if (errno == EACCES)
 	{
 		ft_printf("%s: Permission denied\n", cmd);
