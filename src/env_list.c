@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-t_env	*create_env_node(char *key, char *value)
+t_env	*create_env_node(char *key, char *value, int exported)
 {
 	t_env	*new_node;
 
@@ -21,6 +21,7 @@ t_env	*create_env_node(char *key, char *value)
 		return (NULL);
 	new_node->key = key;
 	new_node->value = value;
+	new_node->exported = exported;
 	new_node->next = NULL;
 	return (new_node);
 }

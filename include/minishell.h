@@ -57,6 +57,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*value;
+	int				exported;
 	struct s_env	*next;
 }	t_env;
 
@@ -93,6 +94,8 @@ int			generate_minimal_env(t_data *data, char **argv);
 void		unset_env(t_env **head, char *key);
 void		set_env_value(t_env *head, char *key, char *new_value);
 char		*get_env_value(t_env *head, char *key);
+int			is_valid_var_name(char *s);
+int			is_new_var(char *arg);
 
 //env_convert.c
 void		env_list_to_array(t_data *data);
@@ -103,7 +106,7 @@ void		free_env_list(t_env **head);
 void		free_env_node(t_env **node);
 t_env		*get_last_env_node(t_env *head);
 void		add_env_node(t_env **head, t_env *new_node);
-t_env		*create_env_node(char *key, char *value);
+t_env		*create_env_node(char *key, char *value, int exported);
 
 //error.c
 int			system_error(t_data *data, char *function);
