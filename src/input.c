@@ -57,7 +57,7 @@ static int	process_input(t_data *data)
 	res = expand(data);
 	if (res)
 		return (res);
-		// execute(data);
+	execute(data);
 	return (VALID);
 }
 
