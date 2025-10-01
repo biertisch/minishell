@@ -1,0 +1,9 @@
+--- test/bash/63.out	2025-10-01 16:17:32.731162617 +0100
++++ test/mini/63.out	2025-10-01 16:17:32.731162617 +0100
+@@ -1 +1,2 @@
++idontexist: command not found
+ 0
+--- test/bash/63.err	2025-10-01 16:17:32.731162617 +0100
++++ test/mini/63.err	2025-10-01 16:17:32.731162617 +0100
+@@ -1 +0,0 @@
+-bash: line 1: idontexist: command not found

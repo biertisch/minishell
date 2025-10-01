@@ -1,0 +1,4 @@
+	@cp $(PRINTF_DIR)/include/libft.h $(INC_DIR)/libft.h
+	@cp $(PRINTF_DIR)/include/printf.h $(INC_DIR)/printf.h
+	@echo "tags\n.gitignore\n*.txt\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\noutfile*\n*.pdf\n*.png" > .gitignore
+INC_DIR     = include

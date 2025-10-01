@@ -1,0 +1,6 @@
+--- test/bash/35.err	2025-10-01 16:17:32.619161446 +0100
++++ test/mini/35.err	2025-10-01 16:17:32.623161488 +0100
+@@ -1,2 +1 @@
+-bash: line 1: syntax error near unexpected token `newline'
+-bash: line 1: `ls >'
++minishell: syntax error near unexpected token 'newline'
