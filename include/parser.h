@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/19 10:58:06 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/09/30 18:54:50 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@ typedef struct s_tree
 
 //expander.c
 int			expand(t_data *data);
+
+//expand_tilde.c
+void		expand_tilde(t_data *data, char **arg);
 
 //expander_dollar.c
 void		expand_dollar(t_data *data, char **arg);

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 12:15:23 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/24 16:36:17 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,18 @@ static int	get_token_value(t_data *data, char *input, char **value, int *index)
 	validate_malloc(data, value, NULL);
 	*index += ft_strlen(*value);
 	return (VALID);
+}
+
+static int	is_arithmetic_operation(char *input)
+{
+	if (!input || *input != '(' || *(input + 1) != '(')
+		return (0);
+	input += 2;
+	while (*input && !(*input == ')' && (*(input + 1)) == ')'))
+		input++;
+	if (!*input)
+		return (0);
+	return (1);
 }
 
 static t_token_type	get_token_type(char *input)
@@ -93,6 +105,8 @@ int	lexer(t_data *data)
 		if (!data->input[i])
 			break ;
 		type = get_token_type(data->input + i);
+		if (type == LPAREN && is_arithmetic_operation(data->input + i))
+			return (internal_error(data, ERR_9, NULL, NULL));
 		res = get_token_value(data, data->input + i, &value, &i);
 		if (res)
 			return (res);

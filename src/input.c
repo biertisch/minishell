@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/19 12:08:34 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/09/30 19:47:55 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 
 void	handle_eof(t_data *data)
 {
-	if (!ft_strcmp(get_env_value(data->env_list, "SHLVL"), "1"))
-		printf("logout\n");
-	else
-		printf("exit\n");
+	write(1, "exit\n", 5);
 	free_all(data);
 	exit(EXIT_SUCCESS);
 }
@@ -100,7 +97,8 @@ void	prompt_input(t_data *data)
 	rl_signal_event_hook = rl_sigint_main;
 	while (1)
 	{
-		data->input = readline(PROMPT);
+		update_prompt(data);
+		data->input = readline(data->prompt);
 		if (!data->input)
 			handle_eof(data);
 		if (g_sig_received == SIGINT)
