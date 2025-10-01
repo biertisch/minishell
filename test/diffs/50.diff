@@ -1,0 +1,6 @@
+--- test/bash/50.err	2025-10-01 16:17:32.671161990 +0100
++++ test/mini/50.err	2025-10-01 16:17:32.675162032 +0100
+@@ -1,2 +1 @@
+-bash: line 1: unexpected EOF while looking for matching `"'
+-bash: line 2: syntax error: unexpected end of file
++minishell: syntax error: missing quote

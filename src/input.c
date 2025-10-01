@@ -14,9 +14,10 @@
 
 void	handle_eof(t_data *data)
 {
-	write(1, "exit\n", 5);
+	if (isatty(STDIN_FILENO))
+		write(1, "exit\n", 5);
 	free_all(data);
-	exit(EXIT_SUCCESS);
+	exit(data->exit_status);
 }
 
 static char	*update_input(t_data *data, char *line, char target)
@@ -103,6 +104,30 @@ void	prompt_input(t_data *data)
 			handle_eof(data);
 		if (g_sig_received == SIGINT)
 			g_sig_received = 0;
+		if (*data->input)
+		{
+			status = process_input(data);
+			if (status == INCOMPLETE && data->input)
+			{
+				process_input(data);
+				rl_signal_event_hook = rl_sigint_main;
+			}
+			else if (status == INCOMPLETE_EOF)
+				handle_eof(data);
+		}
+		free_command_data(data);
+	}
+}
+
+void	read_input(t_data *data)
+{
+	int	status;
+	
+	while (1)
+	{
+		data->input = get_next_line(STDIN_FILENO);
+		if (!data->input)
+			handle_eof(data);
 		if (*data->input)
 		{
 			status = process_input(data);

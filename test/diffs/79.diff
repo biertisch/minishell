@@ -1,0 +1,6 @@
+--- test/bash/79.err	2025-10-01 15:58:34.866495020 +0100
++++ test/mini/79.err	2025-10-01 15:58:34.866495020 +0100
+@@ -1,2 +1 @@
+-bash: line 1: syntax error near unexpected token `|'
+-bash: line 1: `ls | | >file'
++minishell: syntax error near unexpected token '|'
