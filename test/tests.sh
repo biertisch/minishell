@@ -67,6 +67,7 @@ cat < *ile
 # BUILTIN
 echo hello && echo -n bye
 echo -f hello
+echo -nn hello
 cd && pwd && cd - && pwd
 cd ~/Documents && pwd && cd - && pwd
 cd test && pwd && cd .. && pwd
@@ -77,6 +78,7 @@ exit
 exit 2
 exit -2
 exit p
+exit a 1
 
 # invalid/incomplete
 env hello
