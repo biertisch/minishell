@@ -29,6 +29,8 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 		execute_cd(data, stack);
 	else if (!has_pipe_ancestor(*stack) && !ft_strcmp((*stack)->node->argv[0], "exit"))
 		execute_exit(data, stack);
+	else if (!has_pipe_ancestor(*stack) && !ft_strcmp((*stack)->node->argv[0], "unset"))
+		execute_unset(data, stack);
 	else
 	{
 		pid = fork();
@@ -64,5 +66,7 @@ int	choose_and_execute_builtin(t_data *data, t_stack **stack)
 		execute_pwd(data, stack);
 	if (!ft_strcmp((*stack)->node->argv[0], "exit"))
 		execute_exit(data, stack);
+	if (!ft_strcmp((*stack)->node->argv[0], "unset"))
+		execute_unset(data, stack);
 	return (0);
 }
