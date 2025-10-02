@@ -62,7 +62,7 @@ make
 
 Example:
 ```
-ls | grep ".c" && echo "Found C source files in $PWD"
+ls -l | grep *file && echo "Found Makefile in $PWD"
 ```
 
 Shortcuts:

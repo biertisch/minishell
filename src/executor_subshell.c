@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_subshell.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 11:57:43 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/24 11:57:44 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/01 18:09:02 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,11 @@ int	execute_subshell(t_data *data, t_stack **stack)
 	return (0);
 }
 
+// B: deleted variable because of warning
 int	execute_subshell_entered(t_data **data, t_stack **stack)
 {
 	pid_t	pid;
-	pid_t	res;
 	int		status;
-
 
 	(*stack)->phase = DONE;
 	pid = fork();
@@ -37,7 +36,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	}
 	else
 	{
-		res = waitpid(pid, &status, 0);
+		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			(*stack)->exit_status = WEXITSTATUS(status);
 	}

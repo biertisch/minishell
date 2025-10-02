@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:49:39 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/04 12:49:39 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/01 18:08:41 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ int	parent(t_stack **stack, pid_t pid)
 	return (1);
 }
 
+// B: deleted variable because of warning
 int	parent_single_command(t_stack **stack, pid_t pid)
 {
 	int		status;
-	pid_t	res;
 
-	res = waitpid(pid, &status, 0);
+	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		(*stack)->exit_status = WEXITSTATUS(status);
 	return (1);

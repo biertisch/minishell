@@ -1,9 +1,0 @@
---- test/bash/33.out	2025-10-01 16:17:32.547160694 +0100
-+++ test/mini/33.out	2025-10-01 16:17:32.547160694 +0100
-@@ -0,0 +1,6 @@
-+/*   main.c                                             :+:      :+:    :+:   */
-+int	main(int argc, char **argv, char **envp)
-+/*   main.c                                             :+:      :+:    :+:   */
-+int	main(int argc, char **argv, char **envp)
-+/*   main.c                                             :+:      :+:    :+:   */
-+int	main(int argc, char **argv, char **envp)

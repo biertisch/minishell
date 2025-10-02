@@ -1,5 +1,0 @@
---- test/bash/19.err	2025-10-01 16:17:32.419159356 +0100
-+++ test/mini/19.err	2025-10-01 16:17:32.419159356 +0100
-@@ -1 +1 @@
--cat: test/file2: No such file or directory
-+/usr/bin/cat: test/file2: No such file or directory
