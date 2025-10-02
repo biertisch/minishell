@@ -109,14 +109,3 @@ void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 		error_exit(data);
 	}
 }
-
-void	check_for_errors(int status, t_data *data, t_stack *stack, char *command_name)
-{
-	if (status == -1)
-	{
-		perror(command_name);
-		free_all(data);
-		free_stack(&stack);
-		exit(EXIT_FAILURE);
-	}
-}

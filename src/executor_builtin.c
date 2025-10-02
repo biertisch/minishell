@@ -25,21 +25,23 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
 
-	if (!has_subshell_ancestor(*stack) && !ft_strcmp((*stack)->node->argv[0], "cd"))
+	(*stack)->phase = DONE;
+	if (!has_node_type_ancestor(*stack, NODE_SUBSHELL) && !ft_strcmp((*stack)->node->argv[0], "cd"))
 		execute_cd(data, stack);
-	else if (!has_pipe_ancestor(*stack) && !ft_strcmp((*stack)->node->argv[0], "exit"))
+	else if (!has_node_type_ancestor(*stack, NODE_PIPE) && !ft_strcmp((*stack)->node->argv[0], "exit"))
 		execute_exit(data, stack);
-	else if (!has_pipe_ancestor(*stack) && !ft_strcmp((*stack)->node->argv[0], "unset"))
+	else if (!has_node_type_ancestor(*stack, NODE_PIPE) && !ft_strcmp((*stack)->node->argv[0], "unset"))
 		execute_unset(data, stack);
-	else
+	else if (!has_node_type_ancestor(*stack, NODE_PIPE))
 	{
 		pid = fork();
+		if (pid < 0)
+			return (validate_fork(data, stack));
 		if (pid == 0)
 			child(data, stack);
 		else
 			parent(stack, pid);
-	}
-	(*stack)->phase = DONE;
+	} 
 	return (0);
 }
 

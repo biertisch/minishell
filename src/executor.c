@@ -60,16 +60,18 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
 
+	(*stack)->phase = DONE;
 	//check if it has a command if not just dummy this shit
 	if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC && !(*stack)->node->argv)
 		dummy_heredoc(stack);
 	else
 	{
 		if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
-			pipe((*stack)->pipe);
+			if (validate_pipe(pipe((*stack)->pipe), stack))
+				return (0);
 		pid = fork();
 		if (pid < 0)
-			check_for_errors(-1, data, *stack, "fork");
+			return (validate_fork(data, stack));
 		else if (pid == 0)
 			child(data, stack);
 		else if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
@@ -77,7 +79,6 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 		else
 			parent(stack, pid);
 	}
-	(*stack)->phase = DONE;
 	return (0);
 }
 
