@@ -100,6 +100,7 @@ int			is_new_var(char *arg);
 //env_convert.c
 void		env_list_to_array(t_data *data);
 int			envp_to_list(t_data *data, char **envp, char **argv);
+void		split_env_entry(t_data *data, char *entry, t_env *node);
 
 //env_list.c
 void		free_env_list(t_env **head);

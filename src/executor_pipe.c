@@ -32,7 +32,8 @@ int	execute_pipe_entered(t_data *data, t_stack **stack)
 	int	left_in;
 	int	left_out;
 
-	check_for_errors(pipe((*stack)->pipe), data, *stack, "pipe");
+	if (validate_pipe(pipe((*stack)->pipe), stack) == 1)
+		return (0);
 	left_in = (*stack)->in_fd;
 	left_out = ((*stack)->pipe)[1];
 	(*stack)->phase = LAUNCH_LEFT;

@@ -59,3 +59,25 @@ char	*run_curr_dir(char *cmd)
 	}
 	return (cmd);
 }
+
+void	check_for_variables(t_data *data, t_stack **stack)
+{
+	int	i;
+	int	j;
+	t_env	*new_node;
+
+	i = 0;
+	while (is_new_var((*stack)->node->argv[i]))
+		i++;
+	if (!i)
+		return ;
+	j = 0;
+	while (j < i)
+	{
+		new_node = create_env_node(NULL, NULL, 0);
+		validate_malloc(data, new_node, NULL);
+		split_env_entry(data, (*stack)->node->argv[j], new_node);
+		j++;
+	}
+	(*stack)->node->argv = ft_shrink_split((*stack)->node->argv, j - 1, ft_splitlen((*stack)->node->argv) - 1);
+}

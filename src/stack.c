@@ -82,33 +82,20 @@ t_stack	**get_first_log_operator(t_stack **stack)
 	return (NULL);
 }
 
-int	has_pipe_ancestor(t_stack *stack)
+int	has_node_type_ancestor(t_stack *stack, t_node_type type)
 {
 	t_stack	*curr;
 
 	curr = stack;
 	while (curr)
 	{
-		if (curr->type == NODE_PIPE)
+		if (curr->type == type)
 			return (1);
 		curr = curr->next;
 	}
 	return (0);
 }
 
-int	has_subshell_ancestor(t_stack *stack)
-{
-	t_stack	*curr;
-
-	curr = stack;
-	while (curr)
-	{
-		if (curr->type == NODE_SUBSHELL)
-			return (1);
-		curr = curr->next;
-	}
-	return (0);
-}
 void	pop(t_stack **stack)
 {
 	t_stack *new_head;
@@ -118,6 +105,13 @@ void	pop(t_stack **stack)
 	new_head = (*stack)->next;
 	free((*stack));
 	*stack = new_head;
+}
+
+t_stack	*peek(t_stack **stack)
+{
+	if (stack == NULL || *stack == NULL)
+		return (NULL);
+	return (*stack);
 }
 
 t_stack	**get_first_subshell(t_stack **stack)

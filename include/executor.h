@@ -45,8 +45,6 @@ int			dummy_heredoc(t_stack **stack);
 //stack.c
 t_stack		*create_stack(t_data *data);
 void		push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *data);
-int			has_pipe_ancestor(t_stack *stack);
-int			has_subshell_ancestor(t_stack *stack);
 void		pop(t_stack **stack);
 t_stack		**get_first_pipe(t_stack **stack);
 void		print_stack(t_stack *stack);
@@ -57,6 +55,7 @@ int			stack_size(t_stack *stack);
 t_stack		**get_first_log_operator(t_stack **stack);
 int		setup_next_to_top(t_data **data, t_stack **stack);
 t_stack		**get_first_subshell(t_stack **stack);
+int			has_node_type_ancestor(t_stack *stack, t_node_type type);
 
 //child.c
 void		child(t_data *data, t_stack **stack);
@@ -68,6 +67,7 @@ void		child_heredoc(t_data *data, t_stack **stack);
 //executor_utils.c
 char		*correct_path(t_data * data, char *cmd);
 char		*run_curr_dir(char *cmd);
+void		check_for_variables(t_data *data, t_stack **stack);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
@@ -140,5 +140,11 @@ int			execute_exit(t_data *data, t_stack **stack);
 //executor_unset.c
 int			execute_unset(t_data *data, t_stack **stack);
 int			check_unset_input(t_stack **stack);
+
+//executor_error.c
+int			validate_fork(t_data *data, t_stack **stack);
+void		print_fork_err_mess(void);
+void		print_pipe_err_mess(void);
+int			validate_pipe(int pipe_res, t_stack **stack);
 
 #endif

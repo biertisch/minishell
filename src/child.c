@@ -18,6 +18,7 @@ void	child(t_data *data, t_stack **stack)
 
 	env_list_to_array(data);
 	setup_signals_child(data);
+//	check_for_variables(data, stack);
 	if ((*stack)->type == NODE_CMD && (*stack)->node->argv)
 	{
 		full_path = correct_path(data, (*stack)->node->argv[0]);
@@ -38,13 +39,9 @@ void	child(t_data *data, t_stack **stack)
 void	child_redir_in(t_data *data, t_stack **stack)
 {
 	((*stack)->node->redir)->fd = open((*stack)->node->redir->file, O_RDONLY);
-	if (((*stack)->node->redir)->fd < 0)
-		check_for_errors(-1, data, *stack, "open");
-	check_for_errors(dup2(((*stack)->node
-				->redir)->fd, STDIN_FILENO), data, *stack, "dup2");
+	dup2(((*stack)->node->redir)->fd, STDIN_FILENO);
 	if ((*stack)->out_fd != STDOUT_FILENO)
-	check_for_errors(dup2((*stack)
-			->out_fd, STDOUT_FILENO), data, *stack, "dup2");
+	dup2((*stack)->out_fd, STDOUT_FILENO);
 	close(((*stack)->node->redir)->fd);
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		close((*stack)->out_fd);
@@ -66,13 +63,12 @@ void	child_no_redir(t_data *data, t_stack **stack)
 {
 	if ((*stack)->in_fd != STDIN_FILENO)
 	{
-		check_for_errors(dup2((*stack)
-				->in_fd, STDIN_FILENO), data, *stack, "dup2");
+		dup2((*stack)->in_fd, STDIN_FILENO);
 		close((*stack)->in_fd);
 	}
 	if ((*stack)->out_fd != STDOUT_FILENO)
 	{
-		check_for_errors(dup2((*stack)->out_fd, STDOUT_FILENO), data, *stack, "dup2");
+		dup2((*stack)->out_fd, STDOUT_FILENO);
 		close((*stack)->out_fd);
 	}
 	close_all_pipe_ends(stack);
@@ -97,11 +93,8 @@ void	child_redir_out(t_data *data, t_stack **stack)
 	else
 		((*stack)->node->redir)->fd = open(((*stack)->node
 				->redir)->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (((*stack)->node->redir)->fd < 0)
-		check_for_errors(-1, data, *stack, "open");
-	check_for_errors(dup2((*stack)->in_fd, STDIN_FILENO), data, *stack, "dup2");
-	check_for_errors(dup2(((*stack)->node->redir)
-			->fd, STDOUT_FILENO), data, *stack, "dup2");
+	dup2((*stack)->in_fd, STDIN_FILENO);
+	dup2(((*stack)->node->redir)->fd, STDOUT_FILENO);
 	close(((*stack)->node->redir)->fd);
 	close((*stack)->in_fd);
 	close_all_pipe_ends(stack);

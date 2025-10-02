@@ -30,7 +30,12 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 
 	(*stack)->phase = DONE;
 	pid = fork();
-	if (pid == 0)
+	if (pid < 0)
+	{
+		(*stack)->exit_status = 1;
+		print_fork_err_mess();
+	}
+	else if (pid == 0)
 	{
 		setup_signals_child(*data);
 		push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);

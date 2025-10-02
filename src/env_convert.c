@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-static void	split_env_entry(t_data *data, char *entry, t_env *node)
+void	split_env_entry(t_data *data, char *entry, t_env *node)
 {
 	char	*equal;
 
