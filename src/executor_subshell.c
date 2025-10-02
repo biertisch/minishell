@@ -21,10 +21,10 @@ int	execute_subshell(t_data *data, t_stack **stack)
 	return (0);
 }
 
-// B: deleted variable because of warning
 int	execute_subshell_entered(t_data **data, t_stack **stack)
 {
 	pid_t	pid;
+	pid_t	res;
 	int		status;
 
 	(*stack)->phase = DONE;
@@ -36,7 +36,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
+		res = waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			(*stack)->exit_status = WEXITSTATUS(status);
 	}

@@ -12,11 +12,12 @@
 
 #include "../include/minishell.h"
 
-// B: deleted variable because of warning
 int	execute_pwd(t_data *data, t_stack **stack)
 {
-	write((*stack)->out_fd, get_pwd(data), ft_strlen(get_pwd(data)));
-	write((*stack)->out_fd, "\n", 1);
+	int	write_res;
+	
+	write_res = write((*stack)->out_fd, get_pwd(data), ft_strlen(get_pwd(data)));
+	write_res = write((*stack)->out_fd, "\n", 1);
 	(void)stack;
 	exit(0);
 	return (1);

@@ -64,18 +64,18 @@ int	execute_pipe_launch_right(t_data *data, t_stack **stack)
 	return (0);
 }
 
-// B: deleted variable because of warning
 int	execute_pipe_wait(t_stack **stack)
 {
 	int		status;
+	pid_t	res;
 
 	status = 0;
 	if (!get_next_pipe(stack))
 	{
 		if ((*stack)->child_count == 1)
-			waitpid((*stack)->child_pid[0], &status, 0);
+			res = waitpid((*stack)->child_pid[0], &status, 0);
 		else
-			waitpid((*stack)->child_pid[1], &status, 0);
+			res = waitpid((*stack)->child_pid[1], &status, 0);
 		if (WIFEXITED(status))
 			(*stack)->exit_status = WEXITSTATUS(status);
 	}
