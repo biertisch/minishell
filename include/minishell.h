@@ -126,6 +126,7 @@ void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 //input.c
 void		prompt_input(t_data *data);
 int			prompt_continuation(t_data *data, char target);
+void		read_input(t_data *data);
 
 //signal.c
 void		setup_signals(t_data *data);

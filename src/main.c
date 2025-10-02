@@ -14,7 +14,6 @@
 
 volatile sig_atomic_t	g_sig_received = 0;
 
-//accept arguments or issue warning?
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
@@ -23,7 +22,10 @@ int	main(int argc, char **argv, char **envp)
 	ft_bzero(&data, sizeof(t_data));
 	setup_signals(&data);
 	envp_to_list(&data, envp, argv);
-	prompt_input(&data);
+	if (isatty(STDIN_FILENO))
+		prompt_input(&data);
+	else
+		read_input(&data);
 	free_all(&data);
-	return (EXIT_SUCCESS);
+	return (data.exit_status);
 }

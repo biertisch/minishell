@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_pwd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 12:20:02 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/28 12:20:03 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/01 18:09:33 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	execute_pwd(t_data *data, t_stack **stack)
 }
 
 char	*get_pwd(t_data *data)
-{	
+{
 	while ((data->env_list))
 	{
 		if (!ft_strcmp(data->env_list->key, "PWD"))

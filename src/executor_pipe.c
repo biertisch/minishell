@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 10:50:31 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/18 10:50:37 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/01 18:08:47 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 {
 	int	right_in;
 	int	right_out;
-	
+
 	right_in = (*stack)->pipe[0];
 	if (get_next_pipe(stack))
 		right_out = (*get_next_pipe(stack))->pipe[1];

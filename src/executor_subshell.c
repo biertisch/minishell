@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_subshell.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 11:57:43 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/24 11:57:44 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/01 18:09:02 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	pid_t	pid;
 	pid_t	res;
 	int		status;
-
 
 	(*stack)->phase = DONE;
 	pid = fork();
