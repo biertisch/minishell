@@ -12,11 +12,12 @@
 
 #include "../include/minishell.h"
 
-char	*correct_path(t_data *data, char *cmd)
+char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 {
 	char	*full_path;
 	int		i;
 	char	**paths;
+	char	*slash_path;
 	int		access_res;
 
 	if (!cmd)
@@ -26,20 +27,26 @@ char	*correct_path(t_data *data, char *cmd)
 	full_path = ft_strchr(cmd, '/');
 	if (full_path)
 		return (run_curr_dir(cmd));
-	cmd = ft_strjoin("/", cmd);
+	slash_path = ft_strjoin("/", cmd);
 	while (paths[i])
 	{
-		full_path = ft_strjoin(paths[i++], cmd);
+		full_path = ft_strjoin(paths[i++], slash_path);
 		if (full_path)
 		{
 			access_res = access(full_path, F_OK | X_OK);
 			if (!access_res)
-				return (free(cmd), (full_path));
+				return (free(slash_path), (full_path));
 			else
 				free(full_path);
 		}
 	}
-	ft_printf("%s: command not found\n", cmd + 1);
+	write(STDERR_FILENO, cmd, ft_strlen(cmd));
+	write(STDERR_FILENO, ": command not found\n", 20);
+	ft_splitfree(paths);
+	free_all(data);
+	free(slash_path);
+	free_stack(stack);
+	exit(127);
 	return (NULL);
 }
 

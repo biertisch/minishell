@@ -65,7 +65,7 @@ void		child_redir_out(t_data *data, t_stack **stack);
 void		child_heredoc(t_data *data, t_stack **stack);
 
 //executor_utils.c
-char		*correct_path(t_data * data, char *cmd);
+char		*correct_path(t_data * data, t_stack **stack,char *cmd);
 char		*run_curr_dir(char *cmd);
 void		check_for_variables(t_data *data, t_stack **stack);
 
