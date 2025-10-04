@@ -53,7 +53,7 @@ OBJ         = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 HDRS        = $(INC_DIR)/minishell.h $(INC_DIR)/printf.h $(INC_DIR)/libft.h $(INC_DIR)/parser.h $(INC_DIR)/executor.h
 
 
-.PHONY: all clean fclean re headers test
+.PHONY: all clean fclean re headers test valgrind
 
 all: $(PRINTF_LIB) headers $(NAME)
 	@echo "	\n\
@@ -109,6 +109,8 @@ fclean: clean
 	@$(RM) -rf test/minishell
 	@$(RM) test/tests
 
+valgrind: $(NAME)
+	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --show-leak-kinds=all --trace-children=yes ./${NAME}
 test: re
 	@chmod 755 test/run_tests.sh
 	@./test/run_tests.sh
