@@ -15,14 +15,10 @@
 int	parent(t_stack **stack, pid_t pid)
 {
 	t_stack	**first_pipe;
-	t_stack **first_subshell;
 
 	first_pipe = get_first_pipe(stack);
-	first_subshell = get_first_subshell(stack);
-	if (first_pipe && !first_subshell)
-	{
+	if (first_pipe )
 		(*first_pipe)->child_pid[(*first_pipe)->child_count++] = pid;
-	}
 	else
 		return (parent_single_command(stack, pid));
 	return (1);
