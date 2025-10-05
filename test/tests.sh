@@ -66,6 +66,7 @@ cat < *ile
 
 # BUILTIN
 echo hello && echo -n bye
+echo -nnn hello
 echo -f hello
 cd && pwd && cd - && pwd
 cd ~/Documents && pwd && cd - && pwd
