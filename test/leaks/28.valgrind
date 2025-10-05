@@ -1,0 +1,90 @@
+==83489== Memcheck, a memory error detector
+==83489== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==83489== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==83489== Command: ./minishell
+==83489== Parent PID: 83488
+==83489== 
+==83494== Syscall param execve(filename) points to unaddressable byte(s)
+==83494==    at 0x49B008B: execve (syscall-template.S:120)
+==83494==    by 0x4080F7: child_redir_out (child.c:103)
+==83494==    by 0x407D9B: child (child.c:34)
+==83494==    by 0x407AAF: execute_cmd_entered (executor.c:76)
+==83494==    by 0x40795C: execute_cmd (executor.c:53)
+==83494==    by 0x407849: execute_stack (executor.c:36)
+==83494==    by 0x4077B5: execute (executor.c:20)
+==83494==    by 0x4039D1: process_input (input.c:61)
+==83494==    by 0x403A3C: read_input (input.c:133)
+==83494==    by 0x404608: main (main.c:28)
+==83494==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==83494== 
+==83494== 
+==83494== HEAP SUMMARY:
+==83494==     in use at exit: 14,340 bytes in 271 blocks
+==83494==   total heap usage: 342 allocs, 71 frees, 15,542 bytes allocated
+==83494== 
+==83494== 4 bytes in 1 blocks are definitely lost in loss record 1 of 26
+==83494==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==83494==    by 0x40BC28: ft_strdup (in /home/beatde-a/common_core/rank_03/minishell/minishell)
+==83494==    by 0x404F17: get_word (parser_cmd.c:23)
+==83494==    by 0x404DFA: get_command_data (parser_cmd.c:80)
+==83494==    by 0x404A5E: parse_command (parser.c:56)
+==83494==    by 0x404784: parse_pipe (parser.c:71)
+==83494==    by 0x404644: parse_and_or (parser.c:96)
+==83494==    by 0x40489C: parser (parser.c:123)
+==83494==    by 0x403980: process_input (input.c:55)
+==83494==    by 0x403A3C: read_input (input.c:133)
+==83494==    by 0x404608: main (main.c:28)
+==83494== 
+==83494== 5 bytes in 1 blocks are definitely lost in loss record 2 of 26
+==83494==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==83494==    by 0x40BD8B: ft_strjoin (in /home/beatde-a/common_core/rank_03/minishell/minishell)
+==83494==    by 0x408588: correct_path (executor_utils.c:29)
+==83494==    by 0x407CB3: child (child.c:24)
+==83494==    by 0x407AAF: execute_cmd_entered (executor.c:76)
+==83494==    by 0x40795C: execute_cmd (executor.c:53)
+==83494==    by 0x407849: execute_stack (executor.c:36)
+==83494==    by 0x4077B5: execute (executor.c:20)
+==83494==    by 0x4039D1: process_input (input.c:61)
+==83494==    by 0x403A3C: read_input (input.c:133)
+==83494==    by 0x404608: main (main.c:28)
+==83494== 
+==83494== 240 (96 direct, 144 indirect) bytes in 1 blocks are definitely lost in loss record 20 of 26
+==83494==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==83494==    by 0x40AD8C: ft_split (in /home/beatde-a/common_core/rank_03/minishell/minishell)
+==83494==    by 0x40853B: correct_path (executor_utils.c:24)
+==83494==    by 0x407CB3: child (child.c:24)
+==83494==    by 0x407AAF: execute_cmd_entered (executor.c:76)
+==83494==    by 0x40795C: execute_cmd (executor.c:53)
+==83494==    by 0x407849: execute_stack (executor.c:36)
+==83494==    by 0x4077B5: execute (executor.c:20)
+==83494==    by 0x4039D1: process_input (input.c:61)
+==83494==    by 0x403A3C: read_input (input.c:133)
+==83494==    by 0x404608: main (main.c:28)
+==83494== 
+==83494== LEAK SUMMARY:
+==83494==    definitely lost: 105 bytes in 3 blocks
+==83494==    indirectly lost: 144 bytes in 11 blocks
+==83494==      possibly lost: 0 bytes in 0 blocks
+==83494==    still reachable: 14,091 bytes in 257 blocks
+==83494==         suppressed: 0 bytes in 0 blocks
+==83494== Reachable blocks (those to which a pointer was found) are not shown.
+==83494== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==83494== 
+==83494== For lists of detected and suppressed errors, rerun with: -s
+==83494== ERROR SUMMARY: 4 errors from 4 contexts (suppressed: 0 from 0)
+==83489== 
+==83489== HEAP SUMMARY:
+==83489==     in use at exit: 4,016 bytes in 1 blocks
+==83489==   total heap usage: 210 allocs, 209 frees, 10,493 bytes allocated
+==83489== 
+==83489== LEAK SUMMARY:
+==83489==    definitely lost: 0 bytes in 0 blocks
+==83489==    indirectly lost: 0 bytes in 0 blocks
+==83489==      possibly lost: 0 bytes in 0 blocks
+==83489==    still reachable: 4,016 bytes in 1 blocks
+==83489==         suppressed: 0 bytes in 0 blocks
+==83489== Reachable blocks (those to which a pointer was found) are not shown.
+==83489== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==83489== 
+==83489== For lists of detected and suppressed errors, rerun with: -s
+==83489== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
