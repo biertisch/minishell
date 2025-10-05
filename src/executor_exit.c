@@ -16,7 +16,8 @@ int	execute_exit(t_data *data, t_stack **stack)
 {
 	if (!get_first_subshell(stack))
 		write(1, "exit\n", 5);
-	free_stack(stack);
+	while (stack && *stack)
+		pop(stack);
 	free_all(data);
 	exit(EXIT_SUCCESS);
 	return (1);
