@@ -20,7 +20,7 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		executor_utils executor_pipe executor_and executor_or executor_builtin\
 		executor_echo executor_subshell get_next_line get_next_line_utils\
 		executor_env executor_cd executor_pwd executor_exit expand_tilde\
-		input_prompt executor_unset
+		input_prompt executor_unset executor_error
 
 SRC_DIR     = src
 OBJ_DIR     = obj
@@ -69,7 +69,8 @@ all: $(PRINTF_LIB) headers $(NAME)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@ctags -R .
-	@echo "tags\n.gitignore\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\noutfile*\n*.pdf\n*.png\ntest/bash\ntest/minishell\ntest/diffs" > .gitignore
+	@echo "tags\n.gitignore\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\
+		\noutfile*\n*.pdf\n*.png\ntest/bash\ntest/minishell\ntest/diffs\ntest/file1\ntest/file2\ntest/leaks" > .gitignore
 	@echo "* text=auto eol=lf" > .gitattributes
 
 $(OBJ_DIR):

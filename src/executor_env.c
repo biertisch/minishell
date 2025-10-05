@@ -12,16 +12,16 @@
 
 #include "../include/minishell.h"
 
-// B: deleted variable because of warning
 int	execute_env(t_data *data, t_stack **stack)
 {
+	int	write_res;
 	int	i;
 
 	i = 0;
 	while ((data->env[i]))
 	{
-		write((*stack)->out_fd, data->env[i], ft_strlen(data->env[i]));
-		write((*stack)->out_fd, "\n", 1);
+		write_res = write((*stack)->out_fd, data->env[i], ft_strlen(data->env[i]));
+		write_res = write((*stack)->out_fd, "\n", 1);
 		i++;
 	}
 	exit(0);

@@ -33,12 +33,6 @@ static void	advance_both(int *i, int *j)
 	(*j)++;
 }
 
-static int	is_hidden_file(char *entry, char *pattern)
-{
-	return ((entry[0] == '.' && pattern[0] != '.') || !ft_strcmp(entry, ".")
-		|| !ft_strcmp(entry, ".."));
-}
-
 int	match_wildcard(char *entry, char *pattern)
 {
 	int	i;
@@ -48,7 +42,7 @@ int	match_wildcard(char *entry, char *pattern)
 	i = 0;
 	j = 0;
 	star = -1;
-	if (is_hidden_file(entry, pattern))
+	if (entry[0] == '.' && pattern[0] != '.')
 		return (0);
 	while (entry[i])
 	{

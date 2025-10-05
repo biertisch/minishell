@@ -25,7 +25,7 @@ int	execute_cd(t_data *data, t_stack **stack)
 	new_pwd = ft_strdup(getcwd(NULL, 0));
 	set_env_value(data->env_list, "OLDPWD", curr_pwd);
 	set_env_value(data->env_list, "PWD", new_pwd);
-	if (has_subshell_ancestor(*stack))
+	if (has_node_type_ancestor(*stack, NODE_SUBSHELL))
 		exit(0);
 	return (0);
 }

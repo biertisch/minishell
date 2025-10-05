@@ -21,22 +21,27 @@ int	execute_subshell(t_data *data, t_stack **stack)
 	return (0);
 }
 
-// B: deleted variable because of warning
 int	execute_subshell_entered(t_data **data, t_stack **stack)
 {
 	pid_t	pid;
+	pid_t	res;
 	int		status;
 
 	(*stack)->phase = DONE;
 	pid = fork();
-	if (pid == 0)
+	if (pid < 0)
+	{
+		(*stack)->exit_status = 1;
+		print_fork_err_mess();
+	}
+	else if (pid == 0)
 	{
 		setup_signals_child(*data);
 		push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
+		res = waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			(*stack)->exit_status = WEXITSTATUS(status);
 	}

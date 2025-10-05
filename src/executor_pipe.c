@@ -32,7 +32,8 @@ int	execute_pipe_entered(t_data *data, t_stack **stack)
 	int	left_in;
 	int	left_out;
 
-	check_for_errors(pipe((*stack)->pipe), data, *stack, "pipe");
+	if (validate_pipe(pipe((*stack)->pipe), stack) == 1)
+		return (0);
 	left_in = (*stack)->in_fd;
 	left_out = ((*stack)->pipe)[1];
 	(*stack)->phase = LAUNCH_LEFT;
@@ -64,18 +65,18 @@ int	execute_pipe_launch_right(t_data *data, t_stack **stack)
 	return (0);
 }
 
-// B: deleted variable because of warning
 int	execute_pipe_wait(t_stack **stack)
 {
 	int		status;
+	pid_t	res;
 
 	status = 0;
 	if (!get_next_pipe(stack))
 	{
 		if ((*stack)->child_count == 1)
-			waitpid((*stack)->child_pid[0], &status, 0);
+			res = waitpid((*stack)->child_pid[0], &status, 0);
 		else
-			waitpid((*stack)->child_pid[1], &status, 0);
+			res = waitpid((*stack)->child_pid[1], &status, 0);
 		if (WIFEXITED(status))
 			(*stack)->exit_status = WEXITSTATUS(status);
 	}

@@ -28,12 +28,12 @@ int	parent(t_stack **stack, pid_t pid)
 	return (1);
 }
 
-// B: deleted variable because of warning
 int	parent_single_command(t_stack **stack, pid_t pid)
 {
 	int		status;
+	pid_t	res;
 
-	waitpid(pid, &status, 0);
+	res = waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		(*stack)->exit_status = WEXITSTATUS(status);
 	return (1);
