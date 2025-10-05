@@ -69,7 +69,8 @@ all: $(PRINTF_LIB) headers $(NAME)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@ctags -R .
-	@echo "tags\n.gitignore\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\noutfile*\n*.pdf\n*.png\ntest/bash\ntest/minishell\ntest/diffs" > .gitignore
+	@echo "tags\n.gitignore\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\
+		\noutfile*\n*.pdf\n*.png\ntest/bash\ntest/minishell\ntest/diffs\ntest/file1\ntest/file2\ntest/leaks" > .gitignore
 	@echo "* text=auto eol=lf" > .gitattributes
 
 $(OBJ_DIR):
