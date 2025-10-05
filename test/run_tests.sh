@@ -35,9 +35,6 @@ while IFS= read -r cmd; do
         elif [[ $status -ge 128 ]]; then
             echo $status >"$MINI_OUT/$i.status"
             echo "💥 Minishell crashed (signal $((status-128)))"
-        else
-            echo $status >"$MINI_OUT/$i.status"
-            echo "⚠️ Minishell exited with error (status $status)"
         fi
     fi
 
