@@ -14,12 +14,17 @@
 
 int	execute_pwd(t_data *data, t_stack **stack)
 {
-	int	write_res;
-	
-	write_res = write((*stack)->out_fd, get_pwd(data), ft_strlen(get_pwd(data)));
-	write_res = write((*stack)->out_fd, "\n", 1);
-	(void)stack;
-	exit(0);
+	int		write_res;
+	char	*pwd;
+
+	pwd = get_pwd(data);
+	if (pwd)
+	{
+		write_res = write((*stack)->out_fd, get_pwd(data), ft_strlen(get_pwd(data)));
+		write_res = write((*stack)->out_fd, "\n", 1);
+		(void)stack;
+		exit(0);
+	}
 	return (1);
 }
 

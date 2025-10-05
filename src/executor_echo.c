@@ -14,13 +14,12 @@
 
 int	execute_echo(t_data *data, t_stack **stack)
 {
-	int	write_res;
 
 	if (!(*stack)->node->argv[1])
 	{
-		write_res = write((*stack)->out_fd, "\n", 1);
-		if (write_res == -1)
-			write_fail();
+		validate_write(data, stack, write((*stack)->out_fd, "\n", 1));
+		free_stack(stack);
+		free_all(data);
 		exit(0);
 	}
 	else if (!ft_strcmp((*stack)->node->argv[1], "-n"))
@@ -33,41 +32,52 @@ int	execute_echo(t_data *data, t_stack **stack)
 
 int	execute_echo_option(t_data *data, t_stack **stack)
 {
-	int	write_res;
+	int	i;
 
-	if (!(*stack)->node->argv[2])
-		exit(0);
-	else
+	i = 2;
+	while ((*stack)->node->argv[i])
 	{
-		write_res =write((*stack)->out_fd, (*stack)->node->argv[2], ft_strlen((*stack)->node->argv[2]));
-		if (write_res == -1)
-			write_fail();
-		exit(0);
+		validate_write(data, stack, write((*stack)->out_fd, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i])));
+		if ((*stack)->node->argv[i + 1])
+			validate_write(data, stack, write((*stack)->out_fd, " ", 1));
+		i++;
+		
 	}
-	(void)data;
+	free_stack(stack);
+	free_all(data);
+	exit(0);
 	return (0);
 }
 
 int	execute_echo_no_option(t_data *data, t_stack **stack)
 {
-	int	write_res;
+	int	i;
 
-	write_res = write((*stack)->out_fd, (*stack)->node->argv[1], ft_strlen((*stack)->node->argv[1]));
-	if (write_res == -1)
-		write_fail();
-	write((*stack)->out_fd, "\n", 1);
-	if (write_res == -1)
-		write_fail();
+	i = 1;
+	while ((*stack)->node->argv[i])
+	{
+		validate_write(data, stack, write((*stack)->out_fd, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i])));
+		if ((*stack)->node->argv[i + 1])
+			validate_write(data, stack, write((*stack)->out_fd, " ", 1));
+		i++;
+	}
+	validate_write(data, stack, write((*stack)->out_fd, "\n", 1));
+	free_stack(stack);
+	free_all(data);
 	exit(0);
-	(void)data;
 	return (1);
 }
 
-int	write_fail(void)
+int	validate_write(t_data *data, t_stack **stack, int write_res)
 {
-	if (errno == EBADF || errno == ENOSPC || errno == EIO || errno == EROFS)
-		exit(1);
-	if (errno == EPIPE)
-		exit(141);
-	return (1);
+	if (write_res == -1)
+	{
+		free_stack(stack);
+		free_all(data);
+		if (errno == EBADF || errno == ENOSPC || errno == EIO || errno == EROFS)
+			exit(1);
+		if (errno == EPIPE)
+			exit(141);
+	}
+	return (write_res);
 }
