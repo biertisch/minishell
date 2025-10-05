@@ -22,18 +22,23 @@ static void	build_prompt(char *prompt, char *user, char *hostname, char *pwd)
 	ft_strlcat(prompt, "$ ", ft_strlen(prompt) + 3);
 }
 
+static char	*get_value(t_data *data, char *key)
+{
+	char	*value;
+
+	value = get_env_value(data->env_list, key);
+	if (!value)
+		return ("unknown");
+	return (value);
+}
+
 static char	*get_prompt_pwd(t_data *data)
 {
 	char	*pwd;
 	char	*home;
 	int		home_len;
 
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-	{
-		system_error(data, "getcwd");
-		error_exit(data);
-	}
+	pwd = get_value(data, "PWD");
 	home = get_env_value(data->env_list, "HOME");
 	home_len = ft_strlen(home);
 	if (home && !ft_strncmp(pwd, home, home_len))
@@ -43,16 +48,6 @@ static char	*get_prompt_pwd(t_data *data)
 		pwd[ft_strlen(pwd) - home_len + 1] = '\0';
 	}
 	return (pwd);
-}
-
-static char	*get_value(t_data *data, char *key)
-{
-	char	*value;
-
-	value = get_env_value(data->env_list, key);
-	if (!value)
-		return ("unknown");
-	return (value);
 }
 
 void	update_prompt(t_data *data)
@@ -70,5 +65,4 @@ void	update_prompt(t_data *data)
 			+ ft_strlen(pwd) + 5);
 	validate_malloc(data, data->prompt, NULL);
 	build_prompt(data->prompt, user, hostname, pwd);
-	free(pwd);
 }
