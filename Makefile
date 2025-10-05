@@ -80,7 +80,7 @@ $(NAME): $(OBJ) $(PRINTF_LIB)
 	@$(CC) $(CFLAGS) $(OBJ) -L$(PRINTF_DIR) -lftprintf -lreadline -o $(NAME)
 
 $(PRINTF_DIR):
-	@git clone --depth 1 $(PRINTF_URL) $(PRINTF_DIR)
+	@git clone --quiet --depth 1 $(PRINTF_URL) $(PRINTF_DIR)
 
 $(PRINTF_LIB): | $(PRINTF_DIR)
 	@$(MAKE) --no-print-directory -C $(PRINTF_DIR)
@@ -108,6 +108,7 @@ fclean: clean
 	@$(RM) -rf test/bash
 	@$(RM) -rf test/diffs
 	@$(RM) -rf test/minishell
+	@$(RM) -rf test/leaks
 	@$(RM) test/tests
 
 valgrind: $(NAME)
