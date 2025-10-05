@@ -26,10 +26,10 @@ int	execute_stack(t_data *data, t_stack **stack)
 	int	i;
 	int	tree_nodes_count;
 
-	tree_nodes_count = count_tree_nodes(data->parser_tree);
 	i = 0;
 	while (i < tree_nodes_count)
 	{
+		print_stack(*stack);
 		if ((*stack)->type == NODE_PIPE)
 			i += execute_pipe(data, stack);
 		else if ((*stack)->type == NODE_CMD)

@@ -114,39 +114,55 @@ t_stack	*peek(t_stack **stack)
 	return (*stack);
 }
 
-t_stack	**get_first_subshell(t_stack **stack)
+t_stack	**get_first_type(t_stack **stack, t_node_type type)
 {
 	t_stack	**head;
 
 	head = stack;
 	while (head && (*head))
 	{
-		if ((*head)->type == NODE_SUBSHELL)
+		if ((*head)->type == type)
 			return (head);
 		head = &((*head)->next);
 	}
 	return (NULL);
 }
 
-t_stack	**get_first_pipe(t_stack **stack)
-{
-	t_stack	**head;
-
-	head = stack;
-	while (head && (*head))
-	{
-		if ((*head)->type == NODE_PIPE)
-			return (head);
-		head = &((*head)->next);
-	}
-	return (NULL);
-}
-
-t_stack **get_next_pipe(t_stack **stack)
+t_stack **get_first_pipe(t_stack **stack)
 {
   	if (!stack || !*stack)
-		return NULL;
-	return (get_first_pipe(&(*stack)->next)); 
+		return (NULL);
+	return (get_first_type(&(*stack)->next, NODE_PIPE)); 
+}
+
+t_stack **get_first_subshell(t_stack **stack)
+{
+	if (!stack || !*stack)
+		return (NULL);
+	return (get_first_type(&(*stack)->next, NODE_SUBSHELL));
+}
+
+int	count_type(t_stack **stack, t_node_type type)
+{
+	t_stack	**head;
+	int		i;
+
+	head = stack;
+	i = 0;
+	while (head && (*head))
+	{
+		if ((*head)->type == type)
+			i++;
+		head = &((*head)->next);
+	}
+	return (i);
+}
+
+int	count_pipes(t_stack **stack)
+{
+	if (!stack || !*stack)
+		return (0);
+	return (count_type(&(*stack)->next, NODE_PIPE));
 }
 
 int	stack_size(t_stack *stack)
@@ -186,6 +202,8 @@ static char	*type_to_string(t_node_type type)
 		return "NODE_BUILTIN";
 	if (type == NODE_PIPE)
 		return "NODE_PIPE";
+	if (type == NODE_SUBSHELL)
+		return "NODE_SUBSHELL";
 	else
 		return "ERROR_TYPE";
 }
