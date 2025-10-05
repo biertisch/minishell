@@ -53,7 +53,7 @@ OBJ         = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 HDRS        = $(INC_DIR)/minishell.h $(INC_DIR)/printf.h $(INC_DIR)/libft.h $(INC_DIR)/parser.h $(INC_DIR)/executor.h
 
 
-.PHONY: all clean fclean re headers
+.PHONY: all clean fclean re headers test valgrind
 
 all: $(PRINTF_LIB) headers $(NAME)
 	@echo "	\n\
@@ -80,7 +80,7 @@ $(NAME): $(OBJ) $(PRINTF_LIB)
 	@$(CC) $(CFLAGS) $(OBJ) -L$(PRINTF_DIR) -lftprintf -lreadline -o $(NAME)
 
 $(PRINTF_DIR):
-	@git clone --depth 1 $(PRINTF_URL) $(PRINTF_DIR)
+	@git clone --quiet --depth 1 $(PRINTF_URL) $(PRINTF_DIR)
 
 $(PRINTF_LIB): | $(PRINTF_DIR)
 	@$(MAKE) --no-print-directory -C $(PRINTF_DIR)
@@ -105,5 +105,16 @@ fclean: clean
 	@$(RM) -r $(LIBFT_DIR)
 	@$(RM) -r $(PRINTF_DIR)
 	@$(RM) outfile*
+	@$(RM) -rf test/bash
+	@$(RM) -rf test/diffs
+	@$(RM) -rf test/minishell
+	@$(RM) -rf test/leaks
+	@$(RM) test/tests
+
+valgrind: $(NAME)
+	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --show-leak-kinds=all --trace-children=yes ./${NAME}
+test: re
+	@chmod 755 test/run_tests.sh
+	@./test/run_tests.sh
 
 re: fclean all

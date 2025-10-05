@@ -14,22 +14,17 @@
 
 int	execute_pwd(t_data *data, t_stack **stack)
 {
-	int	write_res;
-	
-	write_res = write((*stack)->out_fd, get_pwd(data), ft_strlen(get_pwd(data)));
-	write_res = write((*stack)->out_fd, "\n", 1);
-	(void)stack;
-	exit(0);
-	return (1);
-}
+	int		write_res;
+	char	*pwd;
 
-char	*get_pwd(t_data *data)
-{
-	while ((data->env_list))
+	pwd = get_env_value(data->env_list, "PWD");
+	if (pwd)
 	{
-		if (!ft_strcmp(data->env_list->key, "PWD"))
-			return (data->env_list->value);
-		data->env_list = data->env_list->next;
+		write_res = write((*stack)->out_fd, pwd, ft_strlen(pwd));
+		write_res = write((*stack)->out_fd, "\n", 1);
+		free_stack(stack);
+		free_all(data);
+		exit(0);
 	}
-	return (NULL);
+	return (1);
 }

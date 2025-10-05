@@ -12,52 +12,79 @@
 
 #include "../include/minishell.h"
 
-char	*correct_path(t_data *data, char *cmd)
+char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 {
 	char	*full_path;
 	int		i;
 	char	**paths;
+	char	*slash_path;
 	int		access_res;
 
 	if (!cmd)
 		return (NULL);
-	paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
 	i = 0;
 	full_path = ft_strchr(cmd, '/');
 	if (full_path)
-		return (run_curr_dir(cmd));
-	cmd = ft_strjoin("/", cmd);
+		return (run_curr_dir(data, stack, cmd));
+	paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
+	slash_path = ft_strjoin("/", cmd);
 	while (paths[i])
 	{
-		full_path = ft_strjoin(paths[i++], cmd);
+		full_path = ft_strjoin(paths[i++], slash_path);
 		if (full_path)
 		{
 			access_res = access(full_path, F_OK | X_OK);
 			if (!access_res)
-				return (free(cmd), (full_path));
-			else
+				return (free(slash_path), (full_path));
+			else if (errno == ENOENT)
 				free(full_path);
+			else
+			{
+				ft_splitfree(paths);
+				free(slash_path);
+				executor_child_errno(data, stack, cmd);
+			}
 		}
 	}
-	ft_printf("%s: command not found\n", cmd + 1);
+	write(STDERR_FILENO, cmd, ft_strlen(cmd));
+	write(STDERR_FILENO, ": command not found\n", 20);
+	ft_splitfree(paths);
+	free(slash_path);
+	free_all(data);
+	free_stack(stack);
+	exit(127);
 	return (NULL);
 }
 
-char	*run_curr_dir(char *cmd)
+char	*run_curr_dir(t_data *data, t_stack **stack, char *cmd)
 {
+	int	access_res;
 
-	access(cmd, F_OK | X_OK);
+	access_res = access(cmd, F_OK | X_OK);
+	if (access_res == -1)
+		executor_child_errno(data, stack, cmd);
+	return (cmd);
+}
+
+void	executor_child_errno(t_data *data, t_stack **stack, char *cmd)
+{	
+	write(STDERR_FILENO, cmd, ft_strlen(cmd));
+	free_all(data);
+	free_stack(stack);
 	if (errno == EACCES)
-	{
-		ft_printf("%s: Permission denied\n", cmd);
-		return (NULL);
-	}
+		write(STDERR_FILENO, ": Permission denied\n", 20);
 	else if (errno == ENOENT)
 	{
-		ft_printf("%s: No such file or directory\n", cmd);
-		return (NULL);
+		write(STDERR_FILENO, ": No such file or directory\n", 28);
+		exit(127);
 	}
-	return (cmd);
+	else if (errno == ENOTDIR)
+		write(STDERR_FILENO, ": Not a directory\n", 18);
+	else if (errno == ELOOP)
+		write(STDERR_FILENO, ": Too many levels of symbolic links\n", 36);
+	else if (errno == ENAMETOOLONG)
+		write(STDERR_FILENO, ": File name too long\n", 21);
+	exit(126);
 }
 
 void	check_for_variables(t_data *data, t_stack **stack)

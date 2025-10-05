@@ -65,9 +65,10 @@ void		child_redir_out(t_data *data, t_stack **stack);
 void		child_heredoc(t_data *data, t_stack **stack);
 
 //executor_utils.c
-char		*correct_path(t_data * data, char *cmd);
-char		*run_curr_dir(char *cmd);
+char		*correct_path(t_data * data, t_stack **stack,char *cmd);
+char		*run_curr_dir(t_data *data, t_stack **stack, char *cmd);
 void		check_for_variables(t_data *data, t_stack **stack);
+void		executor_child_errno(t_data *data, t_stack **stack, char *cmd);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
@@ -106,7 +107,7 @@ int			choose_and_execute_builtin(t_data *data, t_stack **stack);
 int			execute_echo(t_data *data, t_stack **stack);
 int			execute_echo_option(t_data *data, t_stack **stack);
 int			execute_echo_no_option(t_data *data, t_stack **stack);
-int			write_fail(void);
+int			validate_write(t_data *data, t_stack **stack, int write_res);
 
 //executor_subshell
 int			execute_subshell(t_data *data, t_stack **stack);
@@ -132,7 +133,6 @@ int			cd_fail(char *dir);
 
 //executor_pwd.c
 int			execute_pwd(t_data *data, t_stack **stack);
-char		*get_pwd(t_data *data);
 
 //executor_exit.c
 int			execute_exit(t_data *data, t_stack **stack);
