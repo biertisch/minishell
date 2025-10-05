@@ -16,7 +16,7 @@ void	setup_signals(t_data *data)
 {
 	struct sigaction	sa;
 
-	if (isatty(STDIN_FILENO)) //check argc as well?
+	if (isatty(STDIN_FILENO))
 	{
 		sa.sa_handler = signal_handler;
 		sigemptyset(&sa.sa_mask);
@@ -51,6 +51,7 @@ void	setup_signals_child(t_data *data)
 
 	sa.sa_handler = SIG_DFL;
 	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
 	if (sigaction(SIGINT, &sa, NULL))
 	{
 		system_error(data, "sigaction");
