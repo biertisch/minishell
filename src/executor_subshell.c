@@ -36,6 +36,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	}
 	else if (pid == 0)
 	{
+		(*stack)->child_count = -42;
 		setup_signals_child(*data);
 		push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);
 	}
@@ -56,6 +57,8 @@ int	execute_subshell_done(t_data **data, t_stack **stack)
 		setup_next_to_top(data, stack);
 	else
 		(*data)->exit_status = (*stack)->exit_status;
+	if ((*stack)->child_count == -42)
+		exit((*stack)->exit_status);
 	left_tree_size = count_tree_nodes((*stack)->node->left);
 	pop(stack);
 	return (1 + left_tree_size);
