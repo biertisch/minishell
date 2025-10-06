@@ -128,6 +128,24 @@ t_stack	**get_first_subshell(t_stack **stack)
 	return (NULL);
 }
 
+t_stack **get_next_pipe_in_subshell(t_stack **stack)
+{	
+	t_stack	**head;
+
+  	if (!stack || !*stack)
+		return NULL;
+	head = &((*stack)->next);
+	while (head && (*head))
+	{
+		if ((*head)->type == NODE_SUBSHELL)
+			return (NULL);
+		if ((*head)->type == NODE_PIPE)
+			return (head);
+		head = &((*head)->next);
+	}
+	return (NULL);
+}
+
 t_stack	**get_first_pipe(t_stack **stack)
 {
 	t_stack	**head;

@@ -47,10 +47,10 @@ int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 	int	right_out;
 
 	right_in = (*stack)->pipe[0];
-	if (get_next_pipe(stack))
+	if (get_next_pipe_in_subshell(stack))
 		right_out = (*get_next_pipe(stack))->pipe[1];
 	else
-		right_out = STDOUT_FILENO;
+		right_out = (*stack)->out_fd;
 	(*stack)->phase = LAUNCH_RIGHT;
 	push_stack(stack, (*stack)->node->right, right_in, right_out, data);
 	return (0);

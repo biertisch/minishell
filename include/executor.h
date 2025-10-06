@@ -56,6 +56,7 @@ t_stack		**get_first_log_operator(t_stack **stack);
 int		setup_next_to_top(t_data **data, t_stack **stack);
 t_stack		**get_first_subshell(t_stack **stack);
 int			has_node_type_ancestor(t_stack *stack, t_node_type type);
+t_stack 	**get_next_pipe_in_subshell(t_stack **stack);
 
 //child.c
 void		child(t_data *data, t_stack **stack);
