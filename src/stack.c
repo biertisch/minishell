@@ -41,7 +41,6 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	new_head->node = node;
 	new_head->in_fd = in_fd;
 	new_head->out_fd = out_fd;
-//	if (new_head->type == NODE_PIPE && !has_pipe_ancestor(stack)) //is this check required?
 	new_head->child_count = 0;
 	new_head->next = *stack;
 	*stack = new_head;
@@ -50,7 +49,11 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 int	setup_next_to_top(t_data **data, t_stack **stack)
 {
 	if ((*stack)->next->type == NODE_SUBSHELL)
-			exit((*stack)->exit_status);
+	{
+		free_stack(stack);
+		free_all(*data);
+		exit((*stack)->exit_status);
+	}
 	if ((*stack)->next->type == NODE_AND)
 	{
 		if ((*stack)->next->phase == LAUNCH_LEFT)

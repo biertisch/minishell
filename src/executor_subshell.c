@@ -42,6 +42,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	}
 	else
 	{
+		printf("subshell PID %d\n", pid);
 		res = waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			(*stack)->exit_status = WEXITSTATUS(status);
@@ -52,13 +53,19 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 int	execute_subshell_done(t_data **data, t_stack **stack)
 {
 	int	left_tree_size;
+	int	exit_status;
 
 	if ((*stack)->next)
 		setup_next_to_top(data, stack);
 	else
 		(*data)->exit_status = (*stack)->exit_status;
 	if ((*stack)->child_count == -42)
-		exit((*stack)->exit_status);
+	{
+		exit_status = (*stack)->exit_status;
+		free_stack(stack);
+		free_all(*data);
+		exit(exit_status);
+	}
 	left_tree_size = count_tree_nodes((*stack)->node->left);
 	pop(stack);
 	return (1 + left_tree_size);

@@ -89,6 +89,8 @@ int	execute_pipe_done(t_data **data, t_stack **stack)
 {
 	close((*stack)->pipe[0]);
 	close((*stack)->pipe[1]);
+	if (get_first_subshell(stack))
+		close_all_pipe_ends(get_first_subshell(stack));
 	if (!get_next_pipe(stack))
 	{
 		(*data)->exit_status = (*stack)->exit_status;
