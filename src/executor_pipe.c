@@ -68,19 +68,17 @@ int	execute_pipe_launch_right(t_data *data, t_stack **stack)
 int	execute_pipe_wait(t_stack **stack)
 {
 	int		status;
-	pid_t	res;
 
 	status = 0;
 	if (!get_next_pipe(stack))
 	{
 		if ((*stack)->child_count == 1)
-			res = waitpid((*stack)->child_pid[0], &status, 0);
+			waitpid((*stack)->child_pid[0], &status, 0);
 		else
-			res = waitpid((*stack)->child_pid[1], &status, 0);
+			waitpid((*stack)->child_pid[1], &status, 0);
 		if (WIFEXITED(status))
 			(*stack)->exit_status = WEXITSTATUS(status);
 	}
-	//for now it stays like this but i still need to check signals
 	(*stack)->phase = DONE;
 	return (0);
 }

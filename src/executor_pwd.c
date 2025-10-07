@@ -14,14 +14,13 @@
 
 int	execute_pwd(t_data *data, t_stack **stack)
 {
-	int		write_res;
 	char	*pwd;
 
 	pwd = get_env_value(data->env_list, "PWD");
 	if (pwd)
 	{
-		write_res = write((*stack)->out_fd, pwd, ft_strlen(pwd));
-		write_res = write((*stack)->out_fd, "\n", 1);
+		write((*stack)->out_fd, pwd, ft_strlen(pwd));
+		write((*stack)->out_fd, "\n", 1);
 		free_stack(stack);
 		free_all(data);
 		exit(0);
