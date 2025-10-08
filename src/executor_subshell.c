@@ -23,7 +23,6 @@ int	execute_subshell(t_data *data, t_stack **stack)
 
 int	execute_subshell_entered(t_data **data, t_stack **stack)
 {
-	(*stack)->phase = DONE;
 	push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);
 	return (0);
 }
