@@ -23,51 +23,15 @@ int	execute_subshell(t_data *data, t_stack **stack)
 
 int	execute_subshell_entered(t_data **data, t_stack **stack)
 {
-	pid_t	pid;
-	pid_t	res;
-	int		status;
-
 	(*stack)->phase = DONE;
-	pid = fork();
-	if (pid < 0)
-	{
-		(*stack)->exit_status = 1;
-		print_fork_err_mess();
-	}
-	else if (pid == 0)
-	{
-		(*stack)->child_count = -42;
-		setup_signals_child(*data);
-		push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);
-	}
-	else
-	{
-		printf("subshell PID %d\n", pid);
-		res = waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			(*stack)->exit_status = WEXITSTATUS(status);
-	}
+	push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);
 	return (0);
 }
 
 int	execute_subshell_done(t_data **data, t_stack **stack)
 {
-	int	left_tree_size;
-	int	exit_status;
-
 	if ((*stack)->next)
 		setup_next_to_top(data, stack);
-	else
-		(*data)->exit_status = (*stack)->exit_status;
-	if ((*stack)->child_count == -42)
-	{
-		exit_status = (*stack)->exit_status;
-		free_stack(stack);
-		free_all(*data);
-		exit(exit_status);
-	}
-	left_tree_size = count_tree_nodes((*stack)->node->left);
 	pop(stack);
-	return (1 + left_tree_size);
-
+	return (1);
 }

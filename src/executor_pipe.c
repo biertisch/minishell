@@ -47,7 +47,7 @@ int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 	int	right_out;
 
 	right_in = (*stack)->pipe[0];
-	if (get_next_pipe_in_subshell(stack))
+	if (get_next_pipe(stack))
 		right_out = (*get_next_pipe(stack))->pipe[1];
 	else
 		right_out = (*stack)->out_fd;
@@ -87,15 +87,15 @@ int	execute_pipe_wait(t_stack **stack)
 
 int	execute_pipe_done(t_data **data, t_stack **stack)
 {
-	close((*stack)->pipe[0]);
-	close((*stack)->pipe[1]);
-	if (get_first_subshell(stack))
-		close_all_pipe_ends(get_first_subshell(stack));
 	if (!get_next_pipe(stack))
 	{
 		(*data)->exit_status = (*stack)->exit_status;
-		while (errno != ECHILD)
+		while (1)
+		{
 			wait(NULL);
+			if (errno == ECHILD)
+				break;
+		}
 		if ((*stack)->next)
 			setup_next_to_top(data, stack);
 	}

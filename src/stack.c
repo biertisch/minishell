@@ -48,12 +48,6 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 
 int	setup_next_to_top(t_data **data, t_stack **stack)
 {
-	if ((*stack)->next->type == NODE_SUBSHELL)
-	{
-		free_stack(stack);
-		free_all(*data);
-		exit((*stack)->exit_status);
-	}
 	if ((*stack)->next->type == NODE_AND)
 	{
 		if ((*stack)->next->phase == LAUNCH_LEFT)
@@ -68,6 +62,8 @@ int	setup_next_to_top(t_data **data, t_stack **stack)
 		if ((*stack)->next->phase == LAUNCH_RIGHT)
 			(*stack)->next->exit_status = (*data)->exit_status || (*stack)->exit_status;	
 	}
+	else if ((*stack)->next->type == NODE_SUBSHELL)
+		(*stack)->next->exit_status = (*stack)->exit_status;
 	return (0);
 }
 
