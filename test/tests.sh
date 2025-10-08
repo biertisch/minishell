@@ -114,6 +114,7 @@ ls |
 | | |
 idontexist | wc -l
 ls | idontexist
+a | b | c | d | e | f | g
 
 # LOGICAL OPERATORS & PARENTHESES
 ls && cat Makefile
