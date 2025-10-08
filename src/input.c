@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/08 15:49:19 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/08 16:04:34 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,19 @@ void	handle_eof(t_data *data)
 		write(1, "exit\n", 5);
 	free_all(data);
 	exit(data->exit_status);
+}
+
+static int	handle_sigint(t_data *data, char *line, int cont)
+{
+	g_sig_received = 0;
+	data->exit_status = 130;
+	if (cont)
+	{
+		free_command_data(data);
+		free(line);
+		return (INCOMPLETE);
+	}
+	return (VALID);
 }
 
 static char	*update_input(t_data *data, char *line, char target)
@@ -71,12 +84,7 @@ int	prompt_continuation(t_data *data, char target)
 	{
 		line = readline(CONTINUE_PROMPT);
 		if (g_sig_received == SIGINT)
-		{
-			g_sig_received = 0;
-			free_command_data(data);
-			free(line);
-			return (INCOMPLETE);
-		}
+			return (handle_sigint(data, line, 1));
 		if (!line)
 			return (syntax_error(data, ERR_7, NULL));
 		if (is_quote(target) || *line)
@@ -103,7 +111,7 @@ void	prompt_input(t_data *data)
 		if (!data->input)
 			handle_eof(data);
 		if (g_sig_received == SIGINT)
-			g_sig_received = 0;
+			handle_sigint(data, NULL, 0);
 		if (*data->input)
 		{
 			status = process_input(data);
