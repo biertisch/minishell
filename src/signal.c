@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/22 10:22:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/08 16:24:21 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ void	setup_signals(t_data *data)
 void	signal_handler(int sig)
 {
 	g_sig_received = sig;
+	if (g_sig_received == SIGINT)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+	}
 }
 
 void	setup_signals_child(t_data *data)
@@ -74,9 +80,6 @@ int	rl_sigint_continuation(void)
 {
 	if (g_sig_received == SIGINT)
 	{
-		write(STDOUT_FILENO, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
 		rl_done = 1;
 		return (1);
 	}
@@ -87,11 +90,6 @@ int	rl_sigint_continuation(void)
 int	rl_sigint_main(void)
 {
 	if (g_sig_received == SIGINT)
-	{
-		write(STDOUT_FILENO, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
 		rl_redisplay();
-	}
 	return (0);
 }
