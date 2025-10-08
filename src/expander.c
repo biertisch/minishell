@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/30 18:54:47 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/08 14:46:51 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	expand_redir(t_data *data, t_tree *node)
 	while (trav)
 	{
 		if (trav->file[0] != '\'')
-			expand_dollar(data, &trav->file);
+			expand_dollar(data, &trav->file, 0);
 		if (!is_quote(trav->file[0]) && has_wildcard(trav->file))
 		{
 			if (expand_wildcard(data, trav->file, &entries))
@@ -49,7 +49,7 @@ static int	expand_argv(t_data *data, t_tree *node)
 	while (node->argv[i])
 	{
 		if (node->argv[i][0] != '\'')
-			expand_dollar(data, &node->argv[i]);
+			node->argv = expand_dollar(data, node->argv, i);
 		if (!is_quote(node->argv[i][0]))
 			expand_tilde(data, &node->argv[i]);
 		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i]))

@@ -60,6 +60,8 @@ ls .*
 /bin/echo *ile *in*
 cat < *ile
 /bin/echo *on*
+VAR="ls src" && $VAR
+VAR="ls src" && "$VAR"
 
 # invalid/incomplete
 /bin/echo hello > *in*

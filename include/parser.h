@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/30 18:54:50 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/08 14:45:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int			expand(t_data *data);
 void		expand_tilde(t_data *data, char **arg);
 
 //expander_dollar.c
-void		expand_dollar(t_data *data, char **arg);
+char		**expand_dollar(t_data *data, char **arg, int index);
 
 //expander_quotes.c
 void		remove_quotes(t_data *data, char **arg);

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/30 19:47:55 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/08 15:49:19 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	prompt_input(t_data *data)
 void	read_input(t_data *data)
 {
 	int	status;
-	
+
 	while (1)
 	{
 		data->input = get_next_line(STDIN_FILENO);

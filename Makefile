@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/01 19:00:22 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/10/08 12:53:29 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ PRINTF_LIB  = $(PRINTF_DIR)/libftprintf.a
 LIBFT_DIR = libft
 
 CC          = cc -g -O0
-CFLAGS      = -Wall -Wextra -Werror -I$(INC_DIR)
+CFLAGS      = -Wall -Wextra -I$(INC_DIR) # add -Werror
 RM          = rm -rf
 
 RED=\033[0;31m
