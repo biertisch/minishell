@@ -107,9 +107,9 @@ int	execute_pipe_done(t_data **data, t_stack **stack)
 			if (errno == ECHILD)
 				break;
 		}
-		if ((*stack)->next)
-			setup_next_to_top(data, stack);
 	}
+	if ((*stack)->next)
+		setup_next_to_top(data, stack);
 	pop(stack);
 	return (1);
 }
