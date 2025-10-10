@@ -77,10 +77,7 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 		else if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
 			parent_heredoc(stack, pid);
 		else
-		{
-			printf("cmd PID %d\n", pid);
 			parent(stack, pid);
-		}
 	}
 	return (0);
 }
