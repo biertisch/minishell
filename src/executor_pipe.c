@@ -83,7 +83,7 @@ int	execute_pipe_wait(t_stack **stack)
 	int		status;
 
 	status = 0;
-	if (!get_next_pipe(stack))
+	if (!get_next_pipe_in_subshell(stack))
 	{
 		if ((*stack)->child_count == 1)
 			waitpid((*stack)->child_pid[0], &status, 0);
@@ -110,6 +110,8 @@ int	execute_pipe_done(t_data **data, t_stack **stack)
 	}
 	if ((*stack)->next)
 		setup_next_to_top(data, stack);
+	else
+		(*data)->exit_status = (*stack)->exit_status;
 	pop(stack);
 	return (1);
 }

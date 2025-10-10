@@ -74,6 +74,7 @@ void	child_no_redir(t_data *data, t_stack **stack)
 	close_all_pipe_ends(stack);
 	if ((*stack)->type == NODE_CMD)
 	{
+
 		execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
 		exit(1);
 	}

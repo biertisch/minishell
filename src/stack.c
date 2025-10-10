@@ -62,7 +62,7 @@ int	setup_next_to_top(t_data **data, t_stack **stack)
 		if ((*stack)->next->phase == LAUNCH_RIGHT)
 			(*stack)->next->exit_status = (*data)->exit_status || (*stack)->exit_status;	
 	}
-	else if ((*stack)->next->type == NODE_SUBSHELL || (*stack)->type == NODE_SUBSHELL)
+	else
 		(*stack)->next->exit_status = (*stack)->exit_status;
 	return (0);
 }
