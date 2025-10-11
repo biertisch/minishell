@@ -73,7 +73,7 @@ Shortcuts:
 ---
 ### About 42
 
-Founded in 2013, 42 is a global network of schools providing high-quality, scalable software engineering education accessible to anyone motivated to learn. Its project-based, peer-to-peer curriculum emphasizes hands-on programming, algorithmic thinking, and systems-level problem solving.
+Founded in 2013, 42 is a global network of schools providing high-quality, scalable software engineering education. Its project-based, peer-to-peer curriculum emphasizes hands-on programming, algorithmic thinking, and systems-level problem solving.
 
 ---
 ### License & Contact
