@@ -37,11 +37,12 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	}
 	else
 	{
-		close_all_pipe_ends(stack);
 		if ((*stack)->next && (*stack)->next->type == NODE_PIPE)
 			(*stack)->next->child_pid[(*stack)->next->child_count++] = pid;
 		else
-		{
+		{	
+			if ((*stack)->next && (*stack)->next->type == NODE_PIPE)
+				close_all_pipe_ends(&((*stack)->next));
 			status = 0;
 			waitpid(pid, &status, 0);
 			if (WIFEXITED(status))
