@@ -61,7 +61,7 @@ int	execute_subshell_done(t_data **data, t_stack **stack)
 		close_all_pipe_ends(stack);
 		free_all(*data);
 		free_stack(stack);
-		exit(0);
+		exit((*stack)->exit_status);
 	}
 	tree_size = count_tree_nodes((*stack)->node);
 	if ((*stack)->next)

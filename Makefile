@@ -53,7 +53,7 @@ OBJ         = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 HDRS        = $(INC_DIR)/minishell.h $(INC_DIR)/printf.h $(INC_DIR)/libft.h $(INC_DIR)/parser.h $(INC_DIR)/executor.h
 
 
-.PHONY: all clean fclean re headers test valgrind
+.PHONY: all clean fclean re headers test valgrind run
 
 all: $(PRINTF_LIB) headers $(NAME)
 	@echo "	\n\
@@ -116,5 +116,8 @@ valgrind: $(NAME)
 test: re
 	@chmod 755 test/run_tests.sh
 	@./test/run_tests.sh
+
+run:	$(NAME)
+	@./minishell
 
 re: fclean all
