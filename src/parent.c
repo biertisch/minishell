@@ -28,9 +28,12 @@ int	parent_single_command(t_stack **stack, pid_t pid)
 	int		status;
 
 	close_all_pipe_ends(stack);
+	status = 0;
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		(*stack)->exit_status = WEXITSTATUS(status);
+	if ((*stack)->next && (*stack)->next->type == NODE_SUBSHELL)
+		(*stack)->next->exit_status = (*stack)->exit_status;
 	return (1);
 }
 
