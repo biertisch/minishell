@@ -16,6 +16,8 @@ int	parent(t_stack **stack, pid_t pid)
 {
 	if (get_first_pipe(stack))
 		(*get_first_pipe(stack))->child_pid[(*get_first_pipe(stack))->child_count++] = pid;
+	else if (get_first_subshell(stack))
+			close_all_pipe_ends(stack);
 	else
 		return (parent_single_command(stack, pid));
 	return (1);
