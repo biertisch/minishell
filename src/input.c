@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/08 16:04:34 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/15 15:07:48 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	handle_eof(t_data *data)
 	exit(data->exit_status);
 }
 
-static int	handle_sigint(t_data *data, char *line, int cont)
+static int	handle_signal_interruption(t_data *data, char *line, int cont)
 {
+	data->exit_status = 128 + g_sig_received;
 	g_sig_received = 0;
-	data->exit_status = 130;
 	if (cont)
 	{
 		free_command_data(data);
@@ -83,8 +83,8 @@ int	prompt_continuation(t_data *data, char target)
 	while (1)
 	{
 		line = readline(CONTINUE_PROMPT);
-		if (g_sig_received == SIGINT)
-			return (handle_sigint(data, line, 1));
+		if (g_sig_received)
+			return (handle_signal_interruption(data, line, 1));
 		if (!line)
 			return (syntax_error(data, ERR_7, NULL));
 		if (is_quote(target) || *line)
@@ -110,8 +110,8 @@ void	prompt_input(t_data *data)
 		data->input = readline(data->prompt);
 		if (!data->input)
 			handle_eof(data);
-		if (g_sig_received == SIGINT)
-			handle_sigint(data, NULL, 0);
+		if (g_sig_received)
+			handle_signal_interruption(data, NULL, 0);
 		if (*data->input)
 		{
 			status = process_input(data);
