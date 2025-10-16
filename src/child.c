@@ -21,6 +21,7 @@ void	child(t_data *data, t_stack **stack)
 //	check_for_variables(data, stack);
 	if ((*stack)->type == NODE_CMD && (*stack)->node->argv)
 	{
+		(*stack)->real_cmd = ft_strdup((*stack)->node->argv[0]);
 		full_path = correct_path(data, stack,(*stack)->node->argv[0]);
 		(*stack)->node->argv[0] = full_path;
 	}
@@ -137,7 +138,7 @@ void	clean_execve_failure(t_data *data, t_stack **stack)
 	sh_argv[2] = NULL;
 	exit_status = 126;
 	if (errno != ENOEXEC)
-		write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
+		write(STDERR_FILENO, (*stack)->real_cmd, ft_strlen((*stack)->real_cmd));
 	if (errno == ENOENT)
 	{
 		write(STDERR_FILENO, ": command not found\n", 20);
@@ -148,11 +149,12 @@ void	clean_execve_failure(t_data *data, t_stack **stack)
 	else if (errno == ENOEXEC)
 	{
 		execve("/bin/sh", sh_argv, data->env);
-		write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
+		write(STDERR_FILENO, (*stack)->real_cmd, ft_strlen((*stack)->real_cmd));
 		write(STDERR_FILENO, ": Exec format error\n", 20);
 	}
 	else
-		perror((*stack)->node->argv[0]);
+		perror((*stack)->real_cmd);
+	free((*stack)->real_cmd);
 	free_stack(stack);
 	free_all(data);
 	exit (exit_status);
