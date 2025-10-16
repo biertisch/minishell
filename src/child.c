@@ -49,7 +49,7 @@ void	child_redir_in(t_data *data, t_stack **stack)
 	if ((*stack)->type == NODE_CMD)
 	{
 		execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
-		exit(1);
+		clean_execve_failure(data, stack);
 	}
 	else
 	{
@@ -74,9 +74,8 @@ void	child_no_redir(t_data *data, t_stack **stack)
 	close_all_pipe_ends(stack);
 	if ((*stack)->type == NODE_CMD)
 	{
-
 		execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
-		exit(1);
+		clean_execve_failure(data, stack);
 	}
 	else
 	{
@@ -102,7 +101,7 @@ void	child_redir_out(t_data *data, t_stack **stack)
 	if ((*stack)->type == NODE_CMD)
 	{
 		execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
-		exit(1);
+		clean_execve_failure(data, stack);
 	}
 	else
 	{
@@ -125,5 +124,36 @@ void	child_heredoc(t_data *data, t_stack **stack)
 	close((*stack)->pipe[1]);
 	close_all_pipe_ends(stack);
 	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
-	exit(1);
+	clean_execve_failure(data, stack);
+}
+
+void	clean_execve_failure(t_data *data, t_stack **stack)
+{
+	int		exit_status;
+	char	*sh_argv[3];
+	
+	sh_argv[0] = "sh";
+	sh_argv[1] = (*stack)->node->argv[0];
+	sh_argv[2] = NULL;
+	exit_status = 126;
+	if (errno != ENOEXEC)
+		write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
+	if (errno == ENOENT)
+	{
+		write(STDERR_FILENO, ": command not found\n", 20);
+		exit_status = 127;
+	} 
+	else if (errno == EACCES || errno == EISDIR)
+		write(STDERR_FILENO, ": Permission denied\n", 20);
+	else if (errno == ENOEXEC)
+	{
+		execve("/bin/sh", sh_argv, data->env);
+		write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
+		write(STDERR_FILENO, ": Exec format error\n", 20);
+	}
+	else
+		perror((*stack)->node->argv[0]);
+	free_stack(stack);
+	free_all(data);
+	exit (exit_status);
 }
