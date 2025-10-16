@@ -55,6 +55,7 @@ int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 			right_out = (*get_next_pipe(stack))->pipe[1];
 		else if ((*stack)->out_fd == -1)
 		{
+			//should it be the first pipe after the node_subshell????
 			if (get_next_pipe(stack) && (get_next_pipe(get_next_pipe(stack))))
 				right_out = (*get_next_pipe(get_next_pipe(stack)))->pipe[1];
 			else
@@ -83,8 +84,10 @@ int	execute_pipe_wait(t_stack **stack)
 	int		status;
 
 	status = 0;
+	//why???
 	if (!get_next_pipe_in_subshell(stack))
 	{
+		close_all_pipe_ends(stack);
 		if ((*stack)->child_count == 1)
 			waitpid((*stack)->child_pid[0], &status, 0);
 		else
