@@ -111,6 +111,7 @@ int			execute_echo(t_data *data, t_stack **stack);
 int			execute_echo_option(t_data *data, t_stack **stack);
 int			execute_echo_no_option(t_data *data, t_stack **stack);
 int			validate_write(t_data *data, t_stack **stack, int write_res);
+int			is_echo_option(char *opt);
 
 //executor_subshell
 int			execute_subshell(t_data *data, t_stack **stack);

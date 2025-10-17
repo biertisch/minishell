@@ -61,7 +61,6 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 	pid_t	pid;
 
 	(*stack)->phase = DONE;
-	//check if it has a command if not just dummy this shit
 	if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC && !(*stack)->node->argv)
 		dummy_heredoc(stack);
 	else
