@@ -61,11 +61,11 @@ t_stack 	**get_next_pipe_in_subshell(t_stack **stack);
 
 //child.c
 void		child(t_data *data, t_stack **stack);
-void		child_redir_in(t_data *data, t_stack **stack);
-void		child_no_redir(t_data *data, t_stack **stack);
-void		child_redir_out(t_data *data, t_stack **stack);
-void		child_heredoc(t_data *data, t_stack **stack);
-void		clean_execve_failure(t_data *data, t_stack **stack);
+void		child_redir_in(t_data *data, t_stack **stack, char *cmd);
+void		child_no_redir(t_data *data, t_stack **stack, char *cmd);
+void		child_redir_out(t_data *data, t_stack **stack, char *cmd);
+void		child_heredoc(t_data *data, t_stack **stack, char *cmd);
+void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
 
 //executor_utils.c
 char		*correct_path(t_data * data, t_stack **stack,char *cmd);

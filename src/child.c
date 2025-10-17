@@ -15,6 +15,7 @@
 void	child(t_data *data, t_stack **stack)
 {
 	char	*full_path;
+	char	*cmd;
 
 	env_list_to_array(data);
 	setup_signals_child(data);
@@ -25,19 +26,22 @@ void	child(t_data *data, t_stack **stack)
 		full_path = correct_path(data, stack,(*stack)->node->argv[0]);
 		(*stack)->node->argv[0] = full_path;
 	}
+	cmd = ft_strdup((*stack)->node->argv[0]);
+	free((*stack)->node->argv[0]);
+	(*stack)->node->argv[0] = ft_strdup(ft_strrchr(cmd, '/') + 1);
 	if ((*stack)->node->redir && ((*stack)->node->redir)->type == REDIR_IN)
-		child_redir_in(data, stack);
+		child_redir_in(data, stack, cmd);
 	if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
-		child_heredoc(data, stack);
+		child_heredoc(data, stack, cmd);
 	else if ((*stack)->node->redir && (((*stack)
 			->node->redir)->type == REDIR_OUT || ((*stack)
 			->node->redir)->type == APPEND))
-		child_redir_out(data, stack);
+		child_redir_out(data, stack, cmd);
 	else
-		child_no_redir(data, stack);
+		child_no_redir(data, stack, cmd);
 }
 
-void	child_redir_in(t_data *data, t_stack **stack)
+void	child_redir_in(t_data *data, t_stack **stack, char *cmd)
 {
 	((*stack)->node->redir)->fd = open((*stack)->node->redir->file, O_RDONLY);
 	dup2(((*stack)->node->redir)->fd, STDIN_FILENO);
@@ -49,18 +53,19 @@ void	child_redir_in(t_data *data, t_stack **stack)
 	close_all_pipe_ends(stack);
 	if ((*stack)->type == NODE_CMD)
 	{
-		execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
-		clean_execve_failure(data, stack);
+		execve(cmd, (*stack)->node->argv, data->env);
+		clean_execve_failure(data, stack, cmd);
 	}
 	else
 	{
+		free(cmd);
 		(*stack)->in_fd = STDIN_FILENO;
 		(*stack)->out_fd = STDOUT_FILENO;
 		choose_and_execute_builtin(data, stack);
 	}
 }
 
-void	child_no_redir(t_data *data, t_stack **stack)
+void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
 {
 	if ((*stack)->in_fd != STDIN_FILENO)
 	{
@@ -75,18 +80,19 @@ void	child_no_redir(t_data *data, t_stack **stack)
 	close_all_pipe_ends(stack);
 	if ((*stack)->type == NODE_CMD)
 	{
-		execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
-		clean_execve_failure(data, stack);
+		execve(cmd, (*stack)->node->argv, data->env);
+		clean_execve_failure(data, stack, cmd);
 	}
 	else
 	{
+		free(cmd);
 		(*stack)->in_fd = STDIN_FILENO;
 		(*stack)->out_fd = STDOUT_FILENO;
 		choose_and_execute_builtin(data, stack);
 	}
 }
 
-void	child_redir_out(t_data *data, t_stack **stack)
+void	child_redir_out(t_data *data, t_stack **stack, char *cmd)
 {
 	if ((*stack)->node->redir->type == REDIR_OUT)
 		((*stack)->node->redir)->fd = open(((*stack)->node
@@ -101,18 +107,19 @@ void	child_redir_out(t_data *data, t_stack **stack)
 	close_all_pipe_ends(stack);
 	if ((*stack)->type == NODE_CMD)
 	{
-		execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
-		clean_execve_failure(data, stack);
+		execve(cmd, (*stack)->node->argv, data->env);
+		clean_execve_failure(data, stack, cmd);
 	}
 	else
 	{
+		free(cmd);
 		(*stack)->in_fd = STDIN_FILENO;
 		(*stack)->out_fd = STDOUT_FILENO;
 		choose_and_execute_builtin(data, stack);
 	}
 }
 
-void	child_heredoc(t_data *data, t_stack **stack)
+void	child_heredoc(t_data *data, t_stack **stack, char *cmd)
 {
 	(void)data;
 	dup2((*stack)->pipe[0], STDIN_FILENO);
@@ -124,11 +131,11 @@ void	child_heredoc(t_data *data, t_stack **stack)
 	close((*stack)->pipe[0]);
 	close((*stack)->pipe[1]);
 	close_all_pipe_ends(stack);
-	execve((*stack)->node->argv[0], (*stack)->node->argv, data->env);
-	clean_execve_failure(data, stack);
+	execve(cmd, (*stack)->node->argv, data->env);
+	clean_execve_failure(data, stack, cmd);
 }
 
-void	clean_execve_failure(t_data *data, t_stack **stack)
+void	clean_execve_failure(t_data *data, t_stack **stack, char *cmd)
 {
 	int		exit_status;
 	char	*sh_argv[3];
@@ -155,6 +162,7 @@ void	clean_execve_failure(t_data *data, t_stack **stack)
 	else
 		perror((*stack)->real_cmd);
 	free((*stack)->real_cmd);
+	free(cmd);
 	free_stack(stack);
 	free_all(data);
 	exit (exit_status);

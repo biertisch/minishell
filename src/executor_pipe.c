@@ -101,9 +101,8 @@ int	execute_pipe_wait(t_stack **stack)
 
 int	execute_pipe_done(t_data **data, t_stack **stack)
 {
-	if (!get_next_pipe(stack))
+	if (!get_next_pipe_in_subshell(stack))
 	{
-		(*data)->exit_status = (*stack)->exit_status;
 		while (1)
 		{
 			wait(NULL);

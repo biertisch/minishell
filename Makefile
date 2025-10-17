@@ -110,6 +110,7 @@ fclean: clean
 	@$(RM) -rf test/diffs
 	@$(RM) -rf test/minishell
 	@$(RM) test/tests
+	@$(RM) err.tmp
 
 valgrind: $(NAME)
 	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --show-leak-kinds=all --trace-children=yes ./${NAME}

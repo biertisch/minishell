@@ -28,6 +28,7 @@ t_stack	*create_stack(t_data *data)
 	head->out_fd = STDOUT_FILENO;
 	head->real_cmd = NULL;
 	head->next = NULL;
+	head->exit_status = 0;
 	return (head);
 }
 
@@ -45,6 +46,7 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	new_head->child_count = 0;
 	new_head->next = *stack;
 	new_head->real_cmd = NULL;
+	new_head->exit_status = 0;
 	*stack = new_head;
 }
 
@@ -64,7 +66,7 @@ int	setup_next_to_top(t_data **data, t_stack **stack)
 		if ((*stack)->next->phase == LAUNCH_RIGHT)
 			(*stack)->next->exit_status = (*data)->exit_status || (*stack)->exit_status;	
 	}
-	else
+	else if (!((*stack)->type == NODE_SUBSHELL && ((*stack)->next->type == NODE_PIPE)))
 		(*stack)->next->exit_status = (*stack)->exit_status;
 	return (0);
 }
