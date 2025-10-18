@@ -26,7 +26,6 @@ t_stack	*create_stack(t_data *data)
 	head->child_pid[1] = -1;
 	head->in_fd = STDIN_FILENO;
 	head->out_fd = STDOUT_FILENO;
-	head->real_cmd = NULL;
 	head->next = NULL;
 	head->exit_status = 0;
 	return (head);
@@ -45,7 +44,6 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	new_head->out_fd = out_fd;
 	new_head->child_count = 0;
 	new_head->next = *stack;
-	new_head->real_cmd = NULL;
 	new_head->exit_status = 0;
 	*stack = new_head;
 }

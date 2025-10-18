@@ -27,7 +27,6 @@ typedef struct s_stack
 	int			exit_status;
 	pid_t		child_pid[2];
 	struct s_stack		*next;
-	char		*real_cmd;
 }	t_stack;
 
 // builtin.c

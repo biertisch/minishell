@@ -25,7 +25,6 @@ void	child(t_data *data, t_stack **stack)
 	cmd = NULL;
 	if ((*stack)->type == NODE_CMD && (*stack)->node->argv)
 	{
-		(*stack)->real_cmd = ft_strdup((*stack)->node->argv[0]);
 		full_path = correct_path(data, stack,(*stack)->node->argv[0]);
 		(*stack)->node->argv[0] = full_path;
 		cmd = ft_strdup((*stack)->node->argv[0]);
@@ -39,7 +38,7 @@ void	child(t_data *data, t_stack **stack)
 	{
 		if (redir->type == REDIR_IN)
 			child_redir_in(data, stack, cmd, redir);
-		if (redir->type == HEREDOC)
+		else if (redir->type == HEREDOC)
 			child_heredoc(data, stack, cmd, redir);
 		else if (redir->type == REDIR_OUT || redir->type == APPEND)
 			child_redir_out(data, stack, cmd, redir);
@@ -50,13 +49,29 @@ void	child(t_data *data, t_stack **stack)
 void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 {
 	redir->fd = open(redir->file, O_RDONLY);
-	dup2(redir->fd, STDIN_FILENO);
-	close(redir->fd);
+	if (redir->fd != -1)
+		dup2(redir->fd, STDIN_FILENO);
+	if (redir->fd != -1)
+		close(redir->fd);
+	else
+	{
+		if (errno == ENOENT)
+		{
+			write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
+			write(STDERR_FILENO, ": ", 2);
+			write(STDERR_FILENO, redir->file, ft_strlen(redir->file));
+			write(STDERR_FILENO, ": No such file or directory\n", 28);
+		}
+		free(cmd);
+		free_stack(stack);
+		free_all(data);
+		exit(1);
+	}
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		dup2((*stack)->out_fd, STDOUT_FILENO);
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		close((*stack)->out_fd);
-	if (!redir->next)
+	if (!redir->next && redir->fd != -1)
 	{
 		close_all_pipe_ends(stack);
 		if ((*stack)->type == NODE_CMD)
@@ -155,7 +170,7 @@ void	clean_execve_failure(t_data *data, t_stack **stack, char *cmd)
 	sh_argv[2] = NULL;
 	exit_status = 126;
 	if (errno != ENOEXEC)
-		write(STDERR_FILENO, (*stack)->real_cmd, ft_strlen((*stack)->real_cmd));
+		write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
 	if (errno == ENOENT)
 	{
 		write(STDERR_FILENO, ": command not found\n", 20);
@@ -166,12 +181,11 @@ void	clean_execve_failure(t_data *data, t_stack **stack, char *cmd)
 	else if (errno == ENOEXEC)
 	{
 		execve("/bin/sh", sh_argv, data->env);
-		write(STDERR_FILENO, (*stack)->real_cmd, ft_strlen((*stack)->real_cmd));
+		write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
 		write(STDERR_FILENO, ": Exec format error\n", 20);
 	}
 	else
-		perror((*stack)->real_cmd);
-	free((*stack)->real_cmd);
+		perror((*stack)->node->argv[0]);
 	free(cmd);
 	free_stack(stack);
 	free_all(data);
