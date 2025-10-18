@@ -139,6 +139,7 @@ int			execute_pwd(t_data *data, t_stack **stack);
 
 //executor_exit.c
 int			execute_exit(t_data *data, t_stack **stack);
+void		check_exit_input(t_stack **stack, int *exit_code);
 
 //executor_unset.c
 int			execute_unset(t_data *data, t_stack **stack);
