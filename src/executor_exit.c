@@ -24,7 +24,7 @@ int	execute_exit(t_data *data, t_stack **stack)
 		exit_code = data->exit_status;
 	if (!get_first_subshell(stack))
 		write(STDOUT_FILENO, "exit\n", 5);
-	check_exit_input(stack, &exit_code);
+	check_exit_input(data, stack, &exit_code);
 	(*stack)->exit_status = exit_code;
 	if (!(*stack)->node->argv[1] || !(*stack)->node->argv[2])
 	{
@@ -35,7 +35,7 @@ int	execute_exit(t_data *data, t_stack **stack)
 	return (1);
 }
 
-void	check_exit_input(t_stack **stack, int *exit_code)
+void	check_exit_input(t_data *data, t_stack **stack, int *exit_code)
 {
 	int	i;
 
@@ -49,8 +49,9 @@ void	check_exit_input(t_stack **stack, int *exit_code)
 				write(STDERR_FILENO, "minishell : exit: ", 18);
 				write(STDERR_FILENO, (*stack)->node->argv[1], ft_strlen((*stack)->node->argv[1]));
 				write(STDERR_FILENO, ": numeric argument required\n", 28);
-				*exit_code = 2;
-				return ;
+				free_stack(stack);
+				free_all(data);
+				exit(2);
 			}
 			i++;
 		}
