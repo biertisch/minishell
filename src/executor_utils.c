@@ -35,7 +35,10 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 		{
 			access_res = access(full_path, F_OK | X_OK);
 			if (!access_res)
+			{
+				ft_splitfree(paths);
 				return (free(slash_path), (full_path));
+			}
 			else if (errno == ENOENT)
 				free(full_path);
 			else

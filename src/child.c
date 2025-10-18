@@ -25,7 +25,8 @@ void	child(t_data *data, t_stack **stack)
 	cmd = NULL;
 	if ((*stack)->type == NODE_CMD && (*stack)->node->argv)
 	{
-		full_path = correct_path(data, stack,(*stack)->node->argv[0]);
+		full_path = correct_path(data, stack, (*stack)->node->argv[0]);
+		free((*stack)->node->argv[0]);
 		(*stack)->node->argv[0] = full_path;
 		cmd = ft_strdup((*stack)->node->argv[0]);
 		free((*stack)->node->argv[0]);
