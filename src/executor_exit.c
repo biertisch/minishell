@@ -42,6 +42,8 @@ void	check_exit_input(t_data *data, t_stack **stack, int *exit_code)
 	if ((*stack)->node->argv[1])
 	{
 		i = 0;
+		if (*(*stack)->node->argv[1] == '-' || *(*stack)->node->argv[1] == '+')
+			i++;
 		while (*((*stack)->node->argv[1] + i))
 		{
 			if (!ft_isdigit(*((*stack)->node->argv[1] + i)))
