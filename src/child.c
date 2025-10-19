@@ -17,24 +17,25 @@ void	child(t_data *data, t_stack **stack)
 	char	*full_path;
 	char	*cmd;
 	t_redir	*redir;
+	int	cmd_i;
 
 
 	env_list_to_array(data);
 	setup_signals_child(data);
-//	check_for_variables(data, stack);
+	cmd_i = check_if_variables_with_commands(data, stack);
 	cmd = NULL;
 	if ((*stack)->type == NODE_CMD && (*stack)->node->argv)
 	{
-		full_path = correct_path(data, stack, (*stack)->node->argv[0]);
-		free((*stack)->node->argv[0]);
-		(*stack)->node->argv[0] = full_path;
-		cmd = ft_strdup((*stack)->node->argv[0]);
-		free((*stack)->node->argv[0]);
-		(*stack)->node->argv[0] = ft_strdup(ft_strrchr(cmd, '/') + 1);
+		full_path = correct_path(data, stack, (*stack)->node->argv[cmd_i]);
+		free((*stack)->node->argv[cmd_i]);
+		(*stack)->node->argv[cmd_i] = full_path;
+		cmd = ft_strdup((*stack)->node->argv[cmd_i]);
+		free((*stack)->node->argv[cmd_i]);
+		(*stack)->node->argv[cmd_i] = ft_strdup(ft_strrchr(cmd, '/') + 1);
 	}
 	redir = (*stack)->node->redir;
 	if (!redir)
-		child_no_redir(data, stack, cmd);
+		child_no_redir(data, stack, cmd, cmd_i);
 	while (redir)
 	{
 		if (redir->type == REDIR_IN)
@@ -136,7 +137,7 @@ void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 	}
 }
 
-void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
+void	child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i)
 {
 	if ((*stack)->in_fd != STDIN_FILENO)
 		dup2((*stack)->in_fd, STDIN_FILENO);
@@ -149,7 +150,7 @@ void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
 	close_all_pipe_ends(stack);
 	if ((*stack)->type == NODE_CMD)
 	{
-		execve(cmd, (*stack)->node->argv, data->env);
+		execve(cmd, (*stack)->node->argv + cmd_i, data->env);
 		clean_execve_failure(data, stack, cmd);
 	}
 	else

@@ -59,24 +59,28 @@ int	execute_cmd(t_data *data, t_stack **stack)
 int	execute_cmd_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
-
+	
+	//variable expansion
 	(*stack)->phase = DONE;
-	if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC && !(*stack)->node->argv)
-		dummy_heredoc(stack);
-	else
+	if (!check_if_variable(data, stack))
 	{
-		if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
-			if (validate_pipe(pipe((*stack)->pipe), stack))
-				return (0);
-		pid = fork();
-		if (pid < 0)
-			return (validate_fork(data, stack));
-		else if (pid == 0)
-			child(data, stack);
-		else if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
-			parent_heredoc(stack, pid);
+		if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC && !(*stack)->node->argv)
+			dummy_heredoc(stack);
 		else
-			parent(stack, pid);
+		{
+			if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
+				if (validate_pipe(pipe((*stack)->pipe), stack))
+					return (0);
+			pid = fork();
+			if (pid < 0)
+				return (validate_fork(data, stack));
+			else if (pid == 0)
+				child(data, stack);
+			else if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
+				parent_heredoc(stack, pid);
+			else
+				parent(stack, pid);
+		}
 	}
 	return (0);
 }

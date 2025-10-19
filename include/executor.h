@@ -63,7 +63,7 @@ void		child(t_data *data, t_stack **stack);
 void		child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
-void		child_no_redir(t_data *data, t_stack **stack, char *cmd);
+void		child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i);
 void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
 
 //executor_utils.c
@@ -150,5 +150,11 @@ int			validate_fork(t_data *data, t_stack **stack);
 void		print_fork_err_mess(void);
 void		print_pipe_err_mess(void);
 int			validate_pipe(int pipe_res, t_stack **stack);
+
+//variable_utils.c
+int		check_if_variable(t_data *data, t_stack **stack);
+int		check_if_variables_with_commands(t_data *data, t_stack **stack);
+int		has_command(t_data *data, t_stack **stack);
+
 
 #endif
