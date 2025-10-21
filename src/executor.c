@@ -15,7 +15,7 @@
 int	execute(t_data *data)
 {
 	t_stack	*stack;
-
+	
 	stack = create_stack(data);
 	execute_stack(data, &stack);
 	return (1);
@@ -38,8 +38,6 @@ int	execute_stack(t_data *data, t_stack **stack)
 			i += execute_and(data, stack);
 		else if ((*stack)->type == NODE_OR)
 			i += execute_or(data, stack);
-		else if ((*stack)->type == NODE_BUILTIN)
-			i += execute_builtin(data, stack);
 		else if ((*stack)->type == NODE_SUBSHELL)
 			i += execute_subshell(data, stack);
 	}
@@ -49,9 +47,12 @@ int	execute_stack(t_data *data, t_stack **stack)
 
 int	execute_cmd(t_data *data, t_stack **stack)
 {
-	if ((*stack)->phase == ENTERED)
+	//expand here
+	if (is_builtin((*stack)->node->argv && (*stack)->node->argv[0]))
+		return (execute_builtin(data, stack));
+	else if ((*stack)->phase == ENTERED)
 		return (execute_cmd_entered(data, stack));
-	if ((*stack)->phase == DONE)
+	else if ((*stack)->phase == DONE)
 		return (execute_cmd_done(&data, stack));
 	return (0);
 }
@@ -60,7 +61,6 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
 	
-	//variable expansion
 	(*stack)->phase = DONE;
 	if (!check_if_variable(data, stack))
 	{

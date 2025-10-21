@@ -25,13 +25,15 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 {
 	pid_t	pid;
 	int		status;
-
+	
+	//delete contents of redir_out files
 	(*stack)->phase = DONE;
 	pid = fork();
 	if (pid < 0)
 		return (validate_fork(*data, stack));
 	else if (pid == 0)
 	{
+		//add_redir_out but change to append, if it redir_in mantain
 		(*stack)->child_count = -42;
 		push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);
 	}

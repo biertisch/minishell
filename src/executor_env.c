@@ -19,10 +19,11 @@ int	execute_env(t_data *data, t_stack **stack)
 	i = 0;
 	while ((data->env[i]))
 	{
-		write((*stack)->out_fd, data->env[i], ft_strlen(data->env[i]));
-		write((*stack)->out_fd, "\n", 1);
+		write(STDOUT_FILENO, data->env[i], ft_strlen(data->env[i]));
+		write(STDOUT_FILENO, "\n", 1);
 		i++;
 	}
+	(void)stack;
 	exit(0);
 	return (1);
 }
