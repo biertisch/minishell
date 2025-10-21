@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:30:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 16:45:57 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 18:15:23 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ char	**update_argv_wildcard(t_data *data, char **argv, int i, t_list *entries)
 	int		count;
 	int		j;
 
+	if (!argv || !*argv || !entries)
+		return (argv);
 	count = count_expanded_argv(argv, entries);
 	new_argv = malloc(sizeof(char *) * (count + 1));
 	validate_malloc_wildcard(data, new_argv, entries, NULL);

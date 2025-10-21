@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/15 15:14:18 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/10/21 22:09:45 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,9 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		executor_utils executor_pipe executor_and executor_or executor_builtin\
 		executor_echo executor_subshell get_next_line get_next_line_utils\
 		executor_env executor_cd executor_pwd executor_exit expand_tilde\
-		input_prompt executor_unset executor_error
+		input_prompt executor_unset executor_error expander_dollar2\
+		expander_dollar3
+
 
 SRC_DIR     = src
 OBJ_DIR     = obj

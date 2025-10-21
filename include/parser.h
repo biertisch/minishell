@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/21 16:48:34 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:38:52 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,22 @@ typedef struct s_tree
 }	t_tree;
 
 //expander.c
-int			expand(t_data *data);
+int			expand(t_data *data, t_tree *node);
 
 //expand_tilde.c
 void		expand_tilde(t_data *data, char **arg);
 
 //expander_dollar.c
 char		**expand_dollar(t_data *data, char **arg, int index);
+void		expand_exit_status(t_data *data, char **arg, int i);
+char		*get_env_key(char *arg);
+char		*update_arg(char *arg, int i, char *key, char *value);
+
+//expander_dollar2.c
+char		**update_argv_dollar(char **old_argv, int i, char *value);
+
+//expander_dollar3.c
+int			expand_dollar_redir(t_data *data, char **file);
 
 //expander_quotes.c
 void		remove_quotes(t_data *data, char **arg);

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 15:49:22 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 17:58:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,6 @@ static int	process_input(t_data *data)
 		return (res);
 	res = parser(data);
 	if (res || !data->parser_tree)
-		return (res);
-	res = expand(data);
-	if (res)
 		return (res);
 	execute(data);
 	return (VALID);
