@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/21 15:47:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:46:32 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef enum e_node_type
 	NODE_SUBSHELL
 }	t_node_type;
 
-
 typedef enum e_phase
 {
 	ENTERED,
@@ -60,7 +59,5 @@ typedef enum e_error
 	SYNTAX_ERR,
 	INTERNAL_ERR
 }	t_error;
-
-
 
 #endif

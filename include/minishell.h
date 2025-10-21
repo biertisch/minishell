@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 15:37:24 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:53:13 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,9 @@ void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 
 //input.c
 void		prompt_input(t_data *data);
-int			prompt_continuation(t_data *data, char target);
 void		read_input(t_data *data);
+int			handle_signal_interruption(t_data *data, char *line, int cont);
+void		handle_eof(t_data *data);
 
 //signal.c
 void		setup_signals(t_data *data);
@@ -138,5 +139,8 @@ int			rl_sigint_continuation(void);
 
 //input_prompt.c
 void		update_prompt(t_data *data);
+
+//input_continue.c
+int			prompt_continuation(t_data *data, char target);
 
 #endif

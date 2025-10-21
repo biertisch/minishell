@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 16:55:42 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 22:09:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:55:50 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	build_argv(char **new_argv, char **old_argv, char **add_argv, int i)
 	return (0);
 }
 
-static char **get_add_argv(char *value)
+static char	**get_add_argv(char *value)
 {
 	char	**add_argv;
 

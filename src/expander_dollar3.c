@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 22:11:49 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 22:38:40 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:56:20 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static int	expand_redir_variable(t_data *data, char **file, int i)
 	key = get_env_key(*file + i + 1);
 	validate_malloc(data, key, NULL);
 	value = get_env_value(data->env_list, key);
-	if ((!value && *file[0] != '"') || (value && ft_strchr(value, ' ') && *file[0] != '"'))
+	if ((!value && *file[0] != '"')
+		|| (value && ft_strchr(value, ' ') && *file[0] != '"'))
 	{
 		free(key);
 		return (internal_error(data, ERR_2, NULL, NULL));

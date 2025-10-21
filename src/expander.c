@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 22:39:04 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 23:11:55 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,12 @@ static int	expand_argv(t_data *data, t_tree *node)
 			continue ;
 		}
 		expand_tilde(data, &node->argv[i]);
-		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i]))
-		{
-			if (expand_wildcard(data, node->argv[i], &entries))
-				return (-1);
-			if (entries)
-				node->argv = update_argv_wildcard(data, node->argv, i, entries);
-		}
+		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i])
+			&& expand_wildcard(data, node->argv[i], &entries))
+			return (-1);
+		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i])
+			&& entries)
+			node->argv = update_argv_wildcard(data, node->argv, i, entries);
 		remove_quotes(data, &node->argv[i]);
 		i++;
 	}

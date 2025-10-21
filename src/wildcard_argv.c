@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:30:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 18:15:23 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 23:17:31 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ static int	count_expanded_argv(char **argv, t_list *head)
 	return (old_count - 1 + add_count);
 }
 
-char	**update_argv_wildcard(t_data *data, char **argv, int i, t_list *entries)
+char	**update_argv_wildcard(t_data *data, char **argv, int i,
+	t_list *entries)
 {
 	char	**new_argv;
 	int		count;
