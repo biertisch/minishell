@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:37:51 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/02 12:37:53 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/21 16:50:52 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ int	execute_stack(t_data *data, t_stack **stack)
 			i += execute_and(data, stack);
 		else if ((*stack)->type == NODE_OR)
 			i += execute_or(data, stack);
-		else if ((*stack)->type == NODE_BUILTIN)
-			i += execute_builtin(data, stack);
 		else if ((*stack)->type == NODE_SUBSHELL)
 			i += execute_subshell(data, stack);
 	}

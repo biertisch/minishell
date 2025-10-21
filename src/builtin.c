@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:17:33 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/15 12:10:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 16:49:45 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	validate_flags(t_data *data, char **argv, char *allowed)
 
 int	validate_builtin(t_data *data, t_tree *node)
 {
-	if (!node || node->type != NODE_BUILTIN)
+	if (!node || node->type != NODE_CMD)
 		return (0);
 	if (!ft_strcmp(node->argv[0], "pwd") || !ft_strcmp(node->argv[0], "export")
 		|| !ft_strcmp(node->argv[0], "unset"))
