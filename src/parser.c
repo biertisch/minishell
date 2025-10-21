@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 12:21:58 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 15:48:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ static int	parse_command(t_data *data, t_token **token, t_tree **root)
 	validate_malloc(data, node, NULL);
 	if (get_command_data(data, token, node))
 		return (free_parser_node(&node), INVALID);
-	if (node->argv && is_builtin(node->argv[0]))
-		node->type = NODE_BUILTIN;
 	*root = node;
 	return (VALID);
 }
