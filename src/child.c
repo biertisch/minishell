@@ -14,7 +14,6 @@
 
 void	child(t_data *data, t_stack **stack)
 {
-	char	*full_path;
 	char	*cmd;
 	t_redir	*redir;
 	int	cmd_i;
@@ -26,10 +25,7 @@ void	child(t_data *data, t_stack **stack)
 	cmd = NULL;
 	if ((*stack)->type == NODE_CMD && (*stack)->node->argv)
 	{
-		full_path = correct_path(data, stack, (*stack)->node->argv[cmd_i]);
-		free((*stack)->node->argv[cmd_i]);
-		(*stack)->node->argv[cmd_i] = full_path;
-		cmd = ft_strdup((*stack)->node->argv[cmd_i]);
+		cmd = ft_strdup(correct_path(data, stack, (*stack)->node->argv[cmd_i]));
 		free((*stack)->node->argv[cmd_i]);
 		(*stack)->node->argv[cmd_i] = ft_strdup(ft_strrchr(cmd, '/') + 1);
 	}
@@ -48,6 +44,20 @@ void	child(t_data *data, t_stack **stack)
 	}
 }
 
+void	handle_open_errors(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
+{
+	write(STDERR_FILENO, "minishell: ", 11);
+	write(STDERR_FILENO, redir->file, ft_strlen(redir->file));
+	if (errno == ENOENT)
+		write(STDERR_FILENO, ": No such file or directory\n", 28);
+	else if (errno == EACCES)
+		write(STDERR_FILENO, ": Permission denied\n", 20);
+	free(cmd);
+	free_stack(stack);
+	free_all(data);
+	exit(1);
+}
+
 void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 {
 	redir->fd = open(redir->file, O_RDONLY);
@@ -56,19 +66,7 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 	if (redir->fd != -1)
 		close(redir->fd);
 	else
-	{
-		if (errno == ENOENT)
-		{
-			write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
-			write(STDERR_FILENO, ": ", 2);
-			write(STDERR_FILENO, redir->file, ft_strlen(redir->file));
-			write(STDERR_FILENO, ": No such file or directory\n", 28);
-		}
-		free(cmd);
-		free_stack(stack);
-		free_all(data);
-		exit(1);
-	}
+		handle_open_errors(data, stack, cmd, redir);
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		dup2((*stack)->out_fd, STDOUT_FILENO);
 	if ((*stack)->out_fd != STDOUT_FILENO)
@@ -82,11 +80,7 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 			clean_execve_failure(data, stack, cmd);
 		}
 		else
-		{
-			(*stack)->in_fd = STDIN_FILENO;
-			(*stack)->out_fd = STDOUT_FILENO;
 			choose_and_execute_builtin(data, stack);
-		}
 	}
 }
 
@@ -96,8 +90,12 @@ void	child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 		redir->fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
 		redir->fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	dup2(redir->fd, STDOUT_FILENO);
-	close(redir->fd);
+	if (redir->fd != -1)
+		dup2(redir->fd, STDOUT_FILENO);
+	if (redir->fd != -1)
+		close(redir->fd);
+	else
+		handle_open_errors(data, stack, cmd, redir);
 	if ((*stack)->in_fd != STDIN_FILENO)
 		dup2((*stack)->in_fd, STDIN_FILENO);
 	if ((*stack)->in_fd != STDIN_FILENO)
@@ -112,11 +110,7 @@ void	child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 			clean_execve_failure(data, stack, cmd);
 		}
 		else
-		{
-			(*stack)->in_fd = STDIN_FILENO;
-			(*stack)->out_fd = STDOUT_FILENO;
 			choose_and_execute_builtin(data, stack);
-		}
 	}
 }
 
@@ -154,11 +148,7 @@ void	child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i)
 		clean_execve_failure(data, stack, cmd);
 	}
 	else
-	{
-		(*stack)->in_fd = STDIN_FILENO;
-		(*stack)->out_fd = STDOUT_FILENO;
 		choose_and_execute_builtin(data, stack);
-	}
 }
 
 

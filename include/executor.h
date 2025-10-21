@@ -65,6 +65,7 @@ void		child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i);
 void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
+void		handle_open_errors(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 
 //executor_utils.c
 char		*correct_path(t_data * data, t_stack **stack,char *cmd);
