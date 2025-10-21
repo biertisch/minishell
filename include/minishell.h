@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 22:53:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 23:25:27 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "../include/printf.h"
 # include "../include/executor.h"
 # include "../include/parser.h"
+# include "expander.h"
+# include "lexer.h"
 # include <dirent.h>
 # include <fcntl.h>
 # include <readline/readline.h>
