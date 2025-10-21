@@ -6,13 +6,13 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/08 13:51:22 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 16:48:02 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*update_redir(t_data *data, char *file, t_list *entry)
+char	*update_redir_wildcard(t_data *data, char *file, t_list *entry)
 {
 	char	*new_file;
 

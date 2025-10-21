@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/08 14:46:51 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 16:47:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static int	expand_redir(t_data *data, t_tree *node)
 	{
 		if (trav->file[0] != '\'')
 			expand_dollar(data, &trav->file, 0);
+		if (!is_quote(trav->file[0]))
+			expand_tilde(data, &trav->file);
 		if (!is_quote(trav->file[0]) && has_wildcard(trav->file))
 		{
 			if (expand_wildcard(data, trav->file, &entries))
@@ -32,7 +34,7 @@ static int	expand_redir(t_data *data, t_tree *node)
 				return (internal_error(data, ERR_2, NULL, trav->file));
 			}
 			if (entries)
-				trav->file = update_redir(data, trav->file, entries);
+				trav->file = update_redir_wildcard(data, trav->file, entries);
 		}
 		remove_quotes(data, &trav->file);
 		trav = trav->next;
@@ -57,7 +59,7 @@ static int	expand_argv(t_data *data, t_tree *node)
 			if (expand_wildcard(data, node->argv[i], &entries))
 				return (-1);
 			if (entries)
-				node->argv = update_argv(data, node->argv, i, entries);
+				node->argv = update_argv_wildcard(data, node->argv, i, entries);
 		}
 		remove_quotes(data, &node->argv[i]);
 		i++;
