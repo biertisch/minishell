@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/30 19:45:34 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 15:37:24 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@
 # define ERR_6 "unexpected EOF while looking for matching"
 # define ERR_7 "syntax error: unexpected end of file"
 # define ERR_8 "syntax error: missing quote"
-# define BUFFER_SIZE 20
 # define ERR_9 "arithmetic operations not supported"
+# define ERR_10 "semicolon not supported"
+# define BUFFER_SIZE 20
 
 typedef struct s_env
 {
