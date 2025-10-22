@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:49:50 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 11:52:38 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/08 16:31:29 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	free_parser_tree(t_data *data, t_tree **root)
 	if (clean_right_branch(data))
 		return ;
 	free_stack(&data->stack);
-	data->stack = NULL; //incorporate into free_stack
 	*root = NULL;
 }
 

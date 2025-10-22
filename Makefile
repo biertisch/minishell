@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
+#    By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/01 19:00:22 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/10/22 10:55:23 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,9 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		executor_utils executor_pipe executor_and executor_or executor_builtin\
 		executor_echo executor_subshell get_next_line get_next_line_utils\
 		executor_env executor_cd executor_pwd executor_exit expand_tilde\
-		input_prompt executor_unset executor_error
+		input_prompt executor_unset executor_error expander_dollar2\
+		expander_dollar3 input_continue variable_utils
+
 
 SRC_DIR     = src
 OBJ_DIR     = obj
@@ -53,7 +55,7 @@ OBJ         = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 HDRS        = $(INC_DIR)/minishell.h $(INC_DIR)/printf.h $(INC_DIR)/libft.h $(INC_DIR)/parser.h $(INC_DIR)/executor.h
 
 
-.PHONY: all clean fclean re headers test valgrind
+.PHONY: all clean fclean re headers test valgrind run
 
 all: $(PRINTF_LIB) headers $(NAME)
 	@echo "	\n\
@@ -70,10 +72,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@ctags -R .
 	@echo "tags\n.gitignore\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\
-		\noutfile*\n*.pdf\n*.png\ntest/bash\ntest/minishell\ntest/diffs\ntest/file1\ntest/file2\ntest/leaks" > .gitignore
+		\noutfile*\n*.pdf\n*.png\ntest/bash\ntest/minishell\ntest/diffs\ntest/file1\ntest/file2\ntest/leaks\nminishell_tester/" > .gitignore
 	@echo "* text=auto eol=lf" > .gitattributes
 
 $(OBJ_DIR):
+	@echo "$(CURSIVE)$(GREEN)Compiling minishell$(DEF_COLOUR)"
 	@mkdir -p $@
 
 $(NAME): $(OBJ) $(PRINTF_LIB)
@@ -110,11 +113,15 @@ fclean: clean
 	@$(RM) -rf test/minishell
 	@$(RM) -rf test/leaks
 	@$(RM) test/tests
+	@$(RM) err.tmp
 
 valgrind: $(NAME)
 	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --show-leak-kinds=all --trace-children=yes ./${NAME}
 test: re
 	@chmod 755 test/run_tests.sh
 	@./test/run_tests.sh
+
+run:	$(NAME)
+	@./minishell
 
 re: fclean all

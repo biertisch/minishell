@@ -35,7 +35,10 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 		{
 			access_res = access(full_path, F_OK | X_OK);
 			if (!access_res)
+			{
+				ft_splitfree(paths);
 				return (free(slash_path), (full_path));
+			}
 			else if (errno == ENOENT)
 				free(full_path);
 			else
@@ -46,7 +49,7 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 			}
 		}
 	}
-	write(STDERR_FILENO, cmd, ft_strlen(cmd));
+	write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
 	write(STDERR_FILENO, ": command not found\n", 20);
 	ft_splitfree(paths);
 	free(slash_path);
@@ -68,7 +71,8 @@ char	*run_curr_dir(t_data *data, t_stack **stack, char *cmd)
 
 void	executor_child_errno(t_data *data, t_stack **stack, char *cmd)
 {	
-	write(STDERR_FILENO, cmd, ft_strlen(cmd));
+	(void)cmd;
+	write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
 	free_all(data);
 	free_stack(stack);
 	if (errno == EACCES)

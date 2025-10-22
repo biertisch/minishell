@@ -14,11 +14,10 @@
 
 int	parent(t_stack **stack, pid_t pid)
 {
-	t_stack	**first_pipe;
-
-	first_pipe = get_first_pipe(stack);
-	if (first_pipe )
-		(*first_pipe)->child_pid[(*first_pipe)->child_count++] = pid;
+	if ((*stack)->next && (*stack)->next->type == NODE_SUBSHELL)
+		return (parent_single_command(stack, pid));
+	if (get_first_pipe(stack))
+		(*get_first_pipe(stack))->child_pid[(*get_first_pipe(stack))->child_count++] = pid;
 	else
 		return (parent_single_command(stack, pid));
 	return (1);
@@ -27,11 +26,14 @@ int	parent(t_stack **stack, pid_t pid)
 int	parent_single_command(t_stack **stack, pid_t pid)
 {
 	int		status;
-	pid_t	res;
 
-	res = waitpid(pid, &status, 0);
+	close_all_pipe_ends(stack);
+	status = 0;
+	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		(*stack)->exit_status = WEXITSTATUS(status);
+	if ((*stack)->next && (*stack)->next->type == NODE_SUBSHELL)
+		(*stack)->next->exit_status = (*stack)->exit_status;
 	return (1);
 }
 

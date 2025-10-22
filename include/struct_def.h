@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_def.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/19 11:16:37 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:46:32 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,11 @@ typedef enum e_token_type
 typedef enum e_node_type
 {
 	NODE_CMD,
-	NODE_BUILTIN,
 	NODE_PIPE,
 	NODE_AND,
 	NODE_OR,
 	NODE_SUBSHELL
 }	t_node_type;
-
 
 typedef enum e_phase
 {
@@ -61,7 +59,5 @@ typedef enum e_error
 	SYNTAX_ERR,
 	INTERNAL_ERR
 }	t_error;
-
-
 
 #endif

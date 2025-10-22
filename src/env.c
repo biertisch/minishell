@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:15 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 12:13:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 23:19:15 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	is_valid_var_name(char *s)
 		return (0);
 	while (*s)
 	{
-		if (!ft_isalnum(*s) && *s !=  '_')
+		if (!ft_isalnum(*s) && *s != '_')
 			return (0);
 		s++;
 	}
