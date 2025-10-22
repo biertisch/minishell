@@ -23,7 +23,7 @@ void	child(t_data *data, t_stack **stack)
 	setup_signals_child(data);
 	cmd_i = check_if_variables_with_commands(data, stack);
 	cmd = NULL;
-	if ((*stack)->type == NODE_CMD && (*stack)->node->argv)
+	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
 	{
 		cmd = ft_strdup(correct_path(data, stack, (*stack)->node->argv[cmd_i]));
 		free((*stack)->node->argv[cmd_i]);
@@ -74,7 +74,7 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 	if (!redir->next && redir->fd != -1)
 	{
 		close_all_pipe_ends(stack);
-		if ((*stack)->type == NODE_CMD)
+		if (!is_builtin((*stack)->node->argv[0]))
 		{
 			execve(cmd, (*stack)->node->argv, data->env);
 			clean_execve_failure(data, stack, cmd);
@@ -103,7 +103,7 @@ void	child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 	if (!redir->next)
 	{
 		close_all_pipe_ends(stack);
-		if ((*stack)->type == NODE_CMD)
+		if (!is_builtin((*stack)->node->argv[0]))
 		{
 			close_all_pipe_ends(stack);
 			execve(cmd, (*stack)->node->argv, data->env);
@@ -142,7 +142,7 @@ void	child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i)
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		close((*stack)->out_fd);
 	close_all_pipe_ends(stack);
-	if ((*stack)->type == NODE_CMD)
+	if (!is_builtin((*stack)->node->argv[0]))
 	{
 		execve(cmd, (*stack)->node->argv + cmd_i, data->env);
 		clean_execve_failure(data, stack, cmd);
