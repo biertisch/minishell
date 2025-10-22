@@ -47,7 +47,14 @@ int	execute_stack(t_data *data, t_stack **stack)
 
 int	execute_cmd(t_data *data, t_stack **stack)
 {
-	//expand here
+	if ((*stack)->phase == ENTERED)
+	{
+		if (expand(data, (*stack)->node))
+		{
+			pop(stack);
+			return (1); 
+		}
+	}
 	if ((*stack)->node->argv && is_builtin((*stack)->node->argv[0]))
 		return (execute_builtin(data, stack));
 	else if ((*stack)->phase == ENTERED)
