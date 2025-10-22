@@ -51,7 +51,10 @@ cat <
 /bin/echo $?
 /bin/echo "hello $USER$USER"
 /bin/echo "hello $NONE"
+/bin/echo hello $NONE
 /bin/echo $
+/bin/echo "$"
+$NONE /bin/echo hello
 ls *f
 ls *f*
 ls **f**
@@ -60,14 +63,18 @@ ls .*
 /bin/echo *ile *in*
 cat < *ile
 /bin/echo *on*
+VAR="ls src" && $VAR
+VAR="ls src" && "$VAR"
 
 # invalid/incomplete
 /bin/echo hello > *in*
+/bin/echo hello > $NONE
 
 # BUILTIN
 echo hello && echo -n bye
 echo -nnn hello
 echo -f hello
+echo -nn hello
 cd && pwd && cd - && pwd
 cd ~/Documents && pwd && cd - && pwd
 cd test && pwd && cd .. && pwd
@@ -78,6 +85,7 @@ exit
 exit 2
 exit -2
 exit p
+exit a 1
 
 # invalid/incomplete
 env hello
@@ -110,6 +118,7 @@ ls |
 | | |
 idontexist | wc -l
 ls | idontexist
+a | b | c | d | e | f | g
 
 # LOGICAL OPERATORS & PARENTHESES
 ls && cat Makefile

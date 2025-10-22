@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:15:44 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/02 15:15:45 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/21 16:50:31 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	setup_next_to_top(t_data **data, t_stack **stack)
 		if ((*stack)->next->phase == LAUNCH_LEFT)
 			(*stack)->next->exit_status = (*stack)->exit_status;
 		if ((*stack)->next->phase == LAUNCH_RIGHT)
-			(*stack)->next->exit_status = (*data)->exit_status || (*stack)->exit_status;	
+			(*stack)->next->exit_status = (*data)->exit_status || (*stack)->exit_status;
 	}
 	else if (!((*stack)->type == NODE_SUBSHELL && ((*stack)->next->type == NODE_PIPE)))
 		(*stack)->next->exit_status = (*stack)->exit_status;
@@ -165,7 +165,7 @@ t_stack **get_next_pipe(t_stack **stack)
 {
   	if (!stack || !*stack)
 		return NULL;
-	return (get_first_pipe(&(*stack)->next)); 
+	return (get_first_pipe(&(*stack)->next));
 }
 
 int	stack_size(t_stack *stack)
@@ -193,7 +193,7 @@ void	close_all_pipe_ends(t_stack **stack)
 			close((*head)->pipe[0]);
 			close((*head)->pipe[1]);
 		}
-		head = &((*head)->next);	
+		head = &((*head)->next);
 	}
 }
 
@@ -201,8 +201,6 @@ static char	*type_to_string(t_node_type type)
 {
 	if (type == NODE_CMD)
 		return "NODE_CMD";
-	if (type == NODE_BUILTIN)
-		return "NODE_BUILTIN";
 	if (type == NODE_PIPE)
 		return "NODE_PIPE";
 	else

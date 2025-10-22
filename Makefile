@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
+#    By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/01 19:00:22 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/10/22 10:55:23 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,9 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		executor_utils executor_pipe executor_and executor_or executor_builtin\
 		executor_echo executor_subshell get_next_line get_next_line_utils\
 		executor_env executor_cd executor_pwd executor_exit expand_tilde\
-		input_prompt executor_unset executor_error variable_utils
+		input_prompt executor_unset executor_error expander_dollar2\
+		expander_dollar3 input_continue
+
 
 SRC_DIR     = src
 OBJ_DIR     = obj
@@ -109,6 +111,7 @@ fclean: clean
 	@$(RM) -rf test/bash
 	@$(RM) -rf test/diffs
 	@$(RM) -rf test/minishell
+	@$(RM) -rf test/leaks
 	@$(RM) test/tests
 	@$(RM) err.tmp
 

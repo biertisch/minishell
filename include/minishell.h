@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/30 19:45:34 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 23:25:27 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "../include/printf.h"
 # include "../include/executor.h"
 # include "../include/parser.h"
+# include "expander.h"
+# include "lexer.h"
 # include <dirent.h>
 # include <fcntl.h>
 # include <readline/readline.h>
@@ -50,8 +52,9 @@
 # define ERR_6 "unexpected EOF while looking for matching"
 # define ERR_7 "syntax error: unexpected end of file"
 # define ERR_8 "syntax error: missing quote"
-# define BUFFER_SIZE 20
 # define ERR_9 "arithmetic operations not supported"
+# define ERR_10 "semicolon not supported"
+# define BUFFER_SIZE 20
 
 typedef struct s_env
 {
@@ -125,8 +128,9 @@ void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 
 //input.c
 void		prompt_input(t_data *data);
-int			prompt_continuation(t_data *data, char target);
 void		read_input(t_data *data);
+int			handle_signal_interruption(t_data *data, char *line, int cont);
+void		handle_eof(t_data *data);
 
 //signal.c
 void		setup_signals(t_data *data);
@@ -137,5 +141,8 @@ int			rl_sigint_continuation(void);
 
 //input_prompt.c
 void		update_prompt(t_data *data);
+
+//input_continue.c
+int			prompt_continuation(t_data *data, char target);
 
 #endif
