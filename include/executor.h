@@ -153,6 +153,11 @@ void		print_fork_err_mess(void);
 void		print_pipe_err_mess(void);
 int			validate_pipe(int pipe_res, t_stack **stack);
 
+//executor_export.c
+int		execute_export(t_data *data, t_stack **stack);
+int		execute_export_no_option(t_data *data, t_stack **stack);
+void		sort_env(t_data **data);
+
 //variable_utils.c
 int		check_if_variable(t_data *data, t_stack **stack);
 int		check_if_variables_with_commands(t_data *data, t_stack **stack);

@@ -70,5 +70,7 @@ int	choose_and_execute_builtin(t_data *data, t_stack **stack)
 		execute_exit(data, stack);
 	if (!ft_strcmp((*stack)->node->argv[0], "unset"))
 		execute_unset(data, stack);
+	if (!ft_strcmp((*stack)->node->argv[0], "export"))
+		execute_export(data, stack);
 	return (0);
 }
