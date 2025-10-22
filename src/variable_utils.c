@@ -15,6 +15,7 @@
 int	check_if_variable(t_data *data, t_stack **stack)
 {
 	int	i;
+	t_env	*new_node;
 
 	i = 0;
 	if (has_command(data, stack))
@@ -23,7 +24,8 @@ int	check_if_variable(t_data *data, t_stack **stack)
 	{
 		if (ft_strchr((*stack)->node->argv[i], '='))
 		{
-			add_env_node(&(data->env_list), create_env_node(ft_strdup_n((*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i]) - ft_strlen(ft_strchr((*stack)->node->argv[i], '='))), ft_strdup(ft_strchr((*stack)->node->argv[i], '=') + 1), 0));
+			new_node = create_env_node(ft_strdup_n((*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i]) - ft_strlen(ft_strchr((*stack)->node->argv[i], '='))), ft_strdup(ft_strchr((*stack)->node->argv[i], '=') + 1), 0);
+			add_env_node(&(data->env_list), new_node);
 		}
 		else
 			return (0);

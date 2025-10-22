@@ -14,12 +14,43 @@
 
 int	execute_export(t_data *data, t_stack **stack)
 {
+	sort_env(&data);
 	if (!(*stack)->node->argv[1])
 	{
 		execute_export_no_option(data, stack);
 		free_stack(stack);
 		free_all(data);
 		exit(0);
+	}
+	else
+	{
+		execute_export_option(data, stack);
+		free_stack(stack);
+		free_all(data);
+		exit(0);
+	}
+	return (0);
+}
+
+int	execute_export_option(t_data *data, t_stack **stack)
+{
+	t_env	**env;
+	int	i;
+
+	i = 1;
+	while ((*stack)->node->argv[i])
+	{
+		env = &(data->env_list);
+		while (env && *env)
+		{
+			if (!ft_strcmp((*env)->key, (*stack)->node->argv[i]))
+			{
+				(*env)->exported = 1;
+				break ;
+			}
+			env = &(*env)->next;
+		}
+		i++;
 	}
 	return (0);
 }
@@ -29,7 +60,6 @@ int	execute_export_no_option(t_data *data, t_stack **stack)
 	t_env	*env;
 	
 	(void)stack;
-	sort_env(&data);
 	env = data->env_list;
 	while (env)
 	{
@@ -37,10 +67,13 @@ int	execute_export_no_option(t_data *data, t_stack **stack)
 		{
 			write(STDOUT_FILENO, "declare -x ", 11);
 			write(STDOUT_FILENO, env->key, ft_strlen(env->key));
-			write(STDOUT_FILENO, "=", 1);
-			write(STDOUT_FILENO, env->value, ft_strlen(env->value));
+			if (env->value && ft_strcmp(env->value, ""))
+			{
+				write(STDOUT_FILENO, "=", 1);
+				write(STDOUT_FILENO, env->value, ft_strlen(env->value));
+			}
 			write(STDOUT_FILENO, "\n", 1);
-		}
+		} 
 		env = env->next;
 	}
 	return (0);
