@@ -26,8 +26,12 @@ void	child(t_data *data, t_stack **stack)
 	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
 	{
 		cmd = ft_strdup(correct_path(data, stack, (*stack)->node->argv[cmd_i]));
-		free((*stack)->node->argv[cmd_i]);
-		(*stack)->node->argv[cmd_i] = ft_strdup(ft_strrchr(cmd, '/') + 1);
+		//do with other cmds?
+		if (ft_strcmp("/bin/echo", cmd)) 
+		{
+			free((*stack)->node->argv[cmd_i]);
+			(*stack)->node->argv[cmd_i] = ft_strdup(ft_strrchr(cmd, '/') + 1);
+		}
 	}
 	redir = (*stack)->node->redir;
 	if (!redir)

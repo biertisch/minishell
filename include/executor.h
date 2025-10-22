@@ -117,6 +117,7 @@ int			is_echo_option(char *opt);
 int			execute_subshell(t_data *data, t_stack **stack);
 int			execute_subshell_entered(t_data **data, t_stack **stack);
 int			execute_subshell_done(t_data **data, t_stack **stack);
+int			subshell_redir(t_data **data, t_stack **stack);
 
 //get_next_line.c
 char	*get_next_line(int fd);

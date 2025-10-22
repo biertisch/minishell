@@ -33,6 +33,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 		return (validate_fork(*data, stack));
 	else if (pid == 0)
 	{
+		subshell_redir(data, stack);
 		//add_redir_out but change to append, if it redir_in mantain
 		(*stack)->child_count = -42;
 		push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);
@@ -49,6 +50,49 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 			waitpid(pid, &status, 0);
 			if (WIFEXITED(status))
 				(*stack)->exit_status = WEXITSTATUS(status);
+		}
+	}
+	return (0);
+}
+
+int	subshell_redir(t_data **data, t_stack **stack)
+{
+	t_redir *redir;
+	int		fd;
+	int		flag;
+
+	(void)data;
+	redir = (*stack)->node->redir;
+	while (redir)
+	{
+		flag = -1;
+		if (redir->type == REDIR_OUT || redir->type == APPEND)
+		{
+			if (redir->type == REDIR_OUT)
+				fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
+			else
+				fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			(*stack)->out_fd = fd;
+			flag = 0;
+		}
+		else if (redir->type == REDIR_IN)
+		{
+			fd = open(redir->file, O_RDONLY);
+			(*stack)->in_fd = fd;
+			flag = 1;
+		}
+		else if (redir->type == HEREDOC)
+		{
+			(*stack)->in_fd = STDIN_FILENO;
+			flag = 2;
+		}
+		redir = redir->next;
+		if (redir && flag != 2)
+		{
+			if (flag == 0 && (redir->type == REDIR_OUT || redir->type == APPEND))
+				close(fd);
+			if (flag == 1 && (redir->type == REDIR_IN || redir->type == HEREDOC))
+				close(fd);
 		}
 	}
 	return (0);
