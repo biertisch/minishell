@@ -55,11 +55,10 @@ int	execute_and_done(t_data **data, t_stack **stack)
 		setup_next_to_top(data, stack);
 	else
 		(*data)->exit_status = (*stack)->exit_status;
-	if (!(*data)->exit_status)
+	if (!(*stack)->exit_status)
 	{
-		right_tree_size = count_tree_nodes((*stack)->node->right);
 		pop(stack);
-		return (1 + right_tree_size);
+		return (1);
 	}
 	else
 	{

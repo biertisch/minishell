@@ -32,7 +32,7 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 		execute_exit(data, stack);
 	else if (!has_node_type_ancestor(*stack, NODE_PIPE) && !ft_strcmp((*stack)->node->argv[0], "unset"))
 		execute_unset(data, stack);
-	else if (!has_node_type_ancestor(*stack, NODE_PIPE))
+	else 
 	{
 		pid = fork();
 		if (pid < 0)

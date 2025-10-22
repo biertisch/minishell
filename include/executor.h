@@ -56,13 +56,16 @@ t_stack		**get_first_log_operator(t_stack **stack);
 int		setup_next_to_top(t_data **data, t_stack **stack);
 t_stack		**get_first_subshell(t_stack **stack);
 int			has_node_type_ancestor(t_stack *stack, t_node_type type);
+t_stack 	**get_next_pipe_in_subshell(t_stack **stack);
 
 //child.c
 void		child(t_data *data, t_stack **stack);
-void		child_redir_in(t_data *data, t_stack **stack);
-void		child_no_redir(t_data *data, t_stack **stack);
-void		child_redir_out(t_data *data, t_stack **stack);
-void		child_heredoc(t_data *data, t_stack **stack);
+void		child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
+void		child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
+void		child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
+void		child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i);
+void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
+void		handle_open_errors(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 
 //executor_utils.c
 char		*correct_path(t_data * data, t_stack **stack,char *cmd);
@@ -108,6 +111,7 @@ int			execute_echo(t_data *data, t_stack **stack);
 int			execute_echo_option(t_data *data, t_stack **stack);
 int			execute_echo_no_option(t_data *data, t_stack **stack);
 int			validate_write(t_data *data, t_stack **stack, int write_res);
+int			is_echo_option(char *opt);
 
 //executor_subshell
 int			execute_subshell(t_data *data, t_stack **stack);
@@ -136,6 +140,7 @@ int			execute_pwd(t_data *data, t_stack **stack);
 
 //executor_exit.c
 int			execute_exit(t_data *data, t_stack **stack);
+void		check_exit_input(t_data *data, t_stack **stack, int *exit_code);
 
 //executor_unset.c
 int			execute_unset(t_data *data, t_stack **stack);
@@ -146,5 +151,11 @@ int			validate_fork(t_data *data, t_stack **stack);
 void		print_fork_err_mess(void);
 void		print_pipe_err_mess(void);
 int			validate_pipe(int pipe_res, t_stack **stack);
+
+//variable_utils.c
+int		check_if_variable(t_data *data, t_stack **stack);
+int		check_if_variables_with_commands(t_data *data, t_stack **stack);
+int		has_command(t_data *data, t_stack **stack);
+
 
 #endif

@@ -27,6 +27,7 @@ t_stack	*create_stack(t_data *data)
 	head->in_fd = STDIN_FILENO;
 	head->out_fd = STDOUT_FILENO;
 	head->next = NULL;
+	head->exit_status = 0;
 	return (head);
 }
 
@@ -41,22 +42,20 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	new_head->node = node;
 	new_head->in_fd = in_fd;
 	new_head->out_fd = out_fd;
-//	if (new_head->type == NODE_PIPE && !has_pipe_ancestor(stack)) //is this check required?
 	new_head->child_count = 0;
 	new_head->next = *stack;
+	new_head->exit_status = 0;
 	*stack = new_head;
 }
 
 int	setup_next_to_top(t_data **data, t_stack **stack)
 {
-	if ((*stack)->next->type == NODE_SUBSHELL)
-			exit((*stack)->exit_status);
 	if ((*stack)->next->type == NODE_AND)
 	{
 		if ((*stack)->next->phase == LAUNCH_LEFT)
 			(*stack)->next->exit_status = (*stack)->exit_status;
-		if ((*stack)->next->phase == LAUNCH_RIGHT)
-			(*stack)->next->exit_status = (*stack)->next->exit_status || (*stack)->exit_status;
+		else if ((*stack)->next->phase == LAUNCH_RIGHT)
+			(*stack)->next->exit_status = (*stack)->next->exit_status && (*stack)->exit_status;
 	}
 	else if ((*stack)->next->type == NODE_OR)
 	{
@@ -65,6 +64,8 @@ int	setup_next_to_top(t_data **data, t_stack **stack)
 		if ((*stack)->next->phase == LAUNCH_RIGHT)
 			(*stack)->next->exit_status = (*data)->exit_status || (*stack)->exit_status;
 	}
+	else if (!((*stack)->type == NODE_SUBSHELL && ((*stack)->next->type == NODE_PIPE)))
+		(*stack)->next->exit_status = (*stack)->exit_status;
 	return (0);
 }
 
@@ -122,6 +123,24 @@ t_stack	**get_first_subshell(t_stack **stack)
 	while (head && (*head))
 	{
 		if ((*head)->type == NODE_SUBSHELL)
+			return (head);
+		head = &((*head)->next);
+	}
+	return (NULL);
+}
+
+t_stack **get_next_pipe_in_subshell(t_stack **stack)
+{	
+	t_stack	**head;
+
+  	if (!stack || !*stack)
+		return NULL;
+	head = &((*stack)->next);
+	while (head && (*head))
+	{
+		if ((*head)->type == NODE_SUBSHELL)
+			return (NULL);
+		if ((*head)->type == NODE_PIPE)
 			return (head);
 		head = &((*head)->next);
 	}

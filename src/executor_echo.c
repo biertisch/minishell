@@ -22,12 +22,28 @@ int	execute_echo(t_data *data, t_stack **stack)
 		free_all(data);
 		exit(0);
 	}
-	else if (!ft_strcmp((*stack)->node->argv[1], "-n"))
+	else if (is_echo_option((*stack)->node->argv[1]))
 		execute_echo_option(data, stack);
 	else
 		execute_echo_no_option(data, stack);
 	(void)data;
 	return (0);
+}
+
+int	is_echo_option(char *opt)
+{
+	int	i;
+
+	i = 1;
+	if (*opt == '-')
+	{
+		while (*(opt + i) == 'n')
+			i++;
+		if (!*(opt + i))
+			return (1);
+	}
+	return (0);
+
 }
 
 int	execute_echo_option(t_data *data, t_stack **stack)
