@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
+#    By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/21 22:52:01 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/10/22 10:55:23 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ PRINTF_LIB  = $(PRINTF_DIR)/libftprintf.a
 LIBFT_DIR = libft
 
 CC          = cc -g -O0
-CFLAGS      = -Wall -Wextra -I$(INC_DIR) # add -Werror
+CFLAGS      = -Wall -Wextra -Werror -I$(INC_DIR)
 RM          = rm -rf
 
 RED=\033[0;31m
