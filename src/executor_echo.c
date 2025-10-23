@@ -14,7 +14,6 @@
 
 int	execute_echo(t_data *data, t_stack **stack)
 {
-
 	if (!(*stack)->node->argv[1])
 	{
 		validate_write(data, stack, write(STDOUT_FILENO, "\n", 1));

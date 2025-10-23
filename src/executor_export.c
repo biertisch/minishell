@@ -29,7 +29,7 @@ int	execute_export_option(t_data *data, t_stack **stack)
 	char	**kv_split;
 	int	found;
 
-	i = 1;
+	i = get_first_command(data, stack) + 1;
 	while ((*stack)->node->argv[i])
 	{
 		found = 0;
@@ -78,15 +78,15 @@ int	execute_export_no_option(t_data *data, t_stack **stack)
 	{
 		if (env->exported)
 		{
-			write(STDOUT_FILENO, "declare -x ", 11);
-			write(STDOUT_FILENO, env->key, ft_strlen(env->key));
+			write((*stack)->out_fd, "declare -x ", 11);
+			write((*stack)->out_fd, env->key, ft_strlen(env->key));
 			if (env->value && ft_strcmp(env->value, ""))
 			{
-				write(STDOUT_FILENO, "=\"", 2);
-				write(STDOUT_FILENO, env->value, ft_strlen(env->value));
-				write(STDOUT_FILENO, "\"", 1);
+				write((*stack)->out_fd, "=\"", 2);
+				write((*stack)->out_fd, env->value, ft_strlen(env->value));
+				write((*stack)->out_fd, "\"", 1);
 			}
-			write(STDOUT_FILENO, "\n", 1);
+			write((*stack)->out_fd, "\n", 1);
 		} 
 		env = env->next;
 	}

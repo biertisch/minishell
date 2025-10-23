@@ -26,15 +26,15 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 	pid_t	pid;
 
 	(*stack)->phase = DONE;
-	if (!check_if_variable(data, stack))
+	if (!check_if_variable(data, stack) && !validate_builtin(data, (*stack)->node, get_first_command(data, stack)))
 	{
-		if (!has_node_type_ancestor(*stack, NODE_SUBSHELL) && !ft_strcmp((*stack)->node->argv[0], "cd"))
+		if (!has_node_type_ancestor(*stack, NODE_SUBSHELL) && !ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "cd"))
 			execute_cd(data, stack);
-		else if (!has_node_type_ancestor(*stack, NODE_PIPE) && !ft_strcmp((*stack)->node->argv[0], "exit"))
+		else if (!has_node_type_ancestor(*stack, NODE_PIPE) && !ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "exit"))
 			execute_exit(data, stack);
-		else if (!has_node_type_ancestor(*stack, NODE_PIPE) && !ft_strcmp((*stack)->node->argv[0], "unset"))
+		else if (!ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "unset"))
 			execute_unset(data, stack);
-		else if (!ft_strcmp((*stack)->node->argv[0], "export"))
+		else if (!ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "export"))
 			execute_export(data, stack);
 		else 
 		{
