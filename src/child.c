@@ -21,7 +21,7 @@ void	child(t_data *data, t_stack **stack)
 
 	env_list_to_array(data);
 	setup_signals_child(data);
-	cmd_i = check_if_variables_with_commands(data, stack);
+	cmd_i = get_first_command(data, stack);
 	cmd = NULL;
 	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
 	{

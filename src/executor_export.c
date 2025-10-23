@@ -16,19 +16,9 @@ int	execute_export(t_data *data, t_stack **stack)
 {
 	sort_env(&data);
 	if (!(*stack)->node->argv[1])
-	{
 		execute_export_no_option(data, stack);
-		free_stack(stack);
-		free_all(data);
-		exit(0);
-	}
 	else
-	{
 		execute_export_option(data, stack);
-		free_stack(stack);
-		free_all(data);
-		exit(0);
-	}
 	return (0);
 }
 
@@ -36,21 +26,44 @@ int	execute_export_option(t_data *data, t_stack **stack)
 {
 	t_env	**env;
 	int	i;
+	char	**kv_split;
+	int	found;
 
 	i = 1;
 	while ((*stack)->node->argv[i])
 	{
+		found = 0;
 		env = &(data->env_list);
-		while (env && *env)
+		kv_split = ft_split((*stack)->node->argv[i], '=');
+		if (is_valid_var_name(kv_split[0]))
 		{
-			if (!ft_strcmp((*env)->key, (*stack)->node->argv[i]))
+			while (env && *env)
 			{
-				(*env)->exported = 1;
-				break ;
+				if (!ft_strcmp((*env)->key, kv_split[0]))
+				{
+					found = 1;
+					(*env)->exported = 1;
+					if (kv_split[1])
+					{
+						if ((*env)->value)
+							free((*env)->value);
+						(*env)->value = ft_strdup(kv_split[1]);
+					}
+					break ;
+				}
+				env = &(*env)->next;
 			}
-			env = &(*env)->next;
+			if (!found)
+				add_env_node(&data->env_list, create_env_node(ft_strdup(kv_split[0]), ft_strdup(kv_split[1]), 1));
 		}
-		i++;
+		else
+		{
+			write(STDERR_FILENO, "minishell: export: `", 20);
+			write(STDERR_FILENO, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i]));
+			write(STDERR_FILENO, "': not a valid identifier\n", 26);
+		}
+			i++;
+		ft_splitfree(kv_split);
 	}
 	return (0);
 }
@@ -69,8 +82,9 @@ int	execute_export_no_option(t_data *data, t_stack **stack)
 			write(STDOUT_FILENO, env->key, ft_strlen(env->key));
 			if (env->value && ft_strcmp(env->value, ""))
 			{
-				write(STDOUT_FILENO, "=", 1);
+				write(STDOUT_FILENO, "=\"", 2);
 				write(STDOUT_FILENO, env->value, ft_strlen(env->value));
+				write(STDOUT_FILENO, "\"", 1);
 			}
 			write(STDOUT_FILENO, "\n", 1);
 		} 
@@ -84,6 +98,7 @@ void	sort_env(t_data **data)
 	int	sorted;
 	t_env	**env;
 	char	*aux;
+	int	i;
 
 	sorted = 0;
 	while (!sorted)
@@ -109,6 +124,10 @@ void	sort_env(t_data **data)
 					free((*env)->next->value);
 					(*env)->next->value = ft_strdup(aux);
 					free(aux);
+					i = (*env)->exported;
+					(*env)->exported = (*env)->next->exported;
+					(*env)->next->exported = i;
+
 				}
 			}
 			env = &(*env)->next;

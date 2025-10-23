@@ -55,7 +55,7 @@ int	execute_cmd(t_data *data, t_stack **stack)
 			return (1); 
 		}
 	}
-	if ((*stack)->node->argv && is_builtin((*stack)->node->argv[0]))
+	if ((*stack)->node->argv && is_builtin((*stack)->node->argv[get_first_command(data, stack)]))
 		return (execute_builtin(data, stack));
 	else if ((*stack)->phase == ENTERED)
 		return (execute_cmd_entered(data, stack));

@@ -161,7 +161,7 @@ void		sort_env(t_data **data);
 
 //variable_utils.c
 int		check_if_variable(t_data *data, t_stack **stack);
-int		check_if_variables_with_commands(t_data *data, t_stack **stack);
+int		get_first_command(t_data *data, t_stack **stack);
 int		has_command(t_data *data, t_stack **stack);
 
 
