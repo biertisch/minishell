@@ -72,6 +72,8 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 	(*stack)->phase = DONE;
 	if (!check_if_variable(data, stack))
 	{
+		if (get_last_heredoc((*stack)->node->redir) && !(*stack)->node->argv)
+			return (0);
 		//check this shit out
 		if (get_last_heredoc((*stack)->node->redir))
 			if (validate_pipe(pipe((*stack)->pipe), stack))
@@ -81,7 +83,7 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 			return (validate_fork(data, stack));
 		else if (pid == 0)
 			child(data, stack);
-		else if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
+		else if (get_last_heredoc((*stack)->node->redir))
 			parent_heredoc(stack, pid);
 		else
 			parent(stack, pid);

@@ -20,6 +20,8 @@ int	check_if_variable(t_data *data, t_stack **stack)
 	int	found;
 
 	i = 0;
+	if (!(*stack)->node->argv)
+		return (0);
 	while ((*stack)->node->argv[i])
 	{
 		kv_split = ft_split((*stack)->node->argv[i], '=');
@@ -55,6 +57,8 @@ int	get_first_command(t_data *data, t_stack **stack)
 	char	**kv_split;
 
 	(void)data;
+	if (!(*stack)->node->argv)
+		return (-1);
 	i = 0;
 	while ((*stack)->node->argv[i])
 	{
