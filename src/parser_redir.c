@@ -34,6 +34,7 @@ static t_redir	*create_redir(t_token_type type, int fd, char *file)
 	redir->type = type;
 	redir->fd = fd;
 	redir->file = ft_strdup(file);
+	redir->heredoc_input = NULL;
 	if (!redir->file)
 		return (free_redir(redir), NULL);
 	redir->next = NULL;

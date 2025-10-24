@@ -36,6 +36,7 @@ void	free_redir(t_redir *redir)
 	{
 		tmp = redir->next;
 		free(redir->file);
+		free(redir->heredoc_input);
 		free(redir);
 		redir = tmp;
 	}

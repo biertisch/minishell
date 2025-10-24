@@ -14,40 +14,40 @@
 
 int	execute_unset(t_data *data, t_stack **stack)
 {
-	int	valid;
+	t_env **first;
+	t_env **second;
+	t_env **third;
+	t_env	*victim;
+	t_env	*next;
 	int	i;
 
-	valid = check_unset_input(stack);
-	if (valid)
-	{
-		
-		if (!has_node_type_ancestor(*stack, NODE_PIPE) && !has_node_type_ancestor(*stack, NODE_SUBSHELL))
-		{
-			(*stack)->exit_status = valid;
-			return (valid);
-		}
-		else
-			exit(valid);
-	}
-	i = 1;
+	i = get_first_command(data, stack) + 1;
 	while ((*stack)->node->argv[i])
-		unset_env(&((data)->env_list), (*stack)->node->argv[i++]);
-	if (has_node_type_ancestor(*stack, NODE_PIPE) || has_node_type_ancestor(*stack, NODE_SUBSHELL))
-		exit(0);
-	(*stack)->exit_status = 0;
-	return (0);
-}
-
-int	check_unset_input(t_stack **stack)
-{
-	int	i;
-
-	i = 1;
-	while ((*stack)->node->argv[i] && is_valid_var_name((*stack)->node->argv[i]))
+	{
+		first = NULL;
+		second = &(data->env_list);
+		third = NULL;
+		victim = NULL;
+		next = NULL;
+		while (second && *second)
+		{
+			third = &((*second)->next);
+			if (!ft_strcmp((*second)->key, (*stack)->node->argv[i]))
+			{
+				victim = *second;
+				next = *third;
+				if (first)
+					(*first)->next = next;
+				else	
+					data->env_list = next;
+				free_env_node(&victim);
+				break ;
+			}
+			first = second;
+			second = third;
+			third = NULL;
+		}
 		i++;
-	if ((*stack)->node->argv[i] && is_valid_var_name((*stack)->node->argv[i]))
-		return (0);
-	if (*((*stack)->node->argv[1]) == '-')
-		return (2);
-	return (1);
+	}
+	return (0);
 }

@@ -14,10 +14,9 @@
 
 int	execute_echo(t_data *data, t_stack **stack)
 {
-
 	if (!(*stack)->node->argv[1])
 	{
-		validate_write(data, stack, write((*stack)->out_fd, "\n", 1));
+		validate_write(data, stack, write(STDOUT_FILENO, "\n", 1));
 		free_stack(stack);
 		free_all(data);
 		exit(0);
@@ -53,9 +52,9 @@ int	execute_echo_option(t_data *data, t_stack **stack)
 	i = 2;
 	while ((*stack)->node->argv[i])
 	{
-		validate_write(data, stack, write((*stack)->out_fd, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i])));
+		validate_write(data, stack, write(STDOUT_FILENO, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i])));
 		if ((*stack)->node->argv[i + 1])
-			validate_write(data, stack, write((*stack)->out_fd, " ", 1));
+			validate_write(data, stack, write(STDOUT_FILENO, " ", 1));
 		i++;
 		
 	}
@@ -72,12 +71,12 @@ int	execute_echo_no_option(t_data *data, t_stack **stack)
 	i = 1;
 	while ((*stack)->node->argv[i])
 	{
-		validate_write(data, stack, write((*stack)->out_fd, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i])));
+		validate_write(data, stack, write(STDOUT_FILENO, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i])));
 		if ((*stack)->node->argv[i + 1])
-			validate_write(data, stack, write((*stack)->out_fd, " ", 1));
+			validate_write(data, stack, write(STDOUT_FILENO, " ", 1));
 		i++;
 	}
-	validate_write(data, stack, write((*stack)->out_fd, "\n", 1));
+	validate_write(data, stack, write(STDOUT_FILENO, "\n", 1));
 	free_stack(stack);
 	free_all(data);
 	exit(0);
@@ -90,6 +89,7 @@ int	validate_write(t_data *data, t_stack **stack, int write_res)
 	{
 		free_stack(stack);
 		free_all(data);
+		perror("write: ");
 		if (errno == EBADF || errno == ENOSPC || errno == EIO || errno == EROFS)
 			exit(1);
 		if (errno == EPIPE)

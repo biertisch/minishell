@@ -30,7 +30,7 @@ typedef struct s_stack
 }	t_stack;
 
 // builtin.c
-int			validate_builtin(t_data *data, t_tree *node);
+int			validate_builtin(t_data *data, t_tree *node, int i);
 
 //executor.c
 int			execute(t_data *data);
@@ -39,7 +39,7 @@ int			execute_cmd(t_data *data, t_stack **stack);
 int			execute_pipe(t_data *data, t_stack **stack);
 int			execute_cmd_entered(t_data *data, t_stack **stack);
 int			execute_cmd_done(t_data **data, t_stack **stack);
-int			dummy_heredoc(t_stack **stack);
+int			dummy_heredoc(t_redir *redir);
 
 
 //stack.c
@@ -117,6 +117,7 @@ int			is_echo_option(char *opt);
 int			execute_subshell(t_data *data, t_stack **stack);
 int			execute_subshell_entered(t_data **data, t_stack **stack);
 int			execute_subshell_done(t_data **data, t_stack **stack);
+int			subshell_redir(t_data **data, t_stack **stack);
 
 //get_next_line.c
 char	*get_next_line(int fd);
@@ -152,10 +153,22 @@ void		print_fork_err_mess(void);
 void		print_pipe_err_mess(void);
 int			validate_pipe(int pipe_res, t_stack **stack);
 
+//executor_export.c
+int		execute_export(t_data *data, t_stack **stack);
+int		execute_export_no_option(t_data *data, t_stack **stack);
+int		execute_export_option(t_data *data, t_stack **stack);
+void		sort_env(t_data **data);
+
 //variable_utils.c
 int		check_if_variable(t_data *data, t_stack **stack);
-int		check_if_variables_with_commands(t_data *data, t_stack **stack);
+int		get_first_command(t_data *data, t_stack **stack);
 int		has_command(t_data *data, t_stack **stack);
 
+//executor_heredoc.c
+int		check_for_heredoc(t_data *data);
+int		check_heredoc_right(t_data *data);
+int		check_heredoc_left(t_data *data);
+int		execute_heredoc(t_redir *redir);
+t_redir	*get_last_heredoc(t_redir *redir);
 
 #endif
