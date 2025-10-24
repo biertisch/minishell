@@ -15,7 +15,8 @@
 int	execute(t_data *data)
 {
 	t_stack	*stack;
-	
+
+	check_for_heredoc(data);
 	stack = create_stack(data);
 	execute_stack(data, &stack);
 	return (1);
@@ -71,23 +72,19 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 	(*stack)->phase = DONE;
 	if (!check_if_variable(data, stack))
 	{
-		if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC && !(*stack)->node->argv)
-			dummy_heredoc(stack);
+		//check this shit out
+		if (get_last_heredoc((*stack)->node->redir))
+			if (validate_pipe(pipe((*stack)->pipe), stack))
+				return (0);
+		pid = fork();
+		if (pid < 0)
+			return (validate_fork(data, stack));
+		else if (pid == 0)
+			child(data, stack);
+		else if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
+			parent_heredoc(stack, pid);
 		else
-		{
-			if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
-				if (validate_pipe(pipe((*stack)->pipe), stack))
-					return (0);
-			pid = fork();
-			if (pid < 0)
-				return (validate_fork(data, stack));
-			else if (pid == 0)
-				child(data, stack);
-			else if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
-				parent_heredoc(stack, pid);
-			else
-				parent(stack, pid);
-		}
+			parent(stack, pid);
 	}
 	return (0);
 }
@@ -102,18 +99,24 @@ int	execute_cmd_done(t_data **data, t_stack **stack)
 	return (1);
 }
 
-int	dummy_heredoc(t_stack **stack)
+int	dummy_heredoc(t_redir *redir)
 {
 	char	*line;
 	char	*heredoc;
 
-	heredoc = ft_strdup_append(NULL, ft_strdup((*stack)->node->redir->file), "\n");
+	if (redir->heredoc_input)
+		free(redir->heredoc_input);
+	redir->heredoc_input = malloc(1);
+	redir->heredoc_input[0] = '\0';
+	heredoc = ft_strdup_append(NULL, ft_strdup(redir->file), "\n");
+	write(STDOUT_FILENO, "> ", 2);
 	line = get_next_line(STDIN_FILENO);
 	while (ft_strcmp(line, heredoc))
 	{
+		redir->heredoc_input = ft_strdup_append(NULL, redir->heredoc_input, line);
 		free(line);
+		write(STDOUT_FILENO, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
-
 	}
 	free(line);
 	free(heredoc);

@@ -44,47 +44,15 @@ int	parent_single_command(t_stack **stack, pid_t pid)
 	return (1);
 }
 
-int	heredoc_loop(t_stack **stack, char *heredoc, char *res)
-{
-	char	*line;
-
-	while (1)
-	{
-		line = get_next_line(STDIN_FILENO);
-		if (!line || !ft_strcmp(line, heredoc))
-			break ;
-		else
-		{
-			res = ft_strdup_append(NULL, res, line);
-			free(line);
-		}
-	}
-	write((*stack)->pipe[1], "\n", 1);
-	write((*stack)->pipe[1], res, ft_strlen(res));
-	if (line)
-		free(line);
-	free(res);
-	free(heredoc);
-	return (1);
-}
-
 int	parent_heredoc(t_stack **stack, pid_t pid)
 {
-	char	*line;
-	char	*res;
-	char	*heredoc;
+	char	*heredoc_input;
 
+	heredoc_input = get_last_heredoc((*stack)->node->redir)->heredoc_input;
 	close((*stack)->pipe[0]);
-	line = get_next_line(STDIN_FILENO);
-	heredoc = ft_strdup_append(NULL, ft_strdup((*stack)->node->redir->file), "\n");
-	if (ft_strcmp(line, heredoc))
-	{
-		res = ft_strdup(line);
-		free(line);
-		heredoc_loop(stack, heredoc, res);
-	}
-	else
-		write((*stack)->pipe[1], "\n", 1);
+	write((*stack)->pipe[1], heredoc_input, ft_strlen(heredoc_input));
 	close((*stack)->pipe[1]);
+	if (get_next_pipe(stack))
+		return (parent(stack, pid));
 	return (parent_single_command(stack, pid));
 }

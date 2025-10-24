@@ -39,7 +39,7 @@ int			execute_cmd(t_data *data, t_stack **stack);
 int			execute_pipe(t_data *data, t_stack **stack);
 int			execute_cmd_entered(t_data *data, t_stack **stack);
 int			execute_cmd_done(t_data **data, t_stack **stack);
-int			dummy_heredoc(t_stack **stack);
+int			dummy_heredoc(t_redir *redir);
 
 
 //stack.c
@@ -164,5 +164,11 @@ int		check_if_variable(t_data *data, t_stack **stack);
 int		get_first_command(t_data *data, t_stack **stack);
 int		has_command(t_data *data, t_stack **stack);
 
+//executor_heredoc.c
+int		check_for_heredoc(t_data *data);
+int		check_heredoc_right(t_data *data);
+int		check_heredoc_left(t_data *data);
+int		execute_heredoc(t_redir *redir);
+t_redir	*get_last_heredoc(t_redir *redir);
 
 #endif
