@@ -21,6 +21,8 @@ typedef struct s_redir
 	int				fd;
 	char			*file;
 	char			*heredoc_input;
+	int			in_fd;
+	int			out_fd;
 	struct s_redir	*next;
 }	t_redir;
 

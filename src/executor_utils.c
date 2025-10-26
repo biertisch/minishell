@@ -112,3 +112,11 @@ void	check_for_variables(t_data *data, t_stack **stack)
 	}
 	(*stack)->node->argv = ft_shrink_split((*stack)->node->argv, j - 1, ft_splitlen((*stack)->node->argv) - 1);
 }
+
+void	executor_cleanup(t_data *data, t_stack **stack, char *cmd)
+{
+	if (cmd)
+		free(cmd);
+	free_stack(stack);
+	free_all(data);
+}

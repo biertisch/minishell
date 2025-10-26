@@ -14,6 +14,7 @@
 
 int	parent(t_stack **stack, pid_t pid)
 {
+	close_redir_in((*stack)->node->redir);
 	if ((*stack)->next && (*stack)->next->type == NODE_SUBSHELL)
 		return (parent_single_command(stack, pid));
 	if (get_first_pipe(stack))

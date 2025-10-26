@@ -65,13 +65,14 @@ void		child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i);
 void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
-void		handle_open_errors(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
+
 
 //executor_utils.c
 char		*correct_path(t_data * data, t_stack **stack,char *cmd);
 char		*run_curr_dir(t_data *data, t_stack **stack, char *cmd);
 void		check_for_variables(t_data *data, t_stack **stack);
 void		executor_child_errno(t_data *data, t_stack **stack, char *cmd);
+void		executor_cleanup(t_data *data, t_stack **stack, char *cmd);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
@@ -154,21 +155,29 @@ void		print_pipe_err_mess(void);
 int			validate_pipe(int pipe_res, t_stack **stack);
 
 //executor_export.c
-int		execute_export(t_data *data, t_stack **stack);
-int		execute_export_no_option(t_data *data, t_stack **stack);
-int		execute_export_option(t_data *data, t_stack **stack);
+int			execute_export(t_data *data, t_stack **stack);
+int			execute_export_no_option(t_data *data, t_stack **stack);
+int			execute_export_option(t_data *data, t_stack **stack);
 void		sort_env(t_data **data);
 
 //variable_utils.c
-int		check_if_variable(t_data *data, t_stack **stack);
-int		get_first_command(t_data *data, t_stack **stack);
-int		has_command(t_data *data, t_stack **stack);
+int			check_if_variable(t_data *data, t_stack **stack);
+int			get_first_command(t_data *data, t_stack **stack);
+int			has_command(t_data *data, t_stack **stack);
 
 //executor_heredoc.c
-int		check_for_heredoc(t_data *data);
-int		check_heredoc_right(t_data *data);
-int		check_heredoc_left(t_data *data);
-int		execute_heredoc(t_redir *redir);
+int			check_for_heredoc(t_data *data);
+int			check_heredoc_right(t_data *data);
+int			check_heredoc_left(t_data *data);
+int			execute_heredoc(t_redir *redir);
 t_redir	*get_last_heredoc(t_redir *redir);
+
+//executor_redirect.c
+int			traverse_redir_in(t_data *data, t_stack **stack);
+int			open_redir_in(t_stack **stack, t_redir *redir, int *nodes);
+int			close_redir_in(t_redir *redir);
+void		handle_open_errors(t_redir *redir);
+
+
 
 #endif
