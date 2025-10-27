@@ -28,6 +28,11 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	
 	//delete contents of redir_out files
 	(*stack)->phase = DONE;
+	if (check_redir_in_subshell(stack))
+	{
+		(*stack)->exit_status = 1;
+		return (0);
+	}
 	pid = fork();
 	if (pid < 0)
 		return (validate_fork(*data, stack));
@@ -40,6 +45,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	}
 	else
 	{
+		close_redir_in((*stack)->node->redir);
 		if ((*stack)->next && (*stack)->next->type == NODE_PIPE)
 			(*stack)->next->child_pid[(*stack)->next->child_count++] = pid;
 		else
@@ -58,27 +64,34 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 int	subshell_redir(t_data **data, t_stack **stack)
 {
 	t_redir *redir;
-	int		fd;
-	int		flag;
+	int	flag;
 
 	(void)data;
 	redir = (*stack)->node->redir;
+	flag = 2;
 	while (redir)
 	{
-		flag = -1;
+		if (flag != 2)
+		{
+			if (flag == 0)
+				close(redir->out_fd);
+			else
+				close(redir->in_fd);
+		}
+		flag = -2;
 		if (redir->type == REDIR_OUT || redir->type == APPEND)
 		{
 			if (redir->type == REDIR_OUT)
-				fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
+				(*stack)->out_fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
 			else
-				fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			(*stack)->out_fd = fd;
+				(*stack)->out_fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			flag = 0;
 		}
 		else if (redir->type == REDIR_IN)
 		{
-			fd = open(redir->file, O_RDONLY);
-			(*stack)->in_fd = fd;
+			(*stack)->in_fd = redir->in_fd;
+			if (redir->in_fd == -1)
+				break;
 			flag = 1;
 		}
 		else if (redir->type == HEREDOC)
@@ -87,13 +100,22 @@ int	subshell_redir(t_data **data, t_stack **stack)
 			flag = 2;
 		}
 		redir = redir->next;
-		if (redir && flag != 2)
-		{
-			if (flag == 0 && (redir->type == REDIR_OUT || redir->type == APPEND))
-				close(fd);
-			if (flag == 1 && (redir->type == REDIR_IN || redir->type == HEREDOC))
-				close(fd);
-		}
+	}
+	return (0);
+}
+
+
+
+int	check_redir_in_subshell(t_stack **stack)
+{
+	t_redir *redir;
+
+	redir = (*stack)->node->redir;
+	while (redir)
+	{
+		if (redir->type == REDIR_IN && redir->in_fd == -1)
+			return (1);
+		redir = redir->next;
 	}
 	return (0);
 }

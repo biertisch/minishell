@@ -22,7 +22,7 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		executor_env executor_cd executor_pwd executor_exit expand_tilde\
 		input_prompt executor_unset executor_error expander_dollar2\
 		expander_dollar3 input_continue variable_utils executor_export\
-		executor_heredoc
+		executor_heredoc executor_redirect
 
 
 SRC_DIR     = src

@@ -25,7 +25,7 @@ void	child(t_data *data, t_stack **stack)
 	cmd = NULL;
 	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
 	{
-		cmd = ft_strdup(correct_path(data, stack, (*stack)->node->argv[cmd_i]));
+		cmd = correct_path(data, stack, (*stack)->node->argv[cmd_i]);
 		//do with other cmds?
 		if (ft_strcmp("/bin/echo", cmd)) 
 		{
@@ -48,29 +48,15 @@ void	child(t_data *data, t_stack **stack)
 	}
 }
 
-void	handle_open_errors(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
-{
-	write(STDERR_FILENO, "minishell: ", 11);
-	write(STDERR_FILENO, redir->file, ft_strlen(redir->file));
-	if (errno == ENOENT)
-		write(STDERR_FILENO, ": No such file or directory\n", 28);
-	else if (errno == EACCES)
-		write(STDERR_FILENO, ": Permission denied\n", 20);
-	free(cmd);
-	free_stack(stack);
-	free_all(data);
-	exit(1);
-}
-
 void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 {
-	redir->fd = open(redir->file, O_RDONLY);
-	if (redir->fd != -1)
-		dup2(redir->fd, STDIN_FILENO);
-	if (redir->fd != -1)
-		close(redir->fd);
-	else
-		handle_open_errors(data, stack, cmd, redir);
+	if (redir->in_fd == -1)
+	{
+		executor_cleanup(data, stack, cmd);
+		exit(1);
+	}
+	dup2(redir->in_fd, STDIN_FILENO);
+	close(redir->in_fd);
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		dup2((*stack)->out_fd, STDOUT_FILENO);
 	if ((*stack)->out_fd != STDOUT_FILENO)
@@ -91,15 +77,17 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 void	child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 {
 	if (redir->type == REDIR_OUT)
-		redir->fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		redir->out_fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
-		redir->fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (redir->fd != -1)
-		dup2(redir->fd, STDOUT_FILENO);
-	if (redir->fd != -1)
-		close(redir->fd);
-	else
-		handle_open_errors(data, stack, cmd, redir);
+		redir->out_fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (redir->out_fd == -1)
+	{
+		handle_open_errors(redir);
+		executor_cleanup(data, stack, cmd);
+		exit(1);
+	}
+	dup2(redir->out_fd, STDOUT_FILENO);
+	close(redir->out_fd);
 	if ((*stack)->in_fd != STDIN_FILENO)
 		dup2((*stack)->in_fd, STDIN_FILENO);
 	if ((*stack)->in_fd != STDIN_FILENO)
@@ -137,6 +125,12 @@ void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 
 void	child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i)
 {
+	if ((*stack)->in_fd == -1)
+	{
+
+		executor_cleanup(data, stack, cmd);
+		exit(1);
+	}
 	if ((*stack)->in_fd != STDIN_FILENO)
 		dup2((*stack)->in_fd, STDIN_FILENO);
 	if ((*stack)->in_fd != STDIN_FILENO)
