@@ -119,6 +119,7 @@ int			execute_subshell(t_data *data, t_stack **stack);
 int			execute_subshell_entered(t_data **data, t_stack **stack);
 int			execute_subshell_done(t_data **data, t_stack **stack);
 int			subshell_redir(t_data **data, t_stack **stack);
+int		check_redir_in_subshell(t_stack **stack);
 
 //get_next_line.c
 char	*get_next_line(int fd);
@@ -174,9 +175,12 @@ t_redir	*get_last_heredoc(t_redir *redir);
 
 //executor_redirect.c
 int			traverse_redir_in(t_data *data, t_stack **stack);
-int			open_redir_in(t_stack **stack, t_redir *redir, int *nodes);
+int			open_redir_in(t_redir *redir);
 int			close_redir_in(t_redir *redir);
 void		handle_open_errors(t_redir *redir);
+int		check_redir_in_left(t_data *data, t_stack **stack);
+int	check_redir_in_right(t_data *data, t_stack **stack);
+int	push_left_until_cmd_redir(t_data *data, t_stack **stack);
 
 
 

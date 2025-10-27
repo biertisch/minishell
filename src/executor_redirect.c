@@ -14,48 +14,73 @@
 
 int	traverse_redir_in(t_data *data, t_stack **stack)
 {
-	int	nodes;
-
-	nodes = 1;
 	while ((*stack)->node->type == NODE_AND || (*stack)->node->type == NODE_OR)
-	{
 		push_stack(stack, (*stack)->node->left, 0, 0, data);
-		nodes++;
-	}
-	while (nodes && (*stack)->node->type == NODE_PIPE)
-	{
-		if ((*stack)->phase != LAUNCH_LEFT)
-		{
-			(*stack)->phase = LAUNCH_RIGHT;
-			push_stack(stack, (*stack)->node->right, 0, 0, data);
-			nodes++;
-		}
-		open_redir_in(stack, (*stack)->node->redir, &nodes);
-		if (nodes)
-		{
-			if ((*stack)->node->type == NODE_PIPE)
-				(*stack)->phase = LAUNCH_LEFT;
-			push_stack(stack, (*stack)->node->left, 0, 0, data);
-			nodes++;
-			open_redir_in(stack, (*stack)->node->redir, &nodes);
-		}
-
-	}
-	while (nodes)
-		open_redir_in(stack, (*stack)->node->redir, &nodes);
+	if (check_redir_in_left(data, stack))
+		return (-1);
+	if (check_redir_in_right(data, stack))
+		return (-1);
+	while (*stack)
+		pop(stack);
+	*stack = NULL;
 	return (1);
 }
 
-int	open_redir_in(t_stack **stack, t_redir *redir, int *nodes)
+int	check_redir_in_left(t_data *data, t_stack **stack)
 {
-	if ((*stack)->node->type == NODE_PIPE && (*stack)->phase == ENTERED)
-		return (0);
-	else if ((*stack)->node->type == NODE_PIPE)
+	if (!(*stack) || !(*stack)->node)
+		return (-1);
+	if (push_left_until_cmd_redir(data, stack))
+		return (-1);
+	open_redir_in((*stack)->node->redir);
+	pop(stack);
+	return (0);
+	
+}
+
+int	check_redir_in_right(t_data *data, t_stack **stack)
+{
+	if (!(*stack) || !(*stack)->node)
+		return (-1);
+	while (*stack)
 	{
-		pop(stack);
-		(*nodes)--;
-		return (2);
+		if ((*stack)->phase == DONE)
+			pop(stack);
+		else if ((*stack)->node->right)
+		{
+			(*stack)->phase = DONE;
+			if ((*stack)->node->type == NODE_PIPE)
+			{
+				push_stack(stack, (*stack)->node->right, 0, 0, data);
+				if (check_redir_in_left(data, stack))
+					return (-1);
+			}
+		}
 	}
+	return (0);
+}
+
+
+
+int	push_left_until_cmd_redir(t_data *data, t_stack **stack)
+{
+	while ((*stack)->node->left)
+	{
+		if ((*stack)->node->type == NODE_SUBSHELL)
+		{
+			(*stack)->phase = DONE;
+			if (open_redir_in((*stack)->node->redir) == 2)
+				return (-1);
+		}
+		push_stack(stack, (*stack)->node->left, 0, 0, data);
+	}
+	return (0);
+}
+
+int	open_redir_in(t_redir *redir)
+{
+	if (!redir)
+		return (0);
 	while (redir)
 	{
 		if (redir->type == REDIR_IN)
@@ -64,13 +89,11 @@ int	open_redir_in(t_stack **stack, t_redir *redir, int *nodes)
 			if (redir->in_fd == -1)
 			{
 				handle_open_errors(redir);
-				break ;
+				return (2);
 			}
 		}
-		redir = redir->next;		
+		redir = redir->next;
 	}
-	pop(stack);
-	(*nodes)--;
 	return (1);
 }
 
@@ -78,10 +101,12 @@ int	close_redir_in(t_redir *redir)
 {
 	while (redir)
 	{
-		if (redir->in_fd == -1)
-			break ;
 		if (redir->type == REDIR_IN)
+		{
+			if (redir->in_fd == -1)
+				break ;
 			close(redir->in_fd);
+		}
 		redir = redir->next;
 	}
 	return (1);

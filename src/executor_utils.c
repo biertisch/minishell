@@ -115,6 +115,7 @@ void	check_for_variables(t_data *data, t_stack **stack)
 
 void	executor_cleanup(t_data *data, t_stack **stack, char *cmd)
 {
+	close_all_pipe_ends(stack);
 	if (cmd)
 		free(cmd);
 	free_stack(stack);

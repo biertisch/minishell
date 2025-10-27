@@ -25,7 +25,7 @@ void	child(t_data *data, t_stack **stack)
 	cmd = NULL;
 	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
 	{
-		cmd = ft_strdup(correct_path(data, stack, (*stack)->node->argv[cmd_i]));
+		cmd = correct_path(data, stack, (*stack)->node->argv[cmd_i]);
 		//do with other cmds?
 		if (ft_strcmp("/bin/echo", cmd)) 
 		{
@@ -125,6 +125,12 @@ void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 
 void	child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i)
 {
+	if ((*stack)->in_fd == -1)
+	{
+
+		executor_cleanup(data, stack, cmd);
+		exit(1);
+	}
 	if ((*stack)->in_fd != STDIN_FILENO)
 		dup2((*stack)->in_fd, STDIN_FILENO);
 	if ((*stack)->in_fd != STDIN_FILENO)
