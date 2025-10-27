@@ -141,7 +141,7 @@ void	test_builtin_validation(t_data *data, t_tree *head)
 {
 	if (!head)
 		return ;
-	validate_builtin(data, head);
+	validate_builtin(data, head, 0);
 	test_builtin_validation(data, head->left);
 	test_builtin_validation(data, head->right);
 }

@@ -62,24 +62,24 @@ static int	validate_flags(t_data *data, char **argv, char *allowed)
 	return (0);
 }
 
-int	validate_builtin(t_data *data, t_tree *node)
+int	validate_builtin(t_data *data, t_tree *node, int i)
 {
 	if (!node || node->type != NODE_CMD)
 		return (0);
-	if (!ft_strcmp(node->argv[0], "pwd") || !ft_strcmp(node->argv[0], "export")
-		|| !ft_strcmp(node->argv[0], "unset"))
+	if (!ft_strcmp(node->argv[i], "pwd") || !ft_strcmp(node->argv[i], "export")
+		|| !ft_strcmp(node->argv[i], "unset"))
 		if (validate_flags(data, node->argv, NULL))
 			return (-1);
-	if (!ft_strcmp(node->argv[0], "env") && validate_env(data, node->argv))
+	if (!ft_strcmp(node->argv[i], "env") && validate_env(data, node->argv))
 		return (-1);
-	if (!ft_strcmp(node->argv[0], "cd"))
+	if (!ft_strcmp(node->argv[i], "cd"))
 	{
-		if (node->argv[1] && node->argv[2])
-			return (internal_error(data, ERR_4, node->argv[0], NULL));
-		if (node->argv[1] && node->argv[1][0] == '-')
+		if (node->argv[i + 1] && node->argv[i + 2])
+			return (internal_error(data, ERR_4, node->argv[i], NULL));
+		if (node->argv[1] && node->argv[i + 1][0] == '-')
 		{
-			internal_error(data, ERR_3, node->argv[0], node->argv[1]);
-			return (print_usage(node->argv[0]));
+			internal_error(data, ERR_3, node->argv[i], node->argv[i + 1]);
+			return (print_usage(node->argv[i]));
 		}
 	}
 	return (0);

@@ -14,16 +14,22 @@
 
 int	execute_env(t_data *data, t_stack **stack)
 {
-	int	i;
+	t_env	*env;
 
-	i = 0;
-	while ((data->env[i]))
+	env = data->env_list;
+	while (env)
 	{
-		write(STDOUT_FILENO, data->env[i], ft_strlen(data->env[i]));
-		write(STDOUT_FILENO, "\n", 1);
-		i++;
+		if (env->key && ft_strcmp(env->key, "") && env->exported)
+		{
+			write(STDOUT_FILENO, env->key, ft_strlen(env->key));
+			write(STDOUT_FILENO, "=", 1);
+			write(STDOUT_FILENO, env->value, ft_strlen(env->value));
+			write(STDOUT_FILENO, "\n", 1);
+		}
+		env = env->next;
 	}
-	(void)stack;
+	free_stack(stack);
+	free_all(data);
 	exit(0);
 	return (1);
 }
