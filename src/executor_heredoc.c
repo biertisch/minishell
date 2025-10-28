@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:49:01 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 16:55:57 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:58:11 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	check_heredoc_left(t_data *data)
 {
 	if (!data->stack || !data->stack->node)
 		return (0);
-	if (push_left_until_cmd(data, NULL))
+	if (push_left_until_cmd(data))
 		return (-1);
 	if (execute_heredoc(data, data->stack->node->redir))
 		return (-1);
