@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 23:18:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:02:31 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 	if (res)
 		return (empty_subshell(data, token, node, res));
 	if (!*token)
-		return (free_parser_tree(data, &node), prompt_continuation(data, ')'));
+		return (free_parser_tree(data, &node), prompt_cont(data, ')'));
 	if ((*token)->type != RPAREN) //is this needed?
 		return (invalid_sequence(data, *token, node));
 	*token = (*token)->next;
@@ -46,7 +46,7 @@ static int	parse_command(t_data *data, t_token **token, t_tree **root)
 	t_tree	*node;
 
 	if (!*token)
-		return (prompt_continuation(data, 0));
+		return (prompt_cont(data, 0));
 	if (!is_command_token((*token)->type) && (*token)->type != LPAREN)
 		return (syntax_error(data, ERR_1, (*token)->value));
 	if ((*token)->type == LPAREN)

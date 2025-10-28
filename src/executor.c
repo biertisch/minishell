@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:37:51 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 10:16:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:01:28 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ int	execute(t_data *data)
 {
 	t_stack	*stack;
 
-	check_for_heredoc(data);
+	if (check_for_heredoc(data))
+		return (-1);
 	push_stack(&data->stack, data->parser_tree, 0, 0, data);
 	traverse_redir_in(data, &data->stack);
 	stack = create_stack(data);
 	execute_stack(data, &stack);
-	return (1);
+	return (0);
 }
 
 int	execute_stack(t_data *data, t_stack **stack)
@@ -103,7 +104,7 @@ int	execute_cmd_done(t_data **data, t_stack **stack)
 	return (1);
 }
 
-int	dummy_heredoc(t_redir *redir)
+int	dummy_heredoc(t_data *data, t_redir *redir)
 {
 	char	*line;
 
@@ -111,14 +112,21 @@ int	dummy_heredoc(t_redir *redir)
 		free(redir->heredoc_input);
 	redir->heredoc_input = malloc(1);
 	redir->heredoc_input[0] = '\0';
-	line = readline("> ");
-	while (ft_strcmp(line, redir->file))
+	setup_signals_heredoc(data);
+	while (1)
 	{
+		line = readline("> ");
+		if (!line)
+			return (heredoc_eof_abort(data, redir->file));
+		if (g_sig)
+			return (heredoc_sigint_abort(data, line));
+		if (!ft_strcmp(line, redir->file))
+			break;
 		redir->heredoc_input = ft_strdup_append(NULL, redir->heredoc_input, line);
 		free(line);
 		redir->heredoc_input = ft_strdup_append(NULL, redir->heredoc_input, "\n");
-		line = readline("> ");
+
 	}
 	free(line);
-	return (1);
+	return (0);
 }

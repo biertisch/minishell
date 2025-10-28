@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 11:51:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 11:51:35 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 11:11:10 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	push_right_once(t_data *data)
 int	push_left_until_cmd(t_data *data, int (*f_sub)(t_data *, t_tree *))
 {
 	if (!data->stack || !data->stack->node)
-		return (-1); //issue warning?
+		return (0);
 	while (data->stack->node->left)
 	{
 		if (data->stack->node->type == NODE_SUBSHELL)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:49:31 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/04 12:49:32 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/28 12:35:03 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	child(t_data *data, t_stack **stack)
 
 
 	env_list_to_array(data);
-	setup_signals_child(data);
+	setup_signals_command(data);
 	cmd_i = get_first_command(data, stack);
 	cmd = NULL;
 	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
 	{
 		cmd = correct_path(data, stack, (*stack)->node->argv[cmd_i]);
 		//do with other cmds?
-		if (ft_strcmp("/bin/echo", cmd)) 
+		if (ft_strcmp("/bin/echo", cmd))
 		{
 			free((*stack)->node->argv[cmd_i]);
 			(*stack)->node->argv[cmd_i] = ft_strdup(ft_strrchr(cmd, '/') + 1);
@@ -154,7 +154,7 @@ void	clean_execve_failure(t_data *data, t_stack **stack, char *cmd)
 {
 	int		exit_status;
 	char	*sh_argv[3];
-	
+
 	sh_argv[0] = "sh";
 	sh_argv[1] = (*stack)->node->argv[0];
 	sh_argv[2] = NULL;
@@ -165,7 +165,7 @@ void	clean_execve_failure(t_data *data, t_stack **stack, char *cmd)
 	{
 		write(STDERR_FILENO, ": command not found\n", 20);
 		exit_status = 127;
-	} 
+	}
 	else if (errno == EACCES || errno == EISDIR)
 		write(STDERR_FILENO, ": Permission denied\n", 20);
 	else if (errno == ENOEXEC)

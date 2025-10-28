@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+         #
+#    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/22 10:55:23 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/10/28 13:04:37 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,8 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		executor_echo executor_subshell get_next_line get_next_line_utils\
 		executor_env executor_cd executor_pwd executor_exit expand_tilde\
 		input_prompt executor_unset executor_error expander_dollar2\
-		expander_dollar3 input_continue variable_utils executor_export\
-		executor_heredoc executor_redirect
+		expander_dollar3 variable_utils executor_export\
+		executor_heredoc executor_redirect signal_handler signal_eof
 
 
 SRC_DIR     = src

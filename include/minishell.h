@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 23:25:27 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:01:48 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_data
 	int				exit_status;
 }	t_data;
 
-extern volatile sig_atomic_t	g_sig_received;
+extern volatile sig_atomic_t	g_sig;
 
 //test.c ---- DELETE WHEN COMPLETE
 void		print_env_list(t_env *head);
@@ -129,20 +129,28 @@ void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 //input.c
 void		prompt_input(t_data *data);
 void		read_input(t_data *data);
-int			handle_signal_interruption(t_data *data, char *line, int cont);
-void		handle_eof(t_data *data);
-
-//signal.c
-void		setup_signals(t_data *data);
-void		signal_handler(int sig);
-void		setup_signals_child(t_data *data);
-int			rl_sigint_main(void);
-int			rl_sigint_continuation(void);
+int			prompt_cont(t_data *data, char target);
 
 //input_prompt.c
 void		update_prompt(t_data *data);
 
-//input_continue.c
-int			prompt_continuation(t_data *data, char target);
+//signal.c
+void		setup_signals(t_data *data);
+void		setup_signals_cont(t_data *data);
+void		setup_signals_command(t_data *data);
+void		setup_signals_heredoc(t_data *data);
+
+//signal_handler.c
+void		setup_handler(t_data *data, int signum, void (*handler)(int),
+				int flags);
+void		sigint_handler(int sig);
+int			sigint_abort(t_data *data, char *line, int cont);
+void		heredoc_sigint_handler(int sig);
+int			heredoc_abort(t_data *data, char *line);
+
+//signal_eof.c
+void		eof_abort(t_data *data);
+int			heredoc_eof_abort(t_data *data, char *target);
+
 
 #endif
