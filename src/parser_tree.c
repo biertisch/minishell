@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:49:50 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/08 16:31:29 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:21:55 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	free_parser_node(t_tree **node)
 static int	clean_left_branch(t_data *data)
 {
 	if (!data->stack || !data->stack->node)
-		return (-1); //issue warning?
+		return (0);
 	if (push_left_until_cmd(data, NULL))
 		return (-1);
 	free_parser_node(&data->stack->node);
@@ -82,11 +82,4 @@ void	free_parser_tree(t_data *data, t_tree **root)
 		return ;
 	free_stack(&data->stack);
 	*root = NULL;
-}
-
-int	count_tree_nodes(t_tree *root)
-{
-	if (!root)
-		return (0);
-	return (1 + count_tree_nodes(root->left) + count_tree_nodes(root->right));
 }

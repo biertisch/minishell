@@ -6,20 +6,22 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 15:11:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:33:30 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../include/struct_def.h"
-# include "../include/libft.h"
-# include "../include/printf.h"
-# include "../include/executor.h"
-# include "../include/parser.h"
+# include "struct_def.h"
+# include "libft.h"
+# include "printf.h"
+# include "executor.h"
+# include "parser.h"
 # include "expander.h"
 # include "lexer.h"
+# include "signal.h"
+# include "env.h"
 # include <dirent.h>
 # include <fcntl.h>
 # include <readline/readline.h>
@@ -92,26 +94,6 @@ void		free_redir(t_redir *redir);
 void		free_string_array(char ***arr);
 void		free_stack(t_stack **stack);
 
-//env.c
-int			generate_minimal_env(t_data *data, char **argv);
-void		unset_env(t_env **head, char *key);
-void		set_env_value(t_env *head, char *key, char *new_value);
-char		*get_env_value(t_env *head, char *key);
-int			is_valid_var_name(char *s);
-int			is_new_var(char *arg);
-
-//env_convert.c
-void		env_list_to_array(t_data *data);
-int			envp_to_list(t_data *data, char **envp, char **argv);
-void		split_env_entry(t_data *data, char *entry, t_env *node);
-
-//env_list.c
-void		free_env_list(t_env **head);
-void		free_env_node(t_env **node);
-t_env		*get_last_env_node(t_env *head);
-void		add_env_node(t_env **head, t_env *new_node);
-t_env		*create_env_node(char *key, char *value, int exported);
-
 //error.c
 int			system_error(t_data *data, char *function);
 int			syntax_error(t_data *data, char *desc, char *token);
@@ -133,25 +115,5 @@ int			prompt_cont(t_data *data, char target);
 
 //input_prompt.c
 void		update_prompt(t_data *data);
-
-//signal.c
-void		setup_signals(t_data *data);
-void		setup_signals_cont(t_data *data);
-void		setup_signals_command(t_data *data);
-void		setup_signals_heredoc(t_data *data);
-void		setup_signals_parent(t_data *data);
-
-//signal_handler.c
-void		setup_handler(t_data *data, int signum, void (*handler)(int),
-				int flags);
-void		sigint_handler(int sig);
-int			sigint_abort(t_data *data, char *line, int cont);
-void		heredoc_sigint_handler(int sig);
-int			heredoc_sigint_abort(t_data *data, char *line);
-
-//signal_eof.c
-void		eof_abort(t_data *data);
-int			heredoc_eof_abort(t_data *data, char *target);
-
 
 #endif

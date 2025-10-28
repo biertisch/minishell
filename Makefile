@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/28 16:09:19 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/10/28 16:34:14 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,6 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		expander_dollar3 variable_utils executor_export\
 		executor_heredoc executor_redirect signal_handler signal_eof\
 		executor_heredoc2
-
 
 SRC_DIR     = src
 OBJ_DIR     = obj

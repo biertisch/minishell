@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:55:16 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 16:06:35 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:19:14 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ int			execute_cmd(t_data *data, t_stack **stack);
 int			execute_pipe(t_data *data, t_stack **stack);
 int			execute_cmd_entered(t_data *data, t_stack **stack);
 int			execute_cmd_done(t_data **data, t_stack **stack);
-int			dummy_heredoc(t_data *data, t_redir *redir);
-
 
 //stack.c
 t_stack		*create_stack(t_data *data);
@@ -184,6 +182,7 @@ int			push_left_until_cmd_redir(t_data *data, t_stack **stack);
 
 //executor_heredoc2.c
 int			run_heredoc_child(t_data *data, t_redir *redir);
+int			heredoc(t_data *data, t_redir *redir);
 int 		run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid);
 int			copy_heredoc_input(t_data *data, t_redir *redir);
 int			wait_for_heredoc(t_data *data, pid_t pid);

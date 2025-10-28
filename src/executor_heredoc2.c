@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:20:08 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:05:50 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:19:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,39 @@ int	run_heredoc_child(t_data *data, t_redir *redir)
 {
 	setup_signals_heredoc(data);
 	close(data->stack->pipe[0]);
-	dummy_heredoc(data, redir);
+	heredoc(data, redir);
 	close(data->stack->pipe[1]);
 	free_all(data);
 	exit(0);
 }
 
-int run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid)
+int	heredoc(t_data *data, t_redir *redir)
+{
+	char	*line;
+
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+		{
+			if (g_sig == SIGINT)
+				return (heredoc_sigint_abort(data, line));
+			else
+				return (heredoc_eof_abort(data, redir->file));
+		}
+		else if (!ft_strcmp(line, redir->file))
+		{
+			free(line);
+			break ;
+		}
+		write(data->stack->pipe[1], line, ft_strlen(line));
+		write(data->stack->pipe[1], "\n", 1);
+		free(line);
+	}
+	return (0);
+}
+
+int	run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid)
 {
 	setup_signals_parent(data);
 	copy_heredoc_input(data, redir);
@@ -45,7 +71,8 @@ int	copy_heredoc_input(t_data *data, t_redir *redir)
 	while (read_bytes > 0)
 	{
 		buffer[read_bytes] = '\0';
-		redir->heredoc_input = ft_strdup_append(NULL, redir->heredoc_input, buffer);
+		redir->heredoc_input = ft_strdup_append(NULL, redir->heredoc_input,
+				buffer);
 		validate_malloc(data, redir->heredoc_input, NULL);
 		read_bytes = read(data->stack->pipe[0], buffer, sizeof(buffer) - 1);
 	}
