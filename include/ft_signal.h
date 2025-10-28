@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.h                                           :+:      :+:    :+:   */
+/*   ft_signal.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:30:49 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:32:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:38:43 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIGNAL_H
-# define SIGNAL_H
+#ifndef FT_SIGNAL_H
+# define FT_SIGNAL_H
 
 # include "minishell.h"
 

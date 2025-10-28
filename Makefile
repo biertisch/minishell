@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/28 16:34:14 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/10/28 16:49:02 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		input_prompt executor_unset executor_error expander_dollar2\
 		expander_dollar3 variable_utils executor_export\
 		executor_heredoc executor_redirect signal_handler signal_eof\
-		executor_heredoc2
+		executor_heredoc2 env_utils
 
 SRC_DIR     = src
 OBJ_DIR     = obj
@@ -69,7 +69,7 @@ all: $(PRINTF_LIB) headers $(NAME)
 		$(VIOLET)|___|___||____||__|__||____|\___||__|__||_____||_____||_____|$(DEF_COLOUR)\n"
 	@printf "$(BLINK)$(CURSIVE)$(GREEN)\t\t\t\t\t\t- Minishell ready :)$(DEF_COLOUR)\n"
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDRS) | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@ctags -R .
 	@echo "tags\n.gitignore\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\

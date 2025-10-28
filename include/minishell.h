@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:33:30 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:39:00 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include "parser.h"
 # include "expander.h"
 # include "lexer.h"
-# include "signal.h"
+# include "ft_signal.h"
 # include "env.h"
 # include <dirent.h>
 # include <fcntl.h>
