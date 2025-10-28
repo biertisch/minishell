@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 23:23:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 17:34:00 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ char		**update_argv_dollar(char **old_argv, int i, char *value);
 
 //expander_dollar3.c
 int			expand_dollar_redir(t_data *data, char **file);
+int			expand_heredoc_input(t_data *data, t_redir *redir);
+int			expand_heredoc_var(t_data *data, char **input, int i);
 
 //expander_quotes.c
 void		remove_quotes(t_data *data, char **arg);

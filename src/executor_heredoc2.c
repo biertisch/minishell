@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:20:08 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:19:57 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 17:39:25 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	run_heredoc_child(t_data *data, t_redir *redir)
 {
 	setup_signals_heredoc(data);
 	close(data->stack->pipe[0]);
+	remove_quotes(data, &redir->file);
 	heredoc(data, redir);
 	close(data->stack->pipe[1]);
 	free_all(data);
@@ -52,6 +53,7 @@ int	run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid)
 {
 	setup_signals_parent(data);
 	copy_heredoc_input(data, redir);
+	expand_heredoc_input(data, redir);
 	return (wait_for_heredoc(data, pid));
 }
 
