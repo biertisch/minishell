@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:49:50 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:21:55 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:51:56 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,8 @@ static int	clean_right_branch(t_data *data)
 		{
 			free_parser_node(&data->stack->node);
 			pop(&data->stack);
-			continue ;
 		}
-		if (data->stack->node->right)
+		else if (data->stack->node->right)
 		{
 			data->stack->phase = DONE;
 			push_right_once(data);
