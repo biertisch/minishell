@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:49:01 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 16:07:00 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:55:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ int	check_heredoc_right(t_data *data)
 		else if (data->stack->node->right)
 		{
 			data->stack->phase = DONE;
-			push_right_once(data);
+			if (data->stack->node->right)
+				push_stack(&data->stack, data->stack->node->right, 0, 0, data);
 			if (check_heredoc_left(data))
 				return (-1);
 		}

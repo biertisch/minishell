@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 16:29:40 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:55:41 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ void		free_parser_node(t_tree **node);
 t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);
 
 //parser_tree2.c
-int			push_left_until_cmd(t_data *data, int (*f_sub)(t_data *, t_tree *));
-void		push_right_once(t_data *data);
+int			push_left_until_cmd(t_data *data, t_tree *);
 int			count_tree_nodes(t_tree *root);
 
 //parser_utils.c
