@@ -6,26 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 13:02:10 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 21:24:10 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static int	process_input(t_data *data)
-{
-	int	res;
-
-	add_history(data->input);
-	res = lexer(data);
-	if (res || !data->lexer_list)
-		return (res);
-	res = parser(data);
-	if (res || !data->parser_tree)
-		return (res);
-	execute(data);
-	return (VALID);
-}
 
 // interactive mode
 void	prompt_input(t_data *data)
@@ -74,31 +59,22 @@ void	read_input(t_data *data)
 	}
 }
 
-static char	*update_input(t_data *data, char *line, char target)
+int	process_input(t_data *data)
 {
-	char	*separator;
-	char	*append_separator;
-	char	*append_line;
+	int	res;
 
-	if (is_quote(target))
-		separator = "\n";
-	else
-		separator = " ";
-	append_separator = ft_strjoin(data->input, separator);
-	validate_malloc(data, append_separator, line);
-	append_line = ft_strjoin(append_separator, line);
-	if (!append_line)
-	{
-		free(append_separator);
-		validate_malloc(data, NULL, line);
-	}
-	free(append_separator);
-	free_command_data(data);
-	rl_replace_line(append_line, 0);
-	return (append_line);
+	add_history(data->input);
+	res = lexer(data);
+	if (res || !data->lexer_list)
+		return (res);
+	res = parser(data);
+	if (res || !data->parser_tree)
+		return (res);
+	execute(data);
+	return (VALID);
 }
 
-int	prompt_cont(t_data *data, char target)
+int	prompt_input_cont(t_data *data, char target, int fd)
 {
 	char	*line;
 
@@ -107,10 +83,10 @@ int	prompt_cont(t_data *data, char target)
 		line = readline(CONTINUE_PROMPT);
 		if (g_sig == SIGINT)
 			return (sigint_abort(data, line, 1));
-		if (!line)
+		else if (!line)
 			return (syntax_error(data, ERR_7, NULL));
 		if (is_quote(target) || *line)
-			data->input = update_input(data, line, target);
+			write_to_pipe(line, target, fd);
 		if ((target && ft_strchr(line, target)) || (!target && *line))
 		{
 			free(line);
@@ -118,5 +94,5 @@ int	prompt_cont(t_data *data, char target)
 		}
 		free(line);
 	}
-	return (INCOMPLETE);
+	return (0);
 }

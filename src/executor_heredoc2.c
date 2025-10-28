@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:20:08 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 17:39:25 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 21:58:30 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	run_heredoc_child(t_data *data, t_redir *redir)
 	heredoc(data, redir);
 	close(data->stack->pipe[1]);
 	free_all(data);
+	rl_clear_history();
 	exit(0);
 }
 
@@ -29,7 +30,7 @@ int	heredoc(t_data *data, t_redir *redir)
 
 	while (1)
 	{
-		line = readline("> ");
+		line = readline(CONTINUE_PROMPT);
 		if (!line)
 		{
 			if (g_sig == SIGINT)
@@ -69,7 +70,7 @@ int	copy_heredoc_input(t_data *data, t_redir *redir)
 	validate_malloc(data, redir->heredoc_input, NULL);
 	redir->heredoc_input[0] = '\0';
 	close(data->stack->pipe[1]);
-	read_bytes = read(data->stack->pipe[0], buffer, sizeof(buffer));
+	read_bytes = read(data->stack->pipe[0], buffer, sizeof(buffer) - 1);
 	while (read_bytes > 0)
 	{
 		buffer[read_bytes] = '\0';

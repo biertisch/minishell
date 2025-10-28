@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:14:42 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 23:00:07 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,15 @@ static int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 	int		res;
 
 	*token = (*token)->next;
+	if (!*token)
+		return (incomplete_subshell(data, NULL));
 	node = create_parser_node(NODE_SUBSHELL, NULL, NULL);
 	validate_malloc(data, node, NULL);
 	res = parse_and_or(data, token, &node->left);
 	if (res)
 		return (empty_subshell(data, token, node, res));
 	if (!*token)
-		return (free_parser_tree(data, &node), prompt_cont(data, ')'));
+		return (incomplete_subshell(data, &node));
 	if ((*token)->type != RPAREN)
 		return (invalid_sequence(data, *token, node));
 	*token = (*token)->next;
@@ -46,7 +48,7 @@ static int	parse_command(t_data *data, t_token **token, t_tree **root)
 	t_tree	*node;
 
 	if (!*token)
-		return (prompt_cont(data, 0));
+		return (handle_incomplete_input(data, 0));
 	if (!is_command_token((*token)->type) && (*token)->type != LPAREN)
 		return (syntax_error(data, ERR_1, (*token)->value));
 	if ((*token)->type == LPAREN)

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:39:00 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 22:40:14 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,15 @@ void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 //input.c
 void		prompt_input(t_data *data);
 void		read_input(t_data *data);
-int			prompt_cont(t_data *data, char target);
+int			process_input(t_data *data);
+int			prompt_input_cont(t_data *data, char target, int fd);
+
+//input_cont.c
+int			handle_incomplete_input(t_data *data, char target);
+int			run_incomplete_child(t_data *data, char target, int *pipe_fd);
+int			write_to_pipe(char *line, char target, int fd);
+int			run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid);
+char		*copy_continuation_input(t_data *data, int *pipe_fd);
 
 //input_prompt.c
 void		update_prompt(t_data *data);
