@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:49:01 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 12:50:14 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:07:00 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,23 @@ int	check_heredoc_right(t_data *data)
 
 int	execute_heredoc(t_data *data, t_redir *redir)
 {
+	pid_t	pid;
+
 	if (!redir)
 		return (0);
 	while (redir)
 	{
-		if (redir->type == HEREDOC && dummy_heredoc(data, redir))
+		if (redir->type == HEREDOC)
 		{
-			return (-1);
+			if (validate_pipe(pipe(data->stack->pipe), &data->stack))
+				return (-1);
+			pid = fork();
+			if (pid < 0)
+				return (validate_fork(data, &data->stack));
+			else if (pid == 0)
+				run_heredoc_child(data, redir);
+			else if (run_heredoc_parent(data, redir, pid))
+				return (-1);
 		}
 		redir = redir->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:37:51 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 13:01:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:03:39 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,25 +108,24 @@ int	dummy_heredoc(t_data *data, t_redir *redir)
 {
 	char	*line;
 
-	if (redir->heredoc_input)
-		free(redir->heredoc_input);
-	redir->heredoc_input = malloc(1);
-	redir->heredoc_input[0] = '\0';
-	setup_signals_heredoc(data);
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
-			return (heredoc_eof_abort(data, redir->file));
-		if (g_sig)
-			return (heredoc_sigint_abort(data, line));
-		if (!ft_strcmp(line, redir->file))
+		{
+			if (g_sig == SIGINT)
+				return (heredoc_sigint_abort(data, line));
+			else
+				return (heredoc_eof_abort(data, redir->file));
+		}
+		else if (!ft_strcmp(line, redir->file))
+		{
+			free(line);
 			break;
-		redir->heredoc_input = ft_strdup_append(NULL, redir->heredoc_input, line);
+		}
+		write(data->stack->pipe[1], line, ft_strlen(line));
+		write(data->stack->pipe[1], "\n", 1);
 		free(line);
-		redir->heredoc_input = ft_strdup_append(NULL, redir->heredoc_input, "\n");
-
 	}
-	free(line);
 	return (0);
 }

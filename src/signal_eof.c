@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 12:38:03 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 13:02:42 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 15:35:30 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int		heredoc_eof_abort(t_data *data, char *target)
 	validate_malloc(data, error_msg, tmp);
 	free(tmp);
 	write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
+	close(data->stack->pipe[1]);
 	free(error_msg);
-	return (0);
+	free_all(data);
+	exit(0);
 }
