@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:49:01 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/24 12:49:02 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/28 17:44:39 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ int	check_for_heredoc(t_data *data)
 int	check_heredoc_left(t_data *data)
 {
 	if (!data->stack || !data->stack->node)
+		return (0);
+	if (push_left_until_cmd(data))
 		return (-1);
-	if (push_left_until_cmd(data, NULL))
+	if (execute_heredoc(data, data->stack->node->redir))
 		return (-1);
-	execute_heredoc(data->stack->node->redir);
 	pop(&data->stack);
 	return (0);
 }
@@ -38,18 +39,20 @@ int	check_heredoc_left(t_data *data)
 int	check_heredoc_right(t_data *data)
 {
 	if (!data->stack || !data->stack->node)
-		return (-1);
+		return (0);
 	while (data->stack)
 	{
 		if (data->stack->phase == DONE)
 		{
-			execute_heredoc(data->stack->node->redir);
+			if (execute_heredoc(data, data->stack->node->redir))
+				return (-1);
 			pop(&data->stack);
 		}
 		else if (data->stack->node->right)
 		{
 			data->stack->phase = DONE;
-			push_right_once(data);
+			if (data->stack->node->right)
+				push_stack(&data->stack, data->stack->node->right, 0, 0, data);
 			if (check_heredoc_left(data))
 				return (-1);
 		}
@@ -57,14 +60,26 @@ int	check_heredoc_right(t_data *data)
 	return (0);
 }
 
-int	execute_heredoc(t_redir *redir)
+int	execute_heredoc(t_data *data, t_redir *redir)
 {
+	pid_t	pid;
+
 	if (!redir)
 		return (0);
 	while (redir)
 	{
 		if (redir->type == HEREDOC)
-			dummy_heredoc(redir);
+		{
+			if (validate_pipe(pipe(data->stack->pipe), &data->stack))
+				return (-1);
+			pid = fork();
+			if (pid < 0)
+				return (validate_fork(data, &data->stack));
+			else if (pid == 0)
+				run_heredoc_child(data, redir);
+			else if (run_heredoc_parent(data, redir, pid))
+				return (-1);
+		}
 		redir = redir->next;
 	}
 	return (0);

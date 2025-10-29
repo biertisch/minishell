@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:17:33 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 16:49:45 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:49:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 static int	print_usage(char *cmd)
 {

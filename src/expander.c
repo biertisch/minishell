@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 23:11:55 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:52:51 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,52 +80,3 @@ int	expand(t_data *data, t_tree *node)
 		return (-1);
 	return (0);
 }
-
-// static int	expand_left_branch(t_data *data)
-// {
-// 	if (!data->stack || !data->stack->node)
-// 		return (-1); //issue warning?
-// 	if (push_left_until_cmd(data, expand_redir))
-// 		return (-1);
-// 	if (data->stack->node->argv)
-// 		if (expand_argv(data, data->stack->node))
-// 			return (-1);
-// 	if (data->stack->node->redir)
-// 		if (expand_redir(data, data->stack->node))
-// 			return (-1);
-// 	pop(&data->stack);
-// 	return (0);
-// }
-
-// static int	expand_right_branch(t_data *data)
-// {
-// 	if (!data->stack || !data->stack->node)
-// 		return (0);
-// 	while (data->stack)
-// 	{
-// 		if (data->stack->phase == DONE)
-// 		{
-// 			pop(&data->stack);
-// 			continue ;
-// 		}
-// 		if (data->stack->node->right)
-// 		{
-// 			data->stack->phase = DONE;
-// 			push_right_once(data);
-// 			if (expand_left_branch(data))
-// 				return (-1);
-// 		}
-// 	}
-// 	return (0);
-// }
-
-// int	expand(t_data *data)
-// {
-// 	push_stack(&data->stack, data->parser_tree, 0, 0, data);
-// 	if (expand_left_branch(data))
-// 		return (-1);
-// 	if (expand_right_branch(data))
-// 		return (-1);
-// 	free_stack(&data->stack);
-// 	return (0);
-// }
