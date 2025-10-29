@@ -73,6 +73,7 @@ char		*run_curr_dir(t_data *data, t_stack **stack, char *cmd);
 void		check_for_variables(t_data *data, t_stack **stack);
 void		executor_child_errno(t_data *data, t_stack **stack, char *cmd);
 void		executor_cleanup(t_data *data, t_stack **stack, char *cmd);
+char		**split_by_first_equal(char *var);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
