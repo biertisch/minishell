@@ -76,7 +76,7 @@ int	validate_builtin(t_data *data, t_tree *node, int i)
 	{
 		if (node->argv[i + 1] && node->argv[i + 2])
 			return (internal_error(data, ERR_4, node->argv[i], NULL));
-		if (node->argv[1] && node->argv[i + 1][0] == '-')
+		if (node->argv[1] && node->argv[i + 1][0] == '-' && node->argv[i+1][1])
 		{
 			internal_error(data, ERR_3, node->argv[i], node->argv[i + 1]);
 			return (print_usage(node->argv[i]));

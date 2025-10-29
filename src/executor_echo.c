@@ -50,6 +50,8 @@ int	execute_echo_option(t_data *data, t_stack **stack)
 	int	i;
 
 	i = 2;
+	while (is_echo_option((*stack)->node->argv[i]))
+		i++;
 	while ((*stack)->node->argv[i])
 	{
 		validate_write(data, stack, write(STDOUT_FILENO, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i])));

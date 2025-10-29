@@ -56,6 +56,8 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 			waitpid(pid, &status, 0);
 			if (WIFEXITED(status))
 				(*stack)->exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				(*stack)->exit_status = WTERMSIG(status) + 128;
 		}
 	}
 	return (0);

@@ -18,13 +18,14 @@ int	check_if_variable(t_data *data, t_stack **stack)
 	char	**kv_split;
 	t_env	**env;
 	int	found;
-
+	if (!ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "cd"))
+		return (0);
 	i = 0;
 	if (!(*stack)->node->argv)
 		return (0);
 	while ((*stack)->node->argv[i])
 	{
-		kv_split = ft_split((*stack)->node->argv[i], '=');
+		kv_split = split_by_first_equal((*stack)->node->argv[i]);
 		if (is_valid_var_name(kv_split[0]) && kv_split[1])
 		{
 			env = &(data->env_list);
@@ -49,6 +50,37 @@ int	check_if_variable(t_data *data, t_stack **stack)
 		i++;
 	}
 	return (1);
+}
+
+char	**split_by_first_equal(char *var)
+{
+	char	**res;
+	char	*first_eq;
+	int		i;
+	int		j;
+
+	first_eq = ft_strchr(var, '=');
+	if (!first_eq)
+		return (ft_split(var, '='));
+	res = malloc(3 * sizeof(char *));
+	if (!res)
+		return (NULL);
+	res[0] = malloc(first_eq - var + 1);
+	if (!res[0])
+		return (free(res), NULL);
+	res[1] = malloc(ft_strlen(var) - ft_strlen(first_eq) + 1);
+	if (!res[1])
+		return (ft_splitfree_error(res, 1), NULL);
+	i = -1;
+	while (++i < (first_eq - var))
+		res[0][i] = *(var + i);
+	res[0][i] = '\0';
+	j = 0;
+	while (++i < (int)ft_strlen(var))
+		res[1][j++] = *(var + i);
+	res[1][j] = '\0';
+	res[2] = NULL;
+	return (res);
 }
 
 int	get_first_command(t_data *data, t_stack **stack)

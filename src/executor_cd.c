@@ -21,14 +21,23 @@ int	execute_cd(t_data *data, t_stack **stack)
 	(*stack)->exit_status = 0;
 	chdir_res = 0;
 	curr_pwd = ft_strdup(getcwd(NULL, 0));
-	if (!(*stack)->node->argv[1])
+	if (!(*stack)->node->argv[where_is_cd(stack) + 1])
 		chdir_res = chdir(get_env_value(data->env_list, "HOME"));
-	else if (!(*stack)->node->argv[2])
-		chdir_res = chdir((*stack)->node->argv[1]);
+	else if (!(*stack)->node->argv[where_is_cd(stack) + 2])
+	{
+		if (!ft_strcmp((*stack)->node->argv[where_is_cd(stack) + 1], "-"))
+		{
+			write(STDOUT_FILENO, get_env_value(data->env_list, "OLDPWD"), ft_strlen(get_env_value(data->env_list, "OLDPWD")));
+			write(STDOUT_FILENO, "\n", 1);
+			chdir_res = chdir(get_env_value(data->env_list, "OLDPWD"));
+		}
+		else
+			chdir_res = chdir((*stack)->node->argv[where_is_cd(stack) + 1]);
+	}
 	else
 		(*stack)->exit_status = cd_fail(NULL);
 	if (chdir_res)
-		(*stack)->exit_status = cd_fail((*stack)->node->argv[1]);
+		(*stack)->exit_status = cd_fail((*stack)->node->argv[where_is_cd(stack) + 1]);
 	else
 	{
 		new_pwd = ft_strdup(getcwd(NULL, 0));
@@ -38,6 +47,20 @@ int	execute_cd(t_data *data, t_stack **stack)
 	if (has_node_type_ancestor(*stack, NODE_SUBSHELL))
 		exit((*stack)->exit_status);
 	return (0);
+}
+
+int	where_is_cd(t_stack **stack)
+{
+	int	i;
+
+	i = 0;
+	while ((*stack)->node->argv[i])
+	{
+		if (!ft_strcmp((*stack)->node->argv[i], "cd"))
+			return (i);
+		i++;
+	}
+	return (i);
 }
 
 int	cd_fail(char *dir)

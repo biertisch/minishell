@@ -40,6 +40,8 @@ int	parent_single_command(t_stack **stack, pid_t pid)
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		(*stack)->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		(*stack)->exit_status = WTERMSIG(status) + 128;
 	if ((*stack)->next && (*stack)->next->type == NODE_SUBSHELL)
 		(*stack)->next->exit_status = (*stack)->exit_status;
 	return (1);

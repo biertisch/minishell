@@ -86,7 +86,10 @@ void	child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 		executor_cleanup(data, stack, cmd);
 		exit(1);
 	}
-	dup2(redir->out_fd, STDOUT_FILENO);
+	if (redir->fd != -1)
+		dup2(redir->out_fd, redir->fd);
+	else
+		dup2(redir->out_fd, STDOUT_FILENO);
 	close(redir->out_fd);
 	if ((*stack)->in_fd != STDIN_FILENO)
 		dup2((*stack)->in_fd, STDIN_FILENO);
