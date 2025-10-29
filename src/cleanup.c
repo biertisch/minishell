@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:37:43 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/30 19:13:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 21:29:32 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	free_command_data(t_data *data)
 	data->input = NULL;
 	free_lexer_list(&data->lexer_list);
 	free_stack(&data->stack);
-	free_parser_tree(data, &data->parser_tree);
+	free_parser_tree(&data->parser_tree);
 }
 
 void	free_all(t_data *data)

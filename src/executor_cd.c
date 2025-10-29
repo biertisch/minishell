@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_cd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 12:14:33 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/28 12:14:35 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 21:26:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ int	cd_fail(char *dir)
 	else if (errno == EACCES)
 		write(STDERR_FILENO, ": Permission denied\n", 20);
 	else if (!dir)
-		write(STDERR_FILENO, "too many arguments\n", 21);
+		write(STDERR_FILENO, "too many arguments\n", 20);
 	return (1);
 }
