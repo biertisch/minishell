@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:20:08 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 21:58:30 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 12:29:03 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	heredoc(t_data *data, t_redir *redir)
 
 int	run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid)
 {
-	setup_signals_parent(data);
+	setup_signals_ignore(data);
 	copy_heredoc_input(data, redir);
 	expand_heredoc_input(data, redir);
 	return (wait_for_heredoc(data, pid));
@@ -91,5 +91,6 @@ int	wait_for_heredoc(t_data *data, pid_t pid)
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		data->exit_status = WEXITSTATUS(status);
+	setup_signals(data);
 	return (data->exit_status == 130);
 }
