@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:30:49 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 15:53:35 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:19:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void		eof_abort(t_data *data);
 
 //signal_heredoc.c
 void		setup_signals_heredoc(t_data *data);
-void		setup_signals_ignore(t_data *data);
 void		heredoc_sigint_handler(int sig);
 int			heredoc_sigint_abort(t_data *data, char *line);
 int			heredoc_eof_abort(t_data *data, char *target);

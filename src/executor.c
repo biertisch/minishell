@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:37:51 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 14:35:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:22:16 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	execute(t_data *data)
 
 	setup_signals_parent(data);
 	if (check_for_heredoc(data))
+	{
+		setup_signals(data);
 		return (-1);
+	}
 	push_stack(&data->stack, data->parser_tree, 0, 0, data);
 	traverse_redir_in(data, &data->stack);
 	stack = create_stack(data);

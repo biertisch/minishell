@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:57:53 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 12:48:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:18:56 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid)
 {
 	int	status;
 
-	setup_signals_ignore(data);
+	setup_signals_parent(data);
 	close(pipe_fd[1]);
 	status = 0;
 	waitpid(pid, &status, 0);

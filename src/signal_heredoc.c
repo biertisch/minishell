@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 12:31:48 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 12:34:54 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:21:09 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,6 @@ void	setup_signals_heredoc(t_data *data)
 	{
 		setup_handler(data, SIGINT, SIG_DFL, 0);
 		setup_handler(data, SIGQUIT, SIG_DFL, 0);
-	}
-}
-
-void	setup_signals_ignore(t_data *data)
-{
-	if (isatty(STDIN_FILENO))
-	{
-		setup_handler(data, SIGINT, SIG_IGN, 0);
-		setup_handler(data, SIGQUIT, SIG_IGN, 0);
 	}
 }
 

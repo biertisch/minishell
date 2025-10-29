@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:49:31 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 15:53:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:09:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 		dup2((*stack)->out_fd, STDOUT_FILENO);
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		close((*stack)->out_fd);
-	if (!redir->next && redir->fd != -1)
+	if (!redir->next)
 	{
 		close_all_pipe_ends(stack);
 		if (!is_builtin((*stack)->node->argv[0]))
