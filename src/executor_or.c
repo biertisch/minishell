@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_or.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 13:07:50 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/23 13:07:52 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 14:54:56 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	execute_or_entered(t_data *data, t_stack **stack)
 int	execute_or_launch_left(t_data *data, t_stack **stack)
 {
 	(*stack)->phase = LAUNCH_RIGHT;
-	if ((*stack)->exit_status)
+	if ((*stack)->exit_status && (*stack)->exit_status != 130
+		&& (*stack)->exit_status != 131)
 	{
 		push_stack(&data->stack, (*stack)->node->right, 0, 0, data);
 		traverse_redir_in(data, &data->stack);

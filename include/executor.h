@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:55:16 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 16:19:14 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 14:14:49 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,12 @@ char		*run_curr_dir(t_data *data, t_stack **stack, char *cmd);
 void		check_for_variables(t_data *data, t_stack **stack);
 void		executor_child_errno(t_data *data, t_stack **stack, char *cmd);
 void		executor_cleanup(t_data *data, t_stack **stack, char *cmd);
+char		**split_by_first_equal(char *var);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
 int			parent_single_command(t_stack **stack, pid_t pid);
 int			parent_heredoc(t_stack **stack, pid_t pid);
-int			heredoc_loop(t_stack **stack, char *heredoc, char *res);
 
 //executor_pipe.c
 int			execute_pipe_entered(t_data *data, t_stack **stack);
@@ -135,6 +135,8 @@ int			execute_env(t_data *data, t_stack **stack);
 //executor_cd.c
 int			execute_cd(t_data *data, t_stack **stack);
 int			cd_fail(char *dir);
+int		execute_cd_option(t_data *data, t_stack **stack);
+int		where_is_cd(t_stack **stack);
 
 //executor_pwd.c
 int			execute_pwd(t_data *data, t_stack **stack);

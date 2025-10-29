@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_signal.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:30:49 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:38:43 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:19:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,21 @@
 //signal.c
 void		setup_signals(t_data *data);
 void		setup_signals_cont(t_data *data);
-void		setup_signals_command(t_data *data);
-void		setup_signals_heredoc(t_data *data);
+void		setup_signals_child(t_data *data);
 void		setup_signals_parent(t_data *data);
-
-//signal_handler.c
 void		setup_handler(t_data *data, int signum, void (*handler)(int),
 				int flags);
+
+//signal_handler.c
 void		sigint_handler(int sig);
+void		handle_child_exit(int status);
 int			sigint_abort(t_data *data, char *line, int cont);
+void		eof_abort(t_data *data);
+
+//signal_heredoc.c
+void		setup_signals_heredoc(t_data *data);
 void		heredoc_sigint_handler(int sig);
 int			heredoc_sigint_abort(t_data *data, char *line);
-
-//signal_eof.c
-void		eof_abort(t_data *data);
 int			heredoc_eof_abort(t_data *data, char *target);
 
 #endif
