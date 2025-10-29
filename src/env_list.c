@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 17:42:52 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/10 11:04:03 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:10:07 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 t_env	*create_env_node(char *key, char *value, int exported)
 {

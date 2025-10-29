@@ -6,30 +6,28 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:57:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 18:11:09 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:05:16 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
-static char	*replace_tilde_value(char *arg, int key_len, char *value)
+void	expand_tilde(t_data *data, char **arg)
 {
-	char	*new_arg;
-	int		new_len;
-	int		value_len;
+	char	*value;
+	int		key_len;
 
-	value_len = ft_strlen(value);
-	new_len = ft_strlen(arg) - key_len + value_len;
-	new_arg = malloc(sizeof(char) * (new_len + 1));
-	if (!new_arg)
-		return (NULL);
-	ft_strlcpy(new_arg, value, value_len + 1);
-	ft_strlcat(new_arg, arg + key_len, new_len + 1);
-	free(arg);
-	return (new_arg);
+	if (!arg || !*arg || **arg != '~')
+		return ;
+	value = get_tilde_value(data, *arg, &key_len);
+	if (value)
+	{
+		*arg = replace_tilde_value(*arg, key_len, value);
+		validate_malloc(data, *arg, NULL);
+	}
 }
 
-static char	*get_value(t_data *data, char *arg, int *key_len)
+char	*get_tilde_value(t_data *data, char *arg, int *key_len)
 {
 	if (!ft_strcmp(arg, "~+") || !ft_strncmp(arg, "~+/", 3))
 	{
@@ -49,17 +47,19 @@ static char	*get_value(t_data *data, char *arg, int *key_len)
 	return (NULL);
 }
 
-void	expand_tilde(t_data *data, char **arg)
+char	*replace_tilde_value(char *arg, int key_len, char *value)
 {
-	char	*value;
-	int		key_len;
+	char	*new_arg;
+	int		new_len;
+	int		value_len;
 
-	if (!arg || !*arg || **arg != '~')
-		return ;
-	value = get_value(data, *arg, &key_len);
-	if (value)
-	{
-		*arg = replace_tilde_value(*arg, key_len, value);
-		validate_malloc(data, *arg, NULL);
-	}
+	value_len = ft_strlen(value);
+	new_len = ft_strlen(arg) - key_len + value_len;
+	new_arg = malloc(sizeof(char) * (new_len + 1));
+	if (!new_arg)
+		return (NULL);
+	ft_strlcpy(new_arg, value, value_len + 1);
+	ft_strlcat(new_arg, arg + key_len, new_len + 1);
+	free(arg);
+	return (new_arg);
 }

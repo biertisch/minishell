@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:16:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 21:29:46 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:10:19 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 void	error_exit(t_data *data)
 {

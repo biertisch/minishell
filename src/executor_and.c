@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_and.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 13:43:14 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/20 13:43:15 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:10:23 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_and(t_data *data, t_stack **stack)
 {

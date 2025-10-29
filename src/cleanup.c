@@ -6,40 +6,29 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:37:43 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 21:29:32 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:09:58 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
-void	free_string_array(char ***arr)
+void	free_all(t_data *data)
 {
-	int	i;
-
-	if (!arr || !*arr)
-		return ;
-	i = 0;
-	while ((*arr)[i])
-	{
-		free((*arr)[i]);
-		i++;
-	}
-	free(*arr);
-	*arr = NULL;
+	free_string_array(&data->env);
+	free_env_list(&data->env_list);
+	free_command_data(data);
+	rl_clear_history();
+	free(data->prompt);
 }
 
-void	free_redir(t_redir *redir)
+//called after every iteration of main loop
+void	free_command_data(t_data *data)
 {
-	t_redir	*tmp;
-
-	while (redir)
-	{
-		tmp = redir->next;
-		free(redir->file);
-		free(redir->heredoc_input);
-		free(redir);
-		redir = tmp;
-	}
+	free(data->input);
+	data->input = NULL;
+	free_lexer_list(&data->lexer_list);
+	free_stack(&data->stack);
+	free_parser_tree(&data->parser_tree);
 }
 
 void	free_stack(t_stack **stack)
@@ -61,21 +50,32 @@ void	free_stack(t_stack **stack)
 	*stack = NULL;
 }
 
-//called after every iteration of main loop
-void	free_command_data(t_data *data)
+void	free_redir(t_redir *redir)
 {
-	free(data->input);
-	data->input = NULL;
-	free_lexer_list(&data->lexer_list);
-	free_stack(&data->stack);
-	free_parser_tree(&data->parser_tree);
+	t_redir	*tmp;
+
+	while (redir)
+	{
+		tmp = redir->next;
+		free(redir->file);
+		free(redir->heredoc_input);
+		free(redir);
+		redir = tmp;
+	}
 }
 
-void	free_all(t_data *data)
+void	free_string_array(char ***arr)
 {
-	free_string_array(&data->env);
-	free_env_list(&data->env_list);
-	free_command_data(data);
-	rl_clear_history();
-	free(data->prompt);
+	int	i;
+
+	if (!arr || !*arr)
+		return ;
+	i = 0;
+	while ((*arr)[i])
+	{
+		free((*arr)[i]);
+		i++;
+	}
+	free(*arr);
+	*arr = NULL;
 }
