@@ -31,7 +31,7 @@ int	execute_pipe_entered(t_data *data, t_stack **stack)
 {
 	int	left_in;
 	int	left_out;
-
+	
 	if (validate_pipe(pipe((*stack)->pipe), stack) == 1)
 		return (0);
 	left_in = (*stack)->in_fd;
@@ -45,12 +45,26 @@ int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 {
 	int	right_in;
 	int	right_out;
-
-	right_in = (*stack)->pipe[0];
-	if (get_next_pipe(stack))
-		right_out = (*get_next_pipe(stack))->pipe[1];
+	
+	if ((*stack)->node->right->type == NODE_SUBSHELL
+		&& (*stack)->node->right->left->type == NODE_PIPE)
+		right_out = -1;
 	else
-		right_out = STDOUT_FILENO;
+	{
+		if (get_next_pipe(stack) && (*get_next_pipe(stack))->phase != LAUNCH_RIGHT)
+			right_out = (*get_next_pipe(stack))->pipe[1];
+		else if ((*stack)->out_fd == -1)
+		{
+			//should it be the first pipe after the node_subshell????
+			if (get_next_pipe(stack) && (get_next_pipe(get_next_pipe(stack))))
+				right_out = (*get_next_pipe(get_next_pipe(stack)))->pipe[1];
+			else
+				right_out = STDOUT_FILENO;
+		}
+		else
+			right_out = (*stack)->out_fd;
+	}
+	right_in = (*stack)->pipe[0];
 	(*stack)->phase = LAUNCH_RIGHT;
 	push_stack(stack, (*stack)->node->right, right_in, right_out, data);
 	return (0);
@@ -68,35 +82,38 @@ int	execute_pipe_launch_right(t_data *data, t_stack **stack)
 int	execute_pipe_wait(t_stack **stack)
 {
 	int		status;
-	pid_t	res;
 
 	status = 0;
-	if (!get_next_pipe(stack))
+	//why???
+	if (!get_next_pipe_in_subshell(stack))
 	{
+		close_all_pipe_ends(stack);
 		if ((*stack)->child_count == 1)
-			res = waitpid((*stack)->child_pid[0], &status, 0);
+			waitpid((*stack)->child_pid[0], &status, 0);
 		else
-			res = waitpid((*stack)->child_pid[1], &status, 0);
+			waitpid((*stack)->child_pid[1], &status, 0);
 		if (WIFEXITED(status))
 			(*stack)->exit_status = WEXITSTATUS(status);
 	}
-	//for now it stays like this but i still need to check signals
 	(*stack)->phase = DONE;
 	return (0);
 }
 
 int	execute_pipe_done(t_data **data, t_stack **stack)
 {
-	close((*stack)->pipe[0]);
-	close((*stack)->pipe[1]);
-	if (!get_next_pipe(stack))
+	if (!get_next_pipe_in_subshell(stack))
 	{
-		(*data)->exit_status = (*stack)->exit_status;
-		while (errno != ECHILD)
+		while (1)
+		{
 			wait(NULL);
-		if ((*stack)->next)
-			setup_next_to_top(data, stack);
+			if (errno == ECHILD)
+				break;
+		}
 	}
+	if ((*stack)->next)
+		setup_next_to_top(data, stack);
+	else
+		(*data)->exit_status = (*stack)->exit_status;
 	pop(stack);
 	return (1);
 }

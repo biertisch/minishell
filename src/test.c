@@ -93,8 +93,6 @@ static void print_parser_node(t_tree *node, int depth, char *pos)
 	printf("NODE %i %s\n", depth, pos);
 	if (node->type == NODE_CMD)
 		printf("Type: NODE_CMD\n");
-	else if (node->type == NODE_BUILTIN)
-		printf("Type: NODE_BUILTIN\n");
 	else if (node->type == NODE_PIPE)
 		printf("Type: NODE_PIPE\n");
 	else if (node->type == NODE_AND)
@@ -143,7 +141,7 @@ void	test_builtin_validation(t_data *data, t_tree *head)
 {
 	if (!head)
 		return ;
-	validate_builtin(data, head);
+	validate_builtin(data, head, 0);
 	test_builtin_validation(data, head->left);
 	test_builtin_validation(data, head->right);
 }

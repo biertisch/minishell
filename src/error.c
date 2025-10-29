@@ -61,7 +61,8 @@ int	syntax_error(t_data *data, char *desc, char *token)
 int	system_error(t_data *data, char *function)
 {
 	write(2, "minishell: ", 11);
-	perror(function);
+	(void)function;
+	//perror(function);
 	data->exit_status = 1;
 	return (INVALID);
 }

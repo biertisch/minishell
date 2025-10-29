@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:57:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/30 19:55:57 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 18:11:09 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	expand_tilde(t_data *data, char **arg)
 	char	*value;
 	int		key_len;
 
-	if (**arg != '~')
+	if (!arg || !*arg || **arg != '~')
 		return ;
 	value = get_value(data, *arg, &key_len);
 	if (value)

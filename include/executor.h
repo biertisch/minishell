@@ -30,7 +30,7 @@ typedef struct s_stack
 }	t_stack;
 
 // builtin.c
-int			validate_builtin(t_data *data, t_tree *node);
+int			validate_builtin(t_data *data, t_tree *node, int i);
 
 //executor.c
 int			execute(t_data *data);
@@ -39,7 +39,7 @@ int			execute_cmd(t_data *data, t_stack **stack);
 int			execute_pipe(t_data *data, t_stack **stack);
 int			execute_cmd_entered(t_data *data, t_stack **stack);
 int			execute_cmd_done(t_data **data, t_stack **stack);
-int			dummy_heredoc(t_stack **stack);
+int			dummy_heredoc(t_redir *redir);
 
 
 //stack.c
@@ -56,19 +56,23 @@ t_stack		**get_first_log_operator(t_stack **stack);
 int		setup_next_to_top(t_data **data, t_stack **stack);
 t_stack		**get_first_subshell(t_stack **stack);
 int			has_node_type_ancestor(t_stack *stack, t_node_type type);
+t_stack 	**get_next_pipe_in_subshell(t_stack **stack);
 
 //child.c
 void		child(t_data *data, t_stack **stack);
-void		child_redir_in(t_data *data, t_stack **stack);
-void		child_no_redir(t_data *data, t_stack **stack);
-void		child_redir_out(t_data *data, t_stack **stack);
-void		child_heredoc(t_data *data, t_stack **stack);
+void		child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
+void		child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
+void		child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
+void		child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i);
+void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
+
 
 //executor_utils.c
 char		*correct_path(t_data * data, t_stack **stack,char *cmd);
 char		*run_curr_dir(t_data *data, t_stack **stack, char *cmd);
 void		check_for_variables(t_data *data, t_stack **stack);
 void		executor_child_errno(t_data *data, t_stack **stack, char *cmd);
+void		executor_cleanup(t_data *data, t_stack **stack, char *cmd);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
@@ -108,11 +112,14 @@ int			execute_echo(t_data *data, t_stack **stack);
 int			execute_echo_option(t_data *data, t_stack **stack);
 int			execute_echo_no_option(t_data *data, t_stack **stack);
 int			validate_write(t_data *data, t_stack **stack, int write_res);
+int			is_echo_option(char *opt);
 
 //executor_subshell
 int			execute_subshell(t_data *data, t_stack **stack);
 int			execute_subshell_entered(t_data **data, t_stack **stack);
 int			execute_subshell_done(t_data **data, t_stack **stack);
+int			subshell_redir(t_data **data, t_stack **stack);
+int		check_redir_in_subshell(t_stack **stack);
 
 //get_next_line.c
 char	*get_next_line(int fd);
@@ -136,6 +143,7 @@ int			execute_pwd(t_data *data, t_stack **stack);
 
 //executor_exit.c
 int			execute_exit(t_data *data, t_stack **stack);
+void		check_exit_input(t_data *data, t_stack **stack, int *exit_code);
 
 //executor_unset.c
 int			execute_unset(t_data *data, t_stack **stack);
@@ -146,5 +154,34 @@ int			validate_fork(t_data *data, t_stack **stack);
 void		print_fork_err_mess(void);
 void		print_pipe_err_mess(void);
 int			validate_pipe(int pipe_res, t_stack **stack);
+
+//executor_export.c
+int			execute_export(t_data *data, t_stack **stack);
+int			execute_export_no_option(t_data *data, t_stack **stack);
+int			execute_export_option(t_data *data, t_stack **stack);
+void		sort_env(t_data **data);
+
+//variable_utils.c
+int			check_if_variable(t_data *data, t_stack **stack);
+int			get_first_command(t_data *data, t_stack **stack);
+int			has_command(t_data *data, t_stack **stack);
+
+//executor_heredoc.c
+int			check_for_heredoc(t_data *data);
+int			check_heredoc_right(t_data *data);
+int			check_heredoc_left(t_data *data);
+int			execute_heredoc(t_redir *redir);
+t_redir	*get_last_heredoc(t_redir *redir);
+
+//executor_redirect.c
+int			traverse_redir_in(t_data *data, t_stack **stack);
+int			open_redir_in(t_redir *redir);
+int			close_redir_in(t_redir *redir);
+void		handle_open_errors(t_redir *redir);
+int		check_redir_in_left(t_data *data, t_stack **stack);
+int	check_redir_in_right(t_data *data, t_stack **stack);
+int	push_left_until_cmd_redir(t_data *data, t_stack **stack);
+
+
 
 #endif

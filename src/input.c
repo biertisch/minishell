@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/08 16:04:34 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:51:52 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	handle_eof(t_data *data)
 	exit(data->exit_status);
 }
 
-static int	handle_sigint(t_data *data, char *line, int cont)
+int	handle_signal_interruption(t_data *data, char *line, int cont)
 {
+	data->exit_status = 128 + g_sig_received;
 	g_sig_received = 0;
-	data->exit_status = 130;
 	if (cont)
 	{
 		free_command_data(data);
@@ -31,30 +31,6 @@ static int	handle_sigint(t_data *data, char *line, int cont)
 		return (INCOMPLETE);
 	}
 	return (VALID);
-}
-
-static char	*update_input(t_data *data, char *line, char target)
-{
-	char	*separator;
-	char	*append_separator;
-	char	*append_line;
-
-	if (is_quote(target))
-		separator = "\n";
-	else
-		separator = " ";
-	append_separator = ft_strjoin(data->input, separator);
-	validate_malloc(data, append_separator, line);
-	append_line = ft_strjoin(append_separator, line);
-	if (!append_line)
-	{
-		free(append_separator);
-		validate_malloc(data, NULL, line);
-	}
-	free(append_separator);
-	free_command_data(data);
-	rl_replace_line(append_line, 0);
-	return (append_line);
 }
 
 static int	process_input(t_data *data)
@@ -68,35 +44,8 @@ static int	process_input(t_data *data)
 	res = parser(data);
 	if (res || !data->parser_tree)
 		return (res);
-	res = expand(data);
-	if (res)
-		return (res);
 	execute(data);
 	return (VALID);
-}
-
-int	prompt_continuation(t_data *data, char target)
-{
-	char	*line;
-
-	rl_signal_event_hook = rl_sigint_continuation;
-	while (1)
-	{
-		line = readline(CONTINUE_PROMPT);
-		if (g_sig_received == SIGINT)
-			return (handle_sigint(data, line, 1));
-		if (!line)
-			return (syntax_error(data, ERR_7, NULL));
-		if (is_quote(target) || *line)
-			data->input = update_input(data, line, target);
-		if ((target && ft_strchr(line, target)) || (!target && *line))
-		{
-			free(line);
-			break ;
-		}
-		free(line);
-	}
-	return (INCOMPLETE);
 }
 
 void	prompt_input(t_data *data)
@@ -110,8 +59,8 @@ void	prompt_input(t_data *data)
 		data->input = readline(data->prompt);
 		if (!data->input)
 			handle_eof(data);
-		if (g_sig_received == SIGINT)
-			handle_sigint(data, NULL, 0);
+		if (g_sig_received)
+			handle_signal_interruption(data, NULL, 0);
 		if (*data->input)
 		{
 			status = process_input(data);

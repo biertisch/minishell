@@ -6,16 +6,18 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/08 13:51:22 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 18:13:39 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*update_redir(t_data *data, char *file, t_list *entry)
+char	*update_redir_wildcard(t_data *data, char *file, t_list *entry)
 {
 	char	*new_file;
 
+	if (!file || !entry)
+		return (file);
 	new_file = ft_strdup(entry->content);
 	validate_malloc_wildcard(data, new_file, entry, NULL);
 	free(file);
@@ -85,6 +87,8 @@ int	expand_wildcard(t_data *data, char *pattern, t_list **entries)
 	char	*dir_name;
 	DIR		*dir_stream;
 
+	if (!*pattern)
+		return (0);
 	dir_name = getcwd(NULL, 0);
 	if (!dir_name)
 		return (system_error(data, "getcwd"));
@@ -103,6 +107,8 @@ int	expand_wildcard(t_data *data, char *pattern, t_list **entries)
 
 int	has_wildcard(const char *arg)
 {
+	if (!arg)
+		return (0);
 	while (*arg && *arg != '*')
 		arg++;
 	if (*arg == '*')

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/24 16:36:17 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/21 15:38:17 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static int	get_token_value(t_data *data, char *input, char **value, int *index)
 	{
 		if (!quote && (ft_isspace(input[i]) || is_operator(input + i)))
 			break ;
+		if (!quote && input[i] == ';')
+			return (internal_error(data, ERR_10, NULL, NULL));
 		if (!quote && is_quote(input[i]))
 			quote = input[i];
 		else if (quote && input[i] == quote)

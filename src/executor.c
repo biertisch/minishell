@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:37:51 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/02 12:37:53 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:43:55 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ int	execute(t_data *data)
 {
 	t_stack	*stack;
 
+	check_for_heredoc(data);
+	push_stack(&data->stack, data->parser_tree, 0, 0, data);
+	traverse_redir_in(data, &data->stack);
 	stack = create_stack(data);
 	execute_stack(data, &stack);
 	return (1);
@@ -38,8 +41,6 @@ int	execute_stack(t_data *data, t_stack **stack)
 			i += execute_and(data, stack);
 		else if ((*stack)->type == NODE_OR)
 			i += execute_or(data, stack);
-		else if ((*stack)->type == NODE_BUILTIN)
-			i += execute_builtin(data, stack);
 		else if ((*stack)->type == NODE_SUBSHELL)
 			i += execute_subshell(data, stack);
 	}
@@ -50,8 +51,18 @@ int	execute_stack(t_data *data, t_stack **stack)
 int	execute_cmd(t_data *data, t_stack **stack)
 {
 	if ((*stack)->phase == ENTERED)
+	{
+		if (expand(data, (*stack)->node))
+		{
+			pop(stack);
+			return (1); 
+		}
+	}
+	if ((*stack)->node->argv && is_builtin((*stack)->node->argv[get_first_command(data, stack)]))
+		return (execute_builtin(data, stack));
+	else if ((*stack)->phase == ENTERED)
 		return (execute_cmd_entered(data, stack));
-	if ((*stack)->phase == DONE)
+	else if ((*stack)->phase == DONE)
 		return (execute_cmd_done(&data, stack));
 	return (0);
 }
@@ -59,14 +70,14 @@ int	execute_cmd(t_data *data, t_stack **stack)
 int	execute_cmd_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
-
+	
 	(*stack)->phase = DONE;
-	//check if it has a command if not just dummy this shit
-	if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC && !(*stack)->node->argv)
-		dummy_heredoc(stack);
-	else
+	if (!check_if_variable(data, stack))
 	{
-		if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
+		if (get_last_heredoc((*stack)->node->redir) && !(*stack)->node->argv)
+			return (0);
+		//check this shit out
+		if (get_last_heredoc((*stack)->node->redir))
 			if (validate_pipe(pipe((*stack)->pipe), stack))
 				return (0);
 		pid = fork();
@@ -74,7 +85,7 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 			return (validate_fork(data, stack));
 		else if (pid == 0)
 			child(data, stack);
-		else if ((*stack)->node->redir && (*stack)->node->redir->type == HEREDOC)
+		else if (get_last_heredoc((*stack)->node->redir))
 			parent_heredoc(stack, pid);
 		else
 			parent(stack, pid);
@@ -92,18 +103,24 @@ int	execute_cmd_done(t_data **data, t_stack **stack)
 	return (1);
 }
 
-int	dummy_heredoc(t_stack **stack)
+int	dummy_heredoc(t_redir *redir)
 {
 	char	*line;
 	char	*heredoc;
 
-	heredoc = ft_strdup_append(NULL, ft_strdup((*stack)->node->redir->file), "\n");
+	if (redir->heredoc_input)
+		free(redir->heredoc_input);
+	redir->heredoc_input = malloc(1);
+	redir->heredoc_input[0] = '\0';
+	heredoc = ft_strdup_append(NULL, ft_strdup(redir->file), "\n");
+	write(STDOUT_FILENO, "> ", 2);
 	line = get_next_line(STDIN_FILENO);
 	while (ft_strcmp(line, heredoc))
 	{
+		redir->heredoc_input = ft_strdup_append(NULL, redir->heredoc_input, line);
 		free(line);
+		write(STDOUT_FILENO, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
-
 	}
 	free(line);
 	free(heredoc);

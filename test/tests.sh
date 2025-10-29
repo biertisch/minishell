@@ -51,7 +51,10 @@ cat <
 /bin/echo $?
 /bin/echo "hello $USER$USER"
 /bin/echo "hello $NONE"
+/bin/echo hello $NONE
 /bin/echo $
+/bin/echo "$"
+$NONE /bin/echo hello
 ls *f
 ls *f*
 ls **f**
@@ -65,6 +68,7 @@ VAR="ls src" && "$VAR"
 
 # invalid/incomplete
 /bin/echo hello > *in*
+/bin/echo hello > $NONE
 
 # BUILTIN
 echo hello && echo -n bye

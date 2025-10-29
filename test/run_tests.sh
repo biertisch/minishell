@@ -25,7 +25,7 @@ while IFS= read -r cmd; do
     # --- Run in minishell (with timeout + valgrind) ---
     VALGRIND_LOG="$LEAKS_OUT/$i.valgrind"
 
-    if printf '%s\n' "$cmd" | timeout 2s valgrind --leak-check=full --errors-for-leak-kinds=definite \
+    if printf '%s\n' "$cmd" | timeout 2s valgrind --suppressions=readline.supp --leak-check=full --errors-for-leak-kinds=definite --show-leak-kinds=all --trace-children=yes --track-fds=yes \
         --log-file="$VALGRIND_LOG" $MINISHELL >"$MINI_OUT/$i.out" 2>"$MINI_OUT/$i.err"; then
         echo $? >"$MINI_OUT/$i.status"
     else
