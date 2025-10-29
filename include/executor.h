@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:55:16 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 16:19:14 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 14:14:49 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ char		**split_by_first_equal(char *var);
 int			parent(t_stack **stack, pid_t pid);
 int			parent_single_command(t_stack **stack, pid_t pid);
 int			parent_heredoc(t_stack **stack, pid_t pid);
-int			heredoc_loop(t_stack **stack, char *heredoc, char *res);
 
 //executor_pipe.c
 int			execute_pipe_entered(t_data *data, t_stack **stack);

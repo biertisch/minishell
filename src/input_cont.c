@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_cont.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:57:53 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 22:40:04 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 12:48:49 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,22 @@ int	run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid)
 {
 	int	status;
 
-	setup_signals_parent(data);
+	setup_signals_ignore(data);
 	close(pipe_fd[1]);
 	status = 0;
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 	{
 		data->exit_status = WEXITSTATUS(status);
-		if (data->exit_status == 2)
-			return (close(pipe_fd[0]), INCOMPLETE_EOF);
-		if (data->exit_status == 130)
-			return (close(pipe_fd[0]), INVALID);
+		if (data->exit_status)
+		{
+			close(pipe_fd[0]);
+			setup_signals(data);
+			if (data->exit_status == 2)
+				return (INCOMPLETE_EOF);
+			if (data->exit_status == 130)
+				return (INVALID);
+		}
 	}
 	data->input = copy_continuation_input(data, pipe_fd);
 	setup_signals(data);
