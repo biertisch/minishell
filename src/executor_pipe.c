@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 10:50:31 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/01 18:08:47 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:40:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	execute_pipe_wait(t_stack **stack)
 			(*stack)->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 			(*stack)->exit_status = WTERMSIG(status) + 128;
+		handle_child_exit(status);
 	}
 	(*stack)->phase = DONE;
 	return (0);
@@ -103,14 +104,13 @@ int	execute_pipe_wait(t_stack **stack)
 
 int	execute_pipe_done(t_data **data, t_stack **stack)
 {
+	int	status;
+	
+	status = 0;
 	if (!get_next_pipe_in_subshell(stack))
 	{
-		while (1)
-		{
-			wait(NULL);
-			if (errno == ECHILD)
-				break;
-		}
+		while (waitpid(-1, &status, 0) > 0)
+			handle_child_exit(status);
 	}
 	if ((*stack)->next)
 		setup_next_to_top(data, stack);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_subshell.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 11:57:43 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/01 18:09:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:53:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 		return (validate_fork(*data, stack));
 	else if (pid == 0)
 	{
+		setup_signals_child(*data);
 		subshell_redir(data, stack);
 		//add_redir_out but change to append, if it redir_in mantain
 		(*stack)->child_count = -42;
@@ -58,6 +59,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 				(*stack)->exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 				(*stack)->exit_status = WTERMSIG(status) + 128;
+			handle_child_exit(status);	
 		}
 	}
 	return (0);

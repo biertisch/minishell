@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:49:31 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 12:35:03 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:09:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	child(t_data *data, t_stack **stack)
 
 
 	env_list_to_array(data);
-	setup_signals_command(data);
+	setup_signals_child(data);
 	cmd_i = get_first_command(data, stack);
 	cmd = NULL;
 	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
@@ -61,7 +61,6 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 		dup2((*stack)->out_fd, STDOUT_FILENO);
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		close((*stack)->out_fd);
-	//if (!redir->next && redir->fd != -1)
 	if (!redir->next)
 	{
 		close_all_pipe_ends(stack);

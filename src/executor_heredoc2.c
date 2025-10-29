@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:20:08 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 21:58:30 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:18:15 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int	heredoc(t_data *data, t_redir *redir)
 
 int	run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid)
 {
-	setup_signals_parent(data);
 	copy_heredoc_input(data, redir);
 	expand_heredoc_input(data, redir);
 	return (wait_for_heredoc(data, pid));

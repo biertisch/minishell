@@ -3,28 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 10:25:47 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 21:58:39 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:34:15 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	setup_handler(t_data *data, int signum, void (*handler)(int), int flags)
-{
-	struct sigaction	sa;
-
-	sa.sa_handler = handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = flags;
-	if (sigaction(signum, &sa, NULL))
-	{
-		system_error(data, "sigaction");
-		error_exit(data);
-	}
-}
 
 void	sigint_handler(int sig)
 {
@@ -33,6 +19,20 @@ void	sigint_handler(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+}
+
+void	handle_child_exit(int status)
+{
+	int	signal;
+
+	if (WIFSIGNALED(status))
+	{
+		signal = WTERMSIG(status);
+		if (signal == SIGINT)
+			write(STDOUT_FILENO, "\n", 1);
+		else if (signal == SIGQUIT)
+			write(STDERR_FILENO, "Quit (core dumped)\n", 20);
+	}
 }
 
 int	sigint_abort(t_data *data, char *line, int cont)
@@ -47,18 +47,10 @@ int	sigint_abort(t_data *data, char *line, int cont)
 	return (VALID);
 }
 
-void	heredoc_sigint_handler(int sig)
+void	eof_abort(t_data *data)
 {
-	g_sig = sig;
-	write(STDOUT_FILENO, "\n", 1);
-	close(STDIN_FILENO);
-}
-
-int	heredoc_sigint_abort(t_data *data, char *line)
-{
-	close(data->stack->pipe[1]);
-	free(line);
+	if (isatty(STDIN_FILENO))
+		write(1, "exit\n", 5);
 	free_all(data);
-	rl_clear_history();
-	exit(128 + g_sig);
+	exit(data->exit_status);
 }
