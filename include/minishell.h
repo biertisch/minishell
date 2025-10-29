@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 10:55:08 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 11:04:05 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,6 @@
 # include <errno.h>
 
 # define CONTINUE_PROMPT "> "
-# define VALID 0
-# define INVALID 1
-# define INCOMPLETE 2
-# define INCOMPLETE_EOF 3
 # define ERR_0 "invalid environment variable"
 # define ERR_1 "syntax error near unexpected token"
 # define ERR_2 "ambiguous redirect"

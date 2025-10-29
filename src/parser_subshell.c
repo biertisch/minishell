@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_subshell.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 15:37:28 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 22:59:45 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 11:08:07 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	incomplete_subshell(t_data *data, t_tree **node)
 {
 	free_parser_tree(data, node);
-	return (handle_incomplete_input(data, ')'));
+	return (INCOMPLETE_PAREN);
 }
 
 int	empty_subshell(t_data *data, t_token **token, t_tree *node, int res)
