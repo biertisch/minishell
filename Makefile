@@ -117,7 +117,7 @@ fclean: clean
 	@$(RM) err.tmp
 
 valgrind: $(NAME)
-	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --show-leak-kinds=all --trace-children=yes ./${NAME}
+	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --show-leak-kinds=all --trace-children=yes -s ./${NAME}
 test: re
 	@chmod 755 test/run_tests.sh
 	@./test/run_tests.sh

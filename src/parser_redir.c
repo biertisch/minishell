@@ -27,6 +27,10 @@ static t_redir	*create_redir(t_token_type type, int fd, char *file)
 	redir = malloc(sizeof(t_redir));
 	if (!redir)
 		return (NULL);
+/*	if (fd == -1 && (type == REDIR_IN || type == HEREDOC))
+		fd = 0;
+	else if (fd == -1 && (type == REDIR_OUT || type == APPEND))
+		fd = 1;*/
 	redir->type = type;
 	redir->fd = fd;
 	redir->file = ft_strdup(file);
