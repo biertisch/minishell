@@ -18,7 +18,8 @@ int	check_if_variable(t_data *data, t_stack **stack)
 	char	**kv_split;
 	t_env	**env;
 	int	found;
-
+	if (!ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "cd"))
+		return (0);
 	i = 0;
 	if (!(*stack)->node->argv)
 		return (0);
