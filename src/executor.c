@@ -15,7 +15,7 @@
 int	execute(t_data *data)
 {
 	t_stack	*stack;
-
+	
 	check_for_heredoc(data);
 	push_stack(&data->stack, data->parser_tree, 0, 0, data);
 	traverse_redir_in(data, &data->stack);

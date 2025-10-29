@@ -24,7 +24,12 @@ int	execute_cd(t_data *data, t_stack **stack)
 	if (!(*stack)->node->argv[1])
 		chdir_res = chdir(get_env_value(data->env_list, "HOME"));
 	else if (!(*stack)->node->argv[2])
-		chdir_res = chdir((*stack)->node->argv[1]);
+	{
+		if (!ft_strcmp((*stack)->node->argv[1], "-"))
+			chdir_res = chdir(get_env_value(data->env_list, "OLDPWD"));
+		else
+			chdir_res = chdir((*stack)->node->argv[1]);
+	}
 	else
 		(*stack)->exit_status = cd_fail(NULL);
 	if (chdir_res)
