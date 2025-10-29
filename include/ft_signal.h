@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:30:49 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 14:21:09 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:53:35 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 //signal.c
 void		setup_signals(t_data *data);
 void		setup_signals_cont(t_data *data);
-void		setup_signals_command(t_data *data);
+void		setup_signals_child(t_data *data);
 void		setup_signals_parent(t_data *data);
 void		setup_handler(t_data *data, int signum, void (*handler)(int),
 				int flags);

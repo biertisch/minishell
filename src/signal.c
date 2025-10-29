@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 14:17:57 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:52:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	setup_signals_cont(t_data *data)
 	}
 }
 
-void	setup_signals_command(t_data *data)
+void	setup_signals_child(t_data *data)
 {
 	setup_handler(data, SIGINT, SIG_DFL, 0);
 	setup_handler(data, SIGQUIT, SIG_DFL, 0);

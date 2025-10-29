@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 10:25:47 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 14:20:55 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:34:15 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ void	handle_child_exit(int status)
 	{
 		signal = WTERMSIG(status);
 		if (signal == SIGINT)
-			ft_putstr_fd("\n", 2);
-		else if (g_sig == SIGQUIT)
-			ft_putstr_fd("Quit (core dumped)\n", 2);
+			write(STDOUT_FILENO, "\n", 1);
+		else if (signal == SIGQUIT)
+			write(STDERR_FILENO, "Quit (core dumped)\n", 20);
 	}
 }
 

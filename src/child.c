@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:49:31 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 12:35:03 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:53:49 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	child(t_data *data, t_stack **stack)
 
 
 	env_list_to_array(data);
-	setup_signals_command(data);
+	setup_signals_child(data);
 	cmd_i = get_first_command(data, stack);
 	cmd = NULL;
 	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))

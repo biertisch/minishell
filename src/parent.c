@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:49:39 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 14:13:52 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 15:41:34 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	parent_single_command(t_stack **stack, pid_t pid)
 		(*stack)->exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 		(*stack)->exit_status = WTERMSIG(status) + 128;
+	handle_child_exit(status);
 	if ((*stack)->next && (*stack)->next->type == NODE_SUBSHELL)
 		(*stack)->next->exit_status = (*stack)->exit_status;
 	return (1);
