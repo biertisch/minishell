@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:49:50 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 21:33:38 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:25 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 t_tree	*create_parser_node(t_node_type type, t_tree *left, t_tree *right)
 {

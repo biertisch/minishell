@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 18:13:39 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:16:31 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 char	*update_redir_wildcard(t_data *data, char *file, t_list *entry)
 {

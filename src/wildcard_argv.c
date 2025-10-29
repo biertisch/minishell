@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:30:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 23:17:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:16:40 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 static int	copy_after_star(char **new_argv, char **argv, int i, int j)
 {

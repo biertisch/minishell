@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 21:35:08 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:13 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 //calls parse_and_or() for left node, allows redirection,
 //checks for unclosed parenthesis (INCOMPLETE) and invalid sequences (INVALID)

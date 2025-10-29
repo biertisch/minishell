@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parent.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:49:39 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 15:41:34 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:47 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	parent(t_stack **stack, pid_t pid)
 {

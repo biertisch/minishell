@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 10:22:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/15 12:11:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	is_redir_token(t_token_type token_type)
 {

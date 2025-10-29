@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 15:37:28 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 21:32:55 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:33 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	incomplete_subshell(t_tree **node)
 {

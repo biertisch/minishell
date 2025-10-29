@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 21:24:10 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:18:19 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 // interactive mode
 void	prompt_input(t_data *data)

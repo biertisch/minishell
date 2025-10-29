@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   variable_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 12:36:12 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/19 12:36:13 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:16:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	check_if_variable(t_data *data, t_stack **stack)
 {
@@ -116,7 +116,7 @@ int	check_if_variables_with_commands(t_data *data, t_stack **stack)
 		{
 			if (get_env_value(data->env_list, key))
 				set_env_value(data->env_list, key, ft_strdup(ft_strchr((*stack)->node->argv[i], '=') + 1));
-			else 
+			else
 				add_env_node(&(data->env_list), create_env_node(ft_strdup(key), ft_strdup(ft_strchr((*stack)->node->argv[i], '=') + 1), 1));
 		}
 		else
