@@ -94,6 +94,8 @@ int	execute_pipe_wait(t_stack **stack)
 			waitpid((*stack)->child_pid[1], &status, 0);
 		if (WIFEXITED(status))
 			(*stack)->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			(*stack)->exit_status = WTERMSIG(status) + 128;
 	}
 	(*stack)->phase = DONE;
 	return (0);
