@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_eof.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 12:38:03 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 21:58:45 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 10:56:53 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ int	heredoc_eof_abort(t_data *data, char *target)
 	char	*tmp;
 	char	*error_msg;
 
-	tmp = ft_strjoin("minishell: warning: here-document delimited by \
-		end-of-file (wanted '", target); // revise error reporting
+	tmp = ft_strjoin(ERR_11, target);
 	validate_malloc(data, tmp, NULL);
 	error_msg = ft_strjoin(tmp, "')\n");
 	validate_malloc(data, error_msg, tmp);

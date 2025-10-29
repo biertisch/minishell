@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 22:40:14 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 10:55:08 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@
 # define ERR_8 "syntax error: missing quote"
 # define ERR_9 "arithmetic operations not supported"
 # define ERR_10 "semicolon not supported"
+# define ERR_11 "minishell: warning: here-document delimited by \
+end-of-file (wanted '"
 # define BUFFER_SIZE 20
 
 typedef struct s_env
