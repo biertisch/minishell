@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 23:18:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 11:08:26 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,16 @@ static int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 	int		res;
 
 	*token = (*token)->next;
+	if (!*token)
+		return (incomplete_subshell(data, NULL));
 	node = create_parser_node(NODE_SUBSHELL, NULL, NULL);
 	validate_malloc(data, node, NULL);
 	res = parse_and_or(data, token, &node->left);
 	if (res)
 		return (empty_subshell(data, token, node, res));
 	if (!*token)
-		return (free_parser_tree(data, &node), prompt_continuation(data, ')'));
-	if ((*token)->type != RPAREN) //is this needed?
+		return (incomplete_subshell(data, &node));
+	if ((*token)->type != RPAREN)
 		return (invalid_sequence(data, *token, node));
 	*token = (*token)->next;
 	if (*token && ((*token)->type == WORD || (*token)->type == LPAREN))
@@ -46,7 +48,7 @@ static int	parse_command(t_data *data, t_token **token, t_tree **root)
 	t_tree	*node;
 
 	if (!*token)
-		return (prompt_continuation(data, 0));
+		return (INCOMPLETE);
 	if (!is_command_token((*token)->type) && (*token)->type != LPAREN)
 		return (syntax_error(data, ERR_1, (*token)->value));
 	if ((*token)->type == LPAREN)
@@ -120,7 +122,13 @@ int	parser(t_data *data)
 	token = data->lexer_list;
 	res = parse_and_or(data, &token, &data->parser_tree);
 	if (res)
-		return (res);
+	{
+		if (res == INCOMPLETE_PAREN)
+			return (handle_incomplete_input(data, ')'));
+		else if (res == INCOMPLETE)
+			return (handle_incomplete_input(data, 0));
+		return (res);	
+	}
 	if (token && token->type == RPAREN)
 		return (syntax_error(data, ERR_1, token->value));
 	if (token && token->type == LPAREN)

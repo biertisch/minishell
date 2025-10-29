@@ -1,33 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_tree2.c                                     :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/18 11:51:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:55:27 by beatde-a         ###   ########.fr       */
+/*   Created: 2025/10/28 16:24:26 by beatde-a          #+#    #+#             */
+/*   Updated: 2025/10/28 16:24:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
-int	push_left_until_cmd(t_data *data)
+int	is_valid_var_name(char *s)
 {
-	if (!data->stack || !data->stack->node)
+	if (!s || (!ft_isalpha(*s) && *s != '_'))
 		return (0);
-	while (data->stack->node->left)
+	while (*s)
 	{
-		if (data->stack->node->type == NODE_SUBSHELL)
-			data->stack->phase = DONE;
-		push_stack(&data->stack, data->stack->node->left, 0, 0, data);
+		if (!ft_isalnum(*s) && *s != '_')
+			return (0);
+		s++;
 	}
-	return (0);
+	return (1);
 }
 
-int	count_tree_nodes(t_tree *root)
+int	is_new_var(char *arg)
 {
-	if (!root)
+	if (!arg || (!ft_isalpha(*arg) && *arg != '_'))
 		return (0);
-	return (1 + count_tree_nodes(root->left) + count_tree_nodes(root->right));
+	while (*arg && (ft_isalnum(*arg) || *arg == '_'))
+		arg++;
+	return (*arg == '=');
 }

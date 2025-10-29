@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/21 23:25:00 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 23:00:32 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ typedef struct s_redir
 	int				fd;
 	char			*file;
 	char			*heredoc_input;
-	int			in_fd;
-	int			out_fd;
+	int				in_fd;
+	int				out_fd;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -48,6 +48,7 @@ int			get_redir(t_data *data, t_token **token, t_tree *node);
 int			is_redir_token(t_token_type token_type);
 
 //parser_subshell.c
+int			incomplete_subshell(t_data *data, t_tree **node);
 int			empty_subshell(t_data *data, t_token **token, t_tree *node,
 				int res);
 int			invalid_sequence(t_data *data, t_token *token, t_tree *node);
@@ -56,11 +57,10 @@ int			invalid_sequence(t_data *data, t_token *token, t_tree *node);
 void		free_parser_tree(t_data *data, t_tree **root);
 void		free_parser_node(t_tree **node);
 t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);
-int			count_tree_nodes(t_tree *root);
 
 //parser_tree2.c
-int			push_left_until_cmd(t_data *data, int (*f_sub)(t_data *, t_tree *));
-void		push_right_once(t_data *data);
+int			push_left_until_cmd(t_data *data);
+int			count_tree_nodes(t_tree *root);
 
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);

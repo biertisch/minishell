@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:37:51 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/21 22:43:55 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:18:16 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ int	execute(t_data *data)
 {
 	t_stack	*stack;
 
-	check_for_heredoc(data);
+	if (check_for_heredoc(data))
+		return (-1);
 	push_stack(&data->stack, data->parser_tree, 0, 0, data);
 	traverse_redir_in(data, &data->stack);
 	stack = create_stack(data);
 	execute_stack(data, &stack);
-	return (1);
+	return (0);
 }
 
 int	execute_stack(t_data *data, t_stack **stack)
@@ -55,7 +56,7 @@ int	execute_cmd(t_data *data, t_stack **stack)
 		if (expand(data, (*stack)->node))
 		{
 			pop(stack);
-			return (1); 
+			return (1);
 		}
 	}
 	if ((*stack)->node->argv && is_builtin((*stack)->node->argv[get_first_command(data, stack)]))
@@ -70,7 +71,7 @@ int	execute_cmd(t_data *data, t_stack **stack)
 int	execute_cmd_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
-	
+
 	(*stack)->phase = DONE;
 	if (!check_if_variable(data, stack))
 	{
@@ -100,29 +101,5 @@ int	execute_cmd_done(t_data **data, t_stack **stack)
 	else if (stack_size(*stack) == 1 || !get_first_pipe(stack))
 		(*data)->exit_status = (*stack)->exit_status;
 	pop(stack);
-	return (1);
-}
-
-int	dummy_heredoc(t_redir *redir)
-{
-	char	*line;
-	char	*heredoc;
-
-	if (redir->heredoc_input)
-		free(redir->heredoc_input);
-	redir->heredoc_input = malloc(1);
-	redir->heredoc_input[0] = '\0';
-	heredoc = ft_strdup_append(NULL, ft_strdup(redir->file), "\n");
-	write(STDOUT_FILENO, "> ", 2);
-	line = get_next_line(STDIN_FILENO);
-	while (ft_strcmp(line, heredoc))
-	{
-		redir->heredoc_input = ft_strdup_append(NULL, redir->heredoc_input, line);
-		free(line);
-		write(STDOUT_FILENO, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
-	}
-	free(line);
-	free(heredoc);
 	return (1);
 }

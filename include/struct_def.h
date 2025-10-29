@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_def.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/21 22:46:32 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 11:04:52 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@ typedef struct s_stack	t_stack;
 typedef struct s_token	t_token;
 typedef struct s_redir	t_redir;
 typedef struct s_tree	t_tree;
+
+typedef enum e_outcome
+{
+	VALID,
+	INVALID,
+	INCOMPLETE,
+	INCOMPLETE_PAREN,
+	INCOMPLETE_EOF
+}	t_outcome;
 
 typedef enum e_token_type
 {

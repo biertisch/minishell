@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/15 15:12:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/28 19:03:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,79 +14,57 @@
 
 void	setup_signals(t_data *data)
 {
-	struct sigaction	sa;
-
 	if (isatty(STDIN_FILENO))
 	{
-		sa.sa_handler = signal_handler;
-		sigemptyset(&sa.sa_mask);
-		sa.sa_flags = 0;
-		if (sigaction(SIGINT, &sa, NULL))
-		{
-			system_error(data, "sigaction");
-			error_exit(data);
-		}
-		sa.sa_handler = SIG_IGN;
-		if (sigaction(SIGQUIT, &sa, NULL))
-		{
-			system_error(data, "sigaction");
-			error_exit(data);
-		}
-		if (sigaction(SIGTERM, &sa, NULL))
-		{
-			system_error(data, "sigaction");
-			error_exit(data);
-		}
+		setup_handler(data, SIGINT, sigint_handler, 0);
+		setup_handler(data, SIGQUIT, SIG_IGN, 0);
+	}
+	else
+	{
+		setup_handler(data, SIGINT, SIG_DFL, 0);
+		setup_handler(data, SIGQUIT, SIG_DFL, 0);
 	}
 }
 
-void	signal_handler(int sig)
+void	setup_signals_cont(t_data *data)
 {
-	g_sig_received = sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-}
-
-void	setup_signals_child(t_data *data)
-{
-	struct sigaction	sa;
-
-	sa.sa_handler = SIG_DFL;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	if (sigaction(SIGINT, &sa, NULL))
+	if (isatty(STDIN_FILENO))
 	{
-		system_error(data, "sigaction");
-		error_exit(data);
+		setup_handler(data, SIGINT, heredoc_sigint_handler, 0);
+		setup_handler(data, SIGQUIT, SIG_IGN, 0);
 	}
-	if (sigaction(SIGQUIT, &sa, NULL))
+	else
 	{
-		system_error(data, "sigaction");
-		error_exit(data);
-	}
-	if (sigaction(SIGTERM, &sa, NULL))
-	{
-		system_error(data, "sigaction");
-		error_exit(data);
+		setup_handler(data, SIGINT, SIG_DFL, 0);
+		setup_handler(data, SIGQUIT, SIG_DFL, 0);
 	}
 }
 
-//readline handler for prompt_continuation
-int	rl_sigint_continuation(void)
+void	setup_signals_command(t_data *data)
 {
-	if (g_sig_received) //restrict to SIGINT?
-	{
-		rl_done = 1;
-		return (1);
-	}
-	return (0);
+	setup_handler(data, SIGINT, SIG_DFL, 0);
+	setup_handler(data, SIGQUIT, SIG_DFL, 0);
 }
 
-//readline handler for prompt_input
-int	rl_sigint_main(void)
+void	setup_signals_heredoc(t_data *data)
 {
-	if (g_sig_received) //restrict to SIGINT?
-		rl_redisplay();
-	return (0);
+	if (isatty(STDIN_FILENO))
+	{
+		setup_handler(data, SIGINT, heredoc_sigint_handler, 0);
+		setup_handler(data, SIGQUIT, SIG_IGN, 0);
+	}
+	else
+	{
+		setup_handler(data, SIGINT, SIG_DFL, 0);
+		setup_handler(data, SIGQUIT, SIG_DFL, 0);
+	}
+}
+
+void	setup_signals_parent(t_data *data)
+{
+	if (isatty(STDIN_FILENO))
+	{
+		setup_handler(data, SIGINT, SIG_IGN, 0);
+		setup_handler(data, SIGQUIT, SIG_IGN, 0);
+	}
 }

@@ -27,7 +27,7 @@ int	parent(t_stack **stack, pid_t pid)
 int	parent_single_command(t_stack **stack, pid_t pid)
 {
 	int		status;
-	
+
 	if ((*stack)->next && (*stack)->next->phase != LAUNCH_LEFT && ((*stack)->next->type != NODE_AND && (*stack)->next->type != NODE_OR))
 	{
 		if ((*stack)->in_fd != STDIN_FILENO)
