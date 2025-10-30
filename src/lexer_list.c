@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 13:13:12 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 21:48:16 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 22:39:25 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_token	*create_lexer_node(t_token_type type, char *value)
 {
 	t_token	*new_node;
 
-	new_node = malloc(sizeof(new_node));
+	new_node = malloc(sizeof(t_token));
 	if (!new_node)
 		return (NULL);
 	new_node->type = type;
