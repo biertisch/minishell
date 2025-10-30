@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:18:19 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 21:33:00 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	process_input(t_data *data)
 	int	res;
 
 	add_history(data->input);
-	res = lexer(data);
+	res = lexer(data, data->input);
 	if (res || !data->lexer_list)
 		return (res);
 	res = parser(data);

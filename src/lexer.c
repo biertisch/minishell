@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 11:45:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 22:01:22 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//converts user input into a list of tokens
-int	lexer(t_data *data)
+//converts user raw input into a list of tokens
+int	lexer(t_data *data, char *input)
 {
 	t_token_type	type;
 	char			*value;
@@ -21,20 +21,20 @@ int	lexer(t_data *data)
 	int				res;
 
 	i = 0;
-	while (data->input[i])
+	while (input[i])
 	{
 		value = NULL;
 		while (ft_isspace(data->input[i]))
 			i++;
-		if (!data->input[i])
+		if (!input[i])
 			break ;
-		type = get_token_type(data->input + i);
-		if (type == LPAREN && is_arithmetic_operation(data->input + i))
+		type = get_token_type(input + i);
+		if (type == LPAREN && is_arithmetic_op(input + i))
 			return (internal_error(data, ERR_9, NULL, NULL));
-		res = get_token_value(data, data->input + i, &value, &i);
+		res = get_token_value(data, input + i, &value, &i);
 		if (res)
 			return (res);
-		add_token(data, type, value);
+		add_token(data, &data->lexer_list, type, value);
 	}
 	return (VALID);
 }
@@ -65,20 +65,8 @@ t_token_type	get_token_type(char *input)
 		return (WORD);
 }
 
-int	is_arithmetic_operation(char *input)
-{
-	if (!input || *input != '(' || *(input + 1) != '(')
-		return (0);
-	input += 2;
-	while (*input && !(*input == ')' && (*(input + 1)) == ')'))
-		input++;
-	if (!*input)
-		return (0);
-	return (1);
-}
-
-//assumes value is delimitated by blank space or operators,
-//groups text within quotes && checks for unclosed quotes
+//takes as value what is delimitated by quotes, blank space or operators
+//checks for unclosed quotes
 int	get_token_value(t_data *data, char *input, char **value, int *index)
 {
 	char	quote;
@@ -98,7 +86,7 @@ int	get_token_value(t_data *data, char *input, char **value, int *index)
 			quote = 0;
 		i++;
 	}
-	if (quote)
+	if (quote) // perhaps refactor to helper & identify char in error msg
 		return (syntax_error(data, ERR_8, NULL));
 	if (i == 0 && is_operator(input + i))
 		i = get_operator_len(input + i);
@@ -108,11 +96,12 @@ int	get_token_value(t_data *data, char *input, char **value, int *index)
 	return (VALID);
 }
 
-void	add_token(t_data *data, t_token_type type, char *value)
+void	add_token(t_data *data, t_token **lexer_list, t_token_type type,
+	char *value)
 {
 	t_token	*new_node;
 
 	new_node = create_lexer_node(type, value);
 	validate_malloc(data, new_node, value);
-	add_lexer_node(&data->lexer_list, new_node);
+	add_lexer_node(lexer_list, new_node);
 }
