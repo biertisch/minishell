@@ -25,12 +25,17 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	full_path = ft_strchr(cmd, '/');
 	if (full_path)
 		return (run_curr_dir(data, stack, cmd));
+	slash_path = ft_strjoin("/", cmd);
+	validate_malloc_execute(data, stack, slash_path, cmd);
 	if (get_env_value(data->env_list, "PATH"))
 		paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
 	else
 		paths = ft_split("/usr/local/bin:/usr/bin:/bin", ':');
-	validate_malloc_execute(data, stack, paths, cmd);
-	slash_path = ft_strjoin("/", cmd);
+	if (!paths)
+	{
+		free(slash_path);
+		validate_malloc_execute(data, stack, paths, cmd);
+	}
 	while (paths[i])
 	{
 		full_path = ft_strjoin(paths[i++], slash_path);
@@ -49,6 +54,12 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 				free(slash_path);
 				executor_child_errno(data, stack, cmd);
 			}
+		}
+		else
+		{
+			ft_splitfree(paths);
+			free(cmd);
+			validate_malloc_execute(data, stack, full_path, slash_path);
 		}
 	}
 	write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
