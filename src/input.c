@@ -6,14 +6,39 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 21:33:00 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 22:20:13 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// non-interactive mode
+int	read_input(t_data *data)
+{
+	int	status;
+
+	if (isatty(STDIN_FILENO))
+		return (prompt_input(data));
+	while (1)
+	{
+		data->input = get_next_line(STDIN_FILENO);
+		if (!data->input)
+			eof_abort(data);
+		if (*data->input)
+		{
+			status = process_input(data);
+			if (status == INCOMPLETE && data->input)
+				process_input(data);
+			else if (status == INCOMPLETE_EOF)
+				eof_abort(data);
+		}
+		free_command_data(data);
+	}
+	return (0);
+}
+
 // interactive mode
-void	prompt_input(t_data *data)
+int	prompt_input(t_data *data)
 {
 	int	status;
 
@@ -37,28 +62,6 @@ void	prompt_input(t_data *data)
 	}
 }
 
-// non-interactive mode
-void	read_input(t_data *data)
-{
-	int	status;
-
-	while (1)
-	{
-		data->input = get_next_line(STDIN_FILENO);
-		if (!data->input)
-			eof_abort(data);
-		if (*data->input)
-		{
-			status = process_input(data);
-			if (status == INCOMPLETE && data->input)
-				process_input(data);
-			else if (status == INCOMPLETE_EOF)
-				eof_abort(data);
-		}
-		free_command_data(data);
-	}
-}
-
 int	process_input(t_data *data)
 {
 	int	res;
@@ -67,7 +70,7 @@ int	process_input(t_data *data)
 	res = lexer(data, data->input);
 	if (res || !data->lexer_list)
 		return (res);
-	res = parser(data);
+	res = parser(data, data->lexer_list);
 	if (res || !data->parser_tree)
 		return (res);
 	execute(data);
