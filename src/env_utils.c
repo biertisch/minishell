@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:24:26 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 15:17:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 18:21:39 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_env	*find_env_node(t_env *head, char *key)
 	{
 		if (!ft_strcmp(head->key, key))
 			return (head);
-		head = head->next;	
+		head = head->next;
 	}
 	return (NULL);
 }
