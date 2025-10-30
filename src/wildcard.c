@@ -3,57 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:16:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:16:51 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*update_redir_wildcard(t_data *data, char *file, t_list *entry)
+int	has_wildcard(const char *arg)
 {
-	char	*new_file;
-
-	if (!file || !entry)
-		return (file);
-	new_file = ft_strdup(entry->content);
-	validate_malloc_wildcard(data, new_file, entry, NULL);
-	free(file);
-	ft_lstclear(&entry, free);
-	return (new_file);
+	if (!arg)
+		return (0);
+	while (*arg && *arg != '*')
+		arg++;
+	if (*arg == '*')
+		return (1);
+	return (0);
 }
 
-static void	filter_matches(t_list **head, char *pattern)
+int	expand_wildcard(t_data *data, char *pattern, t_list **entries)
 {
-	t_list	*curr;
-	t_list	*prev;
-	t_list	*tmp;
+	char	*dir_name;
+	DIR		*dir_stream;
 
-	curr = *head;
-	prev = NULL;
-	while (curr)
-	{
-		if (!match_wildcard((char *)curr->content, pattern))
-		{
-			tmp = curr;
-			curr = curr->next;
-			if (prev)
-				prev->next = curr;
-			else
-				*head = curr;
-			ft_lstdelone(tmp, free);
-		}
-		else
-		{
-			prev = curr;
-			curr = curr->next;
-		}
-	}
+	if (!*pattern)
+		return (0);
+	dir_name = getcwd(NULL, 0);
+	if (!dir_name)
+		return (system_error(data, "getcwd"));
+	dir_stream = opendir(dir_name);
+	free(dir_name);
+	if (!dir_stream)
+		return (system_error(data, "opendir"));
+	*entries = get_entries(data, dir_stream);
+	if (closedir(dir_stream))
+		return (system_error(data, "closedir"));
+	if (!entries)
+		return (0);
+	filter_matches(entries, pattern);
+	return (0);
 }
 
-static t_list	*get_entries(t_data *data, DIR *dir_stream)
+t_list	*get_entries(t_data *data, DIR *dir_stream)
 {
 	struct dirent	*dirent;
 	t_list			*head;
@@ -82,36 +75,43 @@ static t_list	*get_entries(t_data *data, DIR *dir_stream)
 	return (head);
 }
 
-int	expand_wildcard(t_data *data, char *pattern, t_list **entries)
+void	filter_matches(t_list **head, char *pattern)
 {
-	char	*dir_name;
-	DIR		*dir_stream;
+	t_list	*curr;
+	t_list	*prev;
+	t_list	*tmp;
 
-	if (!*pattern)
-		return (0);
-	dir_name = getcwd(NULL, 0);
-	if (!dir_name)
-		return (system_error(data, "getcwd"));
-	dir_stream = opendir(dir_name);
-	free(dir_name);
-	if (!dir_stream)
-		return (system_error(data, "opendir"));
-	*entries = get_entries(data, dir_stream);
-	if (closedir(dir_stream))
-		return (system_error(data, "closedir"));
-	if (!entries)
-		return (0);
-	filter_matches(entries, pattern);
-	return (0);
+	curr = *head;
+	prev = NULL;
+	while (curr)
+	{
+		if (!match_wildcard((char *)curr->content, pattern))
+		{
+			tmp = curr;
+			curr = curr->next;
+			if (prev)
+				prev->next = curr;
+			else
+				*head = curr;
+			ft_lstdelone(tmp, free);
+		}
+		else
+		{
+			prev = curr;
+			curr = curr->next;
+		}
+	}
 }
 
-int	has_wildcard(const char *arg)
+char	*update_redir_wildcard(t_data *data, char *file, t_list *entry)
 {
-	if (!arg)
-		return (0);
-	while (*arg && *arg != '*')
-		arg++;
-	if (*arg == '*')
-		return (1);
-	return (0);
+	char	*new_file;
+
+	if (!file || !entry)
+		return (file);
+	new_file = ft_strdup(entry->content);
+	validate_malloc_wildcard(data, new_file, entry, NULL);
+	free(file);
+	ft_lstclear(&entry, free);
+	return (new_file);
 }

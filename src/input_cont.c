@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:57:53 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 17:18:56 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:38:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,27 +105,3 @@ char	*copy_continuation_input(t_data *data, int *pipe_fd)
 	close(pipe_fd[0]);
 	return (new_input);
 }
-
-// static char	*update_input(t_data *data, char *line, char target)
-// {
-// 	char	*separator;
-// 	char	*append_separator;
-// 	char	*append_line;
-
-// 	if (is_quote(target))
-// 		separator = "\n";
-// 	else
-// 		separator = " ";
-// 	append_separator = ft_strjoin(data->input, separator);
-// 	validate_malloc(data, append_separator, line);
-// 	append_line = ft_strjoin(append_separator, line);
-// 	if (!append_line)
-// 	{
-// 		free(append_separator);
-// 		validate_malloc(data, NULL, line);
-// 	}
-// 	free(append_separator);
-// 	free_command_data(data);
-// 	rl_replace_line(append_line, 0);
-// 	return (append_line);
-// }

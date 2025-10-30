@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 21:35:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:07:29 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ int			parse_and_or(t_data *data, t_token **token, t_tree **root);
 
 //parser_cmd.c
 int			get_command_data(t_data *data, t_token **token, t_tree *node);
+char		**allocate_argv(t_data *data, t_token **token, t_tree *node);
 int			is_command_token(t_token_type token_type);
+void		get_word(t_data *data, t_token **token, t_tree *node, int *i);
+int			count_argv(t_token *token);
 
 //parser_redir.c
 int			get_redir(t_data *data, t_token **token, t_tree *node);

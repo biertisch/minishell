@@ -3,25 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 21:43:11 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:15:08 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "struct_def.h"
-# include "libft.h"
-# include "printf.h"
-# include "executor.h"
-# include "parser.h"
-# include "expander.h"
-# include "lexer.h"
-# include "ft_signal.h"
-# include "env.h"
 # include <dirent.h>
 # include <fcntl.h>
 # include <readline/readline.h>
@@ -39,6 +30,15 @@
 # include <termios.h>
 # include <unistd.h>
 # include <errno.h>
+# include "struct_def.h"
+# include "libft.h"
+# include "printf.h"
+# include "executor.h"
+# include "parser.h"
+# include "expander.h"
+# include "lexer.h"
+# include "ft_signal.h"
+# include "env.h"
 
 # define CONTINUE_PROMPT "> "
 # define ERR_0 "invalid environment variable"
@@ -108,6 +108,16 @@ void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 void		validate_malloc_execute(t_data *data, t_stack **stack,
 			     void *ptr, void *to_free);
 
+//get_next_line.c
+char	*get_next_line(int fd);
+
+//get_next_line_utils.c
+int			ft_find_init_nl(char *buff);
+char		*ft_handle_new_line(char *buff, char *result, int i);
+char		*ft_process_buffer(char *buff, int i);
+char		*get_next_line_cont(int fd, char *buffer, char *result, int bytes_read);
+char		*ft_gnl_realloc(char *result, int i, int *r);
+
 //input.c
 void		prompt_input(t_data *data);
 void		read_input(t_data *data);
@@ -123,5 +133,8 @@ char		*copy_continuation_input(t_data *data, int *pipe_fd);
 
 //input_prompt.c
 void		update_prompt(t_data *data);
+char		*get_env_value_modified(t_data *data, char *key);
+char		*get_prompt_pwd(t_data *data);
+void		build_prompt(char *prompt, char *user, char *hostname, char *pwd);
 
 #endif

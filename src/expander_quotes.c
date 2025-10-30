@@ -3,51 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:57:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/21 18:11:52 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:13:45 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	copy_without_quotes(char *dest, char *src, char quote)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (src[i])
-	{
-		if (src[i] != quote)
-		{
-			dest[j] = src[i];
-			j++;
-		}
-		i++;
-	}
-	dest[j] = '\0';
-}
-
-static int	count_quotes(char *arg, char *quote)
-{
-	int	count;
-	int	i;
-
-	count = 0;
-	i = 0;
-	while (arg[i])
-	{
-		if (!*quote && is_quote(arg[i]))
-			*quote = arg[i];
-		if (*quote && arg[i] == *quote)
-			count++;
-		i++;
-	}
-	return (count);
-}
 
 void	remove_quotes(t_data *data, char **arg)
 {
@@ -66,4 +29,41 @@ void	remove_quotes(t_data *data, char **arg)
 	copy_without_quotes(tmp, *arg, quote);
 	free(*arg);
 	*arg = tmp;
+}
+
+int	count_quotes(char *arg, char *quote)
+{
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
+	while (arg[i])
+	{
+		if (!*quote && is_quote(arg[i]))
+			*quote = arg[i];
+		if (*quote && arg[i] == *quote)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+void	copy_without_quotes(char *dest, char *src, char quote)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (src[i])
+	{
+		if (src[i] != quote)
+		{
+			dest[j] = src[i];
+			j++;
+		}
+		i++;
+	}
+	dest[j] = '\0';
 }

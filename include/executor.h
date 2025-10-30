@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:55:16 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 22:09:30 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:37:18 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,16 +121,6 @@ int			execute_subshell_entered(t_data **data, t_stack **stack);
 int			execute_subshell_done(t_data **data, t_stack **stack);
 int			subshell_redir(t_data **data, t_stack **stack);
 int		check_redir_in_subshell(t_stack **stack);
-
-//get_next_line.c
-char	*get_next_line(int fd);
-
-//get_next_line_utils.c
-int			ft_find_init_nl(char *buff);
-char		*ft_handle_new_line(char *buff, char *result, int i);
-char		*ft_process_buffer(char *buff, int i);
-char		*get_next_line_cont(int fd, char *buffer, char *result, int bytes_read);
-char		*ft_gnl_realloc(char *result, int i, int *r);
 
 //executor_env.c
 int			execute_env(t_data *data, t_stack **stack);
