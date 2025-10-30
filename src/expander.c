@@ -3,45 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:52:51 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:43:27 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
-static int	expand_redir(t_data *data, t_tree *node)
+int	expand(t_data *data, t_tree *node)
 {
-	t_redir	*trav;
-	t_list	*entries;
-
-	trav = node->redir;
-	while (trav)
-	{
-		if (expand_dollar_redir(data, &trav->file))
-			return (-1);
-		expand_tilde(data, &trav->file);
-		if (trav->file && !is_quote(trav->file[0]) && has_wildcard(trav->file))
-		{
-			if (expand_wildcard(data, trav->file, &entries))
-				return (-1);
-			if (entries && entries->next)
-			{
-				ft_lstclear(&entries, free);
-				return (internal_error(data, ERR_2, NULL, trav->file));
-			}
-			if (entries)
-				trav->file = update_redir_wildcard(data, trav->file, entries);
-		}
-		remove_quotes(data, &trav->file);
-		trav = trav->next;
-	}
+	if (!node)
+		return (-1);
+	if (node->argv && expand_argv(data, node))
+		return (-1);
+	if (node->redir && expand_redir(data, node))
+		return (-1);
 	return (0);
 }
 
-static int	expand_argv(t_data *data, t_tree *node)
+int	expand_argv(t_data *data, t_tree *node)
 {
 	int		i;
 	t_list	*entries;
@@ -70,13 +52,39 @@ static int	expand_argv(t_data *data, t_tree *node)
 	return (0);
 }
 
-int	expand(t_data *data, t_tree *node)
+int	expand_redir(t_data *data, t_tree *node)
 {
-	if (!node)
+	t_redir	*trav;
+
+	trav = node->redir;
+	while (trav)
+	{
+		if (trav->type != REDIR_IN && expand_single_redir(data, trav))
+			return (-1);
+		trav = trav->next;
+	}
+	return (0);
+}
+
+int	expand_single_redir(t_data *data, t_redir *redir)
+{
+	t_list	*entries;
+
+	if (expand_dollar_redir(data, &redir->file))
 		return (-1);
-	if (node->argv && expand_argv(data, node))
-		return (-1);
-	if (node->redir && expand_redir(data, node))
-		return (-1);
+	expand_tilde(data, &redir->file);
+	if (redir->file && !is_quote(redir->file[0]) && has_wildcard(redir->file))
+	{
+		if (expand_wildcard(data, redir->file, &entries))
+			return (-1);
+		if (entries && entries->next)
+		{
+			ft_lstclear(&entries, free);
+			return (internal_error(data, ERR_2, NULL, redir->file));
+		}
+		if (entries)
+			redir->file = update_redir_wildcard(data, redir->file, entries);
+	}
+	remove_quotes(data, &redir->file);
 	return (0);
 }

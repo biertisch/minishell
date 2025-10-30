@@ -6,29 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:15 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:24:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:10:14 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-
-static t_env	*generate_env_pwd(t_data *data)
-{
-	t_env	*node;
-
-	node = create_env_node(NULL, NULL, 1);
-	validate_malloc(data, node, NULL);
-	node->key = ft_strdup("PWD");
-	validate_malloc_env(data, node->key, node);
-	node->value = getcwd(NULL, 0);
-	if (!node->value)
-	{
-		system_error(data, "getcwd");
-		free_env_node(&node);
-		error_exit(data);
-	}
-	return (node);
-}
+#include "minishell.h"
 
 int	generate_minimal_env(t_data *data, char **argv)
 {
@@ -53,6 +35,24 @@ int	generate_minimal_env(t_data *data, char **argv)
 	validate_malloc_env(data, underscore->value, underscore);
 	add_env_node(&data->env_list, underscore);
 	return (0);
+}
+
+t_env	*generate_env_pwd(t_data *data)
+{
+	t_env	*node;
+
+	node = create_env_node(NULL, NULL, 1);
+	validate_malloc(data, node, NULL);
+	node->key = ft_strdup("PWD");
+	validate_malloc_env(data, node->key, node);
+	node->value = getcwd(NULL, 0);
+	if (!node->value)
+	{
+		system_error(data, "getcwd");
+		free_env_node(&node);
+		error_exit(data, NULL);
+	}
+	return (node);
 }
 
 char	*get_env_value(t_env *head, char *key)

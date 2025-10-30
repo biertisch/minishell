@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_unset.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 12:39:13 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/01 12:39:13 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:11:34 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_unset(t_data *data, t_stack **stack)
 {
@@ -38,7 +38,7 @@ int	execute_unset(t_data *data, t_stack **stack)
 				next = *third;
 				if (first)
 					(*first)->next = next;
-				else	
+				else
 					data->env_list = next;
 				free_env_node(&victim);
 				break ;

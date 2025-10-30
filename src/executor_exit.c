@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_exit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 14:47:46 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/30 14:47:47 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:10:53 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_exit(t_data *data, t_stack **stack)
 {

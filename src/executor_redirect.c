@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_redirect.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 17:31:30 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/24 17:31:32 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:11:27 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	traverse_redir_in(t_data *data, t_stack **stack)
 {
@@ -32,10 +32,10 @@ int	check_redir_in_left(t_data *data, t_stack **stack)
 		return (-1);
 	if (push_left_until_cmd_redir(data, stack))
 		return (-1);
-	open_redir_in((*stack)->node->redir);
+	open_redir_in(data, (*stack)->node->redir);
 	pop(stack);
 	return (0);
-	
+
 }
 
 int	check_redir_in_right(t_data *data, t_stack **stack)
@@ -69,7 +69,7 @@ int	push_left_until_cmd_redir(t_data *data, t_stack **stack)
 		if ((*stack)->node->type == NODE_SUBSHELL)
 		{
 			(*stack)->phase = DONE;
-			if (open_redir_in((*stack)->node->redir) == 2)
+			if (open_redir_in(data, (*stack)->node->redir) == 2)
 				return (-1);
 		}
 		push_stack(stack, (*stack)->node->left, 0, 0, data);
@@ -77,7 +77,7 @@ int	push_left_until_cmd_redir(t_data *data, t_stack **stack)
 	return (0);
 }
 
-int	open_redir_in(t_redir *redir)
+int	open_redir_in(t_data *data, t_redir *redir)
 {
 	if (!redir)
 		return (0);
@@ -85,6 +85,12 @@ int	open_redir_in(t_redir *redir)
 	{
 		if (redir->type == REDIR_IN)
 		{
+			
+			if (expand_single_redir(data, redir))
+			{
+				redir->in_fd = -1;
+				return (2);	
+			}
 			redir->in_fd = open(redir->file, O_RDONLY);
 			if (redir->in_fd == -1)
 			{

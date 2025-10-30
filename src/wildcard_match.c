@@ -3,35 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_match.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 14:39:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/04 11:26:54 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:26:14 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-
-static int	backtrack_on_mismatch(int *i, int *j, int *star)
-{
-	if (*star < 0)
-		return (0);
-	*j = *star + 1;
-	(*i)++;
-	return (1);
-}
-
-static void	record_star(int *j, int *star)
-{
-	*star = *j;
-	(*j)++;
-}
-
-static void	advance_both(int *i, int *j)
-{
-	(*i)++;
-	(*j)++;
-}
+#include "minishell.h"
 
 int	match_wildcard(char *entry, char *pattern)
 {
@@ -57,5 +36,26 @@ int	match_wildcard(char *entry, char *pattern)
 		j++;
 	if (pattern[j])
 		return (0);
+	return (1);
+}
+
+void	advance_both(int *i, int *j)
+{
+	(*i)++;
+	(*j)++;
+}
+
+void	record_star(int *j, int *star)
+{
+	*star = *j;
+	(*j)++;
+}
+
+int	backtrack_on_mismatch(int *i, int *j, int *star)
+{
+	if (*star < 0)
+		return (0);
+	*j = *star + 1;
+	(*i)++;
 	return (1);
 }

@@ -1,5 +1,5 @@
 //DELETE WHEN COMPLETE
-#include "../include/minishell.h"
+#include "minishell.h"
 
 //---------------------ENV-----------------------
 void	print_env_list(t_env *head)

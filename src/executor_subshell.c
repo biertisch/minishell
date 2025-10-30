@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_subshell.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 11:57:43 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 15:53:44 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:11:31 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_subshell(t_data *data, t_stack **stack)
 {
@@ -25,7 +25,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 {
 	pid_t	pid;
 	int		status;
-	
+
 	//delete contents of redir_out files
 	(*stack)->phase = DONE;
 	if (check_redir_in_subshell(stack))
@@ -50,7 +50,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 		if ((*stack)->next && (*stack)->next->type == NODE_PIPE)
 			(*stack)->next->child_pid[(*stack)->next->child_count++] = pid;
 		else
-		{	
+		{
 			if ((*stack)->next && (*stack)->next->type == NODE_PIPE)
 				close_all_pipe_ends(&((*stack)->next));
 			status = 0;
@@ -59,7 +59,7 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 				(*stack)->exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 				(*stack)->exit_status = WTERMSIG(status) + 128;
-			handle_child_exit(status);	
+			handle_child_exit(status);
 		}
 	}
 	return (0);

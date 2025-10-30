@@ -6,14 +6,14 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:55:16 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 14:14:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:37:18 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTOR_H
 # define EXECUTOR_H
 
-# include "../include/minishell.h"
+# include "minishell.h"
 
 typedef struct s_stack
 {
@@ -31,6 +31,9 @@ typedef struct s_stack
 
 // builtin.c
 int			validate_builtin(t_data *data, t_tree *node, int i);
+int			validate_builtin_flags(t_data *data, char **argv, char *allowed);
+int			validate_env(t_data *data, char **argv);
+int			print_builtin_usage(char *cmd);
 
 //executor.c
 int			execute(t_data *data);
@@ -63,6 +66,7 @@ void		child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i);
 void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
+void	check_no_cmd(t_data *data, t_stack **stack);
 
 
 //executor_utils.c
@@ -119,16 +123,6 @@ int			execute_subshell_done(t_data **data, t_stack **stack);
 int			subshell_redir(t_data **data, t_stack **stack);
 int		check_redir_in_subshell(t_stack **stack);
 
-//get_next_line.c
-char	*get_next_line(int fd);
-
-//get_next_line_utils.c
-int			ft_find_init_nl(char *buff);
-char		*ft_handle_new_line(char *buff, char *result, int i);
-char		*ft_process_buffer(char *buff, int i);
-char		*get_next_line_cont(int fd, char *buffer, char *result, int bytes_read);
-char		*ft_gnl_realloc(char *result, int i, int *r);
-
 //executor_env.c
 int			execute_env(t_data *data, t_stack **stack);
 
@@ -160,6 +154,7 @@ int			execute_export(t_data *data, t_stack **stack);
 int			execute_export_no_option(t_data *data, t_stack **stack);
 int			execute_export_option(t_data *data, t_stack **stack);
 void		sort_env(t_data **data);
+int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split);
 
 //variable_utils.c
 int			check_if_variable(t_data *data, t_stack **stack);
@@ -175,7 +170,7 @@ t_redir		*get_last_heredoc(t_redir *redir);
 
 //executor_redirect.c
 int			traverse_redir_in(t_data *data, t_stack **stack);
-int			open_redir_in(t_redir *redir);
+int			open_redir_in(t_data *data, t_redir *redir);
 int			close_redir_in(t_redir *redir);
 void		handle_open_errors(t_redir *redir);
 int			check_redir_in_left(t_data *data, t_stack **stack);

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:37:51 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 17:22:16 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:11:50 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute(t_data *data)
 {
@@ -60,6 +60,8 @@ int	execute_cmd(t_data *data, t_stack **stack)
 	{
 		if (expand(data, (*stack)->node))
 		{
+			if ((*stack)->next)
+				(*stack)->next->exit_status = 1;
 			pop(stack);
 			return (1);
 		}

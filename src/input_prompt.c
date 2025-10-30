@@ -3,26 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   input_prompt.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 19:24:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 10:36:26 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:12:41 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
-static void	build_prompt(char *prompt, char *user, char *hostname, char *pwd)
+void	update_prompt(t_data *data)
 {
-	ft_strlcpy(prompt, user, ft_strlen(user) + 1);
-	ft_strlcat(prompt, "@", ft_strlen(prompt) + 2);
-	ft_strlcat(prompt, hostname, ft_strlen(prompt) + ft_strlen(hostname) + 1);
-	ft_strlcat(prompt, ":", ft_strlen(prompt) + 2);
-	ft_strlcat(prompt, pwd, ft_strlen(prompt) + ft_strlen(pwd) + 1);
-	ft_strlcat(prompt, "$ ", ft_strlen(prompt) + 3);
+	char	*user;
+	char	*hostname;
+	char	*pwd;
+
+	if (data->prompt)
+		free(data->prompt);
+	user = get_env_value_modified(data, "USER");
+	hostname = get_env_value_modified(data, "HOSTNAME");
+	pwd = get_prompt_pwd(data);
+	data->prompt = malloc(ft_strlen(user) + ft_strlen(hostname)
+			+ ft_strlen(pwd) + 5);
+	validate_malloc(data, data->prompt, NULL);
+	build_prompt(data->prompt, user, hostname, pwd);
 }
 
-static char	*get_value(t_data *data, char *key)
+char	*get_env_value_modified(t_data *data, char *key)
 {
 	char	*value;
 
@@ -32,13 +39,13 @@ static char	*get_value(t_data *data, char *key)
 	return (value);
 }
 
-static char	*get_prompt_pwd(t_data *data)
+char	*get_prompt_pwd(t_data *data)
 {
 	char	*pwd;
 	char	*home;
 	int		home_len;
 
-	pwd = get_value(data, "PWD");
+	pwd = get_env_value_modified(data, "PWD");
 	home = get_env_value(data->env_list, "HOME");
 	home_len = ft_strlen(home);
 	if (home && !ft_strncmp(pwd, home, home_len))
@@ -50,19 +57,12 @@ static char	*get_prompt_pwd(t_data *data)
 	return (pwd);
 }
 
-void	update_prompt(t_data *data)
+void	build_prompt(char *prompt, char *user, char *hostname, char *pwd)
 {
-	char	*user;
-	char	*hostname;
-	char	*pwd;
-
-	if (data->prompt)
-		free(data->prompt);
-	user = get_value(data, "USER");
-	hostname = get_value(data, "HOSTNAME");
-	pwd = get_prompt_pwd(data);
-	data->prompt = malloc(ft_strlen(user) + ft_strlen(hostname)
-			+ ft_strlen(pwd) + 5);
-	validate_malloc(data, data->prompt, NULL);
-	build_prompt(data->prompt, user, hostname, pwd);
+	ft_strlcpy(prompt, user, ft_strlen(user) + 1);
+	ft_strlcat(prompt, "@", ft_strlen(prompt) + 2);
+	ft_strlcat(prompt, hostname, ft_strlen(prompt) + ft_strlen(hostname) + 1);
+	ft_strlcat(prompt, ":", ft_strlen(prompt) + 2);
+	ft_strlcat(prompt, pwd, ft_strlen(prompt) + ft_strlen(pwd) + 1);
+	ft_strlcat(prompt, "$ ", ft_strlen(prompt) + 3);
 }

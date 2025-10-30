@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 17:21:23 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:06 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 void	setup_signals(t_data *data)
 {
@@ -65,6 +65,6 @@ void	setup_handler(t_data *data, int signum, void (*handler)(int), int flags)
 	if (sigaction(signum, &sa, NULL))
 	{
 		system_error(data, "sigaction");
-		error_exit(data);
+		error_exit(data, NULL);
 	}
 }

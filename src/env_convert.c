@@ -3,32 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   env_convert.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:51:27 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 12:12:55 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:59:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
-void	split_env_entry(t_data *data, char *entry, t_env *node)
+void	env_list_to_array(t_data *data)
 {
-	char	*equal;
+	t_env	*trav;
+	int		counter;
+	int		i;
 
-	equal = ft_strchr(entry, '=');
-	if (equal)
+	free_string_array(&data->env);
+	trav = data->env_list;
+	counter = count_env_nodes(trav);
+	data->env = malloc(sizeof(char *) * (counter + 1));
+	validate_malloc(data, data->env, NULL);
+	i = 0;
+	while (trav)
 	{
-		node->key = ft_substr(entry, 0, equal - entry);
-		validate_malloc_env(data, node->key, node);
-		node->value = ft_strdup(equal + 1);
-		validate_malloc_env(data, node->value, node);
+		if (trav->exported)
+		{
+			data->env[i] = join_key_value(trav);
+			validate_malloc(data, data->env[i], NULL);
+			i++;
+		}
+		trav = trav->next;
 	}
-	else
+	data->env[i] = NULL;
+}
+
+int	count_env_nodes(t_env *head)
+{
+	int	counter;
+
+	counter = 0;
+	while (head)
 	{
-		node->key = ft_strdup(entry);
-		validate_malloc(data, node->key, node);
+		if (head->exported)
+			counter++;
+		head = head->next;
 	}
+	return (counter);
+}
+
+char	*join_key_value(t_env *node)
+{
+	char	*res;
+	char	*tmp;
+
+	if (!node->value)
+		return (ft_strdup(node->key));
+	tmp = ft_strjoin(node->key, "=");
+	if (!tmp)
+		return (NULL);
+	res = ft_strjoin(tmp, node->value);
+	free(tmp);
+	return (res);
 }
 
 int	envp_to_list(t_data *data, char **envp, char **argv)
@@ -54,59 +89,25 @@ int	envp_to_list(t_data *data, char **envp, char **argv)
 		add_env_node(&data->env_list, node);
 		i++;
 	}
+	increment_shlvl(data, data->env_list);
 	return (0);
 }
 
-static int	count_nodes(t_env *head)
+void	split_env_entry(t_data *data, char *entry, t_env *node)
 {
-	int	counter;
+	char	*equal;
 
-	counter = 0;
-	while (head)
+	equal = ft_strchr(entry, '=');
+	if (equal)
 	{
-		if (head->exported)
-			counter++;
-		head = head->next;
+		node->key = ft_substr(entry, 0, equal - entry);
+		validate_malloc_env(data, node->key, node);
+		node->value = ft_strdup(equal + 1);
+		validate_malloc_env(data, node->value, node);
 	}
-	return (counter);
-}
-
-static char	*join_key_value(t_env *node)
-{
-	char	*res;
-	char	*tmp;
-
-	if (!node->value)
-		return (ft_strdup(node->key));
-	tmp = ft_strjoin(node->key, "=");
-	if (!tmp)
-		return (NULL);
-	res = ft_strjoin(tmp, node->value);
-	free(tmp);
-	return (res);
-}
-
-void	env_list_to_array(t_data *data)
-{
-	t_env	*trav;
-	int		counter;
-	int		i;
-
-	free_string_array(&data->env);
-	trav = data->env_list;
-	counter = count_nodes(trav);
-	data->env = malloc(sizeof(char *) * (counter + 1));
-	validate_malloc(data, data->env, NULL);
-	i = 0;
-	while (trav)
+	else
 	{
-		if (trav->exported)
-		{
-			data->env[i] = join_key_value(trav);
-			validate_malloc(data, data->env[i], NULL);
-			i++;
-		}
-		trav = trav->next;
+		node->key = ft_strdup(entry);
+		validate_malloc(data, node->key, node);
 	}
-	data->env[i] = NULL;
 }

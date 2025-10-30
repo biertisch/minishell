@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_cd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 12:14:33 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/28 12:14:35 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:10:35 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_cd(t_data *data, t_stack **stack)
 {
@@ -21,6 +21,7 @@ int	execute_cd(t_data *data, t_stack **stack)
 	(*stack)->exit_status = 0;
 	chdir_res = 0;
 	curr_pwd = ft_strdup(getcwd(NULL, 0));
+	validate_malloc_execute(data, stack, curr_pwd, NULL);
 	if (!(*stack)->node->argv[where_is_cd(stack) + 1])
 		chdir_res = chdir(get_env_value(data->env_list, "HOME"));
 	else if (!(*stack)->node->argv[where_is_cd(stack) + 2])
@@ -41,6 +42,7 @@ int	execute_cd(t_data *data, t_stack **stack)
 	else
 	{
 		new_pwd = ft_strdup(getcwd(NULL, 0));
+		validate_malloc_execute(data, stack, new_pwd, NULL);
 		set_env_value(data->env_list, "OLDPWD", curr_pwd);
 		set_env_value(data->env_list, "PWD", new_pwd);
 	}
@@ -74,6 +76,6 @@ int	cd_fail(char *dir)
 	else if (errno == EACCES)
 		write(STDERR_FILENO, ": Permission denied\n", 20);
 	else if (!dir)
-		write(STDERR_FILENO, "too many arguments\n", 21);
+		write(STDERR_FILENO, "too many arguments\n", 20);
 	return (1);
 }

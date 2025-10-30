@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:49:01 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 17:44:39 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:11:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	check_for_heredoc(t_data *data)
 {

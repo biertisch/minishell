@@ -6,22 +6,13 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 11:04:05 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:53:12 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "struct_def.h"
-# include "libft.h"
-# include "printf.h"
-# include "executor.h"
-# include "parser.h"
-# include "expander.h"
-# include "lexer.h"
-# include "ft_signal.h"
-# include "env.h"
 # include <dirent.h>
 # include <fcntl.h>
 # include <readline/readline.h>
@@ -39,6 +30,15 @@
 # include <termios.h>
 # include <unistd.h>
 # include <errno.h>
+# include "struct_def.h"
+# include "libft.h"
+# include "printf.h"
+# include "executor.h"
+# include "parser.h"
+# include "expander.h"
+# include "lexer.h"
+# include "ft_signal.h"
+# include "env.h"
 
 # define CONTINUE_PROMPT "> "
 # define ERR_0 "invalid environment variable"
@@ -55,14 +55,6 @@
 # define ERR_11 "minishell: warning: here-document delimited by \
 end-of-file (wanted '"
 # define BUFFER_SIZE 20
-
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	int				exported;
-	struct s_env	*next;
-}	t_env;
 
 typedef struct s_data
 {
@@ -88,15 +80,15 @@ void		test_builtin_validation(t_data *data, t_tree *head);
 //cleanup.c
 void		free_all(t_data *data);
 void		free_command_data(t_data *data);
+void		free_stack(t_stack **stack);
 void		free_redir(t_redir *redir);
 void		free_string_array(char ***arr);
-void		free_stack(t_stack **stack);
 
 //error.c
 int			system_error(t_data *data, char *function);
 int			syntax_error(t_data *data, char *desc, char *token);
 int			internal_error(t_data *data, char *desc, char *cmd, char *arg);
-void		error_exit(t_data *data);
+void		error_exit(t_data *data, t_stack **stack);
 void		validate_malloc(t_data *data, void *ptr, void *to_free);
 void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 				t_tree *right);
@@ -105,6 +97,19 @@ void		check_for_errors(int status, t_data *data, t_stack *stack,
 				char *command_name);
 void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 				char **new_argv);
+void		validate_malloc_execute(t_data *data, t_stack **stack,
+			     void *ptr, void *to_free);
+
+//get_next_line.c
+char		*get_next_line(int fd);
+
+//get_next_line_utils.c
+int			ft_find_init_nl(char *buff);
+char		*ft_handle_new_line(char *buff, char *result, int i);
+char		*ft_process_buffer(char *buff, int i);
+char		*get_next_line_cont(int fd, char *buffer, char *result,
+				int bytes_read);
+char		*ft_gnl_realloc(char *result, int i, int *r);
 
 //input.c
 void		prompt_input(t_data *data);
@@ -121,5 +126,8 @@ char		*copy_continuation_input(t_data *data, int *pipe_fd);
 
 //input_prompt.c
 void		update_prompt(t_data *data);
+char		*get_env_value_modified(t_data *data, char *key);
+char		*get_prompt_pwd(t_data *data);
+void		build_prompt(char *prompt, char *user, char *hostname, char *pwd);
 
 #endif

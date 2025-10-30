@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:10 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 15:19:25 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:53 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 volatile sig_atomic_t	g_sig;
 
