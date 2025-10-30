@@ -35,6 +35,7 @@ int	execute_export_option(t_data *data, t_stack **stack)
 		found = 0;
 		env = &(data->env_list);
 		kv_split = ft_split((*stack)->node->argv[i], '=');
+		validate_malloc_execute(data, stack, kv_split, NULL);
 		if (is_valid_var_name(kv_split[0]))
 		{
 			while (env && *env)

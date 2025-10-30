@@ -65,7 +65,7 @@ static t_redir	*parse_single_redir(t_data *data, t_token **token,
 	{
 		system_error(data, "malloc");
 		free_redir(head);
-		error_exit(data);
+		error_exit(data, NULL);
 	}
 	*token = (*token)->next;
 	return (redir);

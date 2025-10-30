@@ -96,7 +96,7 @@ void		free_string_array(char ***arr);
 int			system_error(t_data *data, char *function);
 int			syntax_error(t_data *data, char *desc, char *token);
 int			internal_error(t_data *data, char *desc, char *cmd, char *arg);
-void		error_exit(t_data *data);
+void		error_exit(t_data *data, t_stack **stack);
 void		validate_malloc(t_data *data, void *ptr, void *to_free);
 void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 				t_tree *right);
@@ -105,6 +105,8 @@ void		check_for_errors(int status, t_data *data, t_stack *stack,
 				char *command_name);
 void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 				char **new_argv);
+void		validate_malloc_execute(t_data *data, t_stack **stack,
+			     void *ptr, void *to_free);
 
 //input.c
 void		prompt_input(t_data *data);

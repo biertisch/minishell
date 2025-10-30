@@ -50,7 +50,7 @@ t_env	*generate_env_pwd(t_data *data)
 	{
 		system_error(data, "getcwd");
 		free_env_node(&node);
-		error_exit(data);
+		error_exit(data, NULL);
 	}
 	return (node);
 }

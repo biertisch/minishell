@@ -27,6 +27,7 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	if (full_path)
 		return (run_curr_dir(data, stack, cmd));
 	paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
+	validate_malloc_execute(data, stack, paths, cmd);
 	slash_path = ft_strjoin("/", cmd);
 	while (paths[i])
 	{

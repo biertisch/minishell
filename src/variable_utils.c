@@ -95,6 +95,7 @@ int	get_first_command(t_data *data, t_stack **stack)
 	while ((*stack)->node->argv[i])
 	{
 		kv_split = ft_split((*stack)->node->argv[i], '=');
+		validate_malloc_execute(data, stack, kv_split, NULL);
 		if (!is_valid_var_name(kv_split[0]) || !kv_split[1])
 			return (ft_splitfree(kv_split), i);
 		i++;

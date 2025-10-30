@@ -12,9 +12,10 @@
 
 #include "minishell.h"
 
-void	error_exit(t_data *data)
+void	error_exit(t_data *data, t_stack **stack)
 {
 	write(2, "fatal error: leaving minishell...\n", 34);
+	free_stack(stack);
 	free_all(data);
 	exit(EXIT_FAILURE);
 }
@@ -67,13 +68,25 @@ int	system_error(t_data *data, char *function)
 	return (INVALID);
 }
 
+void	validate_malloc_execute(t_data *data, t_stack **stack,
+			     void *ptr, void *to_free)
+{
+	if (!ptr)
+	{
+		system_error(data, "malloc");
+		if (to_free)
+			free(to_free);
+		error_exit(data, stack);
+	}
+}
+
 void	validate_malloc(t_data *data, void *ptr, void *to_free)
 {
 	if (!ptr)
 	{
 		system_error(data, "malloc");
 		free(to_free);
-		error_exit(data);
+		error_exit(data, NULL);
 	}
 }
 
@@ -83,7 +96,7 @@ void	validate_malloc_env(t_data *data, void *ptr, t_env *node)
 	{
 		system_error(data, "malloc");
 		free_env_node(&node);
-		error_exit(data);
+		error_exit(data, NULL);
 	}
 }
 
@@ -95,7 +108,7 @@ void	validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 		system_error(data, "malloc");
 		free_parser_tree(&left);
 		free_parser_tree(&right);
-		error_exit(data);
+		error_exit(data, NULL);
 	}
 }
 
@@ -107,6 +120,6 @@ void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 		system_error(data, "malloc");
 		ft_lstclear(&node, free);
 		free_string_array(&new_argv);
-		error_exit(data);
+		error_exit(data, NULL);
 	}
 }
