@@ -59,7 +59,7 @@ int	expand_redir(t_data *data, t_tree *node)
 	trav = node->redir;
 	while (trav)
 	{
-		if (expand_single_redir(data, trav))
+		if (trav->type != REDIR_IN && expand_single_redir(data, trav))
 			return (-1);
 		trav = trav->next;
 	}
