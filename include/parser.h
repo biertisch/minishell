@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/30 18:17:29 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 22:38:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_tree
 }	t_tree;
 
 //parser.c
-int			parser(t_data *data);
+int			parser(t_data *data, t_token *token);
 int			parse_and_or(t_data *data, t_token **token, t_tree **root);
 int			parse_pipe(t_data *data, t_token **token, t_tree **root);
 int			parse_command(t_data *data, t_token **token, t_tree **root);

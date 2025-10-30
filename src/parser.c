@@ -3,33 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 13:55:11 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 22:41:55 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//builds an abstract syntax tree (AST) based on operator precedence
-//from lowest precendece to highest: logical operators -> pipe -> commands
-//& checks for stray parentheses at the end
-int	parser(t_data *data)
+//builds an abstract syntax tree based on operator precedence
+//checks for stray parentheses at the end
+int	parser(t_data *data, t_token *token)
 {
-	t_token	*token;
-	int		res;
+	int	res;
 
-	token = data->lexer_list;
 	res = parse_and_or(data, &token, &data->parser_tree);
+	if (res == INCOMPLETE_PAREN)
+		return (handle_incomplete_input(data, ')'));
+	if (res == INCOMPLETE)
+		return (handle_incomplete_input(data, 0));
 	if (res)
-	{
-		if (res == INCOMPLETE_PAREN)
-			return (handle_incomplete_input(data, ')'));
-		else if (res == INCOMPLETE)
-			return (handle_incomplete_input(data, 0));
 		return (res);
-	}
 	if (token && token->type == RPAREN)
 		return (syntax_error(data, ERR_1, token->value));
 	if (token && token->type == LPAREN)
