@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_or.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 13:07:50 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 14:54:56 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:11:11 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_or(t_data *data, t_stack **stack)
 {
@@ -58,7 +58,7 @@ int	execute_or_done(t_data **data, t_stack **stack)
 {
 	if ((*stack)->next)
 		setup_next_to_top(data, stack);
-	else 
+	else
 		(*data)->exit_status = (*stack)->exit_status;
 	pop(stack);
 	return (1);

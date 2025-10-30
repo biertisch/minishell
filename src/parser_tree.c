@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:49:50 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:55:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:25 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 t_tree	*create_parser_node(t_node_type type, t_tree *left, t_tree *right)
 {
@@ -37,49 +37,11 @@ void	free_parser_node(t_tree **node)
 	*node = NULL;
 }
 
-static int	clean_left_branch(t_data *data)
-{
-	if (!data->stack || !data->stack->node)
-		return (0);
-	if (push_left_until_cmd(data))
-		return (-1);
-	free_parser_node(&data->stack->node);
-	pop(&data->stack);
-	return (0);
-}
-
-static int	clean_right_branch(t_data *data)
-{
-	if (!data->stack || !data->stack->node)
-		return (0);
-	while (data->stack)
-	{
-		if (data->stack->phase == DONE)
-		{
-			free_parser_node(&data->stack->node);
-			pop(&data->stack);
-		}
-		else if (data->stack->node->right)
-		{
-			data->stack->phase = DONE;
-			if (data->stack->node->right)
-				push_stack(&data->stack, data->stack->node->right, 0, 0, data);
-			if (clean_left_branch(data))
-				return (-1);
-		}
-	}
-	return (0);
-}
-
-void	free_parser_tree(t_data *data, t_tree **root)
+void	free_parser_tree(t_tree **root)
 {
 	if (!root || !*root)
 		return ;
-	push_stack(&data->stack, *root, 0, 0, data);
-	if (clean_left_branch(data))
-		return ;
-	if (clean_right_branch(data))
-		return ;
-	free_stack(&data->stack);
-	*root = NULL;
+	free_parser_tree(&(*root)->left);
+	free_parser_tree(&(*root)->right);
+	free_parser_node(root);
 }

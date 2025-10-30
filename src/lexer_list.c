@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 13:13:12 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/08/21 13:13:12 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:18:11 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 t_token	*create_lexer_node(t_token_type type, char *value)
 {

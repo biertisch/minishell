@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 12:20:02 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/01 18:09:33 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:11:23 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_pwd(t_data *data, t_stack **stack)
 {

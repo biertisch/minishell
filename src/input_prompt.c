@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 19:24:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 10:36:26 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:18:24 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 static void	build_prompt(char *prompt, char *user, char *hostname, char *pwd)
 {

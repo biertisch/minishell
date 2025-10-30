@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 11:08:26 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:13 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 //calls parse_and_or() for left node, allows redirection,
 //checks for unclosed parenthesis (INCOMPLETE) and invalid sequences (INVALID)
@@ -21,14 +21,14 @@ static int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 
 	*token = (*token)->next;
 	if (!*token)
-		return (incomplete_subshell(data, NULL));
+		return (incomplete_subshell(NULL));
 	node = create_parser_node(NODE_SUBSHELL, NULL, NULL);
 	validate_malloc(data, node, NULL);
 	res = parse_and_or(data, token, &node->left);
 	if (res)
-		return (empty_subshell(data, token, node, res));
+		return (empty_subshell(token, node, res));
 	if (!*token)
-		return (incomplete_subshell(data, &node));
+		return (incomplete_subshell(&node));
 	if ((*token)->type != RPAREN)
 		return (invalid_sequence(data, *token, node));
 	*token = (*token)->next;
@@ -36,7 +36,7 @@ static int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 		return (invalid_sequence(data, *token, node));
 	if (*token && (is_redir_token((*token)->type) || (*token)->type == FD)
 		&& get_command_data(data, token, node))
-		return (free_parser_tree(data, &node), INVALID);
+		return (free_parser_tree(&node), INVALID);
 	*root = node;
 	return (VALID);
 }
@@ -76,7 +76,7 @@ static int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 		*token = (*token)->next;
 		res = parse_command(data, token, &right);
 		if (res)
-			return (free_parser_tree(data, &left), res);
+			return (free_parser_tree(&left), res);
 		tmp = create_parser_node(NODE_PIPE, left, right);
 		validate_malloc_tree(data, tmp, left, right);
 		left = tmp;
@@ -102,7 +102,7 @@ int	parse_and_or(t_data *data, t_token **token, t_tree **root)
 		*token = (*token)->next;
 		res = parse_pipe(data, token, &right);
 		if (res)
-			return (free_parser_tree(data, &left), res);
+			return (free_parser_tree(&left), res);
 		tmp = create_parser_node(type, left, right);
 		validate_malloc_tree(data, tmp, left, right);
 		left = tmp;
@@ -127,7 +127,7 @@ int	parser(t_data *data)
 			return (handle_incomplete_input(data, ')'));
 		else if (res == INCOMPLETE)
 			return (handle_incomplete_input(data, 0));
-		return (res);	
+		return (res);
 	}
 	if (token && token->type == RPAREN)
 		return (syntax_error(data, ERR_1, token->value));

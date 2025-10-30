@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   stack.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 15:15:44 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 15:04:10 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:16:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 t_stack	*create_stack(t_data *data)
 {
@@ -131,7 +131,7 @@ t_stack	**get_first_subshell(t_stack **stack)
 }
 
 t_stack **get_next_pipe_in_subshell(t_stack **stack)
-{	
+{
 	t_stack	**head;
 
   	if (!stack || !*stack)

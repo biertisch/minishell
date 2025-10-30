@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 11:51:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 16:55:27 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:21 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	push_left_until_cmd(t_data *data)
 {
