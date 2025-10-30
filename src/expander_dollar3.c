@@ -3,34 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander_dollar3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 22:11:49 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/28 17:45:33 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:12:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	expand_redir_variable(t_data *data, char **file, int i)
-{
-	char	*key;
-	char	*value;
-
-	key = get_env_key(*file + i + 1);
-	validate_malloc(data, key, NULL);
-	value = get_env_value(data->env_list, key);
-	if ((!value && *file[0] != '"')
-		|| (value && ft_strchr(value, ' ') && *file[0] != '"'))
-	{
-		free(key);
-		return (internal_error(data, ERR_2, NULL, NULL));
-	}
-	*file = update_arg(*file, i, key, value);
-	validate_malloc(data, *file, key);
-	free(key);
-	return (0);
-}
 
 int	expand_dollar_redir(t_data *data, char **file)
 {
@@ -55,19 +35,22 @@ int	expand_dollar_redir(t_data *data, char **file)
 	return (0);
 }
 
-int	expand_heredoc_var(t_data *data, char **input, int i)
+int	expand_redir_variable(t_data *data, char **file, int i)
 {
 	char	*key;
 	char	*value;
 
-	key = get_env_key((*input) + i + 1);
+	key = get_env_key(*file + i + 1);
 	validate_malloc(data, key, NULL);
 	value = get_env_value(data->env_list, key);
-	if (value)
+	if ((!value && *file[0] != '"')
+		|| (value && ft_strchr(value, ' ') && *file[0] != '"'))
 	{
-		*input = update_arg(*input, i, key, value);
-		validate_malloc(data, *input, key);
+		free(key);
+		return (internal_error(data, ERR_2, NULL, NULL));
 	}
+	*file = update_arg(*file, i, key, value);
+	validate_malloc(data, *file, key);
 	free(key);
 	return (0);
 }
@@ -93,5 +76,22 @@ int	expand_heredoc_input(t_data *data, t_redir *redir)
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	expand_heredoc_var(t_data *data, char **input, int i)
+{
+	char	*key;
+	char	*value;
+
+	key = get_env_key((*input) + i + 1);
+	validate_malloc(data, key, NULL);
+	value = get_env_value(data->env_list, key);
+	if (value)
+	{
+		*input = update_arg(*input, i, key, value);
+		validate_malloc(data, *input, key);
+	}
+	free(key);
 	return (0);
 }

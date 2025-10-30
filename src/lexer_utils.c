@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:23:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:18:04 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:43:29 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_operator(char *s)
+{
+	return (*s == '|' || *s == '<' || *s == '>' || *s == '(' || *s == ')'
+		|| !ft_strncmp(s, "<<", 2) || !ft_strncmp(s, ">>", 2)
+		|| !ft_strncmp(s, "&&", 2) || !ft_strncmp(s, "||", 2));
+}
 
 int	get_operator_len(char *s)
 {
@@ -22,11 +29,9 @@ int	get_operator_len(char *s)
 	return (0);
 }
 
-int	is_operator(char *s)
+int	is_quote(char c)
 {
-	return (*s == '|' || *s == '<' || *s == '>' || *s == '(' || *s == ')'
-		|| !ft_strncmp(s, "<<", 2) || !ft_strncmp(s, ">>", 2)
-		|| !ft_strncmp(s, "&&", 2) || !ft_strncmp(s, "||", 2));
+	return (c == '"' || c == '\'');
 }
 
 //classifies a substring as FD if it is only composed of digits
@@ -39,9 +44,4 @@ int	is_fd(char *input)
 			|| !ft_strncmp(input, "<<", 2) || !ft_strncmp(input, ">>", 2)))
 		return (1);
 	return (0);
-}
-
-int	is_quote(char c)
-{
-	return (c == '"' || c == '\'');
 }
