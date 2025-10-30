@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:32:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 21:55:19 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 15:11:20 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 # define ENV_H
 
 # include "minishell.h"
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	int				exported;
+	struct s_env	*next;
+}	t_env;
 
 //env.c
 int			generate_minimal_env(t_data *data, char **argv);
@@ -39,5 +47,7 @@ void		free_env_list(t_env **head);
 //env_utils.c
 int			is_valid_var_name(char *s);
 int			is_new_var(char *arg);
+void		increment_shlvl(t_data *data, t_env *head);
+t_env		*find_env_node(t_env *head, char *key);
 
 #endif

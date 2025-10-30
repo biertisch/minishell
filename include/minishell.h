@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 14:45:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:53:12 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,6 @@
 # define ERR_11 "minishell: warning: here-document delimited by \
 end-of-file (wanted '"
 # define BUFFER_SIZE 20
-
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	int				exported;
-	struct s_env	*next;
-}	t_env;
 
 typedef struct s_data
 {
