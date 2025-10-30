@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 12:15:08 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:53:12 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,6 @@
 end-of-file (wanted '"
 # define BUFFER_SIZE 20
 
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	int				exported;
-	struct s_env	*next;
-}	t_env;
-
 typedef struct s_data
 {
 	char			*input;
@@ -109,13 +101,14 @@ void		validate_malloc_execute(t_data *data, t_stack **stack,
 			     void *ptr, void *to_free);
 
 //get_next_line.c
-char	*get_next_line(int fd);
+char		*get_next_line(int fd);
 
 //get_next_line_utils.c
 int			ft_find_init_nl(char *buff);
 char		*ft_handle_new_line(char *buff, char *result, int i);
 char		*ft_process_buffer(char *buff, int i);
-char		*get_next_line_cont(int fd, char *buffer, char *result, int bytes_read);
+char		*get_next_line_cont(int fd, char *buffer, char *result,
+				int bytes_read);
 char		*ft_gnl_realloc(char *result, int i, int *r);
 
 //input.c

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 12:10:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:43:27 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	expand_redir(t_data *data, t_tree *node)
 	return (0);
 }
 
-int	expand_single_redir(t_data *data, t_redir* redir)
+int	expand_single_redir(t_data *data, t_redir *redir)
 {
 	t_list	*entries;
 

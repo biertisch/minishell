@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 12:15:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:46:35 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 int			expand(t_data *data, t_tree *node);
 int			expand_argv(t_data *data, t_tree *node);
 int			expand_redir(t_data *data, t_tree *node);
-int			expand_single_redir(t_data *data, t_redir* redir);
+int			expand_single_redir(t_data *data, t_redir *redir);
 
 //expand_tilde.c
 void		expand_tilde(t_data *data, char **arg);
@@ -37,7 +37,8 @@ char		*update_arg(char *arg, int i, char *key, char *value);
 char		**update_argv_dollar(char **old_argv, int i, char *value);
 char		**get_add_argv(char *value);
 int			get_argv_count(char **old_argv, char **add_argv, int *add_count);
-int			build_argv(char **new_argv, char **old_argv, char **add_argv, int i);
+int			build_argv(char **new_argv, char **old_argv, char **add_argv,
+				int i);
 int			copy_to_array(char **dest, char **src, int size);
 
 //expander_dollar3.c

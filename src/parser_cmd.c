@@ -6,12 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 11:10:37 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 12:07:54 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:44:00 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 //counts all WORDS as part of argv except for
 //the WORD immediately after redirection operator

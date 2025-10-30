@@ -3,20 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_subshell.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 15:37:28 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:17:33 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:37:56 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	incomplete_subshell(t_tree **node)
-{
-	free_parser_tree(node);
-	return (INCOMPLETE_PAREN);
-}
 
 int	empty_subshell(t_token **token, t_tree *node, int res)
 {

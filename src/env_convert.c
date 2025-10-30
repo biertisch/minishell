@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_convert.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:51:27 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:10:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:59:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	envp_to_list(t_data *data, char **envp, char **argv)
 		add_env_node(&data->env_list, node);
 		i++;
 	}
+	increment_shlvl(data, data->env_list);
 	return (0);
 }
 
