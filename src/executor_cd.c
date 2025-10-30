@@ -21,6 +21,7 @@ int	execute_cd(t_data *data, t_stack **stack)
 	(*stack)->exit_status = 0;
 	chdir_res = 0;
 	curr_pwd = ft_strdup(getcwd(NULL, 0));
+	validate_malloc_execute(data, stack, curr_pwd, NULL);
 	if (!(*stack)->node->argv[where_is_cd(stack) + 1])
 		chdir_res = chdir(get_env_value(data->env_list, "HOME"));
 	else if (!(*stack)->node->argv[where_is_cd(stack) + 2])
@@ -41,6 +42,7 @@ int	execute_cd(t_data *data, t_stack **stack)
 	else
 	{
 		new_pwd = ft_strdup(getcwd(NULL, 0));
+		validate_malloc_execute(data, stack, new_pwd, NULL);
 		set_env_value(data->env_list, "OLDPWD", curr_pwd);
 		set_env_value(data->env_list, "PWD", new_pwd);
 	}

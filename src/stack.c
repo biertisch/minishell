@@ -36,7 +36,7 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	t_stack *new_head;
 
 	new_head = malloc(sizeof(t_stack));
-	validate_malloc(data, new_head, NULL);
+	validate_malloc_execute(data, stack, new_head, NULL);
 	new_head->phase = ENTERED;
 	new_head->type = node->type;
 	new_head->node = node;

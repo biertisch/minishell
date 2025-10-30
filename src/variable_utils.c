@@ -18,14 +18,16 @@ int	check_if_variable(t_data *data, t_stack **stack)
 	char	**kv_split;
 	t_env	**env;
 	int	found;
+
+	if (!(*stack)->node->argv)
+		return (0);
 	if (!ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "cd"))
 		return (0);
 	i = 0;
-	if (!(*stack)->node->argv)
-		return (0);
 	while ((*stack)->node->argv[i])
 	{
 		kv_split = split_by_first_equal((*stack)->node->argv[i]);
+		validate_malloc_execute(data, stack, kv_split, NULL);
 		if (is_valid_var_name(kv_split[0]) && kv_split[1])
 		{
 			env = &(data->env_list);
@@ -95,6 +97,7 @@ int	get_first_command(t_data *data, t_stack **stack)
 	while ((*stack)->node->argv[i])
 	{
 		kv_split = ft_split((*stack)->node->argv[i], '=');
+		validate_malloc_execute(data, stack, kv_split, NULL);
 		if (!is_valid_var_name(kv_split[0]) || !kv_split[1])
 			return (ft_splitfree(kv_split), i);
 		i++;

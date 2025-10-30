@@ -60,6 +60,8 @@ int	execute_cmd(t_data *data, t_stack **stack)
 	{
 		if (expand(data, (*stack)->node))
 		{
+			if ((*stack)->next)
+				(*stack)->next->exit_status = 1;
 			pop(stack);
 			return (1);
 		}

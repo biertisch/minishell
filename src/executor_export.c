@@ -35,6 +35,7 @@ int	execute_export_option(t_data *data, t_stack **stack)
 		found = 0;
 		env = &(data->env_list);
 		kv_split = ft_split((*stack)->node->argv[i], '=');
+		validate_malloc_execute(data, stack, kv_split, NULL);
 		if (is_valid_var_name(kv_split[0]))
 		{
 			while (env && *env)
@@ -48,13 +49,18 @@ int	execute_export_option(t_data *data, t_stack **stack)
 						if ((*env)->value)
 							free((*env)->value);
 						(*env)->value = ft_strdup(kv_split[1]);
+						if (!(*env)->value)
+						{
+							ft_splitfree(kv_split);
+							validate_malloc_execute(data, stack, NULL, NULL);
+						}
 					}
 					break ;
 				}
 				env = &(*env)->next;
 			}
 			if (!found)
-				add_env_node(&data->env_list, create_env_node(ft_strdup(kv_split[0]), ft_strdup(kv_split[1]), 1));
+				execute_export_val_not_found(data, stack, kv_split);
 		}
 		else
 		{
@@ -66,6 +72,25 @@ int	execute_export_option(t_data *data, t_stack **stack)
 		ft_splitfree(kv_split);
 	}
 	return (0);
+}
+
+int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split)
+{
+	char	*str1;
+	char	*str2;
+
+	str1 = ft_strdup(kv_split[0]);
+	str2 = ft_strdup(kv_split[1]);
+	if (!str1 || ! str2)
+	{
+		ft_splitfree(kv_split);
+		if (!str1)
+			validate_malloc_execute(data, stack, str1, str2);
+		else
+			validate_malloc_execute(data, stack, str2, str1);
+	}
+	add_env_node(&data->env_list, create_env_node(str1, str2, 1));
+	return (1);
 }
 
 int	execute_export_no_option(t_data *data, t_stack **stack)
