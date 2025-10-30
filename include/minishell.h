@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 14:53:12 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 17:44:24 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,6 @@ char		*copy_continuation_input(t_data *data, int *pipe_fd);
 void		update_prompt(t_data *data);
 char		*get_env_value_modified(t_data *data, char *key);
 char		*get_prompt_pwd(t_data *data);
-void		build_prompt(char *prompt, char *user, char *hostname, char *pwd);
+void		build_prompt(char *prompt, char *shell, char *pwd);
 
 #endif
