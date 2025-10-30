@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:55:16 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 14:14:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:09:30 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTOR_H
 # define EXECUTOR_H
 
-# include "../include/minishell.h"
+# include "minishell.h"
 
 typedef struct s_stack
 {
@@ -31,6 +31,9 @@ typedef struct s_stack
 
 // builtin.c
 int			validate_builtin(t_data *data, t_tree *node, int i);
+int			validate_builtin_flags(t_data *data, char **argv, char *allowed);
+int			validate_env(t_data *data, char **argv);
+int			print_builtin_usage(char *cmd);
 
 //executor.c
 int			execute(t_data *data);

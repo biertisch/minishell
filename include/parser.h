@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/28 23:00:32 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 21:35:02 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ int			get_redir(t_data *data, t_token **token, t_tree *node);
 int			is_redir_token(t_token_type token_type);
 
 //parser_subshell.c
-int			incomplete_subshell(t_data *data, t_tree **node);
-int			empty_subshell(t_data *data, t_token **token, t_tree *node,
+int			incomplete_subshell(t_tree **node);
+int			empty_subshell(t_token **token, t_tree *node,
 				int res);
 int			invalid_sequence(t_data *data, t_token *token, t_tree *node);
 
 //parser_tree.c
-void		free_parser_tree(t_data *data, t_tree **root);
+void		free_parser_tree(t_tree **root);
 void		free_parser_node(t_tree **node);
 t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);
 

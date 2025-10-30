@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_builtin.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 10:31:38 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 14:26:52 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:10:27 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_builtin(t_data *data, t_stack **stack)
 {
@@ -36,7 +36,7 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 			execute_unset(data, stack);
 		else if (!ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "export"))
 			execute_export(data, stack);
-		else 
+		else
 		{
 			pid = fork();
 			if (pid < 0)

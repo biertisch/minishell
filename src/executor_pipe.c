@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 10:50:31 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 17:40:57 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:11:15 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_pipe(t_data *data, t_stack **stack)
 {
@@ -31,7 +31,7 @@ int	execute_pipe_entered(t_data *data, t_stack **stack)
 {
 	int	left_in;
 	int	left_out;
-	
+
 	if (validate_pipe(pipe((*stack)->pipe), stack) == 1)
 		return (0);
 	left_in = (*stack)->in_fd;
@@ -45,7 +45,7 @@ int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 {
 	int	right_in;
 	int	right_out;
-	
+
 	if ((*stack)->node->right->type == NODE_SUBSHELL
 		&& (*stack)->node->right->left->type == NODE_PIPE)
 		right_out = -1;
@@ -105,7 +105,7 @@ int	execute_pipe_wait(t_stack **stack)
 int	execute_pipe_done(t_data **data, t_stack **stack)
 {
 	int	status;
-	
+
 	status = 0;
 	if (!get_next_pipe_in_subshell(stack))
 	{

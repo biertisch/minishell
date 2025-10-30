@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_redirect.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 17:31:30 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/24 17:31:32 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:11:27 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	traverse_redir_in(t_data *data, t_stack **stack)
 {
@@ -35,7 +35,7 @@ int	check_redir_in_left(t_data *data, t_stack **stack)
 	open_redir_in((*stack)->node->redir);
 	pop(stack);
 	return (0);
-	
+
 }
 
 int	check_redir_in_right(t_data *data, t_stack **stack)

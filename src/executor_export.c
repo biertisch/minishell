@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 17:18:10 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/22 17:18:12 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:10:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_export(t_data *data, t_stack **stack)
 {
@@ -71,7 +71,7 @@ int	execute_export_option(t_data *data, t_stack **stack)
 int	execute_export_no_option(t_data *data, t_stack **stack)
 {
 	t_env	*env;
-	
+
 	(void)stack;
 	env = data->env_list;
 	while (env)
@@ -87,7 +87,7 @@ int	execute_export_no_option(t_data *data, t_stack **stack)
 				write((*stack)->out_fd, "\"", 1);
 			}
 			write((*stack)->out_fd, "\n", 1);
-		} 
+		}
 		env = env->next;
 	}
 	return (0);

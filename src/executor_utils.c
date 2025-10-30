@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 13:34:32 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/22 10:23:29 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:11:43 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 {
@@ -70,7 +70,7 @@ char	*run_curr_dir(t_data *data, t_stack **stack, char *cmd)
 }
 
 void	executor_child_errno(t_data *data, t_stack **stack, char *cmd)
-{	
+{
 	(void)cmd;
 	write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
 	free_all(data);

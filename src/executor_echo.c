@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   executor_echo.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 13:30:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/09/23 13:30:37 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:10:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	execute_echo(t_data *data, t_stack **stack)
 {
@@ -58,7 +58,7 @@ int	execute_echo_option(t_data *data, t_stack **stack)
 		if ((*stack)->node->argv[i + 1])
 			validate_write(data, stack, write(STDOUT_FILENO, " ", 1));
 		i++;
-		
+
 	}
 	free_stack(stack);
 	free_all(data);

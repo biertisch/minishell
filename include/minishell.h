@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 11:04:05 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 21:43:11 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,9 @@ void		test_builtin_validation(t_data *data, t_tree *head);
 //cleanup.c
 void		free_all(t_data *data);
 void		free_command_data(t_data *data);
+void		free_stack(t_stack **stack);
 void		free_redir(t_redir *redir);
 void		free_string_array(char ***arr);
-void		free_stack(t_stack **stack);
 
 //error.c
 int			system_error(t_data *data, char *function);

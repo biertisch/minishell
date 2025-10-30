@@ -6,11 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 11:10:37 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/09/18 12:15:45 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/29 22:17:42 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	is_command_token(t_token_type token_type)
 {
