@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 12:10:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:29:56 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	expand_redir(t_data *data, t_tree *node)
 	trav = node->redir;
 	while (trav)
 	{
-		if (expand_single_redir(data, trav))
+		if (trav->type != REDIR_IN && expand_single_redir(data, trav))
 			return (-1);
 		trav = trav->next;
 	}
