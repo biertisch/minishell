@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/30 22:38:44 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:07:36 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,13 @@ int			parse_subshell(t_data *data, t_token **token, t_tree **root);
 //parser_cmd.c
 int			get_command_data(t_data *data, t_token **token, t_tree *node);
 char		**allocate_argv(t_data *data, t_token **token, t_tree *node);
-int			is_command_token(t_token_type token_type);
-void		get_word(t_data *data, t_token **token, t_tree *node, int *i);
+void		get_arg(t_data *data, t_token **token, t_tree *node, int *i);
 int			count_argv(t_token *token);
 
 //parser_redir.c
-int			is_redir_token(t_token_type token_type);
 int			get_redir(t_data *data, t_token **token, t_tree *node);
 t_redir		*parse_single_redir(t_data *data, t_token **token, t_redir *head);
 t_redir		*create_redir(t_token_type type, int fd, char *file);
-
-//parser_subshell.c
-int			empty_subshell(t_token **token, t_tree *node, int res);
-int			invalid_sequence(t_data *data, t_token *token, t_tree *node);
 
 //parser_tree.c
 t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);
@@ -68,6 +62,9 @@ int			count_tree_nodes(t_tree *root);
 
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
-int			is_builtin(char *cmd);
+int			is_redir_token(t_token_type token_type);
+int			is_command_token(t_token_type token_type);
+int			empty_subshell(t_token **token, t_tree *node, int res);
+int			invalid_sequence(t_data *data, t_token *token, t_tree *node);
 
 #endif

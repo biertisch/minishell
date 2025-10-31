@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 11:00:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:17:18 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:08:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_builtin(char *cmd)
-{
-	return (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
-		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
-		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env")
-		|| !ft_strcmp(cmd, "exit"));
-}
 
 //converts lexer token type into parser node type
 t_node_type	get_node_type(t_token_type token_type)
@@ -35,4 +27,30 @@ t_node_type	get_node_type(t_token_type token_type)
 		return (NODE_SUBSHELL);
 	else
 		return (-1);
+}
+
+int	is_command_token(t_token_type token_type)
+{
+	return (token_type == WORD || token_type == FD
+		|| is_redir_token(token_type));
+}
+
+int	is_redir_token(t_token_type token_type)
+{
+	return (token_type == REDIR_IN || token_type == REDIR_OUT
+		|| token_type == APPEND || token_type == HEREDOC);
+}
+
+int	empty_subshell(t_token **token, t_tree *node, int res)
+{
+	if (*token && (*token)->type == RPAREN)
+		*token = (*token)->next;
+	free_parser_tree(&node);
+	return (res);
+}
+
+int	invalid_sequence(t_data *data, t_token *token, t_tree *node)
+{
+	free_parser_tree(&node);
+	return (syntax_error(data, ERR_1, token->value));
 }

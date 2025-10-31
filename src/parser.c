@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/31 11:16:20 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:32:02 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 }
 
 //calls parse_subshell() if it finds '('
-//checks for missing commands (INCOMPLETE at end or INVALID otherwise)
+//checks for missing commands (INCOMPLETE or INVALID)
 int	parse_command(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree	*node;
@@ -108,8 +108,8 @@ int	parse_command(t_data *data, t_token **token, t_tree **root)
 	return (VALID);
 }
 
-//calls parse_and_or() for left node, allows redirection,
-//checks for unclosed parenthesis (INCOMPLETE) and invalid sequences (INVALID)
+//calls parse_and_or() for left node & allows redirection
+//checks for unclosed parenthesis and invalid sequences
 int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree	*node;

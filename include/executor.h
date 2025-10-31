@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:55:16 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/30 11:37:18 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/31 13:24:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_stack
 }	t_stack;
 
 // builtin.c
+int			is_builtin(char *cmd);
 int			validate_builtin(t_data *data, t_tree *node, int i);
 int			validate_builtin_flags(t_data *data, char **argv, char *allowed);
 int			validate_env(t_data *data, char **argv);

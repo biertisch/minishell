@@ -154,3 +154,4 @@ ls ||
 /bin/echo "start" && (ls -l | grep minishell) > test/file1 && cat test/file1
 /bin/echo "start" && (ls -l | grep minishell) | /bin/echo end
 ls -l > test/file1 && (cat < test/file1 || echo fail) | wc -l
+echo $SHLVL && ./minishell && echo $SHLVL

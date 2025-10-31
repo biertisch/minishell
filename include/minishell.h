@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 22:19:42 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:47:04 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ void		check_for_errors(int status, t_data *data, t_stack *stack,
 				char *command_name);
 void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 				char **new_argv);
-void		validate_malloc_execute(t_data *data, t_stack **stack,
-			     void *ptr, void *to_free);
+void		validate_malloc_execute(t_data *data, t_stack **stack, void *ptr,
+				void *to_free);
 
 //get_next_line.c
 char		*get_next_line(int fd);

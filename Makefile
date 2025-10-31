@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/30 12:45:56 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/10/31 14:08:21 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME        = minishell
 
 SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		expander_dollar expander_quotes input lexer lexer_list\
-		lexer_utils main parser parser_cmd parser_redir parser_subshell\
+		lexer_utils main parser parser_cmd parser_redir\
 		parser_tree parser_utils wildcard wildcard_argv wildcard_match\
 		test stack signal executor child parent\
 		executor_utils executor_pipe executor_and executor_or executor_builtin\
