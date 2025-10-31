@@ -26,6 +26,8 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	if (full_path)
 		return (run_curr_dir(data, stack, cmd));
 	slash_path = ft_strjoin("/", cmd);
+	if (!ft_strcmp(slash_path, "/"))
+		cmd_not_found(data, stack, NULL, slash_path);
 	validate_malloc_execute(data, stack, slash_path, cmd);
 	if (get_env_value(data->env_list, "PATH"))
 		paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
@@ -62,7 +64,13 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 			validate_malloc_execute(data, stack, full_path, slash_path);
 		}
 	}
-	write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
+	cmd_not_found(data, stack, paths, slash_path);
+	return (NULL);
+}
+
+void	cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path)
+{
+	write(STDERR_FILENO, (*stack)->node->argv[get_first_command(data, stack)], ft_strlen((*stack)->node->argv[get_first_command(data, stack)]));
 	write(STDERR_FILENO, ": command not found\n", 20);
 	if ((*stack)->node->redir)
 	{
@@ -77,7 +85,7 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	free_all(data);
 	free_stack(stack);
 	exit(127);
-	return (NULL);
+
 }
 
 char	*run_curr_dir(t_data *data, t_stack **stack, char *cmd)

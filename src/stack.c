@@ -50,21 +50,12 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 
 int	setup_next_to_top(t_data **data, t_stack **stack)
 {
-	(void)data;
+	if ((*stack)->type == NODE_SUBSHELL)
+		(*data)->exit_status = (*stack)->exit_status;
 	if ((*stack)->next->type == NODE_AND)
-	{
-		if ((*stack)->next->phase == LAUNCH_LEFT)
-			(*stack)->next->exit_status = (*stack)->exit_status;
-		else if ((*stack)->next->phase == LAUNCH_RIGHT)
-			(*stack)->next->exit_status = (*stack)->exit_status;
-	}
+		(*stack)->next->exit_status = (*stack)->exit_status;
 	else if ((*stack)->next->type == NODE_OR)
-	{
-		if ((*stack)->next->phase == LAUNCH_LEFT)
-			(*stack)->next->exit_status = (*stack)->exit_status;
-		if ((*stack)->next->phase == LAUNCH_RIGHT)
-			(*stack)->next->exit_status = (*stack)->exit_status;
-	}
+		(*stack)->next->exit_status = (*stack)->exit_status;
 	else if (!((*stack)->type == NODE_SUBSHELL && ((*stack)->next->type == NODE_PIPE)))
 		(*stack)->next->exit_status = (*stack)->exit_status;
 	return (0);

@@ -76,6 +76,7 @@ void		check_for_variables(t_data *data, t_stack **stack);
 void		executor_child_errno(t_data *data, t_stack **stack, char *cmd);
 void		executor_cleanup(t_data *data, t_stack **stack, char *cmd);
 char		**split_by_first_equal(char *var);
+void	cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
