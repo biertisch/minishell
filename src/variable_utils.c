@@ -18,14 +18,16 @@ int	check_if_variable(t_data *data, t_stack **stack)
 	char	**kv_split;
 	t_env	**env;
 	int	found;
+
+	if (!(*stack)->node->argv)
+		return (0);
 	if (!ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "cd"))
 		return (0);
 	i = 0;
-	if (!(*stack)->node->argv)
-		return (0);
 	while ((*stack)->node->argv[i])
 	{
 		kv_split = split_by_first_equal((*stack)->node->argv[i]);
+		validate_malloc_execute(data, stack, kv_split, NULL);
 		if (is_valid_var_name(kv_split[0]) && kv_split[1])
 		{
 			env = &(data->env_list);
@@ -38,11 +40,16 @@ int	check_if_variable(t_data *data, t_stack **stack)
 					if ((*env)->value)
 						free((*env)->value);
 					(*env)->value = ft_strdup(kv_split[1]);
+					if (!(*env)->value)
+					{
+						ft_splitfree(kv_split);
+						validate_malloc_execute(data, stack, (*env)->value, NULL);
+					}
 				}
 				env = &(*env)->next;
 			}
 			if (!found)
-				add_env_node(&data->env_list, create_env_node(ft_strdup(kv_split[0]), ft_strdup(kv_split[1]), 0));
+				variable_key_not_found(data, stack, kv_split);
 		}
 		else
 			return (ft_splitfree(kv_split), 0);
@@ -95,6 +102,7 @@ int	get_first_command(t_data *data, t_stack **stack)
 	while ((*stack)->node->argv[i])
 	{
 		kv_split = ft_split((*stack)->node->argv[i], '=');
+		validate_malloc_execute(data, stack, kv_split, NULL);
 		if (!is_valid_var_name(kv_split[0]) || !kv_split[1])
 			return (ft_splitfree(kv_split), i);
 		i++;
@@ -103,26 +111,28 @@ int	get_first_command(t_data *data, t_stack **stack)
 	return (i);
 }
 
-int	check_if_variables_with_commands(t_data *data, t_stack **stack)
+int	variable_key_not_found(t_data *data, t_stack **stack, char **kv_split)
 {
-	int	i;
-	char	*key;
+	char		*str1;
+	char		*str2;
+	t_env	*new_node;
 
-	i = 0;
-	while ((*stack)->node->argv[i])
+	str1 = ft_strdup(kv_split[0]);
+	str2 = ft_strdup(kv_split[1]);
+	if (!str1 || !str2)
 	{
-		key = ft_strdup_n((*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i]) - ft_strlen(ft_strchr((*stack)->node->argv[i], '=')));
-		if (ft_strchr((*stack)->node->argv[i], '='))
-		{
-			if (get_env_value(data->env_list, key))
-				set_env_value(data->env_list, key, ft_strdup(ft_strchr((*stack)->node->argv[i], '=') + 1));
-			else
-				add_env_node(&(data->env_list), create_env_node(ft_strdup(key), ft_strdup(ft_strchr((*stack)->node->argv[i], '=') + 1), 1));
-		}
+		ft_splitfree(kv_split);
+		if (!str1)
+			validate_malloc_execute(data, stack, str1, str2);
 		else
-			return (free(key), i);
-		free(key);
-		i++;
+			validate_malloc_execute(data, stack, str2, str1);
 	}
-	return (i);
+	new_node = create_env_node(str1, str2, 0);
+	if (!new_node)
+	{
+		free(str1);
+		validate_malloc_execute(data, stack, new_node, str2);
+	}
+	add_env_node(&data->env_list, new_node);
+	return (0);
 }

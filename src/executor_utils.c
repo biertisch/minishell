@@ -18,7 +18,6 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	int		i;
 	char	**paths;
 	char	*slash_path;
-	int		access_res;
 
 	if (!cmd)
 		return (NULL);
@@ -26,15 +25,23 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	full_path = ft_strchr(cmd, '/');
 	if (full_path)
 		return (run_curr_dir(data, stack, cmd));
-	paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
 	slash_path = ft_strjoin("/", cmd);
+	validate_malloc_execute(data, stack, slash_path, cmd);
+	if (get_env_value(data->env_list, "PATH"))
+		paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
+	else
+		paths = ft_split("/usr/local/bin:/usr/bin:/bin", ':');
+	if (!paths)
+	{
+		free(slash_path);
+		validate_malloc_execute(data, stack, paths, cmd);
+	}
 	while (paths[i])
 	{
 		full_path = ft_strjoin(paths[i++], slash_path);
 		if (full_path)
 		{
-			access_res = access(full_path, F_OK | X_OK);
-			if (!access_res)
+			if (!access(full_path, F_OK | X_OK))
 			{
 				ft_splitfree(paths);
 				return (free(slash_path), (full_path));
@@ -48,9 +55,23 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 				executor_child_errno(data, stack, cmd);
 			}
 		}
+		else
+		{
+			ft_splitfree(paths);
+			free(cmd);
+			validate_malloc_execute(data, stack, full_path, slash_path);
+		}
 	}
 	write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
 	write(STDERR_FILENO, ": command not found\n", 20);
+	if ((*stack)->node->redir)
+	{
+		if ((*stack)->node->redir->type == REDIR_OUT)
+			(*stack)->node->redir->fd = open((*stack)->node->redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else if ((*stack)->node->redir->type == APPEND)
+			(*stack)->node->redir->fd = open((*stack)->node->redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		close((*stack)->node->redir->fd);
+	}
 	ft_splitfree(paths);
 	free(slash_path);
 	free_all(data);
@@ -61,12 +82,13 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 
 char	*run_curr_dir(t_data *data, t_stack **stack, char *cmd)
 {
-	int	access_res;
+	char	*cmd_res;
 
-	access_res = access(cmd, F_OK | X_OK);
-	if (access_res == -1)
+	if (access(cmd, F_OK | X_OK) == -1)
 		executor_child_errno(data, stack, cmd);
-	return (cmd);
+	cmd_res = ft_strdup(cmd);
+	validate_malloc_execute(data, stack, cmd_res, NULL);
+	return (cmd_res);
 }
 
 void	executor_child_errno(t_data *data, t_stack **stack, char *cmd)

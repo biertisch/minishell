@@ -65,6 +65,6 @@ void	setup_handler(t_data *data, int signum, void (*handler)(int), int flags)
 	if (sigaction(signum, &sa, NULL))
 	{
 		system_error(data, "sigaction");
-		error_exit(data);
+		error_exit(data, NULL);
 	}
 }

@@ -66,6 +66,7 @@ void		child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i);
 void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
+void	check_no_cmd(t_data *data, t_stack **stack);
 
 
 //executor_utils.c
@@ -152,12 +153,14 @@ int			validate_pipe(int pipe_res, t_stack **stack);
 int			execute_export(t_data *data, t_stack **stack);
 int			execute_export_no_option(t_data *data, t_stack **stack);
 int			execute_export_option(t_data *data, t_stack **stack);
-void		sort_env(t_data **data);
+void		sort_env(t_data **data, t_stack **stack);
+int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split);
 
 //variable_utils.c
 int			check_if_variable(t_data *data, t_stack **stack);
 int			get_first_command(t_data *data, t_stack **stack);
 int			has_command(t_data *data, t_stack **stack);
+int			variable_key_not_found(t_data *data, t_stack **stack, char **kv_split);
 
 //executor_heredoc.c
 int			check_for_heredoc(t_data *data);
@@ -168,7 +171,7 @@ t_redir		*get_last_heredoc(t_redir *redir);
 
 //executor_redirect.c
 int			traverse_redir_in(t_data *data, t_stack **stack);
-int			open_redir_in(t_redir *redir);
+int			open_redir_in(t_data *data, t_redir *redir);
 int			close_redir_in(t_redir *redir);
 void		handle_open_errors(t_redir *redir);
 int			check_redir_in_left(t_data *data, t_stack **stack);
