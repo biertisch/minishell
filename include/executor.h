@@ -153,13 +153,14 @@ int			validate_pipe(int pipe_res, t_stack **stack);
 int			execute_export(t_data *data, t_stack **stack);
 int			execute_export_no_option(t_data *data, t_stack **stack);
 int			execute_export_option(t_data *data, t_stack **stack);
-void		sort_env(t_data **data);
+void		sort_env(t_data **data, t_stack **stack);
 int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split);
 
 //variable_utils.c
 int			check_if_variable(t_data *data, t_stack **stack);
 int			get_first_command(t_data *data, t_stack **stack);
 int			has_command(t_data *data, t_stack **stack);
+int			variable_key_not_found(t_data *data, t_stack **stack, char **kv_split);
 
 //executor_heredoc.c
 int			check_for_heredoc(t_data *data);

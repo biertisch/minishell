@@ -14,7 +14,7 @@
 
 int	execute_export(t_data *data, t_stack **stack)
 {
-	sort_env(&data);
+	sort_env(&data, stack);
 	if (!(*stack)->node->argv[1])
 		execute_export_no_option(data, stack);
 	else
@@ -71,6 +71,8 @@ int	execute_export_option(t_data *data, t_stack **stack)
 			i++;
 		ft_splitfree(kv_split);
 	}
+
+
 	return (0);
 }
 
@@ -118,7 +120,7 @@ int	execute_export_no_option(t_data *data, t_stack **stack)
 	return (0);
 }
 
-void	sort_env(t_data **data)
+void	sort_env(t_data **data, t_stack **stack)
 {
 	int	sorted;
 	t_env	**env;
@@ -138,21 +140,26 @@ void	sort_env(t_data **data)
 				{
 					sorted = 0;
 					aux = ft_strdup((*env)->key);
+					validate_malloc_execute(*data, stack, aux, NULL);
 					free((*env)->key);
 					(*env)->key = ft_strdup((*env)->next->key);
+					validate_malloc_execute(*data, stack, (*env)->key, aux);
 					free((*env)->next->key);
 					(*env)->next->key = ft_strdup(aux);
+					validate_malloc_execute(*data, stack, (*env)->next->key, aux);
 					free(aux);
 					aux = ft_strdup((*env)->value);
+					validate_malloc_execute(*data, stack, aux, NULL);
 					free((*env)->value);
 					(*env)->value = ft_strdup((*env)->next->value);
+					validate_malloc_execute(*data, stack, (*env)->value, aux);
 					free((*env)->next->value);
 					(*env)->next->value = ft_strdup(aux);
+					validate_malloc_execute(*data, stack, (*env)->next->value, aux);
 					free(aux);
 					i = (*env)->exported;
 					(*env)->exported = (*env)->next->exported;
 					(*env)->next->exported = i;
-
 				}
 			}
 			env = &(*env)->next;
