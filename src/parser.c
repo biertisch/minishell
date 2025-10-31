@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 22:41:55 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/31 11:16:20 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	parser(t_data *data, t_token *token)
 	{
 		token = token->next;
 		if (!token)
-			return (syntax_error(data, ERR_1, "newline"));
+			return (syntax_error(data, ERR_1, "newline")); // maybe let syntax error handle this?
 		else
 			return (syntax_error(data, ERR_1, token->value));
 	}
@@ -89,7 +89,7 @@ int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 }
 
 //calls parse_subshell() if it finds '('
-//& checks for missing commands (INCOMPLETE at end or INVALID otherwise)
+//checks for missing commands (INCOMPLETE at end or INVALID otherwise)
 int	parse_command(t_data *data, t_token **token, t_tree **root)
 {
 	t_tree	*node;
