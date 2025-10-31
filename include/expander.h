@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 14:46:35 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:52:04 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,6 @@ int			expand(t_data *data, t_tree *node);
 int			expand_argv(t_data *data, t_tree *node);
 int			expand_redir(t_data *data, t_tree *node);
 int			expand_single_redir(t_data *data, t_redir *redir);
-
-//expand_tilde.c
-void		expand_tilde(t_data *data, char **arg);
-char		*get_tilde_value(t_data *data, char *arg, int *key_len);
-char		*replace_tilde_value(char *arg, int key_len, char *value);
 
 //expander_dollar.c
 char		**expand_dollar(t_data *data, char **arg, int index);
@@ -51,6 +46,11 @@ int			expand_heredoc_input(t_data *data, t_redir *redir);
 void		remove_quotes(t_data *data, char **arg);
 int			count_quotes(char *arg, char *quote);
 void		copy_without_quotes(char *dest, char *src, char quote);
+
+//expand_tilde.c
+void		expand_tilde(t_data *data, char **arg);
+char		*get_tilde_value(t_data *data, char *arg, int *key_len);
+char		*replace_tilde_value(char *arg, int key_len, char *value);
 
 //wildcard.c
 int			has_wildcard(const char *arg);

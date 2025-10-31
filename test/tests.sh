@@ -66,6 +66,11 @@ cat < *ile
 VAR="ls src" && $VAR
 VAR="ls src" && "$VAR"
 VAR="hi" && VAR2=$VAR && echo $VAR2
+VAR="" && echo $VAR
+VAR='"echo hello"' && $VAR
+VAR=*ile && echo $VAR
+VAR=*in* && echo $VAR
+VAR=~ && echo $VAR
 
 # invalid/incomplete
 /bin/echo hello > *in*

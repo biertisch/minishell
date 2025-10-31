@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:07:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/31 15:20:05 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ char	**expand_variable(t_data *data, char **arg, int index, int i)
 	key = get_env_key(arg[index] + i + 1);
 	validate_malloc(data, key, NULL);
 	value = get_env_value(data->env_list, key);
-	if ((value || arg[index][0] == '"')
-		&& (arg[index][0] == '"' || !ft_strchr(value, ' ')))
+	if (arg[index][0] == '"' || (value && !ft_strchr(value, ' ')))
 	{
 		arg[index] = update_arg(arg[index], i, key, value);
 		validate_malloc(data, arg[index], key);
