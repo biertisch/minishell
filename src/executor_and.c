@@ -28,7 +28,8 @@ int	execute_and(t_data *data, t_stack **stack)
 int	execute_and_entered(t_data *data, t_stack **stack)
 {
 	(*stack)->phase = LAUNCH_LEFT;
-	push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, data);
+	push_stack(stack, (*stack)->node->left, (*stack)->in_fd,
+		(*stack)->out_fd, data);
 	return (0);
 }
 
@@ -39,7 +40,8 @@ int	execute_and_launch_left(t_data *data, t_stack **stack)
 	{
 		push_stack(&data->stack, (*stack)->node->right, 0, 0, data);
 		traverse_redir_in(data, &data->stack);
-		push_stack(stack, (*stack)->node->right, (*stack)->in_fd, (*stack)->out_fd, data);
+		push_stack(stack, (*stack)->node->right,
+			(*stack)->in_fd, (*stack)->out_fd, data);
 	}
 	else
 		return (count_tree_nodes((*stack)->node->right));
