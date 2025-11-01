@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 22:01:22 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/01 20:34:00 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,7 @@ int	get_token_value(t_data *data, char *input, char **value, int *index)
 			break ;
 		if (!quote && input[i] == ';')
 			return (internal_error(data, ERR_10, NULL, NULL));
-		if (!quote && is_quote(input[i]))
-			quote = input[i];
-		else if (quote && input[i] == quote)
-			quote = 0;
+		update_quote_status(input[i], &quote);
 		i++;
 	}
 	if (quote) // perhaps refactor to helper & identify char in error msg
@@ -104,4 +101,12 @@ void	add_token(t_data *data, t_token **lexer_list, t_token_type type,
 	new_node = create_lexer_node(type, value);
 	validate_malloc(data, new_node, value);
 	add_lexer_node(lexer_list, new_node);
+}
+
+void	update_quote_status(char c, char *quote)
+{
+	if (!*quote && is_quote(c))
+		*quote = c;
+	else if (*quote && *quote == c)
+		*quote = 0;
 }

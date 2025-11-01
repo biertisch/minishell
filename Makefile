@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+         #
+#    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/31 14:53:01 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/11/01 19:25:35 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		input_prompt executor_unset executor_error expander_dollar2\
 		expander_dollar3 variable_utils executor_export\
 		executor_heredoc executor_redirect signal_handler signal_heredoc\
-		executor_heredoc2 env_utils input_cont
+		executor_heredoc2 env_utils input_cont expander_resize expander_utils
 
 SRC_DIR     = src
 OBJ_DIR     = obj

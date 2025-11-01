@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expander_tilde.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:57:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/31 14:52:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/01 21:20:20 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_tilde(t_data *data, char **arg)
+int	expand_tilde(t_data *data, char **arg, t_arg_info* arg_info)
 {
 	char	*value;
 	int		key_len;
@@ -25,6 +25,7 @@ void	expand_tilde(t_data *data, char **arg)
 		*arg = replace_tilde_value(*arg, key_len, value);
 		validate_malloc(data, *arg, NULL);
 	}
+	return (0);
 }
 
 char	*get_tilde_value(t_data *data, char *arg, int *key_len)

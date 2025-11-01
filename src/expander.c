@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 14:43:27 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/01 20:28:14 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,32 +25,83 @@ int	expand(t_data *data, t_tree *node)
 
 int	expand_argv(t_data *data, t_tree *node)
 {
-	int		i;
-	t_list	*entries;
-	char	**old;
+	int	i;
 
+	if (!node || !node->argv)
+		return (0);
+	if (node->argv_info)
+		free(node->argv_info);
+	node->argv_info = init_argv_info(data, node->argv);
+	if (!node->argv_info)
+		return (0);
 	i = 0;
-	while (node->argv && node->argv[i])
+	while (node->argv[i])
 	{
-		old = node->argv;
-		node->argv = expand_dollar(data, node->argv, i);
-		if (node->argv != old)
-		{
-			i = 0;
-			continue ;
-		}
-		expand_tilde(data, &node->argv[i]);
-		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i])
-			&& expand_wildcard(data, node->argv[i], &entries))
+		if (expand_single_arg(data, &node->argv[i], &node->argv_info[i]))
 			return (-1);
-		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i])
-			&& entries)
-			node->argv = update_argv_wildcard(data, node->argv, i, entries);
-		remove_quotes(data, &node->argv[i]);
 		i++;
 	}
+	if (resize_argv(data, &node->argv, node->argv_info))
+		return (-1);
 	return (0);
 }
+
+int	expand_single_arg(t_data *data, char **arg, t_arg_info *arg_info)
+{
+	while (has_dollar_arg(*arg))
+		if (expand_dollar(data, arg, arg_info))
+			return (-1);
+	if (expand_tilde(data, arg, arg_info))
+		return (-1);
+	if (expand_wildcard(data, arg, arg_info))
+		return (-1);
+	remove_quotes(data, arg, arg_info);
+	return (0);
+}
+
+	// for each arg in argv
+	// - if it is not within single quotes, expand dollar until there is no dollar left
+	// 		marking as literal if enclosed in double quotes, expanded otherwise
+	// - if it is not within quotes, expand tilde, marking as expanded
+	// - if it is not within quotes, expand wildcard, marking as expanded
+	// - remove syntatic quotes (literal not expanded)
+	// then resize array
+	// - remove expanded empty args
+	// - split expanded args with IFS (space, \n, \t)
+	//
+	// make argv and redir share the same logic, check afterwards if redir returns array with more than one string
+
+
+
+
+// int	expand_argv(t_data *data, t_tree *node)
+// {
+// 	int		i;
+// 	t_list	*entries;
+// 	char	**old;
+
+// 	i = 0;
+// 	while (node->argv && node->argv[i])
+// 	{
+// 		old = node->argv;
+// 		node->argv = expand_dollar(data, node->argv, i);
+// 		if (node->argv != old)
+// 		{
+// 			i = 0;
+// 			continue ;
+// 		}
+// 		expand_tilde(data, &node->argv[i]);
+// 		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i])
+// 			&& expand_wildcard(data, node->argv[i], &entries))
+// 			return (-1);
+// 		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i])
+// 			&& entries)
+// 			node->argv = update_argv_wildcard(data, node->argv, i, entries);
+// 		remove_quotes(data, &node->argv[i]);
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
 int	expand_redir(t_data *data, t_tree *node)
 {

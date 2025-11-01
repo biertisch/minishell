@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/31 14:47:04 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/10/31 19:33:05 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void		print_env_list(t_env *head);
 void		print_env_array(char **env);
 void		print_lexer_list(t_token *head);
 void		print_parser_tree(t_tree *head);
+void		print_parser_node(t_tree *node, int depth, char *pos);
 void		test_builtin_validation(t_data *data, t_tree *head);
 
 //cleanup.c

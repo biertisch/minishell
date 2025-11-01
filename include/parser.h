@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/31 14:07:36 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/01 20:24:15 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_tree
 {
 	t_node_type		type;
 	char			**argv;
+	t_arg_info		*argv_info;
 	t_redir			*redir;
 	struct s_tree	*left;
 	struct s_tree	*right;

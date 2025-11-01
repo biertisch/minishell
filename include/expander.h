@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/31 14:52:04 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/01 21:23:08 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,30 @@
 
 # include "minishell.h"
 
+typedef struct	s_arg_info
+{
+	int	expanded;
+	int	start;
+	int	end;
+	int	in_quotes;
+}	t_arg_info;
+
 //expander.c
 int			expand(t_data *data, t_tree *node);
 int			expand_argv(t_data *data, t_tree *node);
+int			expand_single_arg(t_data *data, char **arg, t_arg_info *arg_info);
 int			expand_redir(t_data *data, t_tree *node);
 int			expand_single_redir(t_data *data, t_redir *redir);
 
 //expander_dollar.c
-char		**expand_dollar(t_data *data, char **arg, int index);
-void		expand_exit_status(t_data *data, char **arg, int i);
-char		**expand_variable(t_data *data, char **arg, int index, int i);
+int			is_dollar_expansion(char quote, char *arg);
+int			has_dollar(char *arg);
+int			expand_dollar(t_data *data, char **arg, t_arg_info *arg_info);
+char		*expand_exit_status(t_data *data, char *old_arg, int i,
+				t_arg_info *arg_info);
+char		*expand_variable(t_data *data, char *old_arg, int i,
+				t_arg_info *arg_info);
+
 char		*get_env_key(char *arg);
 char		*update_arg(char *arg, int i, char *key, char *value);
 
@@ -72,5 +86,12 @@ int			match_wildcard(char *entry, char *wildcard);
 void		advance_both(int *i, int *j);
 void		record_star(int *j, int *star);
 int			backtrack_on_mismatch(int *i, int *j, int *star);
+
+
+//expander_resize.c
+int			get_argc(char **argv);
+
+//expander_utils.c
+t_arg_info	*init_argv_info(t_data *data, char **argv);
 
 #endif

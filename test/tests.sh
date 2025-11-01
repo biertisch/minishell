@@ -71,10 +71,16 @@ VAR='"echo hello"' && $VAR
 VAR=*ile && echo $VAR
 VAR=*in* && echo $VAR
 VAR=~ && echo $VAR
+echo hi'$USER'
+VAR="echo bye" && echo hi"$VAR"
+VAR="ho bye" && ec$VAR
+echo hel"l"o$USER
+echo $USER'$USER'
 
 # invalid/incomplete
 /bin/echo hello > *in*
 /bin/echo hello > $NONE
+VAR="ho bye" && ec"$VAR"
 
 # BUILTIN
 echo hello && echo -n bye
