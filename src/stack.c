@@ -173,6 +173,20 @@ int	stack_size(t_stack *stack)
 	return (size);
 }
 
+void	close_all_open_redir_ends(t_data *data)
+{
+	t_list	*node;
+
+	node = data->open_redir_ins;
+	while (node)
+	{
+		if (*(int *)node->content != -1)
+			close(*(int *)node->content);
+		node = node->next;
+	}
+	
+}
+
 void	close_all_pipe_ends(t_stack **stack)
 {
 	t_stack **head;

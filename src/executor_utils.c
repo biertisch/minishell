@@ -80,10 +80,12 @@ void	cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path
 			(*stack)->node->redir->fd = open((*stack)->node->redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		close((*stack)->node->redir->fd);
 	}
+	close_all_open_redir_ends(data);
+	close_all_pipe_ends(stack);
 	ft_splitfree(paths);
 	free(slash_path);
-	free_all(data);
 	free_stack(stack);
+	free_all(data);
 	exit(127);
 
 }
@@ -145,6 +147,7 @@ void	check_for_variables(t_data *data, t_stack **stack)
 
 void	executor_cleanup(t_data *data, t_stack **stack, char *cmd)
 {
+	close_all_open_redir_ends(data);
 	close_all_pipe_ends(stack);
 	if (cmd)
 		free(cmd);
