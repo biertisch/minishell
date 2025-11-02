@@ -24,19 +24,14 @@ int	execute_builtin(t_data *data, t_stack **stack)
 int	execute_builtin_entered(t_data *data, t_stack **stack)
 {
 	pid_t	pid;
+	int		cmd_i;
 
+	cmd_i = get_first_command(data, stack);
 	(*stack)->phase = DONE;
-	if (!check_if_variable(data, stack) && !validate_builtin(data, (*stack)->node, get_first_command(data, stack)))
+	if (!check_if_variable(data, stack) && !validate_builtin(data,
+			(*stack)->node, cmd_i))
 	{
-		if (!has_node_type_ancestor(*stack, NODE_SUBSHELL) && !ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "cd"))
-			execute_cd(data, stack);
-		else if (!has_node_type_ancestor(*stack, NODE_PIPE) && !ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "exit"))
-			execute_exit(data, stack);
-		else if (!ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "unset"))
-			execute_unset(data, stack);
-		else if (!ft_strcmp((*stack)->node->argv[get_first_command(data, stack)], "export"))
-			execute_export(data, stack);
-		else
+		if (execute_builtin_should_run_child(data, stack, cmd_i))
 		{
 			pid = fork();
 			if (pid < 0)
@@ -50,6 +45,21 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 	return (0);
 }
 
+int	execute_builtin_should_run_child(t_data *data, t_stack **stack, int cmd_i)
+{
+	if (!has_node_type_ancestor(*stack, NODE_SUBSHELL)
+		&& !ft_strcmp((*stack)->node->argv[cmd_i], "cd"))
+		return (execute_cd(data, stack), 0);
+	else if (!has_node_type_ancestor(*stack, NODE_PIPE)
+		&& !ft_strcmp((*stack)->node->argv[cmd_i], "exit"))
+		return (execute_exit(data, stack), 0);
+	else if (!ft_strcmp((*stack)->node->argv[cmd_i], "unset"))
+		return (execute_unset(data, stack), 0);
+	else if (!ft_strcmp((*stack)->node->argv[cmd_i], "export"))
+		return (execute_export(data, stack), 0);
+	return (1);
+}
+
 int	execute_builtin_done(t_data **data, t_stack **stack)
 {
 	if ((*stack)->next)
@@ -58,7 +68,6 @@ int	execute_builtin_done(t_data **data, t_stack **stack)
 		(*data)->exit_status = (*stack)->exit_status;
 	pop(stack);
 	return (1);
-
 }
 
 int	choose_and_execute_builtin(t_data *data, t_stack **stack)

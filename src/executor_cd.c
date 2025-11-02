@@ -17,28 +17,19 @@ int	execute_cd(t_data *data, t_stack **stack)
 	int		chdir_res;
 	char	*curr_pwd;
 	char	*new_pwd;
+	int		cmd_i;
 
+	cmd_i = get_first_command(data, stack);
 	(*stack)->exit_status = 0;
 	chdir_res = 0;
 	curr_pwd = ft_strdup(getcwd(NULL, 0));
 	validate_malloc_execute(data, stack, curr_pwd, NULL);
-	if (!(*stack)->node->argv[where_is_cd(stack) + 1])
+	if (!(*stack)->node->argv[cmd_i + 1])
 		chdir_res = chdir(get_env_value(data->env_list, "HOME"));
-	else if (!(*stack)->node->argv[where_is_cd(stack) + 2])
-	{
-		if (!ft_strcmp((*stack)->node->argv[where_is_cd(stack) + 1], "-"))
-		{
-			write(STDOUT_FILENO, get_env_value(data->env_list, "OLDPWD"), ft_strlen(get_env_value(data->env_list, "OLDPWD")));
-			write(STDOUT_FILENO, "\n", 1);
-			chdir_res = chdir(get_env_value(data->env_list, "OLDPWD"));
-		}
-		else
-			chdir_res = chdir((*stack)->node->argv[where_is_cd(stack) + 1]);
-	}
 	else
-		(*stack)->exit_status = cd_fail(NULL);
+		execute_cd_option(data, stack, cmd_i, &chdir_res);
 	if (chdir_res)
-		(*stack)->exit_status = cd_fail((*stack)->node->argv[where_is_cd(stack) + 1]);
+		(*stack)->exit_status = cd_fail((*stack)->node->argv[cmd_i + 1]);
 	else
 	{
 		new_pwd = ft_strdup(getcwd(NULL, 0));
@@ -46,23 +37,43 @@ int	execute_cd(t_data *data, t_stack **stack)
 		set_env_value(data->env_list, "OLDPWD", curr_pwd);
 		set_env_value(data->env_list, "PWD", new_pwd);
 	}
-	if (has_node_type_ancestor(*stack, NODE_SUBSHELL))
-		exit((*stack)->exit_status);
+	execute_cd_check_for_subshell(data, stack);
 	return (0);
 }
 
-int	where_is_cd(t_stack **stack)
+int	execute_cd_option(t_data *data, t_stack **stack, int cmd_i, int *chdir_res)
 {
-	int	i;
-
-	i = 0;
-	while ((*stack)->node->argv[i])
+	if (!(*stack)->node->argv[cmd_i + 2])
 	{
-		if (!ft_strcmp((*stack)->node->argv[i], "cd"))
-			return (i);
-		i++;
+		if (!ft_strcmp((*stack)->node->argv[cmd_i + 1], "-"))
+		{
+			write(STDOUT_FILENO, get_env_value(data->env_list,
+					"OLDPWD"), ft_strlen(get_env_value(data->env_list,
+						"OLDPWD")));
+			write(STDOUT_FILENO, "\n", 1);
+			*chdir_res = chdir(get_env_value(data->env_list, "OLDPWD"));
+		}
+		else
+			*chdir_res = chdir((*stack)->node->argv[cmd_i + 1]);
 	}
-	return (i);
+	else
+		(*stack)->exit_status = cd_fail(NULL);
+	return (0);
+}
+
+void	execute_cd_check_for_subshell(t_data *data, t_stack **stack)
+{
+	int	exit_status;
+
+	if (has_node_type_ancestor(*stack, NODE_SUBSHELL))
+	{
+		exit_status = (*stack)->exit_status;
+		close_all_pipe_ends(stack);
+		close_all_open_redir_ends(data);
+		free_stack(stack);
+		free_all(data);
+		exit(exit_status);
+	}
 }
 
 int	cd_fail(char *dir)

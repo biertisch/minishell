@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/19 10:55:16 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/30 11:37:18 by beatde-a         ###   ########.fr       */
+/*   Created: 2025/11/02 13:13:49 by pedde-so          #+#    #+#             */
+/*   Updated: 2025/11/02 13:13:52 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ int			execute_or_done(t_data **data, t_stack **stack);
 //executor_builtin.c
 int			execute_builtin(t_data *data, t_stack **stack);
 int			execute_builtin_entered(t_data *data, t_stack **stack);
+int			execute_builtin_should_run_child(t_data *data, t_stack **stack, int cmd_i);
 int			execute_builtin_done(t_data **data, t_stack **stack);
 int			choose_and_execute_builtin(t_data *data, t_stack **stack);
 
@@ -130,9 +131,9 @@ int			execute_env(t_data *data, t_stack **stack);
 
 //executor_cd.c
 int			execute_cd(t_data *data, t_stack **stack);
+int			execute_cd_option(t_data *data, t_stack **stack, int cmd_i, int *chdir_res);
+void			execute_cd_check_for_subshell(t_data *data, t_stack **stack);
 int			cd_fail(char *dir);
-int		execute_cd_option(t_data *data, t_stack **stack);
-int		where_is_cd(t_stack **stack);
 
 //executor_pwd.c
 int			execute_pwd(t_data *data, t_stack **stack);
