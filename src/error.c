@@ -73,6 +73,8 @@ void	validate_malloc_execute(t_data *data, t_stack **stack,
 {
 	if (!ptr)
 	{
+		close_all_open_redir_ends(data);
+		close_all_pipe_ends(stack);
 		system_error(data, "malloc");
 		if (to_free)
 			free(to_free);

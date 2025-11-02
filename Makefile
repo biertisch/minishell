@@ -23,7 +23,7 @@ SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		input_prompt executor_unset executor_error expander_dollar2\
 		expander_dollar3 variable_utils executor_export\
 		executor_heredoc executor_redirect signal_handler signal_heredoc\
-		executor_heredoc2 env_utils input_cont
+		executor_heredoc2 env_utils input_cont executor_sort_env
 
 SRC_DIR     = src
 OBJ_DIR     = obj

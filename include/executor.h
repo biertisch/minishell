@@ -114,9 +114,8 @@ int			choose_and_execute_builtin(t_data *data, t_stack **stack);
 
 //executor_echo
 int			execute_echo(t_data *data, t_stack **stack);
-int			execute_echo_option(t_data *data, t_stack **stack);
-int			execute_echo_no_option(t_data *data, t_stack **stack);
-int			validate_write(t_data *data, t_stack **stack, int write_res);
+int			execute_echo_option(t_data *data, t_stack **stack, int cmd_i);
+int			execute_echo_no_option(t_data *data, t_stack **stack, int cmd_i);
 int			is_echo_option(char *opt);
 
 //executor_subshell
@@ -154,10 +153,15 @@ int			validate_pipe(int pipe_res, t_stack **stack);
 
 //executor_export.c
 int			execute_export(t_data *data, t_stack **stack);
+int			execute_export_val_found(t_data *data, t_stack **stack, char **kv_split, t_env **env);
+int			execute_export_option(t_data *data, t_stack **stack, int cmd_i);
+int			execute_export_val_found(t_data *data, t_stack **stack, char **kv_split, t_env **env);
+void			execute_export_invalid_var(t_stack **stack, int cmd_i);
+int			execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split);
 int			execute_export_no_option(t_data *data, t_stack **stack);
-int			execute_export_option(t_data *data, t_stack **stack);
-void		sort_env(t_data **data, t_stack **stack);
-int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split);
+
+//executor_sort_env.c
+void			sort_env(t_data **data, t_stack **stack);
 
 //variable_utils.c
 int			check_if_variable(t_data *data, t_stack **stack);

@@ -14,66 +14,74 @@
 
 int	execute_export(t_data *data, t_stack **stack)
 {
+	int	cmd_i;
+/**	int	stdin_dup;
+	int	stdout_dup;
+	
+	stdin_dup = dup(STDIN_FILENO);
+	stdout_dup = dup(STDOUT_FILENO);
+	if ((*stack)->redir)
+		execute_parent_redirs(data, stack);**/
+	cmd_i = get_first_command(data, stack);
 	sort_env(&data, stack);
-	if (!(*stack)->node->argv[1])
+	if (!(*stack)->node->argv[cmd_i + 1])
 		execute_export_no_option(data, stack);
 	else
-		execute_export_option(data, stack);
+		execute_export_option(data, stack, cmd_i);
 	return (0);
 }
 
-int	execute_export_option(t_data *data, t_stack **stack)
+int	execute_export_option(t_data *data, t_stack **stack, int cmd_i)
 {
 	t_env	**env;
-	int	i;
 	char	**kv_split;
-	int	found;
 
-	i = get_first_command(data, stack) + 1;
-	while ((*stack)->node->argv[i])
+	while ((*stack)->node->argv[cmd_i + 1])
 	{
-		found = 0;
-		env = &(data->env_list);
-		kv_split = ft_split((*stack)->node->argv[i], '=');
+		kv_split = ft_split((*stack)->node->argv[cmd_i + 1], '=');
 		validate_malloc_execute(data, stack, kv_split, NULL);
 		if (is_valid_var_name(kv_split[0]))
 		{
-			while (env && *env)
-			{
-				if (!ft_strcmp((*env)->key, kv_split[0]))
-				{
-					found = 1;
-					(*env)->exported = 1;
-					if (kv_split[1])
-					{
-						if ((*env)->value)
-							free((*env)->value);
-						(*env)->value = ft_strdup(kv_split[1]);
-						if (!(*env)->value)
-						{
-							ft_splitfree(kv_split);
-							validate_malloc_execute(data, stack, NULL, NULL);
-						}
-					}
-					break ;
-				}
+			env = &(data->env_list);
+			while (env && *env && ft_strcmp((*env)->key, kv_split[0]))
 				env = &(*env)->next;
-			}
-			if (!found)
+			if (env && *env)
+				execute_export_val_found(data, stack, kv_split, env);
+			else
 				execute_export_val_not_found(data, stack, kv_split);
 		}
 		else
-		{
-			write(STDERR_FILENO, "minishell: export: `", 20);
-			write(STDERR_FILENO, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i]));
-			write(STDERR_FILENO, "': not a valid identifier\n", 26);
-		}
-			i++;
+			execute_export_invalid_var(stack, cmd_i);
 		ft_splitfree(kv_split);
+		cmd_i++;
 	}
-
-
 	return (0);
+}
+
+int	execute_export_val_found(t_data *data, t_stack **stack,
+			char **kv_split, t_env **env)
+{
+	(*env)->exported = 1;
+	if (kv_split[1])
+	{
+		if ((*env)->value)
+			free((*env)->value);
+		(*env)->value = ft_strdup(kv_split[1]);
+		if (!(*env)->value)
+		{
+			ft_splitfree(kv_split);
+			validate_malloc_execute(data, stack, NULL, NULL);
+		}
+	}
+	return (1);
+}
+
+void	execute_export_invalid_var(t_stack **stack, int cmd_i)
+{
+	write(STDERR_FILENO, "minishell: export: `", 20);
+	write(STDERR_FILENO, (*stack)->node->argv[cmd_i],
+		ft_strlen((*stack)->node->argv[cmd_i]));
+	write(STDERR_FILENO, "': not a valid identifier\n", 26);
 }
 
 int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split)
@@ -105,64 +113,17 @@ int	execute_export_no_option(t_data *data, t_stack **stack)
 	{
 		if (env->exported)
 		{
-			write((*stack)->out_fd, "declare -x ", 11);
-			write((*stack)->out_fd, env->key, ft_strlen(env->key));
+			write(STDOUT_FILENO, "declare -x ", 11);
+			write(STDOUT_FILENO, env->key, ft_strlen(env->key));
 			if (env->value && ft_strcmp(env->value, ""))
 			{
-				write((*stack)->out_fd, "=\"", 2);
-				write((*stack)->out_fd, env->value, ft_strlen(env->value));
-				write((*stack)->out_fd, "\"", 1);
+				write(STDOUT_FILENO, "=\"", 2);
+				write(STDOUT_FILENO, env->value, ft_strlen(env->value));
+				write(STDOUT_FILENO, "\"", 1);
 			}
-			write((*stack)->out_fd, "\n", 1);
+			write(STDOUT_FILENO, "\n", 1);
 		}
 		env = env->next;
 	}
 	return (0);
-}
-
-void	sort_env(t_data **data, t_stack **stack)
-{
-	int	sorted;
-	t_env	**env;
-	char	*aux;
-	int	i;
-
-	sorted = 0;
-	while (!sorted)
-	{
-		sorted = 1;
-		env = &(*data)->env_list;
-		while (env && *env)
-		{
-			if ((*env)->next)
-			{
-				if (ft_strcmp((*env)->key, (*env)->next->key) > 0)
-				{
-					sorted = 0;
-					aux = ft_strdup((*env)->key);
-					validate_malloc_execute(*data, stack, aux, NULL);
-					free((*env)->key);
-					(*env)->key = ft_strdup((*env)->next->key);
-					validate_malloc_execute(*data, stack, (*env)->key, aux);
-					free((*env)->next->key);
-					(*env)->next->key = ft_strdup(aux);
-					validate_malloc_execute(*data, stack, (*env)->next->key, aux);
-					free(aux);
-					aux = ft_strdup((*env)->value);
-					validate_malloc_execute(*data, stack, aux, NULL);
-					free((*env)->value);
-					(*env)->value = ft_strdup((*env)->next->value);
-					validate_malloc_execute(*data, stack, (*env)->value, aux);
-					free((*env)->next->value);
-					(*env)->next->value = ft_strdup(aux);
-					validate_malloc_execute(*data, stack, (*env)->next->value, aux);
-					free(aux);
-					i = (*env)->exported;
-					(*env)->exported = (*env)->next->exported;
-					(*env)->next->exported = i;
-				}
-			}
-			env = &(*env)->next;
-		}
-	}
 }
