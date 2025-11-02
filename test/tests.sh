@@ -85,6 +85,7 @@ VAR=*in* && echo $VAR
 /bin/echo hello > *in*
 /bin/echo hello > $NONE
 VAR="ho bye" && ec"$VAR"
+"$NONE" /bin/echo hello
 
 # # BUILTIN
 # echo hello && echo -n bye

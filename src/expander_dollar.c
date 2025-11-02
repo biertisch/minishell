@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/02 17:14:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/02 19:15:18 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,6 @@ int	is_dollar_expansion(char quote, char *arg)
 {
 	return (quote != '\'' && arg[0] == '$' && arg[1]
 		&& (ft_isalpha(arg[1]) || arg[1] == '_' || arg[1] == '?'));
-}
-
-int	has_dollar(char *arg)
-{
-	int		i;
-	char	quote;
-
-	if (!arg)
-		return (0);
-	quote = 0;
-	i = 0;
-	while (arg[i])
-	{
-		update_quote_status(arg[i], &quote);
-		if (is_dollar_expansion(quote, arg + i))
-			return (1);
-		i++;
-	}
-	return (0);
 }
 
 int	expand_dollar(t_data *data, char **arg)

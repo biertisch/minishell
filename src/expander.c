@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/02 15:26:12 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/02 19:22:02 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,40 +34,21 @@ int	expand_argv(t_data *data, t_tree *node)
 	i = 0;
 	while (node->argv[i])
 	{
-		if (expand_single_arg(data, &node->argv[i], node->raw_argv[i]))
-			return (-1);
+		if (expand_dollar(data, &node->argv[i]))
+				return (-1);
+		while (has_tilde(node->argv[i]))
+			expand_tilde(data, &node->argv[i]);
 		i++;
 	}
 	// if (resize_argv(data, &node->argv, node->raw_argv))
 	// 	return (-1);
+
+	//expand_wildcard
+	//remove_quotes
 	return (0);
 }
 
-int	expand_single_arg(t_data *data, char **arg, char *raw_arg)
-{
-	while (has_dollar(*arg))
-		if (expand_dollar(data, arg))
-			return (-1);
-	while (has_tilde(*arg))
-		expand_tilde(data, arg);
-	if (has_wildcard(*arg) && expand_wildcard(data, arg))
-		return (-1);
-	remove_quotes(data, arg, raw_arg);
-	return (0);
-}
-
-	// for each arg in argv
-	// - if it is not within single quotes, expand dollar until there is no dollar left
-	// - if it is not within quotes, expand tilde
-	// - if it is not within quotes, expand wildcard
-	// - remove syntatic quotes (literal not expanded)
-	// then resize array
-	// - remove expanded empty args
-	// - split expanded args with IFS (space, \n, \t)
-	//
-	// make argv and redir share the same logic, check afterwards if redir returns array with more than one string
-
-
+// make argv and redir share the same logic, check afterwards if redir returns array with more than one string
 
 
 // int	expand_argv(t_data *data, t_tree *node)
@@ -104,7 +85,7 @@ int	expand_redir(t_data *data, t_tree *node)
 	(void)data;
 	(void)node;
 	return (0);
-	
+
 	// t_redir	*trav;
 
 	// trav = node->redir;
