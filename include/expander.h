@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/01 21:23:08 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/02 15:26:29 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,19 @@
 
 # include "minishell.h"
 
-typedef struct	s_arg_info
-{
-	int	expanded;
-	int	start;
-	int	end;
-	int	in_quotes;
-}	t_arg_info;
-
 //expander.c
 int			expand(t_data *data, t_tree *node);
 int			expand_argv(t_data *data, t_tree *node);
-int			expand_single_arg(t_data *data, char **arg, t_arg_info *arg_info);
+int			expand_single_arg(t_data *data, char **arg, char *raw_arg);
 int			expand_redir(t_data *data, t_tree *node);
 int			expand_single_redir(t_data *data, t_redir *redir);
 
 //expander_dollar.c
 int			is_dollar_expansion(char quote, char *arg);
 int			has_dollar(char *arg);
-int			expand_dollar(t_data *data, char **arg, t_arg_info *arg_info);
-char		*expand_exit_status(t_data *data, char *old_arg, int i,
-				t_arg_info *arg_info);
-char		*expand_variable(t_data *data, char *old_arg, int i,
-				t_arg_info *arg_info);
-
+int			expand_dollar(t_data *data, char **arg);
+char		*expand_exit_status(t_data *data, char *old_arg, int i);
+char		*expand_variable(t_data *data, char *old_arg, int i);
 char		*get_env_key(char *arg);
 char		*update_arg(char *arg, int i, char *key, char *value);
 
@@ -57,20 +46,26 @@ int			expand_heredoc_var(t_data *data, char **input, int i);
 int			expand_heredoc_input(t_data *data, t_redir *redir);
 
 //expander_quotes.c
-void		remove_quotes(t_data *data, char **arg);
-int			count_quotes(char *arg, char *quote);
-void		copy_without_quotes(char *dest, char *src, char quote);
+void		remove_quotes(t_data *data, char **arg, char *raw_arg);
+int			count_quotes(char *arg);
+void		pass_expanded_segment(t_data *data, char *raw, int *i, int *j);
+char		*copy_without_quotes(t_data *data, char *src, int *to_remove);
 
 //expand_tilde.c
-void		expand_tilde(t_data *data, char **arg);
-char		*get_tilde_value(t_data *data, char *arg, int *key_len);
-char		*replace_tilde_value(char *arg, int key_len, char *value);
+int			has_tilde(char *arg);
+int			expand_tilde(t_data *data, char **arg);
+char		*get_tilde_key(char *arg);
+char		*get_tilde_value(t_data *data, char *key);
 
 //wildcard.c
 int			has_wildcard(const char *arg);
-int			expand_wildcard(t_data *data, char *pattern, t_list **entries);
+int			expand_wildcard(t_data *data, char **arg);
 t_list		*get_entries(t_data *data, DIR *dir_stream);
 void		filter_matches(t_list **head, char *pattern);
+char		*update_arg_wildcard(t_data *data, char *old_arg, t_list *entries);
+char		*append_entry(char *arg, char *entry);
+
+
 char		*update_redir_wildcard(t_data *data, char *file, t_list *entry);
 
 //wildcard_argv.c
@@ -92,6 +87,7 @@ int			backtrack_on_mismatch(int *i, int *j, int *star);
 int			get_argc(char **argv);
 
 //expander_utils.c
-t_arg_info	*init_argv_info(t_data *data, char **argv);
+char		**copy_string_array(char **src);
+void		free_unfinished_string_array(char **arr, int size);
 
 #endif

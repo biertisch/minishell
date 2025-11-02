@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:16:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:10:19 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/02 12:11:43 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,13 +113,13 @@ void	validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
 }
 
 void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
-	char **new_argv)
+	char *new_arg)
 {
 	if (!ptr)
 	{
 		system_error(data, "malloc");
 		ft_lstclear(&node, free);
-		free_string_array(&new_argv);
+		free(new_arg);
 		error_exit(data, NULL);
 	}
 }

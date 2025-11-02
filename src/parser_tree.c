@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_tree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:49:50 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/01 20:27:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/02 16:45:21 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_tree	*create_parser_node(t_node_type type, t_tree *left, t_tree *right)
 	new_node->left = left;
 	new_node->right = right;
 	new_node->argv = NULL;
+	new_node->raw_argv = NULL;
 	new_node->redir = NULL;
 	return (new_node);
 }
@@ -32,7 +33,7 @@ void	free_parser_node(t_tree **node)
 	if (!node || !*node)
 		return ;
 	free_string_array(&(*node)->argv);
-	free((*node)->argv_info);
+	free_string_array(&(*node)->raw_argv);
 	free_redir((*node)->redir);
 	free(*node);
 	*node = NULL;

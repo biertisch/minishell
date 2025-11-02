@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 11:16:51 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/02 12:24:42 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,28 @@
 
 int	has_wildcard(const char *arg)
 {
+	char	quote;
+
 	if (!arg)
 		return (0);
+	quote = 0;
 	while (*arg && *arg != '*')
-		arg++;
-	if (*arg == '*')
+	{
+		update_quote_status(*arg, &quote);
+		arg++;	
+	}
+	if (!quote && *arg == '*')
 		return (1);
 	return (0);
 }
 
-int	expand_wildcard(t_data *data, char *pattern, t_list **entries)
+int	expand_wildcard(t_data *data, char **arg)
 {
+	t_list	*entries;
 	char	*dir_name;
 	DIR		*dir_stream;
 
-	if (!*pattern)
+	if (!arg || !*arg)
 		return (0);
 	dir_name = getcwd(NULL, 0);
 	if (!dir_name)
@@ -37,12 +44,13 @@ int	expand_wildcard(t_data *data, char *pattern, t_list **entries)
 	free(dir_name);
 	if (!dir_stream)
 		return (system_error(data, "opendir"));
-	*entries = get_entries(data, dir_stream);
+	entries = get_entries(data, dir_stream);
 	if (closedir(dir_stream))
 		return (system_error(data, "closedir"));
 	if (!entries)
 		return (0);
-	filter_matches(entries, pattern);
+	filter_matches(&entries, *arg);
+	*arg = update_arg_wildcard(data, *arg, entries);
 	return (0);
 }
 
@@ -101,6 +109,44 @@ void	filter_matches(t_list **head, char *pattern)
 			curr = curr->next;
 		}
 	}
+}
+
+char	*update_arg_wildcard(t_data *data, char *old_arg, t_list *entries)
+{
+	char	*new_arg;
+
+	if (!old_arg|| !entries)
+		return (old_arg);
+	new_arg = NULL;
+	while (entries)
+	{
+		if (!new_arg)
+			new_arg = ft_strdup(entries->content);
+		else
+			new_arg = append_entry(new_arg, entries->content);			
+		validate_malloc_wildcard(data, new_arg, entries, NULL); // revise this function, maybe last param is unnecessary)
+		entries = entries->next;
+	}
+	free(old_arg);
+	ft_lstclear(&entries, free);
+	return (new_arg);
+}
+
+char	*append_entry(char *arg, char *entry)
+{
+	char	*res;
+	char	*tmp;
+	
+	tmp = ft_strjoin(" ", entry);
+	if (!tmp)
+	{
+		free(arg);
+		return (NULL);
+	}
+	res = ft_strjoin(arg, tmp);
+	free(arg);
+	free(tmp);
+	return (res);
 }
 
 char	*update_redir_wildcard(t_data *data, char *file, t_list *entry)
