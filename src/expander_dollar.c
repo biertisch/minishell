@@ -6,28 +6,30 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 15:13:59 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 19:44:58 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_dollar_expansion(int quote_status, char *arg)
+int	is_dollar_expansion(char *arg, int *quote_map, int start)
 {
-	return (quote_status != 1 && arg[0] == '$' && arg[1]
-		&& (ft_isalpha(arg[1]) || arg[1] == '_' || arg[1] == '?'));
+	return (quote_map[start] != 1 && arg[start] == '$' && arg[start + 1]
+		&& quote_map[start] == quote_map[start + 1]
+		&& (ft_isalpha(arg[start + 1]) || arg[start + 1] == '_'
+		|| arg[start + 1] == '?'));
 }
 
 int	expand_dollar(t_data *data, char **arg, t_arg_info *info)
 {
 	int	i;
 
-	if (!arg || !*arg | !info)
+	if (!arg || !*arg || !info)
 		return (0);
 	i = 0;
 	while ((*arg) && (*arg)[i])
 	{
-		if (is_dollar_expansion(info->quote_map[i], *arg + i))
+		if (is_dollar_expansion(*arg, info->quote_map, i))
 		{
 			if ((*arg)[i + 1] == '?')
 				*arg = expand_exit_status(data, *arg, i, info);
@@ -43,7 +45,6 @@ int	expand_dollar(t_data *data, char **arg, t_arg_info *info)
 char	*expand_exit_status(t_data *data, char *arg, int i, t_arg_info *info)
 {
 	char	*new_arg;
-	int		new_len;
 
 	free(info->key);
 	info->key = ft_strdup("$?");
@@ -53,10 +54,10 @@ char	*expand_exit_status(t_data *data, char *arg, int i, t_arg_info *info)
 	info->value = ft_itoa(data->exit_status);
 	validate_malloc(data, info->value, NULL);
 	info->value_len = ft_strlen(info->value);
-	new_len = ft_strlen(arg) - info->key_len + info->value_len;
-	rebuild_quote_map(data, info, i, new_len);
-	rebuild_expand_map(data, info, i, new_len);
-	new_arg = apply_expansion(arg, info, i, new_len);
+	info->total_len = ft_strlen(arg) - info->key_len + info->value_len;
+	rebuild_quote_map(data, info, i);
+	rebuild_expand_map(data, info, i, 1);
+	new_arg = apply_expansion(arg, info, i);
 	validate_malloc(data, new_arg, NULL);
 	free(arg);
 	return (new_arg);
@@ -66,10 +67,9 @@ char	*expand_variable(t_data *data, char *arg, int i, t_arg_info *info)
 {
 	char	*new_arg;
 	char	*tmp;
-	int		new_len;
 
 	free(info->key);
-	info->key = get_env_key(arg + i);
+	info->key = get_env_key(arg, info->quote_map, i);
 	validate_malloc(data, info->key, NULL);
 	info->key_len = ft_strlen(info->key);
 	free(info->value);
@@ -80,85 +80,117 @@ char	*expand_variable(t_data *data, char *arg, int i, t_arg_info *info)
 		info->value = ft_strdup(tmp);
 	validate_malloc(data, info->value, NULL);
 	info->value_len = ft_strlen(info->value);
-	new_len = ft_strlen(arg) - info->key_len + info->value_len;
-	rebuild_quote_map(data, info, i, new_len);
-	rebuild_expand_map(data, info, i, new_len);
-	new_arg = apply_expansion(arg, info, i, new_len);
+	info->total_len = ft_strlen(arg) - info->key_len + info->value_len;
+	rebuild_quote_map(data, info, i);
+	rebuild_expand_map(data, info, i, 1);
+	new_arg = apply_expansion(arg, info, i);
 	validate_malloc(data, new_arg, NULL);
 	free(arg);
 	return (new_arg);
 }
 
-int	rebuild_quote_map(t_data *data, t_arg_info *info, int start, int new_len)
+int	rebuild_quote_map(t_data *data, t_arg_info *info, int start)
 {
-	int	*new_quote_map;
+	int	*new_map;
 	int	old_len;
-	int	quote_status;
+	int	status;
 	int	i;
 	int	j;
 
-	new_quote_map = ft_calloc(new_len, sizeof(int));
-	validate_malloc(data, new_quote_map, NULL);
-	old_len = new_len + info->key_len - info->value_len;
+	old_len = info->total_len + info->key_len - info->value_len;
+	if (info->total_len == 0)
+		return (handle_empty_quote_map(data, info, start, old_len));
+	new_map = ft_calloc(info->total_len, sizeof(int));
+	validate_malloc(data, new_map, NULL);
 	i = 0;
 	j = 0;
 	while (i < start)
-		new_quote_map[i++] = info->quote_map[j++];
-	quote_status = 0;
-	if (j < old_len)
-		quote_status = info->quote_map[j];
+		new_map[i++] = info->quote_map[j++];
+	status = get_quote_status(info->quote_map, j, old_len);
 	while (i < start + info->value_len)
-		new_quote_map[i++] = quote_status;
+		new_map[i++] = status;
 	j += info->key_len;
-	while (i < new_len && j < old_len)
-		new_quote_map[i++] = info->quote_map[j++];
+	while (i < info->total_len && j < old_len)
+		new_map[i++] = info->quote_map[j++];
 	free(info->quote_map);
-	info->quote_map = new_quote_map;
+	info->quote_map = new_map;
 	return (0);
 }
 
-int	rebuild_expand_map(t_data *data, t_arg_info *info, int start, int new_len)
+int	handle_empty_quote_map(t_data *data, t_arg_info *info, int start, int old_len)
 {
-	int	*new_expand_map;
+	int	*new_map;
+
+	new_map = ft_calloc(1, sizeof(int));
+	validate_malloc(data, new_map, NULL);
+	if (start < old_len)
+		new_map[0] = info->quote_map[start];
+	else
+		new_map[0] = 0;
+	free(info->quote_map);
+	info->quote_map = new_map;
+	return (0);
+}
+
+int	get_quote_status(int *quote_map, int start, int len)
+{
+	if (start < len)
+		return (quote_map[start]);
+	return (0);
+}
+
+int	rebuild_expand_map(t_data *data, t_arg_info *info, int start, int type)
+{
+	int	*new_map;
 	int	old_len;
 	int	i;
 	int	j;
 
-	new_expand_map = ft_calloc(new_len, sizeof(int));
-	validate_malloc(data, new_expand_map, NULL);
-	old_len = new_len + info->key_len - info->value_len;
+	if (info->total_len == 0)
+		return (handle_empty_expand_map(data, info));
+	old_len = info->total_len + info->key_len - info->value_len;
+	new_map = ft_calloc(info->total_len, sizeof(int));
+	validate_malloc(data, new_map, NULL);
 	i = 0;
 	j = 0;
-	if (info->expand_map)
-		while (i < start && i < old_len)
-			new_expand_map[i++] = info->expand_map[j++];
+	while (info->expand_map && i < start && i < old_len)
+		new_map[i++] = info->expand_map[j++];
 	i = start;
-	while (i < start + info->value_len && i < new_len)
-		new_expand_map[i++] = 1;
-	if (info->expand_map)
-	{
-		j += info->key_len;
-		while (i < new_len && j < old_len)
-			new_expand_map[i++] = info->expand_map[j++];
-	}
+	while (i < start + info->value_len && i < info->total_len)
+		new_map[i++] = type;
+	j += info->key_len;
+	while (info->expand_map && i < info->total_len && j < old_len)
+		new_map[i++] = info->expand_map[j++];
 	free(info->expand_map);
-	info->expand_map = new_expand_map;
+	info->expand_map = new_map;
 	return (0);
 }
 
-char *apply_expansion(char *src, t_arg_info *info, int start, int len)
+int	handle_empty_expand_map(t_data *data, t_arg_info *info)
+{
+	int	*new_map;
+
+	new_map = ft_calloc(1, sizeof(int));
+	validate_malloc(data, new_map, NULL);
+	new_map[0] = 1;
+	free(info->expand_map);
+	info->expand_map = new_map;
+	return (0);
+}
+
+char *apply_expansion(char *src, t_arg_info *info, int start)
 {
 	char	*dest;
 
-	dest = ft_calloc(len + 1, sizeof(char));
+	dest = ft_calloc(info->total_len + 1, sizeof(char));
 	if (!dest)
 		return (NULL);
-	if (len < 1)
+	if (info->total_len < 1)
 		return (dest);
 	ft_strlcpy(dest, src, start + 1);
 	if (info->value)
-		ft_strlcat(dest, info->value, len + 1);
-	ft_strlcat(dest, src + start + info->key_len, len + 1);
+		ft_strlcat(dest, info->value, info->total_len + 1);
+	ft_strlcat(dest, src + start + info->key_len, info->total_len + 1);
 	return (dest);
 }
 
@@ -249,20 +281,25 @@ char *apply_expansion(char *src, t_arg_info *info, int start, int len)
 // 	return (arg);
 // }
 
-char	*get_env_key(char *arg)
+char	*get_env_key(char *arg, int *quote_map, int start)
 {
 	char	*key;
-	int		key_len;
+	int		len;
+	int		i;
+	int		status;
 
-	key_len = 0;
-	if (arg[key_len] == '$')
-		key_len++;
-	while (arg[key_len] && (ft_isalnum(arg[key_len]) || arg[key_len] == '_'))
-		key_len++;
-	key = malloc(sizeof(char) * (key_len + 1));
+	i = start;
+	status = quote_map[i];
+	if (arg[i] == '$')
+		i++;
+	while (arg[i] && quote_map[i] == status
+		&& (ft_isalnum(arg[i]) || arg[i] == '_'))
+		i++;
+	len = i - start;
+	key = malloc(sizeof(char) * (len + 1));
 	if (!key)
 		return (NULL);
-	ft_strlcpy(key, arg, key_len + 1);
+	ft_strlcpy(key, arg + start, len + 1);
 	return (key);
 }
 

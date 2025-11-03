@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:57:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 15:41:43 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:35:53 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	has_tilde(int quote_status, char *arg)
 int	expand_tilde(t_data *data, char **arg, t_arg_info *info)
 {
 	char	*new_arg;
-	int		new_len;
 
 	if (!arg || !*arg || !info)
 		return (0);
@@ -32,10 +31,10 @@ int	expand_tilde(t_data *data, char **arg, t_arg_info *info)
 		if (!*(info->value))
 			break ;
 		info->value_len = ft_strlen(info->value);
-		new_len = ft_strlen(*arg) - info->key_len + info->value_len;
-		rebuild_quote_map(data, info, 0, new_len);
-		rebuild_expand_map(data, info, 0, new_len);
-		new_arg = apply_expansion(*arg, info, 0, new_len);
+		info->total_len = ft_strlen(*arg) - info->key_len + info->value_len;
+		rebuild_quote_map(data, info, 0);
+		rebuild_expand_map(data, info, 0, 2);
+		new_arg = apply_expansion(*arg, info, 0);
 		validate_malloc(data, new_arg, NULL);
 		free(*arg);
 		*arg = new_arg;

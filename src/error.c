@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:16:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 12:47:22 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 18:34:11 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,16 @@ void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 		system_error(data, "malloc");
 		ft_lstclear(&node, free);
 		free(new_arg);
+		error_exit(data, NULL);
+	}
+}
+
+void	validate_malloc_unfinished_array(t_data *data, void *ptr, char **arr, int size)
+{
+	if (!ptr)
+	{
+		system_error(data, "malloc");
+		free_unfinished_string_array(arr, size);
 		error_exit(data, NULL);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 15:08:05 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 19:07:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,11 @@ int	expand_argv(t_data *data, t_tree *node)
 	while (node->argv[i])
 	{
 		remove_quotes(data, &node->argv[i], &node->argv_info[i]);
-		if (expand_dollar(data, &node->argv[i], &node->argv_info[i]))
-				return (-1);
+		expand_dollar(data, &node->argv[i], &node->argv_info[i]);
 		expand_tilde(data, &node->argv[i], &node->argv_info[i]);
 		i++;
 	}
-	// if (resize_argv(data, &node->argv, node->raw_argv))
-	// 	return (-1);
+	node->argv = resize_argv(data, node->argv, &node->argv_info);
 
 	// //expand_wildcard
 	// //

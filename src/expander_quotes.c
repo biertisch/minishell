@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:57:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 14:47:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 19:17:39 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ int	remove_quotes(t_data *data, char **arg, t_arg_info *info)
 	if (!arg || !*arg)
 		return (0);
 	remove = count_quotes(*arg);
-	info->raw = ft_strdup(*arg);
-	validate_malloc(data, info->raw, NULL);
 	old_len = ft_strlen(*arg);
-	info->quote_map = ft_calloc(old_len - remove, sizeof(int));
+	if (old_len - remove <= 0)
+		info->quote_map = ft_calloc(1, sizeof(int));
+	else
+		info->quote_map = ft_calloc(old_len - remove, sizeof(int));
 	validate_malloc(data, info->quote_map, NULL);
 	if (!remove)
 		return (0);

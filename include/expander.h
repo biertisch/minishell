@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 15:41:27 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 19:10:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 
 typedef struct s_arg_info
 {
-	char	*raw;
 	int		*quote_map;
 	int		*expand_map;
 	char	*key;
 	int		key_len;
 	char	*value;
 	int		value_len;
+	int		total_len;
 }	t_arg_info;
 
 //expander.c
@@ -34,14 +34,17 @@ int			expand_redir(t_data *data, t_tree *node);
 int			expand_single_redir(t_data *data, t_redir *redir);
 
 //expander_dollar.c
-int			is_dollar_expansion(int quote_status, char *arg);
+int			is_dollar_expansion(char *arg, int *quote_map, int start);
 int			expand_dollar(t_data *data, char **arg, t_arg_info *info);
 char		*expand_exit_status(t_data *data, char *arg, int i, t_arg_info *info);
 char		*expand_variable(t_data *data, char *arg, int i, t_arg_info *info);
-int			rebuild_quote_map(t_data *data, t_arg_info *info, int start, int new_len);
-int			rebuild_expand_map(t_data *data, t_arg_info *info, int start, int new_len);
-char		*apply_expansion(char *src, t_arg_info *info, int start, int len);
-char		*get_env_key(char *arg);
+int			rebuild_quote_map(t_data *data, t_arg_info *info, int start);
+int			rebuild_expand_map(t_data *data, t_arg_info *info, int start, int type);
+char		*apply_expansion(char *src, t_arg_info *info, int start);
+char		*get_env_key(char *arg, int *quote_map, int start);
+int			handle_empty_quote_map(t_data *data, t_arg_info *info, int start, int old_len);
+int			get_quote_status(int *quote_map, int start, int len);
+int			handle_empty_expand_map(t_data *data, t_arg_info *info);
 
 //expander_dollar2.c
 char		**update_argv_dollar(char **old_argv, int i, char *value);
@@ -76,8 +79,6 @@ t_list		*get_entries(t_data *data, DIR *dir_stream);
 void		filter_matches(t_list **head, char *pattern);
 char		*update_arg_wildcard(t_data *data, char *old_arg, t_list *entries);
 char		*append_entry(char *arg, char *entry);
-
-
 char		*update_redir_wildcard(t_data *data, char *file, t_list *entry);
 
 //wildcard_argv.c
@@ -97,6 +98,14 @@ int			backtrack_on_mismatch(int *i, int *j, int *star);
 
 //expander_resize.c
 int			get_argc(char **argv);
+int			get_expanded_argc(char **argv, t_arg_info *info);
+char 		**resize_argv(t_data *data, char **argv, t_arg_info **info);
+int			arg_disappears(char *arg, t_arg_info info);
+int			is_ifs(char *arg, t_arg_info info, int i);
+int			count_ifs_fields(char *arg, t_arg_info info);
+int			rebuild_argv(t_data *data, char **dest, char **src, t_arg_info *info);
+int			has_ifs(char *arg, t_arg_info info, int i);
+int			split_on_ifs(char **dest, char *src, t_arg_info info);
 
 //expander_utils.c
 char		**copy_string_array(char **src);

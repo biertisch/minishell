@@ -72,25 +72,24 @@ VAR="echo bye" && echo hi"$VAR"
 VAR="ho bye" && ec$VAR
 echo hel"l"o$USER
 echo $USER'$USER'
+echo "$"USER
 echo "$US"ER
-ls *f
-ls *f*
-ls **f**
-ls *
-ls .*
-/bin/echo *ile *in*
-cat < *ile
-/bin/echo *on*
-echo Make*
-echo Make"*"
-VAR=*ile && echo $VAR
-VAR=*in* && echo $VAR
-
-# invalid/incomplete
-/bin/echo hello > *in*
 /bin/echo hello > $NONE
 VAR="ho bye" && ec"$VAR"
 "$NONE" /bin/echo hello
+# ls *f
+# ls *f*
+# ls **f**
+# ls *
+# ls .*
+# /bin/echo *ile *in*
+# cat < *ile
+# /bin/echo *on*
+# echo Make*
+# echo Make"*"
+# VAR=*ile && echo $VAR
+# VAR=*in* && echo $VAR
+# /bin/echo hello > *in*
 
 # # BUILTIN
 # echo hello && echo -n bye
