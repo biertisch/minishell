@@ -90,6 +90,8 @@ VAR="ho bye" && ec"$VAR"
 # VAR=*ile && echo $VAR
 # VAR=*in* && echo $VAR
 # /bin/echo hello > *in*
+# VAR="hi *file" && echo $VAR
+# VAR="hi *file" && echo "$VAR"
 
 # # BUILTIN
 # echo hello && echo -n bye

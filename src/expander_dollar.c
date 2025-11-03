@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 19:44:58 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 22:13:31 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ int	expand_dollar(t_data *data, char **arg, t_arg_info *info)
 
 	if (!arg || !*arg || !info)
 		return (0);
+	if (info->total_len < 1)
+		info->expand_map = ft_calloc(1, sizeof(int));
+	else
+		info->expand_map = ft_calloc(info->total_len, sizeof(int));
+	validate_malloc(data, info->expand_map, NULL);
 	i = 0;
 	while ((*arg) && (*arg)[i])
 	{

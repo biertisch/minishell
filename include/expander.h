@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 19:10:54 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 21:59:33 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,17 +95,17 @@ void		advance_both(int *i, int *j);
 void		record_star(int *j, int *star);
 int			backtrack_on_mismatch(int *i, int *j, int *star);
 
-
 //expander_resize.c
 int			get_argc(char **argv);
 int			get_expanded_argc(char **argv, t_arg_info *info);
 char 		**resize_argv(t_data *data, char **argv, t_arg_info **info);
-int			arg_disappears(char *arg, t_arg_info info);
-int			is_ifs(char *arg, t_arg_info info, int i);
-int			count_ifs_fields(char *arg, t_arg_info info);
-int			rebuild_argv(t_data *data, char **dest, char **src, t_arg_info *info);
-int			has_ifs(char *arg, t_arg_info info, int i);
-int			split_on_ifs(char **dest, char *src, t_arg_info info);
+int			arg_disappears(char *arg, t_arg_info *info);
+int			is_ifs(char *arg, t_arg_info *info, int i);
+int			count_fields(char *arg, t_arg_info *info);
+int			rebuild_argv(t_data *data, char **dest, char **src, t_arg_info *src_info, t_arg_info *dest_info);
+int			has_ifs(char *arg, t_arg_info *info, int i);
+int			split_on_ifs(char **dest, char *src, t_arg_info *src_info, t_arg_info *dest_info);
+int			copy_arg_info(t_arg_info *dest, t_arg_info *src, int start, int end);
 
 //expander_utils.c
 char		**copy_string_array(char **src);

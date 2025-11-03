@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 18:34:39 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 21:07:58 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void		free_command_data(t_data *data);
 void		free_stack(t_stack **stack);
 void		free_redir(t_redir *redir);
 void		free_string_array(char ***arr);
-void		free_argv_info(t_arg_info **info, int argc);
+void		free_argv_info(t_arg_info **info, int size);
 
 //error.c
 int			system_error(t_data *data, char *function);

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:37:43 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 16:35:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 21:08:04 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,14 @@ void	free_string_array(char ***arr)
 	*arr = NULL;
 }
 
-void	free_argv_info(t_arg_info **info, int argc)
+void	free_argv_info(t_arg_info **info, int size)
 {
 	int	i;
 
 	if (!info || !*info)
 		return ;
 	i = 0;
-	while (i < argc)
+	while (i < size)
 	{
 		free((*info)[i].quote_map);
 		free((*info)[i].expand_map);
