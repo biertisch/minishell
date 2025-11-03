@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:23:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/01 20:31:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 12:17:48 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,11 @@ int	get_operator_len(char *s)
 
 int	is_quote(char c)
 {
-	return (c == '"' || c == '\'');
+	if (c == '"')
+		return (2);
+	if (c == '\'')
+		return (1);
+	return (0);
 }
 
 //takes as FD what is only composed of digits

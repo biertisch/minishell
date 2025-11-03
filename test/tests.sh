@@ -2,23 +2,22 @@
 # ls -l
 # foo
 
-# # QUOTES
-# /bin/echo "hello world"
-# /bin/echo hello
-# /bin/echo "hello"
-# /bin/echo "   spaced      "
-# /bin/echo he"ll"o
-# /bin/echo "hello 'world'"
-# /bin/echo 'hello "world"'
-# /bin/echo "he"ll"o"
-# /bin/echo ""
-# /bin/echo "" hello
-# /bin/echo hello "&&" /bin/echo bye
-# /bin/echo hello '&& /bin/echo bye'
+# QUOTES
+/bin/echo "hello world"
+/bin/echo "hello"
+/bin/echo "   spaced      "
+/bin/echo he"ll"o
+/bin/echo "hello 'world'"
+/bin/echo 'hello "world"'
+/bin/echo "he"ll"o"
+/bin/echo ""
+/bin/echo "" hello
+/bin/echo hello "&&" /bin/echo bye
+/bin/echo hello '&& /bin/echo bye'
 
-# # invalid/incomplete
-# '/bin/echo hello &&' /bin/echo bye
-# /bin/echo "hello
+# invalid/incomplete
+'/bin/echo hello &&' /bin/echo bye
+/bin/echo "hello
 
 # # REDIRECT
 # /bin/echo hello > test/file1 && cat test/file1
@@ -68,6 +67,7 @@ VAR="echo bye" && echo hi"$VAR"
 VAR="ho bye" && ec$VAR
 echo hel"l"o$USER
 echo $USER'$USER'
+echo "$US"ER
 ls *f
 ls *f*
 ls **f**

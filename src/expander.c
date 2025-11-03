@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/02 19:22:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 14:32:21 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,22 @@ int	expand_argv(t_data *data, t_tree *node)
 
 	if (!node || !node->argv)
 		return (0);
-	node->raw_argv = copy_string_array(node->argv);
-	validate_malloc(data, node->raw_argv, NULL);
+	node->argv_info = ft_calloc(sizeof(t_arg_info), get_argc(node->argv));
+	validate_malloc(data, node->argv_info, NULL);
 	i = 0;
 	while (node->argv[i])
 	{
-		if (expand_dollar(data, &node->argv[i]))
+		remove_quotes(data, &node->argv[i], &node->argv_info[i]);
+		if (expand_dollar(data, &node->argv[i], &node->argv_info[i]))
 				return (-1);
-		while (has_tilde(node->argv[i]))
-			expand_tilde(data, &node->argv[i]);
+		// expand_tilde(data, &node->argv[i], &node->argv_info[i]);
 		i++;
 	}
 	// if (resize_argv(data, &node->argv, node->raw_argv))
 	// 	return (-1);
 
-	//expand_wildcard
-	//remove_quotes
+	// //expand_wildcard
+	// //
 	return (0);
 }
 

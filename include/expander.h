@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/02 15:26:29 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 14:41:45 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 # define EXPANDER_H
 
 # include "minishell.h"
+
+typedef struct s_arg_info
+{
+	char	*raw;
+	int		*quote_map;
+	int		*expand_map;
+	char	*key;
+	int		key_len;
+	char	*value;
+	int		value_len;
+}	t_arg_info;
 
 //expander.c
 int			expand(t_data *data, t_tree *node);
@@ -23,13 +34,14 @@ int			expand_redir(t_data *data, t_tree *node);
 int			expand_single_redir(t_data *data, t_redir *redir);
 
 //expander_dollar.c
-int			is_dollar_expansion(char quote, char *arg);
-int			has_dollar(char *arg);
-int			expand_dollar(t_data *data, char **arg);
-char		*expand_exit_status(t_data *data, char *old_arg, int i);
-char		*expand_variable(t_data *data, char *old_arg, int i);
+int			is_dollar_expansion(int quote_status, char *arg);
+int			expand_dollar(t_data *data, char **arg, t_arg_info *info);
+char		*expand_exit_status(t_data *data, char *arg, int i, t_arg_info *info);
+char		*expand_variable(t_data *data, char *arg, int i, t_arg_info *info);
+int			rebuild_quote_map(t_data *data, t_arg_info *info, int start, int new_len);
+int			rebuild_expand_map(t_data *data, t_arg_info *info, int start, int new_len);
+char		*apply_expansion(char *src, t_arg_info *info, int start, int len);
 char		*get_env_key(char *arg);
-char		*update_arg(char *arg, int i, char *key, char *value);
 
 //expander_dollar2.c
 char		**update_argv_dollar(char **old_argv, int i, char *value);
@@ -46,10 +58,9 @@ int			expand_heredoc_var(t_data *data, char **input, int i);
 int			expand_heredoc_input(t_data *data, t_redir *redir);
 
 //expander_quotes.c
-void		remove_quotes(t_data *data, char **arg, char *raw_arg);
+int			remove_quotes(t_data *data, char **arg, t_arg_info *info);
 int			count_quotes(char *arg);
-void		pass_expanded_segment(t_data *data, char *raw, int *i, int *j);
-char		*copy_without_quotes(t_data *data, char *src, int *to_remove);
+void		copy_without_quotes(char *dest, char *src, int *quote_map);
 
 //expand_tilde.c
 int			has_tilde(char *arg);
