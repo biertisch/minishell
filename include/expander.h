@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 14:41:45 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 15:41:27 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,9 @@ int			count_quotes(char *arg);
 void		copy_without_quotes(char *dest, char *src, int *quote_map);
 
 //expand_tilde.c
-int			has_tilde(char *arg);
-int			expand_tilde(t_data *data, char **arg);
+int			has_tilde(int quote_status, char *arg);
+int			expand_tilde(t_data *data, char **arg, t_arg_info *info);
+int			update_tilde_key_value(t_data *data, char *arg, t_arg_info *info);
 char		*get_tilde_key(char *arg);
 char		*get_tilde_value(t_data *data, char *key);
 

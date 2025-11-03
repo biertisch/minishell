@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 14:40:17 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 15:13:59 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_dollar_expansion(int quote_status, char *arg)
 
 int	expand_dollar(t_data *data, char **arg, t_arg_info *info)
 {
-	int		i;
+	int	i;
 
 	if (!arg || !*arg | !info)
 		return (0);
@@ -65,7 +65,7 @@ char	*expand_exit_status(t_data *data, char *arg, int i, t_arg_info *info)
 char	*expand_variable(t_data *data, char *arg, int i, t_arg_info *info)
 {
 	char	*new_arg;
-	char	*value;
+	char	*tmp;
 	int		new_len;
 
 	free(info->key);
@@ -73,13 +73,13 @@ char	*expand_variable(t_data *data, char *arg, int i, t_arg_info *info)
 	validate_malloc(data, info->key, NULL);
 	info->key_len = ft_strlen(info->key);
 	free(info->value);
-	value = get_env_value(data->env_list, info->key + 1);
-	if (!value)
+	tmp = get_env_value(data->env_list, info->key + 1);
+	if (!tmp)
 		info->value = ft_strdup("");
 	else
-		info->value = ft_strdup(value);
+		info->value = ft_strdup(tmp);
 	validate_malloc(data, info->value, NULL);
-	info->value_len = ft_strlen(value);
+	info->value_len = ft_strlen(info->value);
 	new_len = ft_strlen(arg) - info->key_len + info->value_len;
 	rebuild_quote_map(data, info, i, new_len);
 	rebuild_expand_map(data, info, i, new_len);

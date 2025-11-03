@@ -57,6 +57,11 @@ $NONE /bin/echo hello
 echo ~
 echo ~+
 echo ~-
+echo ~/hi
+echo ~bhb
+echo "~"
+echo '~'
+echo a~
 VAR="ls src" && $VAR
 VAR="hi" && VAR2=$VAR && echo $VAR2
 VAR="" && echo $VAR
