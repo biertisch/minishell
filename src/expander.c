@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 16:58:22 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 22:09:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	expand_argv(t_data *data, t_tree *node)
 		expand_tilde(data, &node->argv[i], &node->argv_info[i]);
 		i++;
 	}
-	node->argv = resize_argv(data, node->argv, &node->argv_info);
+	node->argv = build_expanded_argv(data, node->argv, &node->argv_info);
 	expand_wildcard(data, node);
 	return (0);
 }
@@ -73,38 +73,22 @@ int	expand_single_redir(t_data *data, t_redir *redir)
 	return (0);
 }
 
-int	expand_dollar_redir(t_data *data, t_redir *redir)
+int	expand_dollar(t_data *data, char **arg, t_metadata *info)
 {
-	char	*tmp;
+	int	i;
 
-	tmp = ft_strdup(redir->file);
-	validate_malloc(data, tmp, NULL);
-	expand_dollar(data, &redir->file, &redir->info);
-	if (redir->info.key && !*(redir->info.value))
-	{
-		internal_error(data, ERR_2, NULL, tmp);
-		return (free(tmp), -1);
-	}
-	free(tmp);
-	return (0);
-}
-
-int	expand_wildcard_redir(t_data *data, t_redir *redir)
-{
-	t_list	*entries;
-
-	if (!has_wildcard(redir->file, &redir->info))
+	if (!arg || !*arg || !info)
 		return (0);
-	if (expand_single_wildcard(data, redir->file, &entries))
-		return (-1);
-	if (entries)
+	init_expand_metadata(data, info);
+	i = 0;
+	while ((*arg) && (*arg)[i])
 	{
-		if (entries->next)
+		if (is_dollar_expansion(*arg, info->quote_map, i))
 		{
-			ft_lstclear(&entries, free);
-			return (internal_error(data, ERR_2, NULL, redir->file));
+			*arg = expand_variable(data, *arg, info, i);
+			i = -1;
 		}
-		redir->file = apply_redir_wildcard(data, redir->file, entries);
+		i++;
 	}
 	return (0);
 }

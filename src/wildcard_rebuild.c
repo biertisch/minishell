@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wildcard_argv.c                                    :+:      :+:    :+:   */
+/*   wildcard_rebuild.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:30:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 17:20:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 22:13:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	rebuild_argv_wildcard(t_tree *node, t_list *entries, int star_index)
+int	build_wildcard_argv(t_tree *node, t_list *entries, int star_index)
 {
 	char		**new_argv;
 	t_metadata	*new_info;
@@ -28,24 +28,17 @@ int	rebuild_argv_wildcard(t_tree *node, t_list *entries, int star_index)
 		return (free(new_argv), free(new_info), -1);
 	i = copy_before_star(node, new_argv, new_info, star_index);
 	if (i < 0)
-		return (handle_malloc_failure_wildcard(new_argv, new_info, count));
+		return (handle_wildcard_rebuild_failure(new_argv, new_info, count));
 	i = copy_entries(new_argv, new_info, entries, i);
 	if (i < 0)
-		return (handle_malloc_failure_wildcard(new_argv, new_info, count));
+		return (handle_wildcard_rebuild_failure(new_argv, new_info, count));
 	if (copy_after_star(node, new_argv + i, new_info + i, star_index + 1))
-		return (handle_malloc_failure_wildcard(new_argv, new_info, count));
-	free_argv_info(&node->argv_info, get_argc(node->argv));
+		return (handle_wildcard_rebuild_failure(new_argv, new_info, count));
+	free_metadata(&node->argv_info, get_argc(node->argv));
 	free_string_array(&node->argv);
 	node->argv_info = new_info;
 	node->argv = new_argv;
 	return (0);
-}
-
-int	handle_malloc_failure_wildcard(char **argv, t_metadata *info, int argc)
-{
-	free_argv_info(&info, argc);
-	free_string_array(&argv);
-	return (-1);
 }
 
 int	copy_entries(char **argv, t_metadata *info, t_list *entries, int start)

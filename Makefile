@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+         #
+#    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/11/04 16:26:44 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/11/04 22:15:32 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,14 +15,15 @@ NAME        = minishell
 SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		expander_dollar expander_quotes input lexer lexer_list\
 		lexer_utils main parser parser_cmd parser_redir\
-		parser_tree parser_utils wildcard wildcard_argv wildcard_match\
+		parser_tree parser_utils wildcard wildcard_rebuild wildcard_match\
 		test stack signal executor child parent\
 		executor_utils executor_pipe executor_and executor_or executor_builtin\
 		executor_echo executor_subshell get_next_line get_next_line_utils\
 		executor_env executor_cd executor_pwd executor_exit expander_tilde\
 		input_prompt executor_unset executor_error variable_utils executor_export\
 		executor_heredoc executor_redirect signal_handler signal_heredoc\
-		executor_heredoc2 env_utils input_cont expander_resize expander_utils
+		executor_heredoc2 env_utils input_cont expander_rebuild expander_metadata\
+		expander_split error_expander expander_redir
 
 SRC_DIR     = src
 OBJ_DIR     = obj

@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 16:59:18 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 22:10:04 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	has_wildcard(char *arg, t_metadata *info)
-{
-	int	i;
-
-	if (!arg || !info)
-		return (0);
-	i = 0;
-	while (arg[i] && arg[i] != '*')
-		i++;
-	return (arg[i] && arg[i] == '*' && !info->quote_map[i]);
-}
 
 int	expand_wildcard(t_data *data, t_tree *node)
 {
@@ -36,13 +24,25 @@ int	expand_wildcard(t_data *data, t_tree *node)
 		{
 			if (expand_single_wildcard(data, node->argv[i], &entries))
 				return (-1);
-			if (entries && rebuild_argv_wildcard(node, entries, i))
+			if (entries && build_wildcard_argv(node, entries, i))
 				validate_malloc_wildcard(data, NULL, entries, NULL);
 			ft_lstclear(&entries, free);
 		}
 		i++;
 	}
 	return (0);
+}
+
+int	has_wildcard(char *arg, t_metadata *info)
+{
+	int	i;
+
+	if (!arg || !info)
+		return (0);
+	i = 0;
+	while (arg[i] && arg[i] != '*')
+		i++;
+	return (arg[i] && arg[i] == '*' && !info->quote_map[i]);
 }
 
 int	expand_single_wildcard(t_data *data, char *arg, t_list **entries)
@@ -95,45 +95,4 @@ t_list	*get_entries(t_data *data, DIR *dir_stream)
 		dirent = readdir(dir_stream);
 	}
 	return (head);
-}
-
-void	filter_matches(t_list **head, char *pattern)
-{
-	t_list	*curr;
-	t_list	*prev;
-	t_list	*tmp;
-
-	curr = *head;
-	prev = NULL;
-	while (curr)
-	{
-		if (!match_wildcard((char *)curr->content, pattern))
-		{
-			tmp = curr;
-			curr = curr->next;
-			if (prev)
-				prev->next = curr;
-			else
-				*head = curr;
-			ft_lstdelone(tmp, free);
-		}
-		else
-		{
-			prev = curr;
-			curr = curr->next;
-		}
-	}
-}
-
-char	*apply_redir_wildcard(t_data *data, char *file, t_list *entry)
-{
-	char	*new_file;
-
-	if (!file || !entry)
-		return (file);
-	new_file = ft_strdup(entry->content);
-	validate_malloc_wildcard(data, new_file, entry, NULL);
-	free(file);
-	ft_lstclear(&entry, free);
-	return (new_file);
 }

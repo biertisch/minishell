@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 10:49:50 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 15:03:09 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 22:13:57 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	free_parser_node(t_tree **node)
 {
 	if (!node || !*node)
 		return ;
-	free_argv_info(&(*node)->argv_info, get_argc((*node)->argv));
+	free_metadata(&(*node)->argv_info, get_argc((*node)->argv));
 	free_string_array(&(*node)->argv);
 	free_redir((*node)->redir);
 	free(*node);

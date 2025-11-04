@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander_tilde.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:57:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 16:49:57 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 22:00:18 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	has_tilde(char *arg, int quote_status)
-{
-	return (!quote_status
-		&& arg
-		&& (!ft_strcmp(arg, "~")
-			|| !ft_strncmp(arg, "~/", 2)
-			|| !ft_strncmp(arg, "~+", 2)
-			|| !ft_strncmp(arg, "~-", 2)));
-}
 
 int	expand_tilde(t_data *data, char **arg, t_metadata *info)
 {
@@ -42,6 +32,16 @@ int	expand_tilde(t_data *data, char **arg, t_metadata *info)
 		*arg = new_arg;
 	}
 	return (0);
+}
+
+int	has_tilde(char *arg, int quote_status)
+{
+	return (!quote_status
+		&& arg
+		&& (!ft_strcmp(arg, "~")
+			|| !ft_strncmp(arg, "~/", 2)
+			|| !ft_strncmp(arg, "~+", 2)
+			|| !ft_strncmp(arg, "~-", 2)));
 }
 
 int	update_tilde_key_value(t_data *data, char *arg, t_metadata *info)
