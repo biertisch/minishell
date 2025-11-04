@@ -65,9 +65,10 @@ void		child(t_data *data, t_stack **stack);
 void		child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
-void		child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i);
+void		child_no_redir(t_data *data, t_stack **stack, char *cmd);
 void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
 void	check_no_cmd(t_data *data, t_stack **stack);
+void		handle_redirects(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 
 
 //executor_utils.c
@@ -191,5 +192,9 @@ int			heredoc(t_data *data, t_redir *redir);
 int 		run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid);
 int			copy_heredoc_input(t_data *data, t_redir *redir);
 int			wait_for_heredoc(t_data *data, pid_t pid);
+
+//executo_builtins_utils.c
+int			*duplicate_std(void);
+void			undo_duplicate_std(void);
 
 #endif

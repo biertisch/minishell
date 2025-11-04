@@ -20,6 +20,12 @@ int	is_builtin(char *cmd)
 		|| !ft_strcmp(cmd, "exit"));
 }
 
+int	is_builtin_no_fork(char *cmd)
+{
+	return (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "export")
+	 	|| !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "exit"));
+}
+
 //converts lexer token type into parser node type
 t_node_type	get_node_type(t_token_type token_type)
 {

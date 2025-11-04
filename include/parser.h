@@ -69,5 +69,6 @@ int			count_tree_nodes(t_tree *root);
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
 int			is_builtin(char *cmd);
+int			is_builtin_no_fork(char *cmd);
 
 #endif

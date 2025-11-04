@@ -15,19 +15,16 @@
 int	execute_export(t_data *data, t_stack **stack)
 {
 	int	cmd_i;
-/**	int	stdin_dup;
-	int	stdout_dup;
 	
-	stdin_dup = dup(STDIN_FILENO);
-	stdout_dup = dup(STDOUT_FILENO);
-	if ((*stack)->redir)
-		execute_parent_redirs(data, stack);**/
 	cmd_i = get_first_command(data, stack);
+	duplicate_std();	
+	handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	sort_env(&data, stack);
 	if (!(*stack)->node->argv[cmd_i + 1])
 		execute_export_no_option(data, stack);
 	else
 		execute_export_option(data, stack, cmd_i);
+	undo_duplicate_std();
 	return (0);
 }
 
