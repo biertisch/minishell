@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 09:50:10 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 11:15:24 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	expand_wildcard(t_data *data, t_tree *node)
 	{
 		if (has_wildcard(node->argv[i], node->argv_info + i))
 		{
-			if (expand_wildcard_arg(data, node->argv[i], &entries))
+			if (expand_single_wildcard(data, node->argv[i], &entries))
 				return (-1);
 			if (entries && rebuild_argv_wildcard(node, entries, i))
 				validate_malloc_wildcard(data, NULL, entries, NULL);
@@ -61,7 +61,7 @@ int	expand_wildcard(t_data *data, t_tree *node)
 }
 
 
-int	expand_wildcard_arg(t_data *data, char *arg, t_list **entries)
+int	expand_single_wildcard(t_data *data, char *arg, t_list **entries)
 {
 	char	*dir_name;
 	DIR		*dir_stream;

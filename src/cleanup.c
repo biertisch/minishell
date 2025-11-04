@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:37:43 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 21:08:04 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 11:41:03 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ void	free_redir(t_redir *redir)
 		tmp = redir->next;
 		free(redir->file);
 		free(redir->heredoc_input);
+		free(redir->metadata.quote_map);
+		free(redir->metadata.expand_map);
+		free(redir->metadata.key);
+		free(redir->metadata.value);
 		free(redir);
 		redir = tmp;
 	}

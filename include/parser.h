@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/03 11:03:10 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 11:20:41 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_redir
 	int				fd;
 	char			*file;
 	char			*heredoc_input;
+	t_arg_info		metadata;
 	int				in_fd;
 	int				out_fd;
 	struct s_redir	*next;

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 10:44:26 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 11:39:13 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,6 @@
 # define EXPANDER_H
 
 # include "minishell.h"
-
-typedef struct s_arg_info
-{
-	int		*quote_map;
-	int		*expand_map;
-	char	*key;
-	int		key_len;
-	char	*value;
-	int		value_len;
-	int		total_len;
-}	t_arg_info;
 
 //expander.c
 int			expand(t_data *data, t_tree *node);
@@ -75,7 +64,7 @@ char		*get_tilde_value(t_data *data, char *key);
 //wildcard.c
 int			has_wildcard(char *arg, t_arg_info *info);
 int			expand_wildcard(t_data *data, t_tree *node);
-int			expand_wildcard_arg(t_data *data, char *arg, t_list **entries);
+int			expand_single_wildcard(t_data *data, char *arg, t_list **entries);
 t_list		*get_entries(t_data *data, DIR *dir_stream);
 void		filter_matches(t_list **head, char *pattern);
 char		*update_arg_wildcard(t_data *data, char *old_arg, t_list *entries);

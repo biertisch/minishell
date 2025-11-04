@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/03 11:02:51 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 11:39:17 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,17 @@ typedef struct s_stack		t_stack;
 typedef struct s_token		t_token;
 typedef struct s_redir		t_redir;
 typedef struct s_tree		t_tree;
-typedef struct s_arg_info	t_arg_info;
+
+typedef struct s_arg_info
+{
+	int		*quote_map;
+	int		*expand_map;
+	char	*key;
+	int		key_len;
+	char	*value;
+	int		value_len;
+	int		total_len;
+}	t_arg_info;
 
 typedef enum e_outcome
 {

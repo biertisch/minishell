@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 10:31:44 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 11:53:22 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,87 +44,52 @@ int	expand_argv(t_data *data, t_tree *node)
 	return (0);
 }
 
-// make argv and redir share the same logic, check afterwards if redir returns array with more than one string
-
-
-// int	expand_argv(t_data *data, t_tree *node)
-// {
-// 	int		i;
-// 	t_list	*entries;
-// 	char	**old;
-
-// 	i = 0;
-// 	while (node->argv && node->argv[i])
-// 	{
-// 		old = node->argv;
-// 		node->argv = expand_dollar(data, node->argv, i);
-// 		if (node->argv != old)
-// 		{
-// 			i = 0;
-// 			continue ;
-// 		}
-// 		expand_tilde(data, &node->argv[i]);
-// 		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i])
-// 			&& expand_wildcard(data, node->argv[i], &entries))
-// 			return (-1);
-// 		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i])
-// 			&& entries)
-// 			node->argv = update_argv_wildcard(data, node->argv, i, entries);
-// 		remove_quotes(data, &node->argv[i]);
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
 int	expand_redir(t_data *data, t_tree *node)
 {
-	(void)data;
-	(void)node;
+	t_redir	*trav;
+
+	if (!node)
+		return (0);
+	trav = node->redir;
+	while (trav)
+	{
+		if (trav->type != REDIR_IN && expand_single_redir(data, trav))
+			return (-1);
+		trav = trav->next;
+	}
 	return (0);
-
-	// t_redir	*trav;
-
-	// trav = node->redir;
-	// while (trav)
-	// {
-	// 	if (trav->type != REDIR_IN && expand_single_redir(data, trav))
-	// 		return (-1);
-	// 	trav = trav->next;
-	// }
-	// return (0);
 }
 
 int	expand_single_redir(t_data *data, t_redir *redir)
 {
-	(void)data;
-	(void)redir;
+	t_list	*entries;
+	char	*tmp;
+
+	if (!redir || !redir->file)
+		return (0);
+	remove_quotes(data, &redir->file, &redir->metadata);
+	tmp = ft_strdup(redir->file);
+	validate_malloc(data, tmp, NULL);
+	expand_dollar(data, &redir->file, &redir->metadata);
+	if (redir->metadata.key && !*(redir->metadata.value))
+	{
+		internal_error(data, ERR_2, NULL, tmp);
+		return (free(tmp), 1);
+	}
+	expand_tilde(data, &redir->file, &redir->metadata);
+	if (has_wildcard(redir->file, &redir->metadata))
+	{
+		if (expand_single_wildcard(data, redir->file, &entries))
+			return (-1);
+		if (entries)
+		{
+			if (entries->next)
+			{
+				ft_lstclear(&entries, free);
+				return (internal_error(data, ERR_2, NULL, redir->file));
+			}
+			redir->file = update_redir_wildcard(data, redir->file, entries);
+		}
+	}
 	return (0);
-	// t_list	*entries;
-
-	// if (expand_dollar_redir(data, &redir->file))
-	// 	return (-1);
-	// expand_tilde(data, &redir->file);
-	// if (redir->file && !is_quote(redir->file[0]) && has_wildcard(redir->file))
-	// {
-	// 	if (expand_wildcard(data, redir->file, &entries))
-	// 		return (-1);
-	// 	if (entries && entries->next)
-	// 	{
-	// 		ft_lstclear(&entries, free);
-	// 		return (internal_error(data, ERR_2, NULL, redir->file));
-	// 	}
-	// 	if (entries)
-	// 		redir->file = update_redir_wildcard(data, redir->file, entries);
-	// }
-	// remove_quotes(data, &redir->file);	// t_redir	*trav;
-
-	// trav = node->redir;
-	// while (trav)
-	// {
-	// 	if (trav->type != REDIR_IN && expand_single_redir(data, trav))
-	// 		return (-1);
-	// 	trav = trav->next;
-	// }
-	// return (0);
-	// return (0);
 }
