@@ -49,8 +49,7 @@ int	execute_builtin_should_run_child(t_data *data, t_stack **stack, int cmd_i)
 	if (!has_node_type_ancestor(*stack, NODE_SUBSHELL)
 		&& !ft_strcmp((*stack)->node->argv[cmd_i], "cd"))
 		return (execute_cd(data, stack), 0);
-	else if (!has_node_type_ancestor(*stack, NODE_PIPE)
-		&& !ft_strcmp((*stack)->node->argv[cmd_i], "exit"))
+	else if (!ft_strcmp((*stack)->node->argv[cmd_i], "exit"))
 		return (execute_exit(data, stack), 0);
 	else if (!ft_strcmp((*stack)->node->argv[cmd_i], "unset"))
 		return (execute_unset(data, stack), 0);

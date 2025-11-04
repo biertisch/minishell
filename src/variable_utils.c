@@ -75,7 +75,7 @@ char	**split_by_first_equal(char *var)
 	res[0] = malloc(first_eq - var + 1);
 	if (!res[0])
 		return (free(res), NULL);
-	res[1] = malloc(ft_strlen(var) - ft_strlen(first_eq) + 1);
+	res[1] = malloc(ft_strlen(first_eq));
 	if (!res[1])
 		return (ft_splitfree_error(res, 1), NULL);
 	i = -1;
@@ -106,6 +106,7 @@ int	get_first_command(t_data *data, t_stack **stack)
 		if (!is_valid_var_name(kv_split[0]) || !kv_split[1])
 			return (ft_splitfree(kv_split), i);
 		i++;
+
 		ft_splitfree(kv_split);
 	}
 	return (i);

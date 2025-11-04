@@ -78,7 +78,8 @@ void		check_for_variables(t_data *data, t_stack **stack);
 void		executor_child_errno(t_data *data, t_stack **stack, char *cmd);
 void		executor_cleanup(t_data *data, t_stack **stack, char *cmd);
 char		**split_by_first_equal(char *var);
-void	cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path);
+void		cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path);
+void		cmd_is_directory(t_data *data, t_stack **stack, int fd);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
@@ -140,7 +141,7 @@ int			execute_pwd(t_data *data, t_stack **stack);
 
 //executor_exit.c
 int			execute_exit(t_data *data, t_stack **stack);
-void		check_exit_input(t_data *data, t_stack **stack, int *exit_code);
+void		check_exit_input(t_data *data, t_stack **stack, int *exit_code, int cmd_i);
 
 //executor_unset.c
 int			execute_unset(t_data *data, t_stack **stack);
