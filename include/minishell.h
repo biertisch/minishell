@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 21:07:58 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/03 22:48:53 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
 void		check_for_errors(int status, t_data *data, t_stack *stack,
 				char *command_name);
 void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
-				char *new_arg);
+				char **new_argv);
 void		validate_malloc_execute(t_data *data, t_stack **stack, void *ptr,
 				void *to_free);
 void		validate_malloc_unfinished_array(t_data *data, void *ptr, char **arr,

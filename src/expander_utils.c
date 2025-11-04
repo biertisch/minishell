@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 19:26:29 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/02 14:55:39 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 10:07:51 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	**copy_string_array(char **src)
 		dest[i] = ft_strdup(src[i]);
 		if (!dest[i])
 		{
-			free_unfinished_string_array(dest, i);
+			free_string_array(&dest);
 			return (NULL);
 		}
 		i++;
@@ -39,17 +39,3 @@ char	**copy_string_array(char **src)
 	return (dest);
 }
 
-void	free_unfinished_string_array(char **arr, int size)
-{
-	int	i;
-
-	if (!arr)
-		return ;
-	i = 0;
-	while (i < size)
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-}

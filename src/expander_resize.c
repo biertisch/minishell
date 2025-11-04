@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 19:23:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 22:01:45 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 10:10:40 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,15 +120,15 @@ int	rebuild_argv(t_data *data, char **dest, char **src, t_arg_info *src_info, t_
 		{
 			res = split_on_ifs(dest + j, src[i], src_info + i, dest_info + j);
 			if (res == -1)
-				validate_malloc_unfinished_array(data, NULL, dest, j); // free dest_info on malloc failure
+				validate_malloc_wildcard(data, NULL, NULL, dest); // free dest_info on malloc failure
 			j += res;
 		}
 		else if (!arg_disappears(src[i], src_info + i))
 		{
 			dest[j] = ft_strdup(src[i]);
-			validate_malloc_unfinished_array(data, dest[j], dest, j); // free dest_info on malloc failure
+			validate_malloc_wildcard(data, dest[j], NULL, dest); // free dest_info on malloc failure
 			if (copy_arg_info(dest_info + j, src_info + i, 0, ft_strlen(src[i])))
-				validate_malloc_unfinished_array(data, NULL, dest, j); // free dest_info on malloc failure
+				validate_malloc_wildcard(data, NULL, NULL, dest); // free dest_info on malloc failure
 			j++;
 		}
 		i++;
@@ -168,7 +168,7 @@ int	split_on_ifs(char **dest, char *src, t_arg_info *src_info, t_arg_info *dest_
 			end = ft_strlen(src);
 		dest[i] = ft_substr(src, start, end);
 		if (!dest[i] || copy_arg_info(dest_info + i, src_info, start, end))
-			return (free_unfinished_string_array(dest, i), -1);
+			return (-1);
 		i++;
 		start = end;
 	}
@@ -230,12 +230,21 @@ int	copy_arg_info(t_arg_info *dest, t_arg_info *src, int start, int end)
 	if (len <= 0)
 		return (0);
 	dest->quote_map = ft_calloc(len, sizeof(int));
-	if (!dest->quote_map)
-		return (-1);
-	ft_memcpy(dest->quote_map, src->quote_map, len * sizeof(int));
 	dest->expand_map = ft_calloc(len, sizeof(int));
-	if (!dest->expand_map)
+	if (!dest->quote_map || !dest->expand_map)
 		return (-1);
-	ft_memcpy(dest->expand_map, src->expand_map, len * sizeof(int));
+	if (src->key)
+		dest->key = ft_strdup(src->key);
+	if (src->value)
+		dest->value = ft_strdup(src->value);
+	if ((src->key && !dest->key) || (src->value && !dest->value))
+		return (-1);
+	if (src->quote_map)
+		ft_memcpy(dest->quote_map, src->quote_map + start, len * sizeof(int));
+	if (src->expand_map)
+		ft_memcpy(dest->expand_map, src->expand_map + start, len * sizeof(int));
+	dest->key_len = src->key_len;
+	dest->value_len = src->value_len;
+	dest->total_len = src->total_len;
 	return (0);
 }

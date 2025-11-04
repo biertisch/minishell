@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 19:07:37 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 10:31:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	expand_argv(t_data *data, t_tree *node)
 
 	if (!node || !node->argv)
 		return (0);
-	node->argv_info = ft_calloc(sizeof(t_arg_info), get_argc(node->argv));
+	node->argv_info = ft_calloc(get_argc(node->argv), sizeof(t_arg_info));
 	validate_malloc(data, node->argv_info, NULL);
 	i = 0;
 	while (node->argv[i])
@@ -40,9 +40,7 @@ int	expand_argv(t_data *data, t_tree *node)
 		i++;
 	}
 	node->argv = resize_argv(data, node->argv, &node->argv_info);
-
-	// //expand_wildcard
-	// //
+	expand_wildcard(data, node);
 	return (0);
 }
 

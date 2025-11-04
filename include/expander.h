@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 21:59:33 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 10:44:26 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ char		*get_tilde_key(char *arg);
 char		*get_tilde_value(t_data *data, char *key);
 
 //wildcard.c
-int			has_wildcard(const char *arg);
-int			expand_wildcard(t_data *data, char **arg);
+int			has_wildcard(char *arg, t_arg_info *info);
+int			expand_wildcard(t_data *data, t_tree *node);
+int			expand_wildcard_arg(t_data *data, char *arg, t_list **entries);
 t_list		*get_entries(t_data *data, DIR *dir_stream);
 void		filter_matches(t_list **head, char *pattern);
 char		*update_arg_wildcard(t_data *data, char *old_arg, t_list *entries);
@@ -82,12 +83,10 @@ char		*append_entry(char *arg, char *entry);
 char		*update_redir_wildcard(t_data *data, char *file, t_list *entry);
 
 //wildcard_argv.c
-char		**update_argv_wildcard(t_data *data, char **argv, int i,
-				t_list *entries);
-int			count_expanded_argv(char **argv, t_list *head);
-int			copy_entries(char **new_argv, t_list *entries, int j);
-int			copy_before_star(char **new_argv, char **argv, int i);
-int			copy_after_star(char **new_argv, char **argv, int i, int j);
+int			rebuild_argv_wildcard(t_tree *node, t_list *entries, int star_index);
+int			copy_entries(char **new_argv, t_arg_info *new_info, t_list *entries, int j);
+int			copy_before_star(t_tree *node, char **new_argv, t_arg_info *new_info, int size);
+int			copy_after_star(t_tree *node, char **new_argv, t_arg_info *new_info, int start);
 
 //wildcard_match.c
 int			match_wildcard(char *entry, char *wildcard);
