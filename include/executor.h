@@ -162,10 +162,10 @@ int			execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_spli
 int			execute_export_no_option(t_data *data, t_stack **stack);
 
 //executor_sort_env.c
-void			sort_env(t_data **data, t_stack **stack);
+void			sort_env(t_data **data);
 
 //variable_utils.c
-int			check_if_variable(t_data *data, t_stack **stack);
+int			cmd_has_variable(t_data *data, t_stack **stack);
 int			get_first_command(t_data *data, t_stack **stack);
 int			has_command(t_data *data, t_stack **stack);
 int			variable_key_not_found(t_data *data, t_stack **stack, char **kv_split);

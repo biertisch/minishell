@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	check_if_variable(t_data *data, t_stack **stack)
+int	cmd_has_variable(t_data *data, t_stack **stack)
 {
 	int	i;
 	char	**kv_split;

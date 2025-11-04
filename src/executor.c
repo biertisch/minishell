@@ -65,6 +65,12 @@ int	execute_cmd(t_data *data, t_stack **stack)
 			pop(stack);
 			return (1);
 		}
+		if ((*stack)->node->argv && !(*stack)->node->argv[get_first_command(data, stack)])
+		{
+			cmd_has_variable(data, stack);
+			pop(stack);
+			return (1);
+		}
 	}
 	if ((*stack)->node->argv && is_builtin((*stack)->node->argv[get_first_command(data, stack)]))
 		return (execute_builtin(data, stack));
@@ -80,24 +86,22 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 	pid_t	pid;
 
 	(*stack)->phase = DONE;
-	if (!check_if_variable(data, stack))
-	{
-		if (get_last_heredoc((*stack)->node->redir) && !(*stack)->node->argv)
+	if (get_last_heredoc((*stack)->node->redir) && !(*stack)->node->argv)
+		return (0);
+	//check this shit out
+	if (get_last_heredoc((*stack)->node->redir))
+		if (validate_pipe(pipe((*stack)->pipe), stack))
 			return (0);
-		//check this shit out
-		if (get_last_heredoc((*stack)->node->redir))
-			if (validate_pipe(pipe((*stack)->pipe), stack))
-				return (0);
-		pid = fork();
-		if (pid < 0)
-			return (validate_fork(data, stack));
-		else if (pid == 0)
-			child(data, stack);
-		else if (get_last_heredoc((*stack)->node->redir))
-			parent_heredoc(stack, pid);
-		else
-			parent(stack, pid);
-	}
+	pid = fork();
+	if (pid < 0)
+		return (validate_fork(data, stack));
+	else if (pid == 0)
+		child(data, stack);
+	else if (get_last_heredoc((*stack)->node->redir))
+		parent_heredoc(stack, pid);
+	else
+		parent(stack, pid);
+	
 	return (0);
 }
 

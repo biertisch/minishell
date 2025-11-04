@@ -19,7 +19,7 @@ int	execute_export(t_data *data, t_stack **stack)
 	cmd_i = get_first_command(data, stack);
 	duplicate_std();	
 	handle_redirects(data, stack, NULL, (*stack)->node->redir);
-	sort_env(&data, stack);
+	sort_env(&data);
 	if (!(*stack)->node->argv[cmd_i + 1])
 		execute_export_no_option(data, stack);
 	else
@@ -88,7 +88,7 @@ int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split)
 
 	str1 = ft_strdup(kv_split[0]);
 	str2 = ft_strdup(kv_split[1]);
-	if (!str1 || ! str2)
+	if (!str1 || (kv_split[1] && !str2))
 	{
 		ft_splitfree(kv_split);
 		if (!str1)
