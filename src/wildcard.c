@@ -3,31 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 11:15:24 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 16:59:18 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	has_wildcard(const char *arg)
-// {
-// 	char	quote;
-
-// 	if (!arg)
-// 		return (0);
-// 	quote = 0;
-// 	while (*arg && *arg != '*')
-// 	{
-// 		update_quote_status(*arg, &quote);
-// 		arg++;
-// 	}
-// 	return (!quote && *arg == '*');
-// }
-
-int	has_wildcard(char *arg, t_arg_info *info)
+int	has_wildcard(char *arg, t_metadata *info)
 {
 	int	i;
 
@@ -59,7 +44,6 @@ int	expand_wildcard(t_data *data, t_tree *node)
 	}
 	return (0);
 }
-
 
 int	expand_single_wildcard(t_data *data, char *arg, t_list **entries)
 {
@@ -141,45 +125,7 @@ void	filter_matches(t_list **head, char *pattern)
 	}
 }
 
-// char	*update_arg_wildcard(t_data *data, char *old_arg, t_list *entries)
-// {
-// 	char	*new_arg;
-
-// 	if (!old_arg|| !entries)
-// 		return (old_arg);
-// 	new_arg = NULL;
-// 	while (entries)
-// 	{
-// 		if (!new_arg)
-// 			new_arg = ft_strdup(entries->content);
-// 		else
-// 			new_arg = append_entry(new_arg, entries->content);
-// 		validate_malloc_wildcard(data, new_arg, entries, NULL); // revise this function, maybe last param is unnecessary)
-// 		entries = entries->next;
-// 	}
-// 	free(old_arg);
-// 	ft_lstclear(&entries, free);
-// 	return (new_arg);
-// }
-
-// char	*append_entry(char *arg, char *entry)
-// {
-// 	char	*res;
-// 	char	*tmp;
-
-// 	tmp = ft_strjoin(" ", entry);
-// 	if (!tmp)
-// 	{
-// 		free(arg);
-// 		return (NULL);
-// 	}
-// 	res = ft_strjoin(arg, tmp);
-// 	free(arg);
-// 	free(tmp);
-// 	return (res);
-// }
-
-char	*update_redir_wildcard(t_data *data, char *file, t_list *entry)
+char	*apply_redir_wildcard(t_data *data, char *file, t_list *entry)
 {
 	char	*new_file;
 

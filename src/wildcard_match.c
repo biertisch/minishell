@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 14:39:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 11:26:14 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 17:32:08 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,7 @@ int	match_wildcard(char *entry, char *pattern)
 	}
 	while (pattern[j] && pattern[j] == '*')
 		j++;
-	if (pattern[j])
-		return (0);
-	return (1);
+	return (!pattern[j]);
 }
 
 void	advance_both(int *i, int *j)

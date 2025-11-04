@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 14:16:59 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 16:58:22 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	expand_argv(t_data *data, t_tree *node)
 
 	if (!node || !node->argv)
 		return (0);
-	node->argv_info = ft_calloc(get_argc(node->argv), sizeof(t_arg_info));
+	node->argv_info = ft_calloc(get_argc(node->argv), sizeof(t_metadata));
 	validate_malloc(data, node->argv_info, NULL);
 	i = 0;
 	while (node->argv[i])
@@ -62,35 +62,49 @@ int	expand_redir(t_data *data, t_tree *node)
 
 int	expand_single_redir(t_data *data, t_redir *redir)
 {
-	t_list	*entries;
-	char	*tmp;
-
 	if (!redir || !redir->file)
 		return (0);
-	remove_quotes(data, &redir->file, &redir->metadata);
+	remove_quotes(data, &redir->file, &redir->info);
+	if (expand_dollar_redir(data, redir))
+		return (-1);
+	expand_tilde(data, &redir->file, &redir->info);
+	if (expand_wildcard_redir(data, redir))
+		return (-1);
+	return (0);
+}
+
+int	expand_dollar_redir(t_data *data, t_redir *redir)
+{
+	char	*tmp;
+
 	tmp = ft_strdup(redir->file);
 	validate_malloc(data, tmp, NULL);
-	expand_dollar(data, &redir->file, &redir->metadata);
-	if (redir->metadata.key && !*(redir->metadata.value))
+	expand_dollar(data, &redir->file, &redir->info);
+	if (redir->info.key && !*(redir->info.value))
 	{
 		internal_error(data, ERR_2, NULL, tmp);
-		return (free(tmp), 1);
+		return (free(tmp), -1);
 	}
 	free(tmp);
-	expand_tilde(data, &redir->file, &redir->metadata);
-	if (has_wildcard(redir->file, &redir->metadata))
+	return (0);
+}
+
+int	expand_wildcard_redir(t_data *data, t_redir *redir)
+{
+	t_list	*entries;
+
+	if (!has_wildcard(redir->file, &redir->info))
+		return (0);
+	if (expand_single_wildcard(data, redir->file, &entries))
+		return (-1);
+	if (entries)
 	{
-		if (expand_single_wildcard(data, redir->file, &entries))
-			return (-1);
-		if (entries)
+		if (entries->next)
 		{
-			if (entries->next)
-			{
-				ft_lstclear(&entries, free);
-				return (internal_error(data, ERR_2, NULL, redir->file));
-			}
-			redir->file = update_redir_wildcard(data, redir->file, entries);
+			ft_lstclear(&entries, free);
+			return (internal_error(data, ERR_2, NULL, redir->file));
 		}
+		redir->file = apply_redir_wildcard(data, redir->file, entries);
 	}
 	return (0);
 }

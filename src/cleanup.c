@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:37:43 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 11:41:03 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 15:20:34 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ void	free_redir(t_redir *redir)
 		tmp = redir->next;
 		free(redir->file);
 		free(redir->heredoc_input);
-		free(redir->metadata.quote_map);
-		free(redir->metadata.expand_map);
-		free(redir->metadata.key);
-		free(redir->metadata.value);
+		free(redir->info.quote_map);
+		free(redir->info.expand_map);
+		free(redir->info.key);
+		free(redir->info.value);
 		free(redir);
 		redir = tmp;
 	}
@@ -84,7 +84,7 @@ void	free_string_array(char ***arr)
 	*arr = NULL;
 }
 
-void	free_argv_info(t_arg_info **info, int size)
+void	free_argv_info(t_metadata **info, int size)
 {
 	int	i;
 

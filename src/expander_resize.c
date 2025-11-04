@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_resize.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 19:23:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 10:10:40 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 17:33:16 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	get_argc(char **argv)
 	return (i);
 }
 
-int	get_expanded_argc(char **argv, t_arg_info *info)
+int	get_expanded_argc(char **argv, t_metadata *info)
 {
 	int	count;
 	int	i;
@@ -42,11 +42,11 @@ int	get_expanded_argc(char **argv, t_arg_info *info)
 	return (count);
 }
 
-char **resize_argv(t_data *data, char **argv, t_arg_info **info)
+char **rebuild_argv(t_data *data, char **argv, t_metadata **info)
 {
 	char		**new_argv;
 	int			new_argc;
-	t_arg_info	*new_info;
+	t_metadata	*new_info;
 
 	if (!argv || !info || !*info)
 		return (argv);
@@ -56,9 +56,9 @@ char **resize_argv(t_data *data, char **argv, t_arg_info **info)
 	new_argv = ft_calloc(new_argc + 1, sizeof(char *));
 	validate_malloc(data, new_argv, NULL);
 	if (new_argc < 1)
-		new_info = ft_calloc(1, sizeof(t_arg_info));
+		new_info = ft_calloc(1, sizeof(t_metadata));
 	else
-		new_info = ft_calloc(new_argc, sizeof(t_arg_info));
+		new_info = ft_calloc(new_argc, sizeof(t_metadata));
 	validate_malloc(data, new_info, NULL);
 	rebuild_argv(data, new_argv, argv, *info, new_info);
 	free_argv_info(info, get_argc(argv));
@@ -67,19 +67,19 @@ char **resize_argv(t_data *data, char **argv, t_arg_info **info)
 	return (new_argv);
 }
 
-int	arg_disappears(char *arg, t_arg_info *info)
+int	arg_disappears(char *arg, t_metadata *info)
 {
 	return (!*arg && info->expand_map && info->expand_map[0] == 1
 		&& !info->quote_map[0]);
 }
 
-int	is_ifs(char *arg, t_arg_info *info, int i)
+int	is_ifs(char *arg, t_metadata *info, int i)
 {
 	return (arg[i] && (arg[i] == ' ' || arg[i] == '\t' || arg[i] == '\n')
 		&& info->expand_map && info->expand_map[i] == 1 && !info->quote_map[i]);
 }
 
-int	count_fields(char *arg, t_arg_info *info)
+int	count_fields(char *arg, t_metadata *info)
 {
 	int	i;
 	int	count;
@@ -106,7 +106,7 @@ int	count_fields(char *arg, t_arg_info *info)
 	return (count);
 }
 
-int	rebuild_argv(t_data *data, char **dest, char **src, t_arg_info *src_info, t_arg_info *dest_info)
+int	rebuild_argv(t_data *data, char **dest, char **src, t_metadata *src_info, t_metadata *dest_info)
 {
 	int	i;
 	int	j;
@@ -136,7 +136,7 @@ int	rebuild_argv(t_data *data, char **dest, char **src, t_arg_info *src_info, t_
 	return (0);
 }
 
-int	has_ifs(char *arg, t_arg_info *info, int i)
+int	has_ifs(char *arg, t_metadata *info, int i)
 {
 	if (!arg)
 		return (-1);
@@ -149,7 +149,7 @@ int	has_ifs(char *arg, t_arg_info *info, int i)
 	return (-1);
 }
 
-int	split_on_ifs(char **dest, char *src, t_arg_info *src_info, t_arg_info *dest_info)
+int	split_on_ifs(char **dest, char *src, t_metadata *src_info, t_metadata *dest_info)
 {
 	int start;
 	int	end;
@@ -176,9 +176,9 @@ int	split_on_ifs(char **dest, char *src, t_arg_info *src_info, t_arg_info *dest_
 	return (i);
 }
 
-// t_arg_info	*rebuild_argv_info(t_data *data, char **new, char **old, t_arg_info *info)
+// t_metadata	*rebuild_argv_info(t_data *data, char **new, char **old, t_metadata *info)
 // {
-// 	t_arg_info 	*new_info;
+// 	t_metadata 	*new_info;
 // 	int			new_argc;
 // 	int			old_argc;
 // 	int			i;
@@ -188,9 +188,9 @@ int	split_on_ifs(char **dest, char *src, t_arg_info *src_info, t_arg_info *dest_
 // 	new_argc = get_argc(new);
 // 	old_argc = get_argc(old);
 // 	if (new_argc < 1)
-// 		new_info = ft_calloc(1, sizeof(t_arg_info));
+// 		new_info = ft_calloc(1, sizeof(t_metadata));
 // 	else
-// 		new_info = ft_calloc(new_argc, sizeof(t_arg_info));
+// 		new_info = ft_calloc(new_argc, sizeof(t_metadata));
 // 	validate_malloc(data, new_info, NULL);
 // 	i = 0;
 // 	j = 0;
@@ -208,21 +208,21 @@ int	split_on_ifs(char **dest, char *src, t_arg_info *src_info, t_arg_info *dest_
 // 	}
 // }
 
-// int	transfer_metadata(char *new, char *old, t_arg_info *dest, t_arg_info *src)
+// int	transfer_metadata(char *new, char *old, t_metadata *dest, t_metadata *src)
 // {
 // 	int	splits;
 
 // 	if (ft_strcmp(new, old) && arg_disappears(old, src))
 // 		return (0);
 // 	splits = count_fields(old, src);
-// 	if (splits > 1 && copy_split_arg_info(new, old, dest, src))
+// 	if (splits > 1 && copy_split_metadata(new, old, dest, src))
 // 		return (-1);
 // 	else if (splits == 1 && copy_arg_info(dest, src, ft_strlen(old)))
 // 		return (-1);
 // 	return (splits);
 // }
 
-int	copy_arg_info(t_arg_info *dest, t_arg_info *src, int start, int end)
+int	copy_arg_info(t_metadata *dest, t_metadata *src, int start, int end)
 {
 	int	len;
 

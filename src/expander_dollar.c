@@ -6,26 +6,45 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 14:42:30 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 16:25:45 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_dollar_expansion(char *arg, int *quote_map, int start)
+int	is_dollar_expansion(char *input, int *quote_map, int start)
 {
-	return (quote_map[start] != 1 && arg[start] == '$' && arg[start + 1]
+	return (quote_map[start] != 1
+		&& input[start] == '$'
+		&& input[start + 1]
 		&& quote_map[start] == quote_map[start + 1]
-		&& (ft_isalpha(arg[start + 1]) || arg[start + 1] == '_'
-		|| arg[start + 1] == '?'));
+		&& (ft_isalpha(input[start + 1])
+			|| input[start + 1] == '_'
+			|| input[start + 1] == '?'));
 }
 
-int	expand_dollar(t_data *data, char **arg, t_arg_info *info)
+int	expand_dollar(t_data *data, char **arg, t_metadata *info)
 {
 	int	i;
 
 	if (!arg || !*arg || !info)
 		return (0);
+	init_expand_metadata(data, info);
+	i = 0;
+	while ((*arg) && (*arg)[i])
+	{
+		if (is_dollar_expansion(*arg, info->quote_map, i))
+		{
+			*arg = expand_variable(data, *arg, info, i);
+			i = -1;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	init_expand_metadata(t_data *data, t_metadata *info)
+{
 	free(info->expand_map);
 	if (info->total_len < 1)
 		info->expand_map = ft_calloc(1, sizeof(int));
@@ -36,34 +55,14 @@ int	expand_dollar(t_data *data, char **arg, t_arg_info *info)
 	info->key = NULL;
 	free(info->value);
 	info->value = NULL;
-	i = 0;
-	while ((*arg) && (*arg)[i])
-	{
-		if (is_dollar_expansion(*arg, info->quote_map, i))
-		{
-			if ((*arg)[i + 1] == '?')
-				*arg = expand_exit_status(data, *arg, i, info);
-			else
-				*arg = expand_variable(data, *arg, i, info);
-			i = -1;
-		}
-		i++;
-	}
 	return (0);
 }
 
-char	*expand_exit_status(t_data *data, char *arg, int i, t_arg_info *info)
+char	*expand_variable(t_data *data, char *arg, t_metadata *info, int i)
 {
 	char	*new_arg;
 
-	free(info->key);
-	info->key = ft_strdup("$?");
-	validate_malloc(data, info->key, NULL);
-	info->key_len = ft_strlen(info->key);
-	free(info->value);
-	info->value = ft_itoa(data->exit_status);
-	validate_malloc(data, info->value, NULL);
-	info->value_len = ft_strlen(info->value);
+	get_key_value(data, arg, info, i);
 	info->total_len = ft_strlen(arg) - info->key_len + info->value_len;
 	rebuild_quote_map(data, info, i);
 	rebuild_expand_map(data, info, i, 1);
@@ -73,33 +72,36 @@ char	*expand_exit_status(t_data *data, char *arg, int i, t_arg_info *info)
 	return (new_arg);
 }
 
-char	*expand_variable(t_data *data, char *arg, int i, t_arg_info *info)
+int	get_key_value(t_data *data, char *arg, t_metadata *info, int i)
 {
-	char	*new_arg;
 	char	*tmp;
 
 	free(info->key);
-	info->key = get_env_key(arg, info->quote_map, i);
-	validate_malloc(data, info->key, NULL);
-	info->key_len = ft_strlen(info->key);
 	free(info->value);
-	tmp = get_env_value(data->env_list, info->key + 1);
-	if (!tmp)
-		info->value = ft_strdup("");
+	if (arg[i + 1] == '?')
+	{
+		info->key = ft_strdup("$?");
+		validate_malloc(data, info->key, NULL);
+		info->value = ft_itoa(data->exit_status);
+		validate_malloc(data, info->value, NULL);
+	}
 	else
-		info->value = ft_strdup(tmp);
-	validate_malloc(data, info->value, NULL);
+	{
+		info->key = get_env_key(arg, info->quote_map, i);
+		validate_malloc(data, info->key, NULL);
+		tmp = get_env_value(data->env_list, info->key + 1);
+		if (!tmp)
+			info->value = ft_strdup("");
+		else
+			info->value = ft_strdup(tmp);
+		validate_malloc(data, info->value, NULL);
+	}
+	info->key_len = ft_strlen(info->key);
 	info->value_len = ft_strlen(info->value);
-	info->total_len = ft_strlen(arg) - info->key_len + info->value_len;
-	rebuild_quote_map(data, info, i);
-	rebuild_expand_map(data, info, i, 1);
-	new_arg = apply_expansion(arg, info, i);
-	validate_malloc(data, new_arg, NULL);
-	free(arg);
-	return (new_arg);
+	return (0);
 }
 
-int	rebuild_quote_map(t_data *data, t_arg_info *info, int start)
+int	rebuild_quote_map(t_data *data, t_metadata *info, int start)
 {
 	int	*new_map;
 	int	old_len;
@@ -127,7 +129,8 @@ int	rebuild_quote_map(t_data *data, t_arg_info *info, int start)
 	return (0);
 }
 
-int	handle_empty_quote_map(t_data *data, t_arg_info *info, int start, int old_len)
+int	handle_empty_quote_map(t_data *data, t_metadata *info, int start,
+	int old_len)
 {
 	int	*new_map;
 
@@ -149,7 +152,7 @@ int	get_quote_status(int *quote_map, int start, int len)
 	return (0);
 }
 
-int	rebuild_expand_map(t_data *data, t_arg_info *info, int start, int type)
+int	rebuild_expand_map(t_data *data, t_metadata *info, int start, int type)
 {
 	int	*new_map;
 	int	old_len;
@@ -176,7 +179,7 @@ int	rebuild_expand_map(t_data *data, t_arg_info *info, int start, int type)
 	return (0);
 }
 
-int	handle_empty_expand_map(t_data *data, t_arg_info *info)
+int	handle_empty_expand_map(t_data *data, t_metadata *info)
 {
 	int	*new_map;
 
@@ -188,7 +191,7 @@ int	handle_empty_expand_map(t_data *data, t_arg_info *info)
 	return (0);
 }
 
-char *apply_expansion(char *src, t_arg_info *info, int start)
+char	*apply_expansion(char *src, t_metadata *info, int start)
 {
 	char	*dest;
 
@@ -203,93 +206,6 @@ char *apply_expansion(char *src, t_arg_info *info, int start)
 	ft_strlcat(dest, src + start + info->key_len, info->total_len + 1);
 	return (dest);
 }
-
-// PREVIOUS VERSION
-// int	is_dollar_expansion(char quote, char *arg)
-// {
-// 	return (quote != '\'' && arg[0] == '$' && arg[1]
-// 		&& (ft_isalpha(arg[1]) || arg[1] == '_' || arg[1] == '?'));
-// }
-
-// int	expand_dollar(t_data *data, char **arg, t_arg_info arg_info)
-// {
-// 	int		i;
-// 	char	quote;
-
-// 	if (!arg || !*arg)
-// 		return (0);
-// 	quote = 0;
-// 	i = 0;
-// 	while ((*arg) && (*arg)[i])
-// 	{
-// 		update_quote_status((*arg)[i], &quote);
-// 		if (is_dollar_expansion(quote, *arg + i))
-// 		{
-// 			if ((*arg)[i + 1] == '?')
-// 				*arg = expand_exit_status(data, *arg, i);
-// 			else
-// 				*arg = expand_variable(data, *arg, i);
-// 			i = -1;
-// 		}
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
-// char	*expand_exit_status(t_data *data, char *old_arg, int i)
-// {
-// 	char	*value;
-// 	char	*new_arg;
-
-// 	value = ft_itoa(data->exit_status);
-// 	validate_malloc(data, value, NULL);
-// 	new_arg = update_arg(old_arg, i, "$?", value);
-// 	validate_malloc(data, new_arg, value);
-// 	free(value);
-// 	return (new_arg);
-// }
-
-// char	*expand_variable(t_data *data, char *old_arg, int i)
-// {
-// 	char	*key;
-// 	char	*value;
-// 	char	default_value[1];
-// 	char	*new_arg;
-
-// 	default_value[0] = '\0';
-// 	key = get_env_key(old_arg + i);
-// 	validate_malloc(data, key, NULL);
-// 	value = get_env_value(data->env_list, key + 1);
-// 	if (!value)
-// 		value  = default_value;
-// 	new_arg = update_arg(old_arg, i, key, value);
-// 	validate_malloc(data, new_arg, key);
-// 	free(key);
-// 	return (new_arg);
-// }
-
-
-// char	**expand_variable(t_data *data, char **arg, int index, int i)
-// {
-// 	char	*key;
-// 	char	*value;
-
-// 	key = get_env_key(arg[index] + i + 1);
-// 	validate_malloc(data, key, NULL);
-// 	value = get_env_value(data->env_list, key);
-// 	if (arg[index][0] == '"' || (value && !ft_strchr(value, ' ')))
-// 	{
-// 		arg[index] = update_arg(arg[index], i, key, value);
-// 		validate_malloc(data, arg[index], key);
-// 	}
-// 	else
-// 	{
-// 		arg = update_argv_dollar(arg, index, value);
-// 		validate_malloc(data, arg, key);
-// 	}
-// 	free(key);
-// 	return (arg);
-// }
 
 char	*get_env_key(char *arg, int *quote_map, int start)
 {
@@ -312,23 +228,3 @@ char	*get_env_key(char *arg, int *quote_map, int start)
 	ft_strlcpy(key, arg + start, len + 1);
 	return (key);
 }
-
-// char	*update_arg(char *arg, int i, char *key, char *value)
-// {
-// 	char	*new_arg;
-// 	int		new_len;
-
-// 	new_len = ft_strlen(arg) - ft_strlen(key) + ft_strlen(value);
-// 	new_arg = ft_calloc(new_len + 1, sizeof(char));
-// 	if (!new_arg)
-// 		return (NULL);
-// 	if (new_len != 0)
-// 	{
-// 		ft_strlcpy(new_arg, arg, i + 1);
-// 		if (value)
-// 			ft_strlcat(new_arg, value, new_len + 1);
-// 		ft_strlcat(new_arg, arg + i + ft_strlen(key), new_len + 1);
-// 	}
-// 	free(arg);
-// 	return (new_arg);
-// }
