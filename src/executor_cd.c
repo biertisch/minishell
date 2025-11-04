@@ -20,6 +20,8 @@ int	execute_cd(t_data *data, t_stack **stack)
 	int		cmd_i;
 
 	cmd_i = get_first_command(data, stack);
+	duplicate_std();
+	handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	(*stack)->exit_status = 0;
 	chdir_res = 0;
 	curr_pwd = ft_strdup(getcwd(NULL, 0));
@@ -37,6 +39,7 @@ int	execute_cd(t_data *data, t_stack **stack)
 		set_env_value(data->env_list, "OLDPWD", curr_pwd);
 		set_env_value(data->env_list, "PWD", new_pwd);
 	}
+	undo_duplicate_std();
 	execute_cd_check_for_subshell(data, stack);
 	return (0);
 }

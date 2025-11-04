@@ -14,7 +14,7 @@
 
 int	*duplicate_std(void)
 {
-	static int	dups[4];
+	static int	dups[6];
 
 	if (dups[1] == 0)
 	{
@@ -29,6 +29,13 @@ int	*duplicate_std(void)
 		if (dups[2] < 0)
 			return (dups);
 		dups[3] = 1;
+	}
+	if (dups[5] == 0)
+	{
+		dups[4] = dup(STDERR_FILENO);
+		if (dups[4] < 0)
+			return (dups);
+		dups[5] = 1;
 	}
 	return (dups);
 }
@@ -49,5 +56,11 @@ void	undo_duplicate_std(void)
 		dup2(dups[2], STDOUT_FILENO);
 		close(dups[2]);
 		dups[3] = 0;
+	}
+	if (dups[5] != 0)
+	{
+		dup2(dups[4], STDERR_FILENO);
+		close(dups[4]);
+		dups[5] = 0;
 	}
 }

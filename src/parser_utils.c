@@ -23,7 +23,7 @@ int	is_builtin(char *cmd)
 int	is_builtin_no_fork(char *cmd)
 {
 	return (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "export")
-	 	|| !ft_strcmp(cmd, "export") || !ft_strcmp(cmd, "exit"));
+	 	|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "exit"));
 }
 
 //converts lexer token type into parser node type
