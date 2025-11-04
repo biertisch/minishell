@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 11:39:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 14:32:58 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int			expand_heredoc_input(t_data *data, t_redir *redir);
 int			remove_quotes(t_data *data, char **arg, t_arg_info *info);
 int			count_quotes(char *arg);
 void		copy_without_quotes(char *dest, char *src, int *quote_map);
+int			get_quote_map(t_data *data, char *arg, t_arg_info *info);
 
 //expand_tilde.c
 int			has_tilde(int quote_status, char *arg);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:24:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/01 20:34:19 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 14:29:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int				get_token_value(t_data *data, char *input, char **value,
 					int *index);
 void			add_token(t_data *data, t_token **lexer_list, t_token_type type,
 					char *value);
-void			update_quote_status(char c, char *quote);
+int				update_quote_status(char c, char *quote);
 
 //lexer_list.c
 t_token			*create_lexer_node(t_token_type type, char *value);

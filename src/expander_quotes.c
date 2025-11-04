@@ -3,14 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   expander_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:57:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 11:45:23 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 14:48:08 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	get_quote_map(t_data *data, char *arg, t_arg_info *info)
+{
+	int		i;
+	char	quote;
+
+	free(info->quote_map);
+	if (!info->total_len)
+		info->quote_map = ft_calloc(1, sizeof(int));
+	else
+		info->quote_map = ft_calloc(info->total_len, sizeof(int));
+	validate_malloc(data, info->quote_map, NULL);
+	quote = 0;
+	i = 0;
+	while (arg[i])
+	{
+		update_quote_status(arg[i], &quote);
+		info->quote_map[i] = is_quote(quote);
+		i++;
+	}
+	return (0);
+}
 
 int	remove_quotes(t_data *data, char **arg, t_arg_info *info)
 {

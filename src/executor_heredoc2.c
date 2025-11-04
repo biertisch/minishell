@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:20:08 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 14:44:29 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 14:52:33 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	run_heredoc_child(t_data *data, t_redir *redir)
 {
 	setup_signals_heredoc(data);
 	close(data->stack->pipe[0]);
-	// remove_quotes(data, &redir->file, redir->file);
+	remove_quotes(data, &redir->file, &redir->metadata);
 	heredoc(data, redir);
 	close(data->stack->pipe[1]);
 	free_all(data);
@@ -53,7 +53,11 @@ int	heredoc(t_data *data, t_redir *redir)
 int	run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid)
 {
 	copy_heredoc_input(data, redir);
-	// expand_dollar(data, &redir->heredoc_input);
+	if (redir->metadata.quote_map && !redir->metadata.quote_map[0])
+	{
+		get_quote_map(data, redir->heredoc_input, &redir->metadata);
+		expand_dollar(data, &redir->heredoc_input, &redir->metadata);	
+	}
 	return (wait_for_heredoc(data, pid));
 }
 
@@ -79,6 +83,7 @@ int	copy_heredoc_input(t_data *data, t_redir *redir)
 		read_bytes = read(data->stack->pipe[0], buffer, sizeof(buffer) - 1);
 	}
 	close(data->stack->pipe[0]);
+	redir->metadata.total_len = ft_strlen(redir->heredoc_input);
 	return (0);
 }
 

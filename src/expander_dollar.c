@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 11:45:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 14:42:30 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ int	expand_dollar(t_data *data, char **arg, t_arg_info *info)
 	else
 		info->expand_map = ft_calloc(info->total_len, sizeof(int));
 	validate_malloc(data, info->expand_map, NULL);
+	free(info->key);
+	info->key = NULL;
+	free(info->value);
+	info->value = NULL;
 	i = 0;
 	while ((*arg) && (*arg)[i])
 	{

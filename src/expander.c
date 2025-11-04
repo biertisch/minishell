@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 11:53:22 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 14:16:59 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	expand_single_redir(t_data *data, t_redir *redir)
 		internal_error(data, ERR_2, NULL, tmp);
 		return (free(tmp), 1);
 	}
+	free(tmp);
 	expand_tilde(data, &redir->file, &redir->metadata);
 	if (has_wildcard(redir->file, &redir->metadata))
 	{

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/02 12:53:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 14:29:09 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,13 @@ void	add_token(t_data *data, t_token **lexer_list, t_token_type type,
 	add_lexer_node(lexer_list, new_node);
 }
 
-void	update_quote_status(char c, char *quote)
+int	update_quote_status(char c, char *quote)
 {
 	if (!*quote && is_quote(c))
 		*quote = c;
 	else if (*quote && *quote == c)
 		*quote = 0;
+	else
+		return (0);
+	return (1);
 }
