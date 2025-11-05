@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 21:52:22 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 12:39:15 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,9 @@
 # include "lexer.h"
 # include "ft_signal.h"
 # include "env.h"
+# include "error.h"
 
 # define CONTINUE_PROMPT "> "
-# define ERR_0 "invalid environment variable"
-# define ERR_1 "syntax error near unexpected token"
-# define ERR_2 "ambiguous redirect"
-# define ERR_3 "invalid option"
-# define ERR_4 "too many arguments"
-# define ERR_5 "No such file or directory"
-# define ERR_6 "unexpected EOF while looking for matching"
-# define ERR_7 "syntax error: unexpected end of file"
-# define ERR_8 "syntax error: missing quote"
-# define ERR_9 "arithmetic operations not supported"
-# define ERR_10 "semicolon not supported"
-# define ERR_11 "minishell: warning: here-document delimited by \
-end-of-file (wanted '"
 # define BUFFER_SIZE 20
 
 typedef struct s_data
@@ -85,24 +73,6 @@ void		free_stack(t_stack **stack);
 void		free_redir(t_redir *redir);
 void		free_string_array(char ***arr);
 void		free_metadata(t_metadata **info, int size);
-
-//error.c
-int			system_error(t_data *data, char *function);
-int			syntax_error(t_data *data, char *desc, char *token);
-int			internal_error(t_data *data, char *desc, char *cmd, char *arg);
-void		error_exit(t_data *data, t_stack **stack);
-void		validate_malloc(t_data *data, void *ptr, void *to_free);
-void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
-				t_tree *right);
-void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
-void		check_for_errors(int status, t_data *data, t_stack *stack,
-				char *command_name);
-void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
-				char **new_argv);
-void		validate_malloc_execute(t_data *data, t_stack **stack, void *ptr,
-				void *to_free);
-void		validate_malloc_unfinished_array(t_data *data, void *ptr, char **arr,
-				int size);
 
 //get_next_line.c
 char		*get_next_line(int fd);

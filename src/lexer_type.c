@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*   lexer_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:23:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 12:17:48 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 12:40:13 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	is_operator(char *s)
 {
 	return (s && (*s == '|' || *s == '<' || *s == '>' || *s == '(' || *s == ')'
-		|| !ft_strncmp(s, "<<", 2) || !ft_strncmp(s, ">>", 2)
-		|| !ft_strncmp(s, "&&", 2) || !ft_strncmp(s, "||", 2)));
+			|| !ft_strncmp(s, "<<", 2) || !ft_strncmp(s, ">>", 2)
+			|| !ft_strncmp(s, "&&", 2) || !ft_strncmp(s, "||", 2)));
 }
 
 int	get_operator_len(char *s)
@@ -56,10 +56,10 @@ int	is_fd(char *input)
 
 int	is_arithmetic_op(char *input)
 {
-	if (!input || *input != '(' || *(input + 1) != '(')
+	if (ft_strncmp(input, "((", 2))
 		return (0);
 	input += 2;
-	while (*input && !(*input == ')' && (*(input + 1)) == ')'))
+	while (*input && ft_strncmp(input, "))", 2))
 		input++;
 	if (!*input)
 		return (0);

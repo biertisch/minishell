@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 22:12:53 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 12:37:46 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,6 @@ int			copy_without_quotes(char *dest, char *src, int *map);
 int			get_quote_status(int *quote_map, int start, int len);
 int			get_quote_map(t_data *data, char *arg, t_metadata *info);
 
-//expand_tilde.c
-int			expand_tilde(t_data *data, char **arg, t_metadata *info);
-int			has_tilde(char *arg, int quote_status);
-int			update_tilde_key_value(t_data *data, char *arg, t_metadata *info);
-char		*get_tilde_key(char *arg);
-char		*get_tilde_value(t_data *data, char *key);
-
 //expander_rebuild.c
 char		**build_expanded_argv(t_data *data, char **argv, t_metadata **info);
 int			get_argc(char **argv);
@@ -61,6 +54,11 @@ int			rebuild_argv(char **dest, char **src, t_metadata *s_info,
 int			copy_arg_info(t_metadata *dest, t_metadata *src, int start,
 				int end);
 
+//expander_redir.c
+int			expand_dollar_redir(t_data *data, t_redir *redir);
+int			expand_wildcard_redir(t_data *data, t_redir *redir);
+char		*apply_redir_wildcard(t_data *data, char *file, t_list *entry);
+
 //expander_split.c
 int			arg_disappears(char *arg, t_metadata *info);
 int			is_ifs(char *arg, t_metadata *info, int i);
@@ -69,11 +67,12 @@ int			count_fields(char *arg, t_metadata *info);
 int			split_on_ifs(char **dest, char *src, t_metadata *src_info,
 				t_metadata *dest_info);
 
-//error_expander.c //maybe create error.h?
-int			handle_malloc_failure_expansion(t_data *data, char **argv,
-				t_metadata *info, int argc);
-int			handle_wildcard_rebuild_failure(char **argv, t_metadata *info,
-				int argc);
+//expand_tilde.c
+int			expand_tilde(t_data *data, char **arg, t_metadata *info);
+int			has_tilde(char *arg, int quote_status);
+int			update_tilde_key_value(t_data *data, char *arg, t_metadata *info);
+char		*get_tilde_key(char *arg);
+char		*get_tilde_value(t_data *data, char *key);
 
 //wildcard.c
 int			expand_wildcard(t_data *data, t_tree *node);
@@ -96,10 +95,5 @@ int			copy_before_star(t_tree *node, char **argv, t_metadata *info,
 				int size);
 int			copy_after_star(t_tree *node, char **argv, t_metadata *info,
 				int start);
-
-//expand_redir.c
-int			expand_dollar_redir(t_data *data, t_redir *redir);
-int			expand_wildcard_redir(t_data *data, t_redir *redir);
-char		*apply_redir_wildcard(t_data *data, char *file, t_list *entry);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:24:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 16:40:59 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 12:34:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_token			*get_last_lexer_node(t_token *head);
 void			free_lexer_node(t_token **node);
 void			free_lexer_list(t_token **head);
 
-//lexer_utils.c
+//lexer_type.c
 int				is_operator(char *s);
 int				get_operator_len(char *s);
 int				is_quote(char c);

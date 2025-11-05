@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 16:40:59 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 12:33:39 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,10 @@ int	lexer(t_data *data, char *input)
 			i++;
 		if (!input[i])
 			break ;
-		type = get_token_type(input + i);
-		if (type == LPAREN && is_arithmetic_op(input + i))
-			return (internal_error(data, ERR_9, NULL, NULL));
 		res = get_token_value(data, input + i, &value, &i);
 		if (res)
 			return (res);
+		type = get_token_type(value);
 		add_token(data, &data->lexer_list, type, value);
 	}
 	return (VALID);
@@ -76,10 +74,10 @@ int	get_token_value(t_data *data, char *input, char **value, int *index)
 	i = 0;
 	while (input[i])
 	{
+		if (!quote && check_unsupported_syntax(data, input + i))
+			return (INVALID);
 		if (!quote && (ft_isspace(input[i]) || is_operator(input + i)))
 			break ;
-		if (!quote && input[i] == ';')
-			return (internal_error(data, ERR_10, NULL, NULL));
 		toggle_quote(input[i], &quote);
 		i++;
 	}
