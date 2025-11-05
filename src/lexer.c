@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 12:33:39 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 12:43:29 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_token_type	get_token_type(char *input)
 }
 
 //takes as value what is delimitated by quotes, blank space or operators
-//checks for unclosed quotes
+//checks for unclosed quotes & unsupported syntax
 int	get_token_value(t_data *data, char *input, char **value, int *index)
 {
 	char	quote;
