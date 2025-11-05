@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:29:00 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 12:38:24 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:32:09 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "minishell.h"
 
+# define ERR_BUFFER_SIZE 512
 # define ERR_0 "invalid environment variable"
 # define ERR_1 "syntax error near unexpected token"
 # define ERR_2 "ambiguous redirect"
@@ -37,25 +38,22 @@ int		syntax_error(t_data *data, char *desc, char *token);
 int		internal_error(t_data *data, char *desc, char *cmd, char *arg);
 void	error_exit(t_data *data, t_stack **stack);
 void	validate_malloc(t_data *data, void *ptr, void *to_free);
-void	validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
-			t_tree *right);
 void	validate_malloc_env(t_data *data, void *ptr, t_env *node);
 void	check_for_errors(int status, t_data *data, t_stack *stack,
 			char *command_name);
-void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
-			char **new_argv);
 void	validate_malloc_execute(t_data *data, t_stack **stack, void *ptr,
 			void *to_free);
-void	validate_malloc_unfinished_array(t_data *data, void *ptr, char **arr,
-			int size);
 
 //error_expander.c
 int		handle_malloc_failure_expansion(t_data *data, char **argv,
 			t_metadata *info, int argc);
 int		handle_wildcard_rebuild_failure(char **argv, t_metadata *info,
 			int argc);
+void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node);
 
 //error_parser.c
 int		check_unsupported_syntax(t_data *data, char *input);
+void	validate_malloc_parser(t_data *data, void *ptr, t_tree *left,
+			t_tree *right);
 
 #endif

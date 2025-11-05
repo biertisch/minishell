@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/31 12:32:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:31:49 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	parse_and_or(t_data *data, t_token **token, t_tree **root)
 		if (res)
 			return (free_parser_tree(&left), res);
 		tmp = create_parser_node(type, left, right);
-		validate_malloc_tree(data, tmp, left, right);
+		validate_malloc_parser(data, tmp, left, right);
 		left = tmp;
 	}
 	*root = left;
@@ -81,7 +81,7 @@ int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 		if (res)
 			return (free_parser_tree(&left), res);
 		tmp = create_parser_node(NODE_PIPE, left, right);
-		validate_malloc_tree(data, tmp, left, right);
+		validate_malloc_parser(data, tmp, left, right);
 		left = tmp;
 	}
 	*root = left;

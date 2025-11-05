@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 12:39:15 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:16:07 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,6 @@ char		*copy_continuation_input(t_data *data, int *pipe_fd);
 
 //input_prompt.c
 void		update_prompt(t_data *data);
-char		*get_env_value_modified(t_data *data, char *key);
 char		*get_prompt_pwd(t_data *data);
-void		build_prompt(char *prompt, char *shell, char *pwd);
 
 #endif

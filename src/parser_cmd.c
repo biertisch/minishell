@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 11:10:37 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/31 14:06:44 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:31:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	**allocate_argv(t_data *data, t_token **token, t_tree *node)
 	if (count <= 0)
 		return (NULL);
 	argv = malloc(sizeof(char *) * (count + 1));
-	validate_malloc_tree(data, argv, node, NULL);
+	validate_malloc_parser(data, argv, node, NULL);
 	return (argv);
 }
 
@@ -73,7 +73,7 @@ int	count_argv(t_token *token)
 void	get_arg(t_data *data, t_token **token, t_tree *node, int *i)
 {
 	node->argv[*i] = ft_strdup((*token)->value);
-	validate_malloc_tree(data, node->argv[*i], node, NULL);
+	validate_malloc_parser(data, node->argv[*i], node, NULL);
 	(*i)++;
 	*token = (*token)->next;
 }

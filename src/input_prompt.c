@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_prompt.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 19:24:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 17:58:41 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:24:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,47 +16,44 @@ void	update_prompt(t_data *data)
 {
 	char	shell[16];
 	char	*pwd;
+	int		shell_len;
+	int		pwd_len;
 
-	if (data->prompt)
-		free(data->prompt);
+	free(data->prompt);
 	ft_strlcpy(shell, "🌱 minishell:", 16);
+	shell_len = ft_strlen(shell);
 	pwd = get_prompt_pwd(data);
-	data->prompt = malloc(ft_strlen(shell) + ft_strlen(pwd) + 3);
-	validate_malloc(data, data->prompt, NULL);
-	build_prompt(data->prompt, shell, pwd);
+	validate_malloc(data, pwd, NULL);
+	pwd_len = ft_strlen(pwd);
+	data->prompt = malloc(shell_len + pwd_len + 3);
+	validate_malloc(data, data->prompt, pwd);
+	ft_strlcpy(data->prompt, shell, shell_len + 1);
+	ft_strlcat(data->prompt, pwd, shell_len + pwd_len + 1);
+	ft_strlcat(data->prompt, "$ ", shell_len + pwd_len + 3);
+	free(pwd);
 }
 
 char	*get_prompt_pwd(t_data *data)
 {
+	char	*display;
 	char	*pwd;
 	char	*home;
+	int		pwd_len;
 	int		home_len;
 
-	pwd = get_env_value_modified(data, "PWD");
+	pwd = get_env_value(data->env_list, "PWD");
+	if (!pwd)
+		return (ft_strdup("unknown"));
 	home = get_env_value(data->env_list, "HOME");
 	home_len = ft_strlen(home);
-	if (home && !ft_strncmp(pwd, home, home_len))
-	{
-		pwd[0] = '~';
-		ft_memmove(pwd + 1, pwd + home_len, ft_strlen(pwd) - home_len);
-		pwd[ft_strlen(pwd) - home_len + 1] = '\0';
-	}
-	return (pwd);
+	if (!home && ft_strncmp(pwd, home, home_len))
+		return (ft_strdup(pwd));
+	pwd_len = ft_strlen(pwd);
+	display = ft_calloc(pwd_len - home_len + 2, sizeof(char));
+	if (!display)
+		return (NULL);
+	display[0] = '~';
+	ft_strlcpy(display + 1, pwd + home_len, pwd_len - home_len + 1);
+	return (display);
 }
 
-char	*get_env_value_modified(t_data *data, char *key)
-{
-	char	*value;
-
-	value = get_env_value(data->env_list, key);
-	if (!value)
-		return ("unknown");
-	return (value);
-}
-
-void	build_prompt(char *prompt, char *shell, char *pwd)
-{
-	ft_strlcpy(prompt, shell, ft_strlen(shell) + 1);
-	ft_strlcat(prompt, pwd, ft_strlen(prompt) + ft_strlen(pwd) + 1);
-	ft_strlcat(prompt, "$ ", ft_strlen(prompt) + 3);
-}
