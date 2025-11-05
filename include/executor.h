@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/19 10:55:16 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/31 13:24:38 by beatde-a         ###   ########.fr       */
+/*   Created: 2025/11/02 13:13:49 by pedde-so          #+#    #+#             */
+/*   Updated: 2025/11/02 13:13:52 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_stack
 
 // builtin.c
 int			is_builtin(char *cmd);
+int			is_builtin_no_fork(char *cmd);
 int			validate_builtin(t_data *data, t_tree *node, int i);
 int			validate_builtin_flags(t_data *data, char **argv, char *allowed);
 int			validate_env(t_data *data, char **argv);
@@ -59,15 +60,17 @@ int		setup_next_to_top(t_data **data, t_stack **stack);
 t_stack		**get_first_subshell(t_stack **stack);
 int			has_node_type_ancestor(t_stack *stack, t_node_type type);
 t_stack 	**get_next_pipe_in_subshell(t_stack **stack);
+void		close_all_open_redir_ends(t_data *data);
 
 //child.c
 void		child(t_data *data, t_stack **stack);
 void		child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
-void		child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i);
+void		child_no_redir(t_data *data, t_stack **stack, char *cmd);
 void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
 void	check_no_cmd(t_data *data, t_stack **stack);
+void		handle_redirects(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 
 
 //executor_utils.c
@@ -77,6 +80,8 @@ void		check_for_variables(t_data *data, t_stack **stack);
 void		executor_child_errno(t_data *data, t_stack **stack, char *cmd);
 void		executor_cleanup(t_data *data, t_stack **stack, char *cmd);
 char		**split_by_first_equal(char *var);
+void		cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path);
+void		cmd_is_directory(t_data *data, t_stack **stack, int fd);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
@@ -107,14 +112,14 @@ int			execute_or_done(t_data **data, t_stack **stack);
 //executor_builtin.c
 int			execute_builtin(t_data *data, t_stack **stack);
 int			execute_builtin_entered(t_data *data, t_stack **stack);
+int			execute_builtin_should_run_child(t_data *data, t_stack **stack, int cmd_i);
 int			execute_builtin_done(t_data **data, t_stack **stack);
 int			choose_and_execute_builtin(t_data *data, t_stack **stack);
 
 //executor_echo
 int			execute_echo(t_data *data, t_stack **stack);
-int			execute_echo_option(t_data *data, t_stack **stack);
-int			execute_echo_no_option(t_data *data, t_stack **stack);
-int			validate_write(t_data *data, t_stack **stack, int write_res);
+int			execute_echo_option(t_data *data, t_stack **stack, int cmd_i);
+int			execute_echo_no_option(t_data *data, t_stack **stack, int cmd_i);
 int			is_echo_option(char *opt);
 
 //executor_subshell
@@ -129,16 +134,15 @@ int			execute_env(t_data *data, t_stack **stack);
 
 //executor_cd.c
 int			execute_cd(t_data *data, t_stack **stack);
+int			execute_cd_option(t_data *data, t_stack **stack, int cmd_i, int *chdir_res);
 int			cd_fail(char *dir);
-int		execute_cd_option(t_data *data, t_stack **stack);
-int		where_is_cd(t_stack **stack);
 
 //executor_pwd.c
 int			execute_pwd(t_data *data, t_stack **stack);
 
 //executor_exit.c
 int			execute_exit(t_data *data, t_stack **stack);
-void		check_exit_input(t_data *data, t_stack **stack, int *exit_code);
+void		check_exit_input(t_data *data, t_stack **stack, int *exit_code, int cmd_i);
 
 //executor_unset.c
 int			execute_unset(t_data *data, t_stack **stack);
@@ -152,13 +156,18 @@ int			validate_pipe(int pipe_res, t_stack **stack);
 
 //executor_export.c
 int			execute_export(t_data *data, t_stack **stack);
+int			execute_export_val_found(t_data *data, t_stack **stack, char **kv_split, t_env **env);
+int			execute_export_option(t_data *data, t_stack **stack, int cmd_i);
+int			execute_export_val_found(t_data *data, t_stack **stack, char **kv_split, t_env **env);
+void			execute_export_invalid_var(t_stack **stack, int cmd_i);
+int			execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split);
 int			execute_export_no_option(t_data *data, t_stack **stack);
-int			execute_export_option(t_data *data, t_stack **stack);
-void		sort_env(t_data **data, t_stack **stack);
-int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split);
+
+//executor_sort_env.c
+void			sort_env(t_data **data);
 
 //variable_utils.c
-int			check_if_variable(t_data *data, t_stack **stack);
+int			cmd_has_variable(t_data *data, t_stack **stack);
 int			get_first_command(t_data *data, t_stack **stack);
 int			has_command(t_data *data, t_stack **stack);
 int			variable_key_not_found(t_data *data, t_stack **stack, char **kv_split);
@@ -185,5 +194,10 @@ int			heredoc(t_data *data, t_redir *redir);
 int 		run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid);
 int			copy_heredoc_input(t_data *data, t_redir *redir);
 int			wait_for_heredoc(t_data *data, pid_t pid);
+
+//executo_builtins_utils.c
+int			*duplicate_std(void);
+void			undo_duplicate_std(void);
+void		execute_builtin_check_for_pipe(t_data *data, t_stack **stack);
 
 #endif
