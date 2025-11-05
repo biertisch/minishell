@@ -79,6 +79,9 @@ int	push_left_until_cmd_redir(t_data *data, t_stack **stack)
 
 int	open_redir_in(t_data *data, t_redir *redir)
 {
+	int	*fd;
+	t_list	*new;
+
 	if (!redir)
 		return (0);
 	while (redir)
@@ -91,7 +94,16 @@ int	open_redir_in(t_data *data, t_redir *redir)
 				redir->in_fd = -1;
 				return (2);	
 			}
+			fd = malloc(sizeof(int));
+			validate_malloc(data, fd, NULL);
 			redir->in_fd = open(redir->file, O_RDONLY);
+			*fd = redir->in_fd;
+			new = ft_lstnew(fd);
+			validate_malloc(data, new, fd);
+			if (!data->open_redir_ins)
+				data->open_redir_ins = new;
+			else
+				ft_lstadd_back(&data->open_redir_ins, new);
 			if (redir->in_fd == -1)
 			{
 				handle_open_errors(redir);
@@ -126,4 +138,6 @@ void	handle_open_errors(t_redir *redir)
 		write(STDERR_FILENO, ": No such file or directory\n", 28);
 	else if (errno == EACCES)
 		write(STDERR_FILENO, ": Permission denied\n", 20);
+	else if (errno == EISDIR)
+		write(STDERR_FILENO, ": Is a directory\n", 17);
 }

@@ -22,6 +22,9 @@ int	execute_unset(t_data *data, t_stack **stack)
 	int	i;
 
 	i = get_first_command(data, stack) + 1;
+	duplicate_std();
+	if (!has_node_type_ancestor(*stack, NODE_PIPE))
+		handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	while ((*stack)->node->argv[i])
 	{
 		first = NULL;
@@ -49,5 +52,7 @@ int	execute_unset(t_data *data, t_stack **stack)
 		}
 		i++;
 	}
+	undo_duplicate_std();
+	execute_builtin_check_for_pipe(data, stack);
 	return (0);
 }

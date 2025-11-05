@@ -15,13 +15,13 @@
 void	child(t_data *data, t_stack **stack)
 {
 	char	*cmd;
-	t_redir	*redir;
 	int	cmd_i;
 	char	*temp;
 
 
 	env_list_to_array(data);
 	setup_signals_child(data);
+	cmd_has_variable(data, stack);
 	cmd_i = get_first_command(data, stack);
 	cmd = NULL;
 	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
@@ -38,9 +38,13 @@ void	child(t_data *data, t_stack **stack)
 			
 		}
 	}
-	redir = (*stack)->node->redir;
+	handle_redirects(data, stack, cmd, (*stack)->node->redir);
+}
+
+void	handle_redirects(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
+{
 	if (!redir)
-		child_no_redir(data, stack, cmd, cmd_i);
+		child_no_redir(data, stack, cmd);
 	while (redir)
 	{
 		if (redir->type == REDIR_IN)
@@ -71,7 +75,6 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 		exit(1);
 	}
 	dup2(redir->in_fd, STDIN_FILENO);
-	close(redir->in_fd);
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		dup2((*stack)->out_fd, STDOUT_FILENO);
 	if ((*stack)->out_fd != STDOUT_FILENO)
@@ -80,12 +83,14 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 	{
 		close_all_pipe_ends(stack);
 		check_no_cmd(data, stack);
+		close_all_open_redir_ends(data);
 		if (!is_builtin((*stack)->node->argv[0]))
 		{
 			execve(cmd, (*stack)->node->argv, data->env);
 			clean_execve_failure(data, stack, cmd);
 		}
-		else
+		else if (has_node_type_ancestor(*stack, NODE_PIPE)
+			|| !is_builtin_no_fork((*stack)->node->argv[0]))
 			choose_and_execute_builtin(data, stack);
 	}
 }
@@ -115,13 +120,15 @@ void	child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 	{
 		close_all_pipe_ends(stack);
 		check_no_cmd(data, stack);
+		close_all_open_redir_ends(data);
 		if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
 		{
 			close_all_pipe_ends(stack);
 			execve(cmd, (*stack)->node->argv, data->env);
 			clean_execve_failure(data, stack, cmd);
 		}
-		else
+		else if (has_node_type_ancestor(*stack, NODE_PIPE)
+			|| !is_builtin_no_fork((*stack)->node->argv[0]))
 			choose_and_execute_builtin(data, stack);
 	}
 }
@@ -137,17 +144,20 @@ void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 	close((*stack)->pipe[1]);
 	if (!redir->next)
 	{
+		close_all_open_redir_ends(data);
 		close_all_pipe_ends(stack);
 		execve(cmd, (*stack)->node->argv, data->env);
 		clean_execve_failure(data, stack, cmd);
 	}
 }
 
-void	child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i)
+void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
 {
+	int cmd_i;
+
+	cmd_i = get_first_command(data, stack);
 	if ((*stack)->in_fd == -1)
 	{
-
 		executor_cleanup(data, stack, cmd);
 		exit(1);
 	}
@@ -161,12 +171,15 @@ void	child_no_redir(t_data *data, t_stack **stack, char *cmd, int cmd_i)
 		close((*stack)->out_fd);
 	close_all_pipe_ends(stack);
 	check_no_cmd(data, stack);
+	close_all_open_redir_ends(data);
 	if (!is_builtin((*stack)->node->argv[0]))
 	{
+		close_all_open_redir_ends(data);
 		execve(cmd, (*stack)->node->argv + cmd_i, data->env);
 		clean_execve_failure(data, stack, cmd);
 	}
-	else
+	else if (has_node_type_ancestor(*stack, NODE_PIPE)
+		|| !is_builtin_no_fork((*stack)->node->argv[cmd_i]))
 		choose_and_execute_builtin(data, stack);
 }
 

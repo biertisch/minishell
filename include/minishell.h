@@ -54,6 +54,7 @@ typedef struct s_data
 	t_tree			*parser_tree;
 	t_stack			*stack;
 	int				exit_status;
+	t_list			*open_redir_ins;
 }	t_data;
 
 extern volatile sig_atomic_t	g_sig;
