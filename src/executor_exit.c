@@ -19,13 +19,14 @@ int	execute_exit(t_data *data, t_stack **stack)
 
 	cmd_i = get_first_command(data, stack);
 	duplicate_std();
-	handle_redirects(data, stack, NULL, (*stack)->node->redir);
+	if (!has_node_type_ancestor(*stack, NODE_PIPE))
+		handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	if ((*stack)->node->argv[cmd_i] && (*stack)->node->argv[cmd_i + 1])
 		exit_code = ft_atoi((*stack)->node->argv[cmd_i + 1]) % 256;
 	else if ((*stack)->node->argv[cmd_i] && !(*stack)->node->argv[cmd_i + 1])
 		exit_code = data->exit_status;
 	check_exit_input(data, stack, &exit_code, cmd_i);
-	if (!get_first_subshell(stack) && !((*stack)->node->argv[1] && ((*stack)->node->argv[2])))
+	if (!has_node_type_ancestor(*stack, NODE_PIPE) && !get_first_subshell(stack) && !((*stack)->node->argv[1] && ((*stack)->node->argv[2])))
 		write(STDOUT_FILENO, "exit\n", 5);
 	(*stack)->exit_status = exit_code;
 	if (!(*stack)->node->argv[1] || !(*stack)->node->argv[2])
