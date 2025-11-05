@@ -11,21 +11,21 @@
 # **************************************************************************** #
 
 NAME        = minishell
+SRC_FILES = \
+	builtin child cleanup env env_convert \
+	env_list env_utils error error_expander error_parser \
+	executor executor_and executor_builtin executor_builtin_utils executor_cd \
+	executor_echo executor_env executor_error executor_exit executor_export \
+	executor_heredoc executor_heredoc2 executor_or executor_pipe executor_pwd \
+	executor_redirect executor_sort_env executor_subshell executor_unset executor_utils \
+	expander expander_dollar expander_metadata expander_quotes expander_rebuild \
+	expander_redir expander_split expander_tilde get_next_line get_next_line_utils \
+	input input_cont input_prompt lexer lexer_list \
+	lexer_type main parent parser parser_cmd \
+	parser_redir parser_tree parser_utils signal signal_handler \
+	signal_heredoc stack test variable_utils wildcard \
+	wildcard_match wildcard_rebuild
 
-SRC_FILES   = builtin cleanup env env_convert env_list error expander\
-		expander_dollar expander_quotes input lexer lexer_list\
-		lexer_type main parser parser_cmd parser_redir\
-		parser_tree parser_utils wildcard wildcard_rebuild wildcard_match\
-		test stack signal executor child parent\
-		executor_utils executor_pipe executor_and executor_or executor_builtin\
-		executor_echo executor_subshell get_next_line get_next_line_utils\
-		executor_env executor_cd executor_pwd executor_exit expander_tilde\
-		input_prompt executor_unset executor_error variable_utils executor_export\
-		executor_heredoc executor_redirect signal_handler signal_heredoc\
-		executor_heredoc2 env_utils input_cont expander_rebuild expander_metadata\
-		expander_split error_expander expander_redir error_parser
-		executor_builtin_utils
-		executor_heredoc2 env_utils input_cont executor_sort_env\
 
 SRC_DIR     = src
 OBJ_DIR     = obj

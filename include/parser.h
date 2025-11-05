@@ -68,7 +68,5 @@ int			is_redir_token(t_token_type token_type);
 int			empty_subshell(t_token **token, t_tree *node, int res);
 int			is_command_token(t_token_type token_type);
 int			invalid_sequence(t_data *data, t_token *token, t_tree *node);
-int			is_builtin(char *cmd);
-int			is_builtin_no_fork(char *cmd);
 
 #endif
