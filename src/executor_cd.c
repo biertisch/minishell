@@ -21,7 +21,8 @@ int	execute_cd(t_data *data, t_stack **stack)
 
 	cmd_i = get_first_command(data, stack);
 	duplicate_std();
-	handle_redirects(data, stack, NULL, (*stack)->node->redir);
+	if (!has_node_type_ancestor(*stack, NODE_PIPE))
+		handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	(*stack)->exit_status = 0;
 	chdir_res = 0;
 	curr_pwd = ft_strdup(getcwd(NULL, 0));
@@ -40,7 +41,7 @@ int	execute_cd(t_data *data, t_stack **stack)
 		set_env_value(data->env_list, "PWD", new_pwd);
 	}
 	undo_duplicate_std();
-	execute_cd_check_for_subshell(data, stack);
+	execute_builtin_check_for_pipe(data, stack);
 	return (0);
 }
 
@@ -62,21 +63,6 @@ int	execute_cd_option(t_data *data, t_stack **stack, int cmd_i, int *chdir_res)
 	else
 		(*stack)->exit_status = cd_fail(NULL);
 	return (0);
-}
-
-void	execute_cd_check_for_subshell(t_data *data, t_stack **stack)
-{
-	int	exit_status;
-
-	if (has_node_type_ancestor(*stack, NODE_SUBSHELL))
-	{
-		exit_status = (*stack)->exit_status;
-		close_all_pipe_ends(stack);
-		close_all_open_redir_ends(data);
-		free_stack(stack);
-		free_all(data);
-		exit(exit_status);
-	}
 }
 
 int	cd_fail(char *dir)

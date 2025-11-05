@@ -18,13 +18,15 @@ int	execute_export(t_data *data, t_stack **stack)
 	
 	cmd_i = get_first_command(data, stack);
 	duplicate_std();	
-	handle_redirects(data, stack, NULL, (*stack)->node->redir);
+	if (!has_node_type_ancestor(*stack, NODE_PIPE))
+		handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	sort_env(&data);
 	if (!(*stack)->node->argv[cmd_i + 1])
 		execute_export_no_option(data, stack);
 	else
 		execute_export_option(data, stack, cmd_i);
 	undo_duplicate_std();
+	execute_builtin_check_for_pipe(data, stack);
 	return (0);
 }
 

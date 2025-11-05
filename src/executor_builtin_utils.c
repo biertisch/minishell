@@ -64,3 +64,18 @@ void	undo_duplicate_std(void)
 		dups[5] = 0;
 	}
 }
+
+void	execute_builtin_check_for_pipe(t_data *data, t_stack **stack)
+{
+	int	exit_status;
+
+	if (has_node_type_ancestor(*stack, NODE_PIPE))
+	{
+		exit_status = (*stack)->exit_status;
+		close_all_pipe_ends(stack);
+		close_all_open_redir_ends(data);
+		free_stack(stack);
+		free_all(data);
+		exit(exit_status);
+	}
+}

@@ -133,7 +133,6 @@ int			execute_env(t_data *data, t_stack **stack);
 //executor_cd.c
 int			execute_cd(t_data *data, t_stack **stack);
 int			execute_cd_option(t_data *data, t_stack **stack, int cmd_i, int *chdir_res);
-void			execute_cd_check_for_subshell(t_data *data, t_stack **stack);
 int			cd_fail(char *dir);
 
 //executor_pwd.c
@@ -197,5 +196,6 @@ int			wait_for_heredoc(t_data *data, pid_t pid);
 //executo_builtins_utils.c
 int			*duplicate_std(void);
 void			undo_duplicate_std(void);
+void		execute_builtin_check_for_pipe(t_data *data, t_stack **stack);
 
 #endif

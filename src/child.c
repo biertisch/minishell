@@ -89,7 +89,8 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 			execve(cmd, (*stack)->node->argv, data->env);
 			clean_execve_failure(data, stack, cmd);
 		}
-		else if (!is_builtin_no_fork((*stack)->node->argv[0]))
+		else if (has_node_type_ancestor(*stack, NODE_PIPE)
+			|| !is_builtin_no_fork((*stack)->node->argv[0]))
 			choose_and_execute_builtin(data, stack);
 	}
 }
@@ -126,7 +127,8 @@ void	child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 			execve(cmd, (*stack)->node->argv, data->env);
 			clean_execve_failure(data, stack, cmd);
 		}
-		else if (!is_builtin_no_fork((*stack)->node->argv[0]))
+		else if (has_node_type_ancestor(*stack, NODE_PIPE)
+			|| !is_builtin_no_fork((*stack)->node->argv[0]))
 			choose_and_execute_builtin(data, stack);
 	}
 }
@@ -176,7 +178,8 @@ void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
 		execve(cmd, (*stack)->node->argv + cmd_i, data->env);
 		clean_execve_failure(data, stack, cmd);
 	}
-	else if (!is_builtin_no_fork((*stack)->node->argv[0]))
+	else if (has_node_type_ancestor(*stack, NODE_PIPE)
+		|| !is_builtin_no_fork((*stack)->node->argv[cmd_i]))
 		choose_and_execute_builtin(data, stack);
 }
 
