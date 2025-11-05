@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 15:03:10 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:39:08 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	prompt_input_cont(t_data *data, char target, int fd)
 		if (g_sig == SIGINT)
 			return (sigint_abort(data, line, 1));
 		else if (!line)
-			return (syntax_error(data, ERR_7, NULL));
+			return (syntax_error(data, SYN_ERR_7, NULL));
 		if (is_quote(target) || *line)
 			write_to_pipe(line, target, fd);
 		if ((target && ft_strchr(line, target)) || (!target && *line))

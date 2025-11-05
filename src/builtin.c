@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:17:33 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/31 12:56:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:36:53 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ int	validate_builtin(t_data *data, t_tree *node, int i)
 	if (!ft_strcmp(node->argv[i], "cd"))
 	{
 		if (node->argv[i + 1] && node->argv[i + 2])
-			return (internal_error(data, ERR_4, node->argv[i], NULL));
+			return (internal_error(data, INT_ERR_4, node->argv[i], NULL));
 		if (node->argv[1] && node->argv[i + 1][0] == '-'
 			&& node->argv[i + 1][1])
 		{
-			internal_error(data, ERR_3, node->argv[i], node->argv[i + 1]);
+			internal_error(data, INT_ERR_3, node->argv[i], node->argv[i + 1]);
 			return (print_builtin_usage(node->argv[i]));
 		}
 	}
@@ -59,7 +59,7 @@ int	validate_builtin_flags(t_data *data, char **argv, char *allowed)
 	{
 		if (argv[i][0] == '-' && (!allowed || ft_strcmp(argv[i], allowed)))
 		{
-			internal_error(data, ERR_3, argv[0], argv[i]);
+			internal_error(data, INT_ERR_3, argv[0], argv[i]);
 			return (print_builtin_usage(argv[0]));
 		}
 		i++;
@@ -71,14 +71,14 @@ int	validate_env(t_data *data, char **argv)
 {
 	if (argv[1] && argv[1][0] == '-')
 	{
-		internal_error(data, ERR_3, argv[0], argv[1]);
+		internal_error(data, INT_ERR_3, argv[0], argv[1]);
 		data->exit_status = 125;
 		print_builtin_usage(argv[0]);
 		return (-1);
 	}
 	if (argv[1])
 	{
-		internal_error(data, ERR_5, argv[0], argv[1]);
+		internal_error(data, INT_ERR_5, argv[0], argv[1]);
 		data->exit_status = 127;
 		return (-1);
 	}

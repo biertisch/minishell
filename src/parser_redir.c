@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 10:22:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 15:20:34 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:38:52 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ t_redir	*parse_single_redir(t_data *data, t_token **token, t_redir *head)
 	type = (*token)->type;
 	*token = (*token)->next;
 	if (!*token)
-		return (syntax_error(data, ERR_1, "newline"), NULL);
+		return (syntax_error(data, SYN_ERR_5, "newline"), NULL);
 	if ((*token)->type != WORD)
-		return (syntax_error(data, ERR_1, (*token)->value), NULL);
+		return (syntax_error(data, SYN_ERR_5, (*token)->value), NULL);
 	redir = create_redir(type, fd, (*token)->value);
 	if (!redir)
 	{

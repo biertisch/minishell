@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:16:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 15:34:57 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 21:06:32 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,42 +20,39 @@ void	error_exit(t_data *data, t_stack **stack)
 	exit(EXIT_FAILURE);
 }
 
-int	internal_error(t_data *data, char *desc, char *cmd, char *arg)
+int	syntax_error(t_data *data, char *desc, char *token)
 {
-	write(2, "minishell: ", 11);
-	if (cmd)
-	{
-		write(2, cmd, ft_strlen(cmd));
-		write(2, ": ", 2);
-	}
-	if (arg && arg[0] != '\'')
-	{
-		write(2, arg, ft_strlen(arg));
-		write(2, ": ", 2);
-	}
-	write(2, desc, ft_strlen(desc));
-	if (arg && arg[0] == '\'')
-	{
-		write(2, " ", 1);
-		write(2, arg, ft_strlen(arg));
-	}
-	write(2, "\n", 1);
-	data->exit_status = 1;
+	char	err_msg[ERR_BUFFER_SIZE];
+
+	err_msg[0] = '\0';
+	if (ft_strncmp(desc, "minishell:", 10))
+		ft_strlcpy(err_msg, "minishell: ", ERR_BUFFER_SIZE);
+	if (desc)
+		ft_strlcat(err_msg, desc, ERR_BUFFER_SIZE);
+	append_postfix(err_msg, token);
+	ft_strlcat(err_msg, "\n", ERR_BUFFER_SIZE);
+	write(2, err_msg, ft_strlen(err_msg));
+	data->exit_status = 2;
 	return (INVALID);
 }
 
-int	syntax_error(t_data *data, char *desc, char *token)
+int	internal_error(t_data *data, char *desc, char *cmd, char *arg)
 {
-	write(2, "minishell: ", 11);
-	write(2, desc, ft_strlen(desc));
-	if (token)
-	{
-		write(2, " '", 2);
-		write(2, token, ft_strlen(token));
-		write(2, "'", 1);
-	}
-	write(2, "\n", 1);
-	data->exit_status = 2;
+	char	err_msg[ERR_BUFFER_SIZE];
+
+	err_msg[0] = '\0';
+	if (ft_strncmp(desc, "minishell:", 10))
+		ft_strlcpy(err_msg, "minishell: ", ERR_BUFFER_SIZE);
+	append_prefix(err_msg, cmd);
+	if (arg && arg[0] != '\'')
+		append_prefix(err_msg, arg);
+	if (desc)
+		ft_strlcat(err_msg, desc, ERR_BUFFER_SIZE);
+	if (arg && arg[0] == '\'')
+		append_postfix(err_msg, arg);
+	ft_strlcat(err_msg, "\n", ERR_BUFFER_SIZE);
+	write(2, err_msg, ft_strlen(err_msg));
+	data->exit_status = 1;
 	return (INVALID);
 }
 
@@ -66,6 +63,28 @@ int	system_error(t_data *data, char *function)
 	//perror(function);
 	data->exit_status = 1;
 	return (INVALID);
+}
+
+void	append_prefix(char *msg, char *label)
+{
+	if (label)
+	{
+		ft_strlcat(msg, label, ERR_BUFFER_SIZE);
+		ft_strlcat(msg, ": ", ERR_BUFFER_SIZE);
+	}
+}
+
+void	append_postfix(char *msg, char *label)
+{
+	if (label)
+	{
+		ft_strlcat(msg, " ", ERR_BUFFER_SIZE);
+		if (label[0] != '\'')
+			ft_strlcat(msg, "\'", ERR_BUFFER_SIZE);
+		ft_strlcat(msg, label, ERR_BUFFER_SIZE);
+		if (label[0] != '\'')
+			ft_strlcat(msg, "'", ERR_BUFFER_SIZE);
+	}
 }
 
 void	validate_malloc_execute(t_data *data, t_stack **stack,
