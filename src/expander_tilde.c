@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_tilde.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:57:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 22:00:18 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:36:52 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,18 @@ int	expand_tilde(t_data *data, char **arg, t_metadata *info)
 {
 	char	*new_arg;
 
-	if (!arg || !*arg || !info)
+	if (!arg || !*arg || !info || !has_tilde(*arg, info->quote_map[0]))
 		return (0);
-	while (has_tilde(*arg, info->quote_map[0]))
-	{
-		update_tilde_key_value(data, *arg, info);
-		if (!*(info->value))
-			break ;
-		info->total_len = ft_strlen(*arg) - info->key_len + info->value_len;
-		rebuild_quote_map(data, info, 0);
-		rebuild_expand_map(data, info, 0, 2);
-		new_arg = apply_expansion(*arg, info, 0);
-		validate_malloc(data, new_arg, NULL);
-		free(*arg);
-		*arg = new_arg;
-	}
+	update_tilde_key_value(data, *arg, info);
+	if (!*(info->value))
+		return (0) ;
+	info->total_len = ft_strlen(*arg) - info->key_len + info->value_len;
+	rebuild_quote_map(data, info, 0);
+	rebuild_expand_map(data, info, 0, 2);
+	new_arg = apply_expansion(*arg, info, 0);
+	validate_malloc(data, new_arg, NULL);
+	free(*arg);
+	*arg = new_arg;
 	return (0);
 }
 

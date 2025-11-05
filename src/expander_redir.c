@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_redir.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 22:09:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 22:10:10 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:29:50 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*apply_redir_wildcard(t_data *data, char *file, t_list *entry)
 	if (!file || !entry)
 		return (file);
 	new_file = ft_strdup(entry->content);
-	validate_malloc_wildcard(data, new_file, entry, NULL);
+	validate_malloc_wildcard(data, new_file, entry);
 	free(file);
 	ft_lstclear(&entry, free);
 	return (new_file);

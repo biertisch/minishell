@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 12:43:29 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:53:07 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@ int	lexer(t_data *data, char *input)
 			i++;
 		if (!input[i])
 			break ;
-		res = get_token_value(data, input + i, &value, &i);
+		res = get_token_value(data, input + i, &value);
 		if (res)
 			return (res);
-		type = get_token_type(value);
+		type = get_token_type(input + i);
 		add_token(data, &data->lexer_list, type, value);
+		i += ft_strlen(value);
 	}
 	return (VALID);
 }
@@ -65,7 +66,7 @@ t_token_type	get_token_type(char *input)
 
 //takes as value what is delimitated by quotes, blank space or operators
 //checks for unclosed quotes & unsupported syntax
-int	get_token_value(t_data *data, char *input, char **value, int *index)
+int	get_token_value(t_data *data, char *input, char **value)
 {
 	char	quote;
 	int		i;
@@ -87,7 +88,6 @@ int	get_token_value(t_data *data, char *input, char **value, int *index)
 		i = get_operator_len(input + i);
 	*value = ft_substr(input, 0, i);
 	validate_malloc(data, value, NULL);
-	*index += ft_strlen(*value);
 	return (VALID);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 22:10:04 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:30:06 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	expand_wildcard(t_data *data, t_tree *node)
 			if (expand_single_wildcard(data, node->argv[i], &entries))
 				return (-1);
 			if (entries && build_wildcard_argv(node, entries, i))
-				validate_malloc_wildcard(data, NULL, entries, NULL);
+				validate_malloc_wildcard(data, NULL, entries);
 			ft_lstclear(&entries, free);
 		}
 		i++;
@@ -83,13 +83,13 @@ t_list	*get_entries(t_data *data, DIR *dir_stream)
 		if (!name)
 		{
 			closedir(dir_stream);
-			validate_malloc_wildcard(data, name, head, NULL);
+			validate_malloc_wildcard(data, name, head);
 		}
 		node = ft_lstnew(name);
 		if (!node)
 		{
 			closedir(dir_stream);
-			validate_malloc_wildcard(data, node, head, NULL);
+			validate_malloc_wildcard(data, node, head);
 		}
 		ft_lstadd_back(&head, node);
 		dirent = readdir(dir_stream);
