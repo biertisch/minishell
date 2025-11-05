@@ -26,6 +26,8 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	if (full_path)
 		return (run_curr_dir(data, stack, cmd));
 	slash_path = ft_strjoin("/", cmd);
+	if (!ft_strcmp(slash_path, "/"))
+		cmd_not_found(data, stack, NULL, slash_path);
 	validate_malloc_execute(data, stack, slash_path, cmd);
 	if (get_env_value(data->env_list, "PATH"))
 		paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
@@ -62,7 +64,13 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 			validate_malloc_execute(data, stack, full_path, slash_path);
 		}
 	}
-	write(STDERR_FILENO, (*stack)->node->argv[0], ft_strlen((*stack)->node->argv[0]));
+	cmd_not_found(data, stack, paths, slash_path);
+	return (NULL);
+}
+
+void	cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path)
+{
+	write(STDERR_FILENO, (*stack)->node->argv[get_first_command(data, stack)], ft_strlen((*stack)->node->argv[get_first_command(data, stack)]));
 	write(STDERR_FILENO, ": command not found\n", 20);
 	if ((*stack)->node->redir)
 	{
@@ -72,18 +80,36 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 			(*stack)->node->redir->fd = open((*stack)->node->redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		close((*stack)->node->redir->fd);
 	}
+	close_all_open_redir_ends(data);
+	close_all_pipe_ends(stack);
 	ft_splitfree(paths);
 	free(slash_path);
-	free_all(data);
 	free_stack(stack);
+	free_all(data);
 	exit(127);
-	return (NULL);
+
+}
+
+void	cmd_is_directory(t_data *data, t_stack **stack, int fd)
+{
+	if (fd != -1)
+	{
+		write(STDERR_FILENO, (*stack)->node->argv[get_first_command(data, stack)], ft_strlen((*stack)->node->argv[get_first_command(data, stack)]));
+		write(STDERR_FILENO, ": Is a directory\n", 17);
+		close(fd);
+		close_all_open_redir_ends(data);
+		close_all_pipe_ends(stack);
+		free_stack(stack);
+		free_all(data);
+		exit(126);
+	}
 }
 
 char	*run_curr_dir(t_data *data, t_stack **stack, char *cmd)
 {
 	char	*cmd_res;
 
+	cmd_is_directory(data, stack, open(cmd, O_DIRECTORY));
 	if (access(cmd, F_OK | X_OK) == -1)
 		executor_child_errno(data, stack, cmd);
 	cmd_res = ft_strdup(cmd);
@@ -137,6 +163,7 @@ void	check_for_variables(t_data *data, t_stack **stack)
 
 void	executor_cleanup(t_data *data, t_stack **stack, char *cmd)
 {
+	close_all_open_redir_ends(data);
 	close_all_pipe_ends(stack);
 	if (cmd)
 		free(cmd);

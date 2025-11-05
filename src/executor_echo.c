@@ -14,18 +14,20 @@
 
 int	execute_echo(t_data *data, t_stack **stack)
 {
-	if (!(*stack)->node->argv[1])
+	int	cmd_i;
+
+	cmd_i = get_first_command(data, stack);
+	if (!(*stack)->node->argv[cmd_i + 1])
 	{
-		validate_write(data, stack, write(STDOUT_FILENO, "\n", 1));
+		write(STDOUT_FILENO, "\n", 1);
 		free_stack(stack);
 		free_all(data);
 		exit(0);
 	}
-	else if (is_echo_option((*stack)->node->argv[1]))
-		execute_echo_option(data, stack);
+	else if (is_echo_option((*stack)->node->argv[cmd_i + 1]))
+		execute_echo_option(data, stack, cmd_i);
 	else
-		execute_echo_no_option(data, stack);
-	(void)data;
+		execute_echo_no_option(data, stack, cmd_i);
 	return (0);
 }
 
@@ -42,60 +44,49 @@ int	is_echo_option(char *opt)
 			return (1);
 	}
 	return (0);
-
 }
 
-int	execute_echo_option(t_data *data, t_stack **stack)
+int	execute_echo_option(t_data *data, t_stack **stack, int cmd_i)
 {
 	int	i;
 
-	i = 2;
+	i = 2 + cmd_i;
 	while (is_echo_option((*stack)->node->argv[i]))
 		i++;
 	while ((*stack)->node->argv[i])
 	{
-		validate_write(data, stack, write(STDOUT_FILENO, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i])));
+		write(STDOUT_FILENO, (*stack)->node->argv[i],
+			ft_strlen((*stack)->node->argv[i]));
 		if ((*stack)->node->argv[i + 1])
-			validate_write(data, stack, write(STDOUT_FILENO, " ", 1));
+			write(STDOUT_FILENO, " ", 1);
 		i++;
-
 	}
+	close_all_open_redir_ends(data);
+	close_all_pipe_ends(stack);
 	free_stack(stack);
 	free_all(data);
 	exit(0);
 	return (0);
 }
 
-int	execute_echo_no_option(t_data *data, t_stack **stack)
+int	execute_echo_no_option(t_data *data, t_stack **stack, int cmd_i)
 {
 	int	i;
 
-	i = 1;
+	i = 1 + cmd_i;
 	while ((*stack)->node->argv[i])
 	{
-		validate_write(data, stack, write(STDOUT_FILENO, (*stack)->node->argv[i], ft_strlen((*stack)->node->argv[i])));
+		write(STDOUT_FILENO, (*stack)->node->argv[i],
+			ft_strlen((*stack)->node->argv[i]));
 		if ((*stack)->node->argv[i + 1])
-			validate_write(data, stack, write(STDOUT_FILENO, " ", 1));
+			write(STDOUT_FILENO, " ", 1);
 		i++;
 	}
-	validate_write(data, stack, write(STDOUT_FILENO, "\n", 1));
+	write(STDOUT_FILENO, "\n", 1);
+	close_all_open_redir_ends(data);
+	close_all_pipe_ends(stack);
 	free_stack(stack);
 	free_all(data);
 	exit(0);
 	return (1);
-}
-
-int	validate_write(t_data *data, t_stack **stack, int write_res)
-{
-	if (write_res == -1)
-	{
-		free_stack(stack);
-		free_all(data);
-		perror("write: ");
-		if (errno == EBADF || errno == ENOSPC || errno == EIO || errno == EROFS)
-			exit(1);
-		if (errno == EPIPE)
-			exit(141);
-	}
-	return (write_res);
 }

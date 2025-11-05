@@ -20,6 +20,12 @@ int	is_builtin(char *cmd)
 		|| !ft_strcmp(cmd, "exit"));
 }
 
+int	is_builtin_no_fork(char *cmd)
+{
+	return (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "export")
+	 	|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "exit"));
+}
+
 int	validate_builtin(t_data *data, t_tree *node, int i)
 {
 	if (!node || node->type != NODE_CMD)
