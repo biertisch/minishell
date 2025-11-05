@@ -56,6 +56,8 @@ int	execute_stack(t_data *data, t_stack **stack)
 
 int	execute_cmd(t_data *data, t_stack **stack)
 {
+	pid_t	pid;
+
 	if ((*stack)->phase == ENTERED)
 	{
 		if (expand(data, (*stack)->node))
@@ -67,6 +69,19 @@ int	execute_cmd(t_data *data, t_stack **stack)
 		}
 		if ((*stack)->node->argv && !(*stack)->node->argv[get_first_command(data, stack)])
 		{
+			if (has_node_type_ancestor(*stack, NODE_PIPE))
+			{
+				pid = fork();
+				if (pid == 0)
+				{
+					close_all_pipe_ends(stack);
+					free_stack(stack);
+					free_all(data);
+					exit(0);
+				}
+				else
+					parent(stack, pid);
+			}
 			cmd_has_variable(data, stack);
 			pop(stack);
 			return (1);
