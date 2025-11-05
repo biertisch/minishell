@@ -138,4 +138,6 @@ void	handle_open_errors(t_redir *redir)
 		write(STDERR_FILENO, ": No such file or directory\n", 28);
 	else if (errno == EACCES)
 		write(STDERR_FILENO, ": Permission denied\n", 20);
+	else if (errno == EISDIR)
+		write(STDERR_FILENO, ": Is a directory\n", 17);
 }
