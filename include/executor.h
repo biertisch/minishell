@@ -82,6 +82,7 @@ void		executor_cleanup(t_data *data, t_stack **stack, char *cmd);
 char		**split_by_first_equal(char *var);
 void		cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path);
 void		cmd_is_directory(t_data *data, t_stack **stack, int fd);
+void		check_err_output(t_data *data, t_stack **stack, char **paths, char *slash_path);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
