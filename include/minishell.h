@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 14:53:12 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 12:39:15 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,9 @@
 # include "lexer.h"
 # include "ft_signal.h"
 # include "env.h"
+# include "error.h"
 
 # define CONTINUE_PROMPT "> "
-# define ERR_0 "invalid environment variable"
-# define ERR_1 "syntax error near unexpected token"
-# define ERR_2 "ambiguous redirect"
-# define ERR_3 "invalid option"
-# define ERR_4 "too many arguments"
-# define ERR_5 "No such file or directory"
-# define ERR_6 "unexpected EOF while looking for matching"
-# define ERR_7 "syntax error: unexpected end of file"
-# define ERR_8 "syntax error: missing quote"
-# define ERR_9 "arithmetic operations not supported"
-# define ERR_10 "semicolon not supported"
-# define ERR_11 "minishell: warning: here-document delimited by \
-end-of-file (wanted '"
 # define BUFFER_SIZE 20
 
 typedef struct s_data
@@ -76,6 +64,7 @@ void		print_env_list(t_env *head);
 void		print_env_array(char **env);
 void		print_lexer_list(t_token *head);
 void		print_parser_tree(t_tree *head);
+void		print_parser_node(t_tree *node, int depth, char *pos);
 void		test_builtin_validation(t_data *data, t_tree *head);
 
 //cleanup.c
@@ -84,22 +73,7 @@ void		free_command_data(t_data *data);
 void		free_stack(t_stack **stack);
 void		free_redir(t_redir *redir);
 void		free_string_array(char ***arr);
-
-//error.c
-int			system_error(t_data *data, char *function);
-int			syntax_error(t_data *data, char *desc, char *token);
-int			internal_error(t_data *data, char *desc, char *cmd, char *arg);
-void		error_exit(t_data *data, t_stack **stack);
-void		validate_malloc(t_data *data, void *ptr, void *to_free);
-void		validate_malloc_tree(t_data *data, void *ptr, t_tree *left,
-				t_tree *right);
-void		validate_malloc_env(t_data *data, void *ptr, t_env *node);
-void		check_for_errors(int status, t_data *data, t_stack *stack,
-				char *command_name);
-void		validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
-				char **new_argv);
-void		validate_malloc_execute(t_data *data, t_stack **stack,
-			     void *ptr, void *to_free);
+void		free_metadata(t_metadata **info, int size);
 
 //get_next_line.c
 char		*get_next_line(int fd);
@@ -113,8 +87,8 @@ char		*get_next_line_cont(int fd, char *buffer, char *result,
 char		*ft_gnl_realloc(char *result, int i, int *r);
 
 //input.c
-void		prompt_input(t_data *data);
-void		read_input(t_data *data);
+int			prompt_input(t_data *data);
+int			read_input(t_data *data);
 int			process_input(t_data *data);
 int			prompt_input_cont(t_data *data, char target, int fd);
 
@@ -129,6 +103,6 @@ char		*copy_continuation_input(t_data *data, int *pipe_fd);
 void		update_prompt(t_data *data);
 char		*get_env_value_modified(t_data *data, char *key);
 char		*get_prompt_pwd(t_data *data);
-void		build_prompt(char *prompt, char *user, char *hostname, char *pwd);
+void		build_prompt(char *prompt, char *shell, char *pwd);
 
 #endif

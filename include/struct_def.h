@@ -6,19 +6,30 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/30 14:52:05 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 15:16:56 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_DEF_H
 # define STRUCT_DEF_H
 
-typedef struct s_env	t_env;
-typedef struct s_data	t_data;
-typedef struct s_stack	t_stack;
-typedef struct s_token	t_token;
-typedef struct s_redir	t_redir;
-typedef struct s_tree	t_tree;
+typedef struct s_data		t_data;
+typedef struct s_env		t_env;
+typedef struct s_stack		t_stack;
+typedef struct s_token		t_token;
+typedef struct s_redir		t_redir;
+typedef struct s_tree		t_tree;
+
+typedef struct s_metadata
+{
+	int		*quote_map;
+	int		*expand_map;
+	char	*key;
+	int		key_len;
+	char	*value;
+	int		value_len;
+	int		total_len;
+}	t_metadata;
 
 typedef enum e_outcome
 {

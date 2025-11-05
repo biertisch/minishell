@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*   lexer_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:23:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 11:43:29 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 12:40:13 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 int	is_operator(char *s)
 {
-	return (*s == '|' || *s == '<' || *s == '>' || *s == '(' || *s == ')'
-		|| !ft_strncmp(s, "<<", 2) || !ft_strncmp(s, ">>", 2)
-		|| !ft_strncmp(s, "&&", 2) || !ft_strncmp(s, "||", 2));
+	return (s && (*s == '|' || *s == '<' || *s == '>' || *s == '(' || *s == ')'
+			|| !ft_strncmp(s, "<<", 2) || !ft_strncmp(s, ">>", 2)
+			|| !ft_strncmp(s, "&&", 2) || !ft_strncmp(s, "||", 2)));
 }
 
 int	get_operator_len(char *s)
 {
+	if (!s)
+		return (0);
 	if (!ft_strncmp(s, "<<", 2) || !ft_strncmp(s, ">>", 2)
 		|| !ft_strncmp(s, "&&", 2) || !ft_strncmp(s, "||", 2))
 		return (2);
@@ -31,17 +33,35 @@ int	get_operator_len(char *s)
 
 int	is_quote(char c)
 {
-	return (c == '"' || c == '\'');
+	if (c == '"')
+		return (2);
+	if (c == '\'')
+		return (1);
+	return (0);
 }
 
-//classifies a substring as FD if it is only composed of digits
-//and comes immediately before a redirection operator (no spaces allowed)
+//takes as FD what is only composed of digits
+//and comes immediately before a redir operator (no spaces allowed)
 int	is_fd(char *input)
 {
+	if (!input)
+		return (0);
 	while (*input && ft_isdigit(*input))
 		input++;
 	if (*input && (*input == '<' || *input == '>'
 			|| !ft_strncmp(input, "<<", 2) || !ft_strncmp(input, ">>", 2)))
 		return (1);
 	return (0);
+}
+
+int	is_arithmetic_op(char *input)
+{
+	if (ft_strncmp(input, "((", 2))
+		return (0);
+	input += 2;
+	while (*input && ft_strncmp(input, "))", 2))
+		input++;
+	if (!*input)
+		return (0);
+	return (1);
 }

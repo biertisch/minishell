@@ -6,17 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 10:22:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 12:36:23 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 15:20:34 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_redir_token(t_token_type token_type)
-{
-	return (token_type == REDIR_IN || token_type == REDIR_OUT
-		|| token_type == APPEND || token_type == HEREDOC);
-}
 
 int	get_redir(t_data *data, t_token **token, t_tree *node)
 {
@@ -77,9 +71,10 @@ t_redir	*create_redir(t_token_type type, int fd, char *file)
 	redir->type = type;
 	redir->fd = fd;
 	redir->file = ft_strdup(file);
-	redir->heredoc_input = NULL;
 	if (!redir->file)
 		return (free_redir(redir), NULL);
+	redir->heredoc_input = NULL;
+	ft_bzero(&redir->info, sizeof(t_metadata));
 	redir->next = NULL;
 	return (redir);
 }

@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/10/30 12:45:56 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/11/05 12:37:32 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,17 +14,18 @@ NAME        = minishell
 
 SRC_FILES   = builtin cleanup env env_convert env_list error expander\
 		expander_dollar expander_quotes input lexer lexer_list\
-		lexer_utils main parser parser_cmd parser_redir parser_subshell\
-		parser_tree parser_utils wildcard wildcard_argv wildcard_match\
+		lexer_type main parser parser_cmd parser_redir\
+		parser_tree parser_utils wildcard wildcard_rebuild wildcard_match\
 		test stack signal executor child parent\
 		executor_utils executor_pipe executor_and executor_or executor_builtin\
 		executor_echo executor_subshell get_next_line get_next_line_utils\
-		executor_env executor_cd executor_pwd executor_exit expand_tilde\
-		input_prompt executor_unset executor_error expander_dollar2\
-		expander_dollar3 variable_utils executor_export\
+		executor_env executor_cd executor_pwd executor_exit expander_tilde\
+		input_prompt executor_unset executor_error variable_utils executor_export\
 		executor_heredoc executor_redirect signal_handler signal_heredoc\
-		executor_heredoc2 env_utils input_cont executor_sort_env\
+		executor_heredoc2 env_utils input_cont expander_rebuild expander_metadata\
+		expander_split error_expander expander_redir error_parser
 		executor_builtin_utils
+		executor_heredoc2 env_utils input_cont executor_sort_env\
 
 SRC_DIR     = src
 OBJ_DIR     = obj

@@ -6,7 +6,7 @@ TESTS=$TEST_DIR/tests.sh
 BASH_OUT=$TEST_DIR/bash
 MINI_OUT=$TEST_DIR/minishell
 DIFF_OUT=$TEST_DIR/diffs
-LEAKS_OUT=$TEST_DIR/leaks 
+LEAKS_OUT=$TEST_DIR/leaks
 TEST_FILES="$TEST_DIR/file1 $TEST_DIR/file2"
 
 mkdir -p "$BASH_OUT" "$MINI_OUT" "$DIFF_OUT" "$LEAKS_OUT"
@@ -25,7 +25,7 @@ while IFS= read -r cmd; do
     # --- Run in minishell (with timeout + valgrind) ---
     VALGRIND_LOG="$LEAKS_OUT/$i.valgrind"
 
-    if printf '%s\n' "$cmd" | timeout 2s valgrind --suppressions=readline.supp --leak-check=full --errors-for-leak-kinds=definite --show-leak-kinds=all --trace-children=yes --track-fds=yes \
+    if printf '%s\n' "$cmd" | timeout 2s valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --show-leak-kinds=all --trace-children=yes \
         --log-file="$VALGRIND_LOG" $MINISHELL >"$MINI_OUT/$i.out" 2>"$MINI_OUT/$i.err"; then
         echo $? >"$MINI_OUT/$i.status"
     else

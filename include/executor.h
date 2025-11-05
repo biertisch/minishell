@@ -30,6 +30,7 @@ typedef struct s_stack
 }	t_stack;
 
 // builtin.c
+int			is_builtin(char *cmd);
 int			validate_builtin(t_data *data, t_tree *node, int i);
 int			validate_builtin_flags(t_data *data, char **argv, char *allowed);
 int			validate_env(t_data *data, char **argv);

@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_subshell.c                                  :+:      :+:    :+:   */
+/*   error_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/08 15:37:28 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 12:37:56 by beatde-a         ###   ########.fr       */
+/*   Created: 2025/11/05 12:33:22 by beatde-a          #+#    #+#             */
+/*   Updated: 2025/11/05 12:40:36 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	empty_subshell(t_token **token, t_tree *node, int res)
+int	check_unsupported_syntax(t_data *data, char *input)
 {
-	if (*token && (*token)->type == RPAREN)
-		*token = (*token)->next;
-	free_parser_tree(&node);
-	return (res);
-}
-
-int	invalid_sequence(t_data *data, t_token *token, t_tree *node)
-{
-	free_parser_tree(&node);
-	return (syntax_error(data, ERR_1, token->value));
+	if (*input == ';')
+		return (syntax_error(data, ERR_10, NULL));
+	if (!ft_strncmp(input, "$((", 3))
+		return (syntax_error(data, ERR_12, NULL));
+	if (!ft_strncmp(input, "$(", 2))
+		return (syntax_error(data, ERR_13, NULL));
+	if (is_arithmetic_op(input))
+		return (syntax_error(data, ERR_9, NULL));
+	return (0);
 }

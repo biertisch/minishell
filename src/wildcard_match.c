@@ -3,14 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_match.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 14:39:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 11:26:14 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 22:07:14 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	filter_matches(t_list **head, char *pattern)
+{
+	t_list	*curr;
+	t_list	*prev;
+	t_list	*tmp;
+
+	curr = *head;
+	prev = NULL;
+	while (curr)
+	{
+		if (!match_wildcard((char *)curr->content, pattern))
+		{
+			tmp = curr;
+			curr = curr->next;
+			if (prev)
+				prev->next = curr;
+			else
+				*head = curr;
+			ft_lstdelone(tmp, free);
+		}
+		else
+		{
+			prev = curr;
+			curr = curr->next;
+		}
+	}
+}
 
 int	match_wildcard(char *entry, char *pattern)
 {
@@ -34,9 +62,7 @@ int	match_wildcard(char *entry, char *pattern)
 	}
 	while (pattern[j] && pattern[j] == '*')
 		j++;
-	if (pattern[j])
-		return (0);
-	return (1);
+	return (!pattern[j]);
 }
 
 void	advance_both(int *i, int *j)

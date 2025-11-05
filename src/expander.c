@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 14:43:27 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 22:09:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,30 +25,22 @@ int	expand(t_data *data, t_tree *node)
 
 int	expand_argv(t_data *data, t_tree *node)
 {
-	int		i;
-	t_list	*entries;
-	char	**old;
+	int	i;
 
+	if (!node || !node->argv)
+		return (0);
+	node->argv_info = ft_calloc(get_argc(node->argv), sizeof(t_metadata));
+	validate_malloc(data, node->argv_info, NULL);
 	i = 0;
-	while (node->argv && node->argv[i])
+	while (node->argv[i])
 	{
-		old = node->argv;
-		node->argv = expand_dollar(data, node->argv, i);
-		if (node->argv != old)
-		{
-			i = 0;
-			continue ;
-		}
-		expand_tilde(data, &node->argv[i]);
-		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i])
-			&& expand_wildcard(data, node->argv[i], &entries))
-			return (-1);
-		if (!is_quote(node->argv[i][0]) && has_wildcard(node->argv[i])
-			&& entries)
-			node->argv = update_argv_wildcard(data, node->argv, i, entries);
-		remove_quotes(data, &node->argv[i]);
+		remove_quotes(data, &node->argv[i], &node->argv_info[i]);
+		expand_dollar(data, &node->argv[i], &node->argv_info[i]);
+		expand_tilde(data, &node->argv[i], &node->argv_info[i]);
 		i++;
 	}
+	node->argv = build_expanded_argv(data, node->argv, &node->argv_info);
+	expand_wildcard(data, node);
 	return (0);
 }
 
@@ -56,6 +48,8 @@ int	expand_redir(t_data *data, t_tree *node)
 {
 	t_redir	*trav;
 
+	if (!node)
+		return (0);
 	trav = node->redir;
 	while (trav)
 	{
@@ -68,23 +62,33 @@ int	expand_redir(t_data *data, t_tree *node)
 
 int	expand_single_redir(t_data *data, t_redir *redir)
 {
-	t_list	*entries;
-
-	if (expand_dollar_redir(data, &redir->file))
+	if (!redir || !redir->file)
+		return (0);
+	remove_quotes(data, &redir->file, &redir->info);
+	if (expand_dollar_redir(data, redir))
 		return (-1);
-	expand_tilde(data, &redir->file);
-	if (redir->file && !is_quote(redir->file[0]) && has_wildcard(redir->file))
+	expand_tilde(data, &redir->file, &redir->info);
+	if (expand_wildcard_redir(data, redir))
+		return (-1);
+	return (0);
+}
+
+int	expand_dollar(t_data *data, char **arg, t_metadata *info)
+{
+	int	i;
+
+	if (!arg || !*arg || !info)
+		return (0);
+	init_expand_metadata(data, info);
+	i = 0;
+	while ((*arg) && (*arg)[i])
 	{
-		if (expand_wildcard(data, redir->file, &entries))
-			return (-1);
-		if (entries && entries->next)
+		if (is_dollar_expansion(*arg, info->quote_map, i))
 		{
-			ft_lstclear(&entries, free);
-			return (internal_error(data, ERR_2, NULL, redir->file));
+			*arg = expand_variable(data, *arg, info, i);
+			i = -1;
 		}
-		if (entries)
-			redir->file = update_redir_wildcard(data, redir->file, entries);
+		i++;
 	}
-	remove_quotes(data, &redir->file);
 	return (0);
 }

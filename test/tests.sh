@@ -4,7 +4,6 @@ foo
 
 # QUOTES
 /bin/echo "hello world"
-/bin/echo hello
 /bin/echo "hello"
 /bin/echo "   spaced      "
 /bin/echo he"ll"o
@@ -55,6 +54,29 @@ cat <
 /bin/echo $
 /bin/echo "$"
 $NONE /bin/echo hello
+echo ~
+echo ~+
+echo ~-
+echo ~/hi
+echo ~bhb
+echo "~"
+echo '~'
+echo a~
+VAR="ls src" && $VAR
+VAR="hi" && VAR2=$VAR && echo $VAR2
+VAR="" && echo $VAR
+VAR='"echo hello"' && $VAR
+VAR=~ && echo $VAR
+echo hi'$USER'
+VAR="echo bye" && echo hi"$VAR"
+VAR="ho bye" && ec$VAR
+echo hel"l"o$USER
+echo $USER'$USER'
+echo "$"USER
+echo "$US"ER
+/bin/echo hello > $NONE
+VAR="ho bye" && ec"$VAR"
+"$NONE" /bin/echo hello
 ls *f
 ls *f*
 ls **f**
@@ -63,12 +85,15 @@ ls .*
 /bin/echo *ile *in*
 cat < *ile
 /bin/echo *on*
-VAR="ls src" && $VAR
-VAR="ls src" && "$VAR"
-
-# invalid/incomplete
+echo Make*
+echo Make"*"
+VAR=*ile && echo $VAR
+VAR=*in* && echo $VAR
 /bin/echo hello > *in*
-/bin/echo hello > $NONE
+VAR="hi *file" && echo $VAR
+VAR="hi *file" && echo "$VAR"
+VAR=""*ile"" && echo $VAR
+VAR="'*ile'" && echo $VAR
 
 # BUILTIN
 echo hello && echo -n bye
@@ -153,3 +178,4 @@ ls ||
 /bin/echo "start" && (ls -l | grep minishell) > test/file1 && cat test/file1
 /bin/echo "start" && (ls -l | grep minishell) | /bin/echo end
 ls -l > test/file1 && (cat < test/file1 || echo fail) | wc -l
+echo $SHLVL && ./minishell && echo $SHLVL

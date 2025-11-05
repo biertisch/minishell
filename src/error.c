@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:16:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:10:19 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/04 10:05:31 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,3 +125,4 @@ void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node,
 		error_exit(data, NULL);
 	}
 }
+
