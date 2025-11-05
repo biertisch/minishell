@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/03 19:22:24 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:57:46 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,11 @@ int	process_input(t_data *data)
 	res = lexer(data, data->input);
 	if (res || !data->lexer_list)
 		return (res);
+	print_lexer_list(data->lexer_list);
 	res = parser(data, data->lexer_list);
 	if (res || !data->parser_tree)
 		return (res);
+	print_parser_tree(data->parser_tree);
 	execute(data);
 	return (VALID);
 }
