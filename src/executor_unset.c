@@ -52,7 +52,7 @@ int	execute_unset(t_data *data, t_stack **stack)
 		}
 		i++;
 	}
-	undo_duplicate_std();
+	undo_duplicate_std(1);
 	execute_builtin_check_for_pipe(data, stack);
 	return (0);
 }

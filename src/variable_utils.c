@@ -103,10 +103,9 @@ int	get_first_command(t_data *data, t_stack **stack)
 	{
 		kv_split = ft_split((*stack)->node->argv[i], '=');
 		validate_malloc_execute(data, stack, kv_split, NULL);
-		if (!is_valid_var_name(kv_split[0]) || !kv_split[1])
-			return (ft_splitfree(kv_split), i);
+		if (!is_valid_var_name(kv_split[0]) || (!kv_split[1] && !ft_strchr((*stack)->node->argv[i], '=')))
+      			return (ft_splitfree(kv_split), i);
 		i++;
-
 		ft_splitfree(kv_split);
 	}
 	return (i);

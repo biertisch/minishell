@@ -25,7 +25,7 @@ int	execute_export(t_data *data, t_stack **stack)
 		execute_export_no_option(data, stack);
 	else
 		execute_export_option(data, stack, cmd_i);
-	undo_duplicate_std();
+	undo_duplicate_std(1);
 	execute_builtin_check_for_pipe(data, stack);
 	return (0);
 }
@@ -39,7 +39,7 @@ int	execute_export_option(t_data *data, t_stack **stack, int cmd_i)
 	{
 		kv_split = ft_split((*stack)->node->argv[cmd_i + 1], '=');
 		validate_malloc_execute(data, stack, kv_split, NULL);
-		if (is_valid_var_name(kv_split[0]))
+		if (*((*stack)->node->argv[cmd_i + 1]) != '=' && is_valid_var_name(kv_split[0]))
 		{
 			env = &(data->env_list);
 			while (env && *env && ft_strcmp((*env)->key, kv_split[0]))
@@ -78,9 +78,10 @@ int	execute_export_val_found(t_data *data, t_stack **stack,
 void	execute_export_invalid_var(t_stack **stack, int cmd_i)
 {
 	write(STDERR_FILENO, "minishell: export: `", 20);
-	write(STDERR_FILENO, (*stack)->node->argv[cmd_i],
-		ft_strlen((*stack)->node->argv[cmd_i]));
+	write(STDERR_FILENO, (*stack)->node->argv[cmd_i + 1],
+		ft_strlen((*stack)->node->argv[cmd_i + 1]));
 	write(STDERR_FILENO, "': not a valid identifier\n", 26);
+	(*stack)->exit_status = 1;
 }
 
 int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split)

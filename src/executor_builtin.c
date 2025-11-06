@@ -28,8 +28,8 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 
 	cmd_i = get_first_command(data, stack);
 	(*stack)->phase = DONE;
-	if (!validate_builtin(data, (*stack)->node, cmd_i))
-	{
+	//if (!validate_builtin(data, (*stack)->node, cmd_i))
+//	{
 		if (execute_builtin_should_run_child(data, stack, cmd_i))
 		{
 			pid = fork();
@@ -40,7 +40,7 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 			else
 				parent(stack, pid);
 		}
-	}
+//	}
 	return (0);
 }
 
