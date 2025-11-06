@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 20:51:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:52:51 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int	prompt_input(t_data *data)
 		data->input = readline(data->prompt);
 		if (!data->input)
 			eof_abort(data);
-		// if (g_sig == SIGINT) //is this necessary?
-		// 	sigint_abort(data, NULL, 0);
+		if (g_sig == SIGINT)
+			sigint_abort(data, NULL, 0);
 		if (*data->input)
 		{
 			status = process_input(data);
