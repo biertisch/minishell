@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 13:13:49 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/02 13:13:52 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:07:40 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_stack
 int			is_builtin(char *cmd);
 int			is_builtin_no_fork(char *cmd);
 int			validate_builtin(t_data *data, t_tree *node, int i);
-int			validate_builtin_flags(t_data *data, char **argv, char *allowed);
+int			validate_builtin_flags(char **argv, char *allowed);
 int			validate_env(t_data *data, char **argv);
 int			print_builtin_usage(char *cmd);
 

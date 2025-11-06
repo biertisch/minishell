@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 17:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:17:06 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:05:55 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	setup_handler(t_data *data, int signum, void (*handler)(int), int flags)
 	sa.sa_flags = flags;
 	if (sigaction(signum, &sa, NULL))
 	{
-		system_error(data, "sigaction");
+		system_error(strerror(errno), "sigaction");
 		error_exit(data, NULL);
 	}
 }

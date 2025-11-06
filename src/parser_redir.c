@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 10:22:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 19:38:52 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:06:06 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_redir	*parse_single_redir(t_data *data, t_token **token, t_redir *head)
 	redir = create_redir(type, fd, (*token)->value);
 	if (!redir)
 	{
-		system_error(data, "malloc");
+		system_error(strerror(errno), "malloc");
 		free_redir(head);
 		error_exit(data, NULL);
 	}

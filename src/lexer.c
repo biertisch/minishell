@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 19:39:05 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:10:07 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	get_token_value(t_data *data, char *input, char **value)
 		i++;
 	}
 	if (quote)
-		return (syntax_error(data, SYN_ERR_0, &quote));
+		return (missing_quote(data, quote));
 	if (i == 0 && is_operator(input + i))
 		i = get_operator_len(input + i);
 	*value = ft_substr(input, 0, i);

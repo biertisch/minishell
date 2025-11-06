@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_redir.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 22:09:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 19:35:07 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:00:52 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	expand_dollar_redir(t_data *data, t_redir *redir)
 	expand_dollar(data, &redir->file, &redir->info);
 	if (redir->info.key && !*(redir->info.value))
 	{
-		internal_error(data, INT_ERR_1, NULL, tmp);
+		internal_error(INT_ERR_1, NULL, tmp);
 		return (free(tmp), -1);
 	}
 	free(tmp);
@@ -41,7 +41,7 @@ int	expand_wildcard_redir(t_data *data, t_redir *redir)
 		if (entries->next)
 		{
 			ft_lstclear(&entries, free);
-			return (internal_error(data, INT_ERR_1, NULL, redir->file));
+			return (internal_error(INT_ERR_1, NULL, redir->file));
 		}
 		redir->file = apply_redir_wildcard(data, redir->file, entries);
 	}

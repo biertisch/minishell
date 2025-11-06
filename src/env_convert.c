@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_convert.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:51:27 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 19:34:42 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 13:59:56 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	envp_to_list(t_data *data, char **envp, char **argv)
 		split_env_entry(data, envp[i], node);
 		if (!node->key[0])
 		{
-			internal_error(data, INT_ERR_0, NULL, NULL);
+			internal_error(INT_ERR_0, NULL, NULL);
 			free_env_node(&node);
 			i++;
 			continue ;
