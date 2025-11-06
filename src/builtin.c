@@ -25,14 +25,13 @@ int	is_builtin_no_fork(char *cmd)
 	return (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "export")
 	 	|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "exit"));
 }
-
+/**
 int	validate_builtin(t_data *data, t_tree *node, int i)
 {
 	if (!node || node->type != NODE_CMD)
 		return (0);
 	if (!ft_strcmp(node->argv[i], "pwd") || !ft_strcmp(node->argv[i], "export")
 		|| !ft_strcmp(node->argv[i], "unset"))
-		if (validate_builtin_flags(data, node->argv, NULL))
 			return (-1);
 	if (!ft_strcmp(node->argv[i], "env") && validate_env(data, node->argv))
 		return (-1);
@@ -49,19 +48,16 @@ int	validate_builtin(t_data *data, t_tree *node, int i)
 	}
 	return (0);
 }
-
-int	validate_builtin_flags(t_data *data, char **argv, char *allowed)
+**/
+int	has_builtin_flag(char **argv)
 {
 	int	i;
 
 	i = 0;
 	while (argv[i])
 	{
-		if (argv[i][0] == '-' && (!allowed || ft_strcmp(argv[i], allowed)))
-		{
-			internal_error(data, ERR_3, argv[0], argv[i]);
-			return (print_builtin_usage(argv[0]));
-		}
+		if (argv[i][0] == '-')
+			return (1);
 		i++;
 	}
 	return (0);

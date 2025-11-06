@@ -33,9 +33,9 @@ typedef struct s_stack
 int			is_builtin(char *cmd);
 int			is_builtin_no_fork(char *cmd);
 int			validate_builtin(t_data *data, t_tree *node, int i);
-int			validate_builtin_flags(t_data *data, char **argv, char *allowed);
 int			validate_env(t_data *data, char **argv);
 int			print_builtin_usage(char *cmd);
+int			has_builtin_flag(char **argv);
 
 //executor.c
 int			execute(t_data *data);
@@ -136,7 +136,7 @@ int			execute_env(t_data *data, t_stack **stack);
 //executor_cd.c
 int			execute_cd(t_data *data, t_stack **stack);
 int			execute_cd_option(t_data *data, t_stack **stack, int cmd_i, int *chdir_res);
-int			cd_fail(char *dir);
+int			cd_fail(t_stack **stack, char *dir);
 
 //executor_pwd.c
 int			execute_pwd(t_data *data, t_stack **stack);

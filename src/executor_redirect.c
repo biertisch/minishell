@@ -114,7 +114,7 @@ int	open_redir_in(t_data *data, t_redir *redir)
 		{
 			if (expand_single_redir(data, redir))
 			{
-				redir->in_fd = -1;
+				redir->out_fd = -1;
 				return (2);	
 			}
 			if (redir->type == REDIR_OUT)

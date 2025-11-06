@@ -25,6 +25,12 @@ int	execute_cd(t_data *data, t_stack **stack)
 		handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	(*stack)->exit_status = 0;
 	chdir_res = 0;
+	if (!getcwd(NULL, 0) && !ft_strncmp((*stack)->node->argv[1], "..", 2))
+	{
+		write(STDERR_FILENO, "placeholder fucking shit\n", 25);
+		(*stack)->exit_status = 1;
+		return (0);
+	}
 	curr_pwd = ft_strdup(getcwd(NULL, 0));
 	validate_malloc_execute(data, stack, curr_pwd, NULL);
 	if (!(*stack)->node->argv[cmd_i + 1])
@@ -32,7 +38,7 @@ int	execute_cd(t_data *data, t_stack **stack)
 	else
 		execute_cd_option(data, stack, cmd_i, &chdir_res);
 	if (chdir_res)
-		(*stack)->exit_status = cd_fail((*stack)->node->argv[cmd_i + 1]);
+		(*stack)->exit_status = cd_fail(stack, (*stack)->node->argv[cmd_i + 1]);
 	else
 	{
 		new_pwd = ft_strdup(getcwd(NULL, 0));
@@ -40,6 +46,8 @@ int	execute_cd(t_data *data, t_stack **stack)
 		set_env_value(data->env_list, "OLDPWD", curr_pwd);
 		set_env_value(data->env_list, "PWD", new_pwd);
 	}
+	if ((*stack)->exit_status != 0)
+		free(curr_pwd);
 	undo_duplicate_std(1);
 	execute_builtin_check_for_pipe(data, stack);
 	return (0);
@@ -61,21 +69,32 @@ int	execute_cd_option(t_data *data, t_stack **stack, int cmd_i, int *chdir_res)
 			*chdir_res = chdir((*stack)->node->argv[cmd_i + 1]);
 	}
 	else
-		(*stack)->exit_status = cd_fail(NULL);
+		(*stack)->exit_status = cd_fail(stack, NULL);
 	return (0);
 }
 
-int	cd_fail(char *dir)
+int	cd_fail(t_stack **stack, char *dir)
 {
 	write(STDERR_FILENO, "minishell: cd: ", 15);
 	write(STDERR_FILENO, dir, ft_strlen(dir));
-	if (errno == ENOENT)
-		write(STDERR_FILENO, ": No such file or directory\n", 28);
+	if (!dir)
+	{
+		if (has_builtin_flag((*stack)->node->argv))
+			write(STDERR_FILENO, " placeholder flag\n", 18);
+		else
+			write(STDERR_FILENO, "too many arguments\n", 20);
+	}
+	else if (errno == ENOENT)
+	{
+		if (has_builtin_flag((*stack)->node->argv))
+			write(STDERR_FILENO, " placeholder flag\n", 18);
+		else
+			write(STDERR_FILENO, ": No such file or directory\n", 28);
+	}
 	else if (errno == ENOTDIR)
 		write(STDERR_FILENO, ": Not a directory\n", 18);
 	else if (errno == EACCES)
 		write(STDERR_FILENO, ": Permission denied\n", 20);
-	else if (!dir)
-		write(STDERR_FILENO, "too many arguments\n", 20);
+	
 	return (1);
 }
