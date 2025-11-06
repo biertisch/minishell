@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 16:02:16 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 19:57:58 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ char		*expand_variable(t_data *data, char *arg, t_metadata *info, int i);
 char		*apply_expansion(char *src, t_metadata *info, int start);
 
 //expander_metadata.c
-int			init_expand_metadata(t_data *data, t_metadata *info);
-int			rebuild_quote_map(t_data *data, t_metadata *info, int start);
-int			handle_empty_quote_map(t_data *data, t_metadata *info, int start,
-				int old_len);
+int			init_expand_metadata(t_data *data, t_metadata *info, char *arg);
+// int			rebuild_quote_map(t_data *data, t_metadata *info, int start);
+// int			handle_empty_quote_map(t_data *data, t_metadata *info, int start,
+				// int old_len);
 int			rebuild_expand_map(t_data *data, t_metadata *info, int start,
 				int type);
 int			handle_empty_expand_map(t_data *data, t_metadata *info);
@@ -42,8 +42,9 @@ int			handle_empty_expand_map(t_data *data, t_metadata *info);
 int			remove_quotes(t_data *data, char **arg, t_metadata *info);
 int			count_quotes(char *arg, int *expand_map);
 int			copy_without_quotes(char *dest, char *src, t_metadata *info);
-int			get_quote_status(int *quote_map, int start, int len);
-int			get_quote_map(t_data *data, char *arg, t_metadata *info);
+// int			get_quote_status(int *quote_map, int start, int len);
+// int			get_quote_map(t_data *data, char *arg, t_metadata *info);
+int			has_quotes(char *s);
 
 //expander_rebuild.c
 char		**build_expanded_argv(t_data *data, char **argv, t_metadata **info);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:57:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 16:06:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 19:48:05 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,19 @@ int	get_quote_map(t_data *data, char *arg, t_metadata *info)
 		toggle_quote(arg[i], &quote);
 		info->quote_map[i] = is_quote(quote);
 		i++;
+	}
+	return (0);
+}
+
+int	has_quotes(char *s)
+{
+	if (!s)
+		return (0);
+	while (*s)
+	{
+		if (is_quote(*s))
+			return (1);
+		s++;
 	}
 	return (0);
 }

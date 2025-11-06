@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 15:52:54 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 18:36:30 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ int	expand_single_redir(t_data *data, t_redir *redir)
 {
 	if (!redir || !redir->file)
 		return (0);
-	remove_quotes(data, &redir->file, &redir->info);
 	if (expand_dollar_redir(data, redir))
 		return (-1);
 	expand_tilde(data, &redir->file, &redir->info);
+	remove_quotes(data, &redir->file, &redir->info);
 	if (expand_wildcard_redir(data, redir))
 		return (-1);
 	return (0);
@@ -80,7 +80,7 @@ int	expand_dollar(t_data *data, char **arg, t_metadata *info)
 
 	if (!arg || !*arg || !info)
 		return (0);
-	init_expand_metadata(data, info);
+	init_expand_metadata(data, info, *arg);
 	quote = 0;
 	i = 0;
 	while ((*arg) && (*arg)[i])

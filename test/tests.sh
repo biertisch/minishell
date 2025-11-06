@@ -77,6 +77,11 @@ echo "$US"ER
 /bin/echo hello > $NONE
 VAR="ho bye" && ec"$VAR"
 "$NONE" /bin/echo hello
+echo "$NONE""Makefile"
+echo $"hello"
+echo $'hello'
+echo $1HOME
+echo $42HOME
 ls *f
 ls *f*
 ls **f**

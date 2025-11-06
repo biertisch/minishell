@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 15:47:18 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 19:37:02 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ int	is_dollar_expansion(char *input, char quote, int start)
 	return (quote != '\''
 		&& input[start] == '$'
 		&& input[start + 1]
-		&& (ft_isalpha(input[start + 1])
+		&& (ft_isalnum(input[start + 1])
 			|| input[start + 1] == '_'
-			|| input[start + 1] == '?'));
+			|| input[start + 1] == '?'
+			|| (is_quote(input[start + 1])
+			&& input[start + 1] != quote)));
 }
 
 int	get_key_value(t_data *data, char *arg, t_metadata *info, int i)
@@ -60,8 +62,11 @@ char	*get_env_key(char *arg, int start)
 	i = start;
 	if (arg[i] == '$')
 		i++;
-	while (arg[i] && (ft_isalnum(arg[i]) || arg[i] == '_'))
+	if (ft_isdigit(arg[i]))
 		i++;
+	else
+		while (arg[i] && (ft_isalnum(arg[i]) || arg[i] == '_'))
+			i++;
 	len = i - start;
 	key = malloc(sizeof(char) * (len + 1));
 	if (!key)
