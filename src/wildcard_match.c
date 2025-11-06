@@ -6,39 +6,11 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 14:39:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 22:07:14 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:41:59 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	filter_matches(t_list **head, char *pattern)
-{
-	t_list	*curr;
-	t_list	*prev;
-	t_list	*tmp;
-
-	curr = *head;
-	prev = NULL;
-	while (curr)
-	{
-		if (!match_wildcard((char *)curr->content, pattern))
-		{
-			tmp = curr;
-			curr = curr->next;
-			if (prev)
-				prev->next = curr;
-			else
-				*head = curr;
-			ft_lstdelone(tmp, free);
-		}
-		else
-		{
-			prev = curr;
-			curr = curr->next;
-		}
-	}
-}
 
 int	match_wildcard(char *entry, char *pattern)
 {
@@ -84,4 +56,30 @@ int	backtrack_on_mismatch(int *i, int *j, int *star)
 	*j = *star + 1;
 	(*i)++;
 	return (1);
+}
+
+void	sort_list(t_list *head)
+{
+	t_list	*curr;
+	t_list	*next;
+	t_list	*tmp;
+
+	if (!head)
+		return ;
+	curr = head;
+	while (curr)
+	{
+		next = curr->next;
+		while (next)
+		{
+			if (ft_strcmp(curr->content, next->content) > 0)
+			{
+				tmp = curr->content;
+				curr->content = next->content;
+				next->content = tmp;
+			}
+			next = next->next;
+		}
+		curr = curr->next;
+	}
 }
