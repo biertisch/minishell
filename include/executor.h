@@ -198,7 +198,7 @@ int			wait_for_heredoc(t_data *data, pid_t pid);
 
 //executo_builtins_utils.c
 int			*duplicate_std(void);
-void			undo_duplicate_std(void);
+void			undo_duplicate_std(int dup);
 void		execute_builtin_check_for_pipe(t_data *data, t_stack **stack);
 
 #endif

@@ -110,6 +110,42 @@ int	open_redir_in(t_data *data, t_redir *redir)
 				return (2);
 			}
 		}
+		if (redir->type == REDIR_OUT || redir->type == APPEND)
+		{
+			if (expand_single_redir(data, redir))
+			{
+				redir->in_fd = -1;
+				return (2);	
+			}
+			if (redir->type == REDIR_OUT)
+				redir->out_fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			else	
+				redir->out_fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if(redir->fd != -1)
+			{
+				duplicate_std();
+				dup2(redir->out_fd, redir->fd);
+				close(redir->out_fd);
+			}
+			else
+			{
+				fd = malloc(sizeof(int));
+				validate_malloc(data, fd, NULL);
+				*fd = redir->out_fd;
+				new = ft_lstnew(fd);
+				validate_malloc(data, new, fd);
+				if (!data->open_redir_ins)
+					data->open_redir_ins = new;
+				else
+					ft_lstadd_back(&data->open_redir_ins, new);
+				if (redir->in_fd == -1)
+				{
+					handle_open_errors(redir);
+					return (2);
+				}
+			}
+
+		}
 		redir = redir->next;
 	}
 	return (1);

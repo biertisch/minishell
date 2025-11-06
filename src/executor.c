@@ -26,6 +26,7 @@ int	execute(t_data *data)
 	traverse_redir_in(data, &data->stack);
 	stack = create_stack(data);
 	execute_stack(data, &stack);
+	undo_duplicate_std(1);
 	setup_signals(data);
 	return (0);
 }

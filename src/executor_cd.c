@@ -40,7 +40,7 @@ int	execute_cd(t_data *data, t_stack **stack)
 		set_env_value(data->env_list, "OLDPWD", curr_pwd);
 		set_env_value(data->env_list, "PWD", new_pwd);
 	}
-	undo_duplicate_std();
+	undo_duplicate_std(1);
 	execute_builtin_check_for_pipe(data, stack);
 	return (0);
 }
