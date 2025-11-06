@@ -48,6 +48,7 @@ int	validate_builtin(t_data *data, t_tree *node, int i)
 	}
 	return (0);
 }
+**/
 int	has_builtin_flag(char **argv)
 {
 	int	i;
