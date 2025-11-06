@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 15:30:06 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:05:45 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ int	expand_single_wildcard(t_data *data, char *arg, t_list **entries)
 		return (0);
 	dir_name = getcwd(NULL, 0);
 	if (!dir_name)
-		return (system_error(data, "getcwd"));
+		return (system_error(strerror(errno), "getcwd"));
 	dir_stream = opendir(dir_name);
 	free(dir_name);
 	if (!dir_stream)
-		return (system_error(data, "opendir"));
+		return (system_error(strerror(errno), "opendir"));
 	*entries = get_entries(data, dir_stream);
 	if (closedir(dir_stream))
-		return (system_error(data, "closedir"));
+		return (system_error(strerror(errno), "closedir"));
 	if (!entries)
 		return (0);
 	filter_matches(entries, arg);
