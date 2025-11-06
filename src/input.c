@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 19:39:08 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:39:13 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,25 @@
 int	read_input(t_data *data)
 {
 	int	status;
+	int	flags;
 
-	if (isatty(STDIN_FILENO))
+	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
 		return (prompt_input(data));
-	while (1)
+	flags = 1;
+	ioctl(STDIN_FILENO, FIONBIO, &flags);
+	data->input = get_next_line(STDIN_FILENO);
+	while (data->input)
 	{
-		data->input = get_next_line(STDIN_FILENO);
-		if (!data->input)
-			eof_abort(data);
 		if (*data->input)
 		{
 			status = process_input(data);
-			if (status == INCOMPLETE && data->input)
-				process_input(data);
-			else if (status == INCOMPLETE_EOF)
-				eof_abort(data);
+			if (status == INCOMPLETE_EOF)
+				break ;
 		}
 		free_command_data(data);
+		data->input = get_next_line(STDIN_FILENO);
 	}
+	eof_abort(data);
 	return (0);
 }
 
