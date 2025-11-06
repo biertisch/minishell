@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 20:25:54 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:42:28 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,14 @@ int			expand_wildcard(t_data *data, t_tree *node);
 int			has_wildcard(char *arg, t_metadata *info);
 int			expand_single_wildcard(t_data *data, char *arg, t_list **entries);
 t_list		*get_entries(t_data *data, DIR *dir_stream);
+void		filter_matches(t_list **head, char *pattern);
 
 //wildcard_match.c
-void		filter_matches(t_list **head, char *pattern);
 int			match_wildcard(char *entry, char *wildcard);
 void		advance_both(int *i, int *j);
 void		record_star(int *j, int *star);
 int			backtrack_on_mismatch(int *i, int *j, int *star);
+void		sort_list(t_list *head);
 
 //wildcard_rebuild.c
 int			build_wildcard_argv(t_tree *node, t_list *entries, int star_index);

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 11:43:36 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 19:58:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:41:52 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	expand_single_wildcard(t_data *data, char *arg, t_list **entries)
 	if (!entries)
 		return (0);
 	filter_matches(entries, arg);
+	sort_list(*entries);
 	return (0);
 }
 
@@ -95,4 +96,32 @@ t_list	*get_entries(t_data *data, DIR *dir_stream)
 		dirent = readdir(dir_stream);
 	}
 	return (head);
+}
+
+void	filter_matches(t_list **head, char *pattern)
+{
+	t_list	*curr;
+	t_list	*prev;
+	t_list	*tmp;
+
+	curr = *head;
+	prev = NULL;
+	while (curr)
+	{
+		if (!match_wildcard((char *)curr->content, pattern))
+		{
+			tmp = curr;
+			curr = curr->next;
+			if (prev)
+				prev->next = curr;
+			else
+				*head = curr;
+			ft_lstdelone(tmp, free);
+		}
+		else
+		{
+			prev = curr;
+			curr = curr->next;
+		}
+	}
 }
