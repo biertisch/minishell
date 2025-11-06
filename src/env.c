@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:15 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 22:10:14 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:01:52 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_env	*generate_env_pwd(t_data *data)
 	node->value = getcwd(NULL, 0);
 	if (!node->value)
 	{
-		system_error(data, "getcwd");
+		system_error(strerror(errno), "getcwd");
 		free_env_node(&node);
 		error_exit(data, NULL);
 	}

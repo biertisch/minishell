@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 12:31:48 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 17:21:09 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:35:30 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	heredoc_eof_abort(t_data *data, char *target)
 	char	*tmp;
 	char	*error_msg;
 
-	tmp = ft_strjoin(ERR_11, target);
+	tmp = ft_strjoin(INT_ERR_2, target);
 	validate_malloc(data, tmp, NULL);
 	error_msg = ft_strjoin(tmp, "')\n");
 	validate_malloc(data, error_msg, tmp);

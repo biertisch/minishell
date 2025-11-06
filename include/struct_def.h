@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_def.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/04 15:16:56 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:33:45 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef enum e_phase
 typedef enum e_error
 {
 	SYSTEM_ERR,
-	SYNTAX_ERR,
+	SYN_ERR,
 	INTERNAL_ERR
 }	t_error;
 
