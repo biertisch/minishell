@@ -72,6 +72,8 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 {
 	if (redir->in_fd == -1)
 	{
+		if (!has_node_type_ancestor(*stack, NODE_PIPE) || is_builtin_no_fork((*stack)->node->argv[0]))
+			return ;
 		executor_cleanup(data, stack, cmd);
 		exit(1);
 	}
@@ -101,7 +103,8 @@ void	child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 {
 	if (redir->out_fd == -1)
 	{
-		handle_open_errors(redir);
+		if (!has_node_type_ancestor(*stack, NODE_PIPE) || is_builtin_no_fork((*stack)->node->argv[0]))
+			return ;
 		executor_cleanup(data, stack, cmd);
 		exit(1);
 	}
@@ -156,6 +159,8 @@ void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
 	cmd_i = get_first_command(data, stack);
 	if ((*stack)->in_fd == -1)
 	{
+		if (!has_node_type_ancestor(*stack, NODE_PIPE) || is_builtin_no_fork((*stack)->node->argv[0]))
+			return ;
 		executor_cleanup(data, stack, cmd);
 		exit(1);
 	}

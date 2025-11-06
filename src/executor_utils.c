@@ -26,7 +26,7 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	if (full_path)
 		return (run_curr_dir(data, stack, cmd));
 	slash_path = ft_strjoin("/", cmd);
-	if (!ft_strcmp(slash_path, "/"))
+	if (!ft_strcmp(slash_path, "/") || !ft_strcmp(slash_path, "/.."))
 		cmd_not_found(data, stack, NULL, slash_path);
 	validate_malloc_execute(data, stack, slash_path, cmd);
 	if (get_env_value(data->env_list, "PATH"))
