@@ -33,9 +33,9 @@ typedef struct s_stack
 int			is_builtin(char *cmd);
 int			is_builtin_no_fork(char *cmd);
 int			validate_builtin(t_data *data, t_tree *node, int i);
-int			validate_builtin_flags(char **argv, char *allowed);
 int			validate_env(t_data *data, char **argv);
 int			print_builtin_usage(char *cmd);
+int			has_builtin_flag(char **argv);
 
 //executor.c
 int			execute(t_data *data);
@@ -82,6 +82,7 @@ void		executor_cleanup(t_data *data, t_stack **stack, char *cmd);
 char		**split_by_first_equal(char *var);
 void		cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path);
 void		cmd_is_directory(t_data *data, t_stack **stack, int fd);
+void		check_err_output(t_data *data, t_stack **stack, char **paths, char *slash_path);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
@@ -135,7 +136,7 @@ int			execute_env(t_data *data, t_stack **stack);
 //executor_cd.c
 int			execute_cd(t_data *data, t_stack **stack);
 int			execute_cd_option(t_data *data, t_stack **stack, int cmd_i, int *chdir_res);
-int			cd_fail(char *dir);
+int			cd_fail(t_stack **stack, char *dir);
 
 //executor_pwd.c
 int			execute_pwd(t_data *data, t_stack **stack);
@@ -197,7 +198,7 @@ int			wait_for_heredoc(t_data *data, pid_t pid);
 
 //executo_builtins_utils.c
 int			*duplicate_std(void);
-void			undo_duplicate_std(void);
+void			undo_duplicate_std(int dup);
 void		execute_builtin_check_for_pipe(t_data *data, t_stack **stack);
 
 #endif

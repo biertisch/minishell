@@ -26,7 +26,7 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	if (full_path)
 		return (run_curr_dir(data, stack, cmd));
 	slash_path = ft_strjoin("/", cmd);
-	if (!ft_strcmp(slash_path, "/"))
+	if (!ft_strcmp(slash_path, "/") || !ft_strcmp(slash_path, "/.."))
 		cmd_not_found(data, stack, NULL, slash_path);
 	validate_malloc_execute(data, stack, slash_path, cmd);
 	if (get_env_value(data->env_list, "PATH"))
@@ -68,8 +68,34 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	return (NULL);
 }
 
+void	check_err_output(t_data *data, t_stack **stack, char **paths, char *slash_path)
+{
+	t_redir	*redir;
+	
+	redir = (*stack)->node->redir;
+	while (redir)
+	{
+		if (redir->type == REDIR_OUT && redir->fd == 2)
+		{
+			redir->out_fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (redir->out_fd == -1)
+			{
+				handle_open_errors(redir);
+				ft_splitfree(paths);
+				executor_cleanup(data, stack, slash_path);
+				exit(1);
+			}
+			dup2(redir->out_fd, redir->fd);
+			close(redir->out_fd);
+			break;
+		}
+		redir = redir->next;
+	}
+}
+
 void	cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path)
 {
+	check_err_output(data, stack, paths, slash_path);
 	write(STDERR_FILENO, (*stack)->node->argv[get_first_command(data, stack)], ft_strlen((*stack)->node->argv[get_first_command(data, stack)]));
 	write(STDERR_FILENO, ": command not found\n", 20);
 	if ((*stack)->node->redir)

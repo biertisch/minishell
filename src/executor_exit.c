@@ -31,7 +31,7 @@ int	execute_exit(t_data *data, t_stack **stack)
 	(*stack)->exit_status = exit_code;
 	if (!(*stack)->node->argv[1] || !(*stack)->node->argv[2])
 	{
-		undo_duplicate_std();
+		undo_duplicate_std(1);
 		free_stack(stack);
 		free_all(data);
 		exit(exit_code);
@@ -56,7 +56,7 @@ void	check_exit_input(t_data *data, t_stack **stack, int *exit_code, int cmd_i)
 				write(STDERR_FILENO, "minishell : exit: ", 18);
 				write(STDERR_FILENO, (*stack)->node->argv[1], ft_strlen((*stack)->node->argv[1]));
 				write(STDERR_FILENO, ": numeric argument required\n", 28);
-				undo_duplicate_std();
+				undo_duplicate_std(1);
 				free_stack(stack);
 				free_all(data);
 				exit(2);
@@ -68,7 +68,7 @@ void	check_exit_input(t_data *data, t_stack **stack, int *exit_code, int cmd_i)
 			write(STDERR_FILENO, "exit\n", 5);
 			write(STDERR_FILENO, "minishell : exit: too many arguments\n", 37);
 			*exit_code = 1;
-			undo_duplicate_std();
+			undo_duplicate_std(1);
 		}
 	}
 }

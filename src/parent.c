@@ -44,7 +44,10 @@ int	parent_single_command(t_stack **stack, pid_t pid)
 		(*stack)->exit_status = WTERMSIG(status) + 128;
 	handle_child_exit(status);
 	if ((*stack)->next && (*stack)->next->type == NODE_SUBSHELL)
+	{
+		undo_duplicate_std(1);
 		(*stack)->next->exit_status = (*stack)->exit_status;
+	}
 	return (1);
 }
 

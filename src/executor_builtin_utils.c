@@ -40,26 +40,29 @@ int	*duplicate_std(void)
 	return (dups);
 }
 
-void	undo_duplicate_std(void)
+void	undo_duplicate_std(int dup)
 {
 	int	*dups;
 
 	dups = duplicate_std();
 	if (dups[1] != 0)
 	{
-		dup2(dups[0], STDIN_FILENO);
+		if (dup)
+			dup2(dups[0], STDIN_FILENO);
 		close(dups[0]);
 		dups[1] = 0;
 	}
 	if (dups[3] != 0)
 	{
-		dup2(dups[2], STDOUT_FILENO);
+		if (dup)
+			dup2(dups[2], STDOUT_FILENO);
 		close(dups[2]);
 		dups[3] = 0;
 	}
 	if (dups[5] != 0)
 	{
-		dup2(dups[4], STDERR_FILENO);
+		if (dup)
+			dup2(dups[4], STDERR_FILENO);
 		close(dups[4]);
 		dups[5] = 0;
 	}
