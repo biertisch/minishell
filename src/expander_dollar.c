@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   expander_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 21:59:26 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 15:47:18 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_dollar_expansion(char *input, int *quote_map, int start)
+int	is_dollar_expansion(char *input, char quote, int start)
 {
-	return (quote_map[start] != 1
+	return (quote != '\''
 		&& input[start] == '$'
 		&& input[start + 1]
-		&& quote_map[start] == quote_map[start + 1]
 		&& (ft_isalpha(input[start + 1])
 			|| input[start + 1] == '_'
 			|| input[start + 1] == '?'));
@@ -38,7 +37,7 @@ int	get_key_value(t_data *data, char *arg, t_metadata *info, int i)
 	}
 	else
 	{
-		info->key = get_env_key(arg, info->quote_map, i);
+		info->key = get_env_key(arg, i);
 		validate_malloc(data, info->key, NULL);
 		tmp = get_env_value(data->env_list, info->key + 1);
 		if (!tmp)
@@ -52,19 +51,16 @@ int	get_key_value(t_data *data, char *arg, t_metadata *info, int i)
 	return (0);
 }
 
-char	*get_env_key(char *arg, int *quote_map, int start)
+char	*get_env_key(char *arg, int start)
 {
 	char	*key;
 	int		len;
 	int		i;
-	int		status;
 
 	i = start;
-	status = quote_map[i];
 	if (arg[i] == '$')
 		i++;
-	while (arg[i] && quote_map[i] == status
-		&& (ft_isalnum(arg[i]) || arg[i] == '_'))
+	while (arg[i] && (ft_isalnum(arg[i]) || arg[i] == '_'))
 		i++;
 	len = i - start;
 	key = malloc(sizeof(char) * (len + 1));
@@ -80,7 +76,6 @@ char	*expand_variable(t_data *data, char *arg, t_metadata *info, int i)
 
 	get_key_value(data, arg, info, i);
 	info->total_len = ft_strlen(arg) - info->key_len + info->value_len;
-	rebuild_quote_map(data, info, i);
 	rebuild_expand_map(data, info, i, 1);
 	new_arg = apply_expansion(arg, info, i);
 	validate_malloc(data, new_arg, NULL);

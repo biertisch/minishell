@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:57:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 21:59:33 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:06:13 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	remove_quotes(t_data *data, char **arg, t_metadata *info)
 
 	if (!arg || !*arg || !info)
 		return (0);
-	to_remove = count_quotes(*arg);
+	to_remove = count_quotes(*arg, info->expand_map);
 	info->total_len = ft_strlen(*arg) - to_remove;
 	free(info->quote_map);
 	if (info->total_len <= 0)
@@ -31,13 +31,13 @@ int	remove_quotes(t_data *data, char **arg, t_metadata *info)
 		return (0);
 	new_arg = ft_calloc(info->total_len + 1, sizeof(char));
 	validate_malloc(data, new_arg, NULL);
-	copy_without_quotes(new_arg, *arg, info->quote_map);
+	copy_without_quotes(new_arg, *arg, info);
 	free(*arg);
 	*arg = new_arg;
 	return (0);
 }
 
-int	count_quotes(char *arg)
+int	count_quotes(char *arg, int *expand_map)
 {
 	char	quote;
 	int		count;
@@ -48,14 +48,14 @@ int	count_quotes(char *arg)
 	i = 0;
 	while (arg[i])
 	{
-		if (toggle_quote(arg[i], &quote))
+		if (toggle_quote(arg[i], &quote) && !expand_map[i])
 			count++;
 		i++;
 	}
 	return (count);
 }
 
-int	copy_without_quotes(char *dest, char *src, int *map)
+int	copy_without_quotes(char *dest, char *src, t_metadata *info)
 {
 	char	quote;
 	int		i;
@@ -66,10 +66,10 @@ int	copy_without_quotes(char *dest, char *src, int *map)
 	j = 0;
 	while (src[i])
 	{
-		if (!toggle_quote(src[i], &quote))
+		if (!toggle_quote(src[i], &quote) || info->expand_map[i])
 		{
 			dest[j] = src[i];
-			map[j] = is_quote(quote);
+			info->quote_map[j] = is_quote(quote);
 			j++;
 		}
 		i++;

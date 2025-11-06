@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:57:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 14:36:52 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 15:50:08 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@ int	expand_tilde(t_data *data, char **arg, t_metadata *info)
 {
 	char	*new_arg;
 
-	if (!arg || !*arg || !info || !has_tilde(*arg, info->quote_map[0]))
+	if (!arg || !*arg || !info || !has_tilde(*arg))
 		return (0);
 	update_tilde_key_value(data, *arg, info);
 	if (!*(info->value))
 		return (0) ;
 	info->total_len = ft_strlen(*arg) - info->key_len + info->value_len;
-	rebuild_quote_map(data, info, 0);
 	rebuild_expand_map(data, info, 0, 2);
 	new_arg = apply_expansion(*arg, info, 0);
 	validate_malloc(data, new_arg, NULL);
@@ -31,11 +30,9 @@ int	expand_tilde(t_data *data, char **arg, t_metadata *info)
 	return (0);
 }
 
-int	has_tilde(char *arg, int quote_status)
+int	has_tilde(char *arg)
 {
-	return (!quote_status
-		&& arg
-		&& (!ft_strcmp(arg, "~")
+	return (arg && (!ft_strcmp(arg, "~")
 			|| !ft_strncmp(arg, "~/", 2)
 			|| !ft_strncmp(arg, "~+", 2)
 			|| !ft_strncmp(arg, "~-", 2)));

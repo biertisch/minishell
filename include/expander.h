@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 14:32:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:02:16 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int			expand_single_redir(t_data *data, t_redir *redir);
 int			expand_dollar(t_data *data, char **arg, t_metadata *info);
 
 //expander_dollar.c
-int			is_dollar_expansion(char *arg, int *quote_map, int start);
+int			is_dollar_expansion(char *arg, char quote, int start);
 int			get_key_value(t_data *data, char *arg, t_metadata *info, int i);
-char		*get_env_key(char *arg, int *quote_map, int start);
+char		*get_env_key(char *arg, int start);
 char		*expand_variable(t_data *data, char *arg, t_metadata *info, int i);
 char		*apply_expansion(char *src, t_metadata *info, int start);
 
@@ -40,8 +40,8 @@ int			handle_empty_expand_map(t_data *data, t_metadata *info);
 
 //expander_quotes.c
 int			remove_quotes(t_data *data, char **arg, t_metadata *info);
-int			count_quotes(char *arg);
-int			copy_without_quotes(char *dest, char *src, int *map);
+int			count_quotes(char *arg, int *expand_map);
+int			copy_without_quotes(char *dest, char *src, t_metadata *info);
 int			get_quote_status(int *quote_map, int start, int len);
 int			get_quote_map(t_data *data, char *arg, t_metadata *info);
 
@@ -69,7 +69,7 @@ int			split_on_ifs(char **dest, char *src, t_metadata *src_info,
 
 //expand_tilde.c
 int			expand_tilde(t_data *data, char **arg, t_metadata *info);
-int			has_tilde(char *arg, int quote_status);
+int			has_tilde(char *arg);
 int			update_tilde_key_value(t_data *data, char *arg, t_metadata *info);
 char		*get_tilde_key(char *arg);
 char		*get_tilde_value(t_data *data, char *key);
