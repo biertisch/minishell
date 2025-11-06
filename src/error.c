@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:16:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 14:04:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:45:03 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	append_postfix(char *msg, char *label)
 }
 
 void	validate_malloc_execute(t_data *data, t_stack **stack,
-			     void *ptr, void *to_free)
+	void *ptr, void *to_free)
 {
 	if (!ptr)
 	{

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 19:24:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 14:24:38 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:44:36 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,3 @@ char	*get_prompt_pwd(t_data *data)
 	ft_strlcpy(display + 1, pwd + home_len, pwd_len - home_len + 1);
 	return (display);
 }
-
