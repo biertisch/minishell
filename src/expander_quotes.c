@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:57:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 19:48:05 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:24:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,35 +75,6 @@ int	copy_without_quotes(char *dest, char *src, t_metadata *info)
 		i++;
 	}
 	dest[j] = '\0';
-	return (0);
-}
-
-int	get_quote_status(int *quote_map, int start, int len)
-{
-	if (start < len)
-		return (quote_map[start]);
-	return (0);
-}
-
-int	get_quote_map(t_data *data, char *arg, t_metadata *info)
-{
-	int		i;
-	char	quote;
-
-	free(info->quote_map);
-	if (!info->total_len)
-		info->quote_map = ft_calloc(1, sizeof(int));
-	else
-		info->quote_map = ft_calloc(info->total_len, sizeof(int));
-	validate_malloc(data, info->quote_map, NULL);
-	quote = 0;
-	i = 0;
-	while (arg[i])
-	{
-		toggle_quote(arg[i], &quote);
-		info->quote_map[i] = is_quote(quote);
-		i++;
-	}
 	return (0);
 }
 

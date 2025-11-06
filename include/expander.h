@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 19:57:58 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:25:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,16 @@ char		*apply_expansion(char *src, t_metadata *info, int start);
 
 //expander_metadata.c
 int			init_expand_metadata(t_data *data, t_metadata *info, char *arg);
-// int			rebuild_quote_map(t_data *data, t_metadata *info, int start);
-// int			handle_empty_quote_map(t_data *data, t_metadata *info, int start,
-				// int old_len);
 int			rebuild_expand_map(t_data *data, t_metadata *info, int start,
 				int type);
 int			handle_empty_expand_map(t_data *data, t_metadata *info);
+int			copy_arg_info(t_metadata *dest, t_metadata *src, int start,
+				int end);
 
 //expander_quotes.c
 int			remove_quotes(t_data *data, char **arg, t_metadata *info);
 int			count_quotes(char *arg, int *expand_map);
 int			copy_without_quotes(char *dest, char *src, t_metadata *info);
-// int			get_quote_status(int *quote_map, int start, int len);
-// int			get_quote_map(t_data *data, char *arg, t_metadata *info);
 int			has_quotes(char *s);
 
 //expander_rebuild.c
@@ -52,8 +49,6 @@ int			get_argc(char **argv);
 int			get_expanded_argc(char **argv, t_metadata *info);
 int			rebuild_argv(char **dest, char **src, t_metadata *s_info,
 				t_metadata *d_info);
-int			copy_arg_info(t_metadata *dest, t_metadata *src, int start,
-				int end);
 
 //expander_redir.c
 int			expand_dollar_redir(t_data *data, t_redir *redir);

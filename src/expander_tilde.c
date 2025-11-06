@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_tilde.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:57:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 15:50:08 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:29:28 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	expand_tilde(t_data *data, char **arg, t_metadata *info)
 		return (0);
 	update_tilde_key_value(data, *arg, info);
 	if (!*(info->value))
-		return (0) ;
+		return (0);
 	info->total_len = ft_strlen(*arg) - info->key_len + info->value_len;
 	rebuild_expand_map(data, info, 0, 2);
 	new_arg = apply_expansion(*arg, info, 0);
