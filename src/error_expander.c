@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 22:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 15:29:30 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:02:40 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node)
 {
 	if (!ptr)
 	{
-		system_error(data, "malloc");
+		system_error(strerror(errno), "malloc");
 		ft_lstclear(&node, free);
 		error_exit(data, NULL);
 	}

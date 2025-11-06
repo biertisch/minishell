@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 11:00:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/31 14:08:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:38:41 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,5 @@ int	empty_subshell(t_token **token, t_tree *node, int res)
 int	invalid_sequence(t_data *data, t_token *token, t_tree *node)
 {
 	free_parser_tree(&node);
-	return (syntax_error(data, ERR_1, token->value));
+	return (syntax_error(data, SYN_ERR_5, token->value));
 }

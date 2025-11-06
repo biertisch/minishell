@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 10:25:47 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/29 15:34:15 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:40:30 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	sigint_abort(t_data *data, char *line, int cont)
 
 void	eof_abort(t_data *data)
 {
-	if (isatty(STDIN_FILENO))
+	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
 		write(1, "exit\n", 5);
 	free_all(data);
 	exit(data->exit_status);

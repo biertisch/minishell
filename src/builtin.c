@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:17:33 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/31 12:56:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:08:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	validate_builtin(t_data *data, t_tree *node, int i)
 	}
 	return (0);
 }
-**/
 int	has_builtin_flag(char **argv)
 {
 	int	i;
@@ -67,14 +66,14 @@ int	validate_env(t_data *data, char **argv)
 {
 	if (argv[1] && argv[1][0] == '-')
 	{
-		internal_error(data, ERR_3, argv[0], argv[1]);
+		internal_error(INT_ERR_3, argv[0], argv[1]);
 		data->exit_status = 125;
 		print_builtin_usage(argv[0]);
 		return (-1);
 	}
 	if (argv[1])
 	{
-		internal_error(data, ERR_5, argv[0], argv[1]);
+		internal_error(INT_ERR_5, argv[0], argv[1]);
 		data->exit_status = 127;
 		return (-1);
 	}

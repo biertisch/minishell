@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 15:31:49 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:38:34 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ int	parser(t_data *data, t_token *token)
 	if (res)
 		return (res);
 	if (token && token->type == RPAREN)
-		return (syntax_error(data, ERR_1, token->value));
+		return (syntax_error(data, SYN_ERR_5, token->value));
 	if (token && token->type == LPAREN)
 	{
 		token = token->next;
 		if (!token)
-			return (syntax_error(data, ERR_1, "newline")); // maybe let syntax error handle this?
+			return (syntax_error(data, SYN_ERR_5, "newline"));
 		else
-			return (syntax_error(data, ERR_1, token->value));
+			return (syntax_error(data, SYN_ERR_5, token->value));
 	}
 	return (VALID);
 }
@@ -97,7 +97,7 @@ int	parse_command(t_data *data, t_token **token, t_tree **root)
 	if (!*token)
 		return (INCOMPLETE);
 	if (!is_command_token((*token)->type) && (*token)->type != LPAREN)
-		return (syntax_error(data, ERR_1, (*token)->value));
+		return (syntax_error(data, SYN_ERR_5, (*token)->value));
 	if ((*token)->type == LPAREN)
 		return (parse_subshell(data, token, root));
 	node = create_parser_node(NODE_CMD, NULL, NULL);
