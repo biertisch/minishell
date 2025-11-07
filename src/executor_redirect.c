@@ -138,7 +138,7 @@ int	open_redir_in(t_data *data, t_redir *redir)
 					data->open_redir_ins = new;
 				else
 					ft_lstadd_back(&data->open_redir_ins, new);
-				if (redir->in_fd == -1)
+				if (redir->out_fd == -1)
 				{
 					handle_open_errors(redir);
 					return (2);
