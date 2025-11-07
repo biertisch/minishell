@@ -26,6 +26,7 @@ int	execute(t_data *data)
 	traverse_redir_in(data, &data->stack);
 	stack = create_stack(data);
 	execute_stack(data, &stack);
+	close_all_open_redir_ends(data);
 	undo_duplicate_std(1);
 	setup_signals(data);
 	return (0);
@@ -87,6 +88,7 @@ int	execute_cmd(t_data *data, t_stack **stack)
 			pop(stack);
 			return (1);
 		}
+		execute_export_handle_underscore(data, stack);
 	}
 	if ((*stack)->node->argv && is_builtin((*stack)->node->argv[get_first_command(data, stack)]))
 		return (execute_builtin(data, stack));
@@ -117,7 +119,6 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 		parent_heredoc(stack, pid);
 	else
 		parent(stack, pid);
-	
 	return (0);
 }
 
