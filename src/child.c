@@ -24,7 +24,8 @@ void	child(t_data *data, t_stack **stack)
 	cmd_has_variable(data, stack);
 	cmd_i = get_first_command(data, stack);
 	cmd = NULL;
-	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
+	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0])
+		&& !has_failed_redirect((*stack)->node->redir))
 	{
 		cmd = correct_path(data, stack, (*stack)->node->argv[cmd_i]);
 		//here
@@ -39,6 +40,21 @@ void	child(t_data *data, t_stack **stack)
 		}
 	}
 	handle_redirects(data, stack, cmd, (*stack)->node->redir);
+}
+
+int	has_failed_redirect(t_redir *redir)
+{
+	if (!redir)
+		return (0);
+	while (redir)
+	{
+		if (redir->type == REDIR_IN && redir->in_fd == -1)
+			return (1);
+		if ((redir->type == REDIR_OUT || redir->type == APPEND) && redir->out_fd == -1)
+			return (1);
+		redir = redir->next;
+	}
+	return (0);
 }
 
 void	handle_redirects(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
@@ -61,9 +77,7 @@ void	check_no_cmd(t_data *data, t_stack **stack)
 {
 	if (!(*stack)->node->argv)
 	{
-		undo_duplicate_std(0);
-		free_stack(stack);
-		free_all(data);
+		executor_cleanup(data, stack, NULL);
 		exit(0);
 	}
 }
@@ -87,7 +101,7 @@ void	child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 		close_all_pipe_ends(stack);
 		check_no_cmd(data, stack);
 		close_all_open_redir_ends(data);
-		undo_duplicate_std(0);
+		undo_duplicate_std(1);
 		if (!is_builtin((*stack)->node->argv[0]))
 		{
 			execve(cmd, (*stack)->node->argv, data->env);
@@ -121,7 +135,7 @@ void	child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 		close_all_pipe_ends(stack);
 		check_no_cmd(data, stack);
 		close_all_open_redir_ends(data);
-		undo_duplicate_std(0);
+		undo_duplicate_std(1);
 		if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0]))
 		{
 			execve(cmd, (*stack)->node->argv, data->env);
@@ -144,7 +158,7 @@ void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 	close((*stack)->pipe[1]);
 	if (!redir->next)
 	{
-		undo_duplicate_std(0);
+		undo_duplicate_std(1);
 		close_all_open_redir_ends(data);
 		close_all_pipe_ends(stack);
 		execve(cmd, (*stack)->node->argv, data->env);
@@ -175,7 +189,7 @@ void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
 	close_all_pipe_ends(stack);
 	check_no_cmd(data, stack);
 	close_all_open_redir_ends(data);
-	undo_duplicate_std(0);
+	undo_duplicate_std(1);
 	if (!is_builtin((*stack)->node->argv[0]))
 	{
 		close_all_open_redir_ends(data);
@@ -215,7 +229,7 @@ void	clean_execve_failure(t_data *data, t_stack **stack, char *cmd)
 	else
 		perror((*stack)->node->argv[0]);
 	(void)cmd;
-	undo_duplicate_std(0);
+	undo_duplicate_std(1);
 	free_stack(stack);
 	free_all(data);
 	exit (exit_status);
