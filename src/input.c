@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 20:52:51 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 14:46:07 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int	prompt_input(t_data *data)
 		if (*data->input)
 		{
 			status = process_input(data);
-			if (status == INCOMPLETE && data->input)
-				process_input(data);
-			else if (status == INCOMPLETE_EOF)
+			// if (status == INCOMPLETE && data->input)
+			// 	process_input(data);
+			if (status == INCOMPLETE_EOF)
 				eof_abort(data);
 		}
 		free_command_data(data);
@@ -68,10 +68,10 @@ int	process_input(t_data *data)
 	int	res;
 
 	add_history(data->input);
-	res = lexer(data, data->input);
+	res = lexer(data, data->input, &data->lexer_list);
 	if (res || !data->lexer_list)
 		return (res);
-	res = parser(data, data->lexer_list);
+	res = parser(data, data->lexer_list, &data->parser_tree);
 	if (res || !data->parser_tree)
 		return (res);
 	execute(data);

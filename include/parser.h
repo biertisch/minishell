@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/04 15:19:09 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 14:22:09 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_tree
 }	t_tree;
 
 //parser.c
-int			parser(t_data *data, t_token *token);
+int			parser(t_data *data, t_token *token, t_tree **parser_tree);
 int			parse_and_or(t_data *data, t_token **token, t_tree **root);
 int			parse_pipe(t_data *data, t_token **token, t_tree **root);
 int			parse_command(t_data *data, t_token **token, t_tree **root);
@@ -65,8 +65,8 @@ int			count_tree_nodes(t_tree *root);
 //parser_utils.c
 t_node_type	get_node_type(t_token_type token_type);
 int			is_redir_token(t_token_type token_type);
-int			empty_subshell(t_token **token, t_tree *node, int res);
+int			empty_subshell(t_token **token, t_tree **root, t_tree *node, int res);
 int			is_command_token(t_token_type token_type);
-int			invalid_sequence(t_data *data, t_token *token, t_tree *node);
+int			invalid_sequence(t_data *data, t_token *token, t_tree **root, t_tree *node);
 
 #endif

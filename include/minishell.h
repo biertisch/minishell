@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 15:16:07 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 14:41:47 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,12 @@ int			process_input(t_data *data);
 int			prompt_input_cont(t_data *data, char target, int fd);
 
 //input_cont.c
-int			handle_incomplete_input(t_data *data, char target);
+int			handle_incomplete_input(t_data *data, int status);
 int			run_incomplete_child(t_data *data, char target, int *pipe_fd);
 int			write_to_pipe(char *line, char target, int fd);
-int			run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid);
+int			run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid, char **input);
 char		*copy_continuation_input(t_data *data, int *pipe_fd);
+int			append_to_tree(t_data *data, char *cont_input);
 
 //input_prompt.c
 void		update_prompt(t_data *data);

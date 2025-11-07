@@ -6,17 +6,20 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:57:53 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 11:38:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 15:19:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_incomplete_input(t_data *data, char target)
+int	handle_incomplete_input(t_data *data, int status)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
+	int		res;
+	char	*input;
 
+	(void)status; // remove param if INCOMPLETE_PAREN is not implemented
 	if (pipe(pipe_fd))
 	{
 		print_pipe_err_mess();
@@ -29,8 +32,16 @@ int	handle_incomplete_input(t_data *data, char target)
 		return (INVALID);
 	}
 	else if (pid == 0)
-		run_incomplete_child(data, target, pipe_fd);
-	return (run_incomplete_parent(data, pipe_fd, pid));
+	{
+		// if (status == INCOMPLETE_PAREN)
+		// 	run_incomplete_child(data, ')', pipe_fd);
+		// else
+			run_incomplete_child(data, 0, pipe_fd);
+	}
+	res = run_incomplete_parent(data, pipe_fd, pid, &input);
+	if (res)
+		return (res);
+	return (append_to_tree(data, input));
 }
 
 int	run_incomplete_child(t_data *data, char target, int *pipe_fd)
@@ -55,7 +66,7 @@ int	write_to_pipe(char *line, char target, int fd)
 	return (0);
 }
 
-int	run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid)
+int	run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid, char **input)
 {
 	int	status;
 
@@ -76,9 +87,9 @@ int	run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid)
 				return (INVALID);
 		}
 	}
-	data->input = copy_continuation_input(data, pipe_fd);
+	*input = copy_continuation_input(data, pipe_fd);
 	setup_signals(data);
-	return (INCOMPLETE);
+	return (VALID);
 }
 
 char	*copy_continuation_input(t_data *data, int *pipe_fd)
@@ -87,21 +98,43 @@ char	*copy_continuation_input(t_data *data, int *pipe_fd)
 	char	*new_input;
 	ssize_t	read_bytes;
 
+	new_input = NULL;
 	ft_bzero(buffer, sizeof(buffer));
-	if (!data->input)
-		new_input = ft_strdup("");
-	else
-		new_input = ft_strdup(data->input);
-	validate_malloc(data, data->input, NULL);
 	read_bytes = read(pipe_fd[0], buffer, sizeof(buffer) - 1);
 	while (read_bytes > 0)
 	{
 		buffer[read_bytes] = '\0';
-		new_input = ft_strdup_append(NULL, new_input, buffer);
+		if (!new_input)
+			new_input = ft_strdup(buffer);
+		else
+			new_input = ft_strdup_append(NULL, new_input, buffer);
 		validate_malloc(data, data->input, NULL);
 		read_bytes = read(pipe_fd[0], buffer, sizeof(buffer) - 1);
 	}
-	free_command_data(data);
 	close(pipe_fd[0]);
 	return (new_input);
+}
+
+int	append_to_tree(t_data *data, char *cont_input)
+{
+	t_token	*sub_list;
+	t_tree	*sub_tree;
+	
+	sub_list = NULL;
+	sub_tree = NULL;
+	if (lexer(data, cont_input, &sub_list))
+		return (INVALID);
+	if (parser(data, sub_list, &sub_tree))
+	{
+		free(cont_input);
+		free_lexer_list(&sub_list);
+		return (INVALID);
+	}
+	if (!data->parser_tree)
+		data->parser_tree = sub_tree;
+	else
+		data->parser_tree->right = sub_tree;
+	free(cont_input);
+	free_lexer_list(&sub_list);
+	return (VALID);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:37:51 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/03 19:24:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 12:28:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@ int	execute(t_data *data)
 	t_stack	*stack;
 
 	setup_signals_parent(data);
-	if (check_for_heredoc(data))
-	{
-		setup_signals(data);
-		return (-1);
-	}
 	push_stack(&data->stack, data->parser_tree, 0, 0, data);
 	traverse_redir_in(data, &data->stack);
 	stack = create_stack(data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:20:08 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 19:48:27 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 12:31:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	heredoc(t_data *data, t_redir *redir)
 
 int	run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid)
 {
+	setup_signals_parent(data);
 	copy_heredoc_input(data, redir);
 	if (!has_quotes(redir->file))
 		expand_dollar(data, &redir->heredoc_input, &redir->info);

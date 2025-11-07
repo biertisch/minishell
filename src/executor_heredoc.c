@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:49:01 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 22:11:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 15:03:09 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	check_for_heredoc(t_data *data)
 {
+	if (!data->parser_tree)
+		return (0);
 	push_stack(&data->stack, data->parser_tree, 0, 0, data);
 	if (check_heredoc_left(data))
 		return (-1);
@@ -42,19 +44,19 @@ int	check_heredoc_right(t_data *data)
 		return (0);
 	while (data->stack)
 	{
-		if (data->stack->phase == DONE)
+		if (data->stack->phase == DONE || !data->stack->node->right)
 		{
 			if (execute_heredoc(data, data->stack->node->redir))
 				return (-1);
 			pop(&data->stack);
 		}
-		else if (data->stack->node->right)
+		else
 		{
 			data->stack->phase = DONE;
 			if (data->stack->node->right)
 				push_stack(&data->stack, data->stack->node->right, 0, 0, data);
 			if (check_heredoc_left(data))
-				return (-1);
+				return (-1);	
 		}
 	}
 	return (0);
