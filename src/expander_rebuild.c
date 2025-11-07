@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 19:23:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 22:14:03 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 20:25:31 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,32 +95,5 @@ int	rebuild_argv(char **dest, char **src, t_metadata *s_info,
 		j += count_fields(src[i], s_info + i);
 		i++;
 	}
-	return (0);
-}
-
-int	copy_arg_info(t_metadata *dest, t_metadata *src, int start, int end)
-{
-	int	len;
-
-	len = end - start;
-	if (len <= 0)
-		return (0);
-	dest->quote_map = ft_calloc(len, sizeof(int));
-	dest->expand_map = ft_calloc(len, sizeof(int));
-	if (!dest->quote_map || !dest->expand_map)
-		return (-1);
-	if (src->key)
-		dest->key = ft_strdup(src->key);
-	if (src->value)
-		dest->value = ft_strdup(src->value);
-	if ((src->key && !dest->key) || (src->value && !dest->value))
-		return (-1);
-	if (src->quote_map)
-		ft_memcpy(dest->quote_map, src->quote_map + start, len * sizeof(int));
-	if (src->expand_map)
-		ft_memcpy(dest->expand_map, src->expand_map + start, len * sizeof(int));
-	dest->key_len = src->key_len;
-	dest->value_len = src->value_len;
-	dest->total_len = src->total_len;
 	return (0);
 }
