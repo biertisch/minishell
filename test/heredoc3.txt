@@ -1,0 +1,6 @@
+cat << EOF >> test/file1
+$USER
+"$USER"
+~
+*file
+EOF

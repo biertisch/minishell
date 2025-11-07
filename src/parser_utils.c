@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 11:00:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 19:38:41 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 12:57:16 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,16 @@ int	is_redir_token(t_token_type token_type)
 		|| token_type == APPEND || token_type == HEREDOC);
 }
 
-int	empty_subshell(t_token **token, t_tree *node, int res)
+int	empty_subshell(t_token **token, t_tree **root, t_tree *node, int res)
 {
 	if (*token && (*token)->type == RPAREN)
 		*token = (*token)->next;
-	free_parser_tree(&node);
+	*root = node;
 	return (res);
 }
 
-int	invalid_sequence(t_data *data, t_token *token, t_tree *node)
+int	invalid_sequence(t_data *data, t_token *token, t_tree **root, t_tree *node)
 {
-	free_parser_tree(&node);
+	*root = node;
 	return (syntax_error(data, SYN_ERR_5, token->value));
 }

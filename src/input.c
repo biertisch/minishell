@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 20:52:51 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 23:20:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 // non-interactive mode
 int	read_input(t_data *data)
 {
-	int	status;
 	int	flags;
 
 	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
@@ -25,12 +24,8 @@ int	read_input(t_data *data)
 	data->input = get_next_line(STDIN_FILENO);
 	while (data->input)
 	{
-		if (*data->input)
-		{
-			status = process_input(data);
-			if (status == INCOMPLETE_EOF)
-				break ;
-		}
+		if (*data->input && process_input(data) == INCOMPLETE_EOF)
+			break ;
 		free_command_data(data);
 		data->input = get_next_line(STDIN_FILENO);
 	}
@@ -41,8 +36,6 @@ int	read_input(t_data *data)
 // interactive mode
 int	prompt_input(t_data *data)
 {
-	int	status;
-
 	while (1)
 	{
 		update_prompt(data);
@@ -51,16 +44,11 @@ int	prompt_input(t_data *data)
 			eof_abort(data);
 		if (g_sig == SIGINT)
 			sigint_abort(data, NULL, 0);
-		if (*data->input)
-		{
-			status = process_input(data);
-			if (status == INCOMPLETE && data->input)
-				process_input(data);
-			else if (status == INCOMPLETE_EOF)
-				eof_abort(data);
-		}
+		if (*data->input && process_input(data) == INCOMPLETE_EOF)
+			eof_abort(data);
 		free_command_data(data);
 	}
+	return (0);
 }
 
 int	process_input(t_data *data)
@@ -68,17 +56,17 @@ int	process_input(t_data *data)
 	int	res;
 
 	add_history(data->input);
-	res = lexer(data, data->input);
+	res = lexer(data, data->input, &data->lexer_list);
 	if (res || !data->lexer_list)
 		return (res);
-	res = parser(data, data->lexer_list);
+	res = parser(data, data->lexer_list, &data->parser_tree);
 	if (res || !data->parser_tree)
 		return (res);
 	execute(data);
 	return (VALID);
 }
 
-int	prompt_input_cont(t_data *data, char target, int fd)
+int	prompt_continuation_input(t_data *data, char target, int out_fd)
 {
 	char	*line;
 
@@ -90,7 +78,10 @@ int	prompt_input_cont(t_data *data, char target, int fd)
 		else if (!line)
 			return (syntax_error(data, SYN_ERR_7, NULL));
 		if (is_quote(target) || *line)
-			write_to_pipe(line, target, fd);
+		{
+			write(out_fd, " ", 1);
+			write(out_fd, line, ft_strlen(line));
+		}
 		if ((target && ft_strchr(line, target)) || (!target && *line))
 		{
 			free(line);
