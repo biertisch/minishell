@@ -76,6 +76,7 @@ echo "$"USER
 echo "$US"ER
 /bin/echo hello > $NONE
 VAR="ho bye" && ec"$VAR"
+VAR="this is a beautiful shell" && echo $VAR
 "$NONE" /bin/echo hello
 echo "$NONE""Makefile"
 echo $"hello"
