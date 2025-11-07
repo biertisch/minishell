@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/07 23:08:34 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 23:40:55 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,6 @@
 # define PARSER_H
 
 # include "minishell.h"
-
-typedef struct s_redir
-{
-	t_token_type	type;
-	int				fd;
-	char			*file;
-	char			*heredoc_input;
-	t_metadata		info;
-	int				in_fd;
-	int				out_fd;
-	struct s_redir	*next;
-}	t_redir;
-
-typedef struct s_tree
-{
-	t_node_type		type;
-	char			**argv;
-	t_metadata		*argv_info;
-	t_redir			*redir;
-	struct s_tree	*left;
-	struct s_tree	*right;
-}	t_tree;
 
 //parser.c
 int			parser(t_data *data, t_token *token, t_tree **parser_tree);

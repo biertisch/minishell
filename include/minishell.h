@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 23:07:47 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 23:48:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,32 +30,19 @@
 # include <termios.h>
 # include <unistd.h>
 # include <errno.h>
-# include "struct_def.h"
 # include "libft.h"
 # include "printf.h"
+# include "structures.h"
+# include "environment.h"
+# include "errors.h"
 # include "executor.h"
-# include "parser.h"
 # include "expander.h"
 # include "lexer.h"
-# include "ft_signal.h"
-# include "env.h"
-# include "error.h"
+# include "parser.h"
+# include "signals.h"
 
 # define CONTINUE_PROMPT "> "
 # define BUFFER_SIZE 20
-
-typedef struct s_data
-{
-	char			*input;
-	char			*prompt;
-	char			**env;
-	t_env			*env_list;
-	t_token			*lexer_list;
-	t_tree			*parser_tree;
-	t_stack			*stack;
-	int				exit_status;
-	t_list			*open_redir_ins;
-}	t_data;
 
 extern volatile sig_atomic_t	g_sig;
 
@@ -90,16 +77,15 @@ char		*ft_gnl_realloc(char *result, int i, int *r);
 int			prompt_input(t_data *data);
 int			read_input(t_data *data);
 int			process_input(t_data *data);
-int			prompt_input_cont(t_data *data, char target, int out_fd);
+int			prompt_continuation_input(t_data *data, char target, int out_fd);
 
-//input_cont.c
+//input_continuation.c
 int			handle_incomplete_input(t_data *data);
 int			run_incomplete_child(t_data *data, char target, int *pipe_fd);
-int			write_to_pipe(char *line, char target, int fd);
 int			run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid,
 				char **input);
-char		*copy_continuation_input(t_data *data, int in_fd);
-int			append_to_tree(t_data *data, char *cont_input);
+char		*receive_continuation_input(t_data *data, int in_fd);
+int			merge_continuation_tree(t_data *data, char *cont_input);
 
 //input_prompt.c
 void		update_prompt(t_data *data);

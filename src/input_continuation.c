@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input_cont.c                                       :+:      :+:    :+:   */
+/*   input_continuation.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:57:53 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 22:56:40 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 23:23:48 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	handle_incomplete_input(t_data *data)
 	res = run_incomplete_parent(data, pipe_fd, pid, &input);
 	if (res)
 		return (res);
-	return (append_to_tree(data, input));
+	return (merge_continuation_tree(data, input));
 }
 
 int	run_incomplete_child(t_data *data, char target, int *pipe_fd)
@@ -37,21 +37,11 @@ int	run_incomplete_child(t_data *data, char target, int *pipe_fd)
 	setup_signals_cont(data);
 	close(pipe_fd[0]);
 	data->exit_status = 0;
-	prompt_input_cont(data, target, pipe_fd[1]);
+	prompt_continuation_input(data, target, pipe_fd[1]);
 	close(pipe_fd[1]);
 	free_all(data);
 	rl_clear_history();
 	exit(data->exit_status);
-}
-
-int	write_to_pipe(char *line, char target, int fd)
-{
-	if (is_quote(target))
-		write(fd, "\n", 1);
-	else
-		write(fd, " ", 1);
-	write(fd, line, ft_strlen(line));
-	return (0);
 }
 
 int	run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid, char **input)
@@ -75,13 +65,13 @@ int	run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid, char **input)
 				return (free(*input), INVALID);
 		}
 	}
-	*input = copy_continuation_input(data, pipe_fd[0]);
+	*input = receive_continuation_input(data, pipe_fd[0]);
 	close(pipe_fd[0]);
 	setup_signals(data);
 	return (VALID);
 }
 
-char	*copy_continuation_input(t_data *data, int in_fd)
+char	*receive_continuation_input(t_data *data, int in_fd)
 {
 	char	buffer[11];
 	char	*new_input;
@@ -103,7 +93,7 @@ char	*copy_continuation_input(t_data *data, int in_fd)
 	return (new_input);
 }
 
-int	append_to_tree(t_data *data, char *cont_input)
+int	merge_continuation_tree(t_data *data, char *cont_input)
 {
 	t_token	*sub_list;
 	t_tree	*sub_tree;

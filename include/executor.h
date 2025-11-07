@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 13:13:49 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/07 22:54:26 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 23:38:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,6 @@
 # define EXECUTOR_H
 
 # include "minishell.h"
-
-typedef struct s_stack
-{
-	t_phase		phase;
-	t_node_type	type;
-	t_tree		*node;
-	int			in_fd;
-	int			out_fd;
-	int			pipe[2];
-	int			child_count;
-	int			exit_status;
-	pid_t		child_pid[2];
-	struct s_stack		*next;
-}	t_stack;
 
 // builtin.c
 int			is_builtin(char *cmd);

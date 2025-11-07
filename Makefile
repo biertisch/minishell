@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/11/07 23:09:32 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/11/07 23:24:42 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRC_FILES = \
 	executor_redirect executor_sort_env executor_subshell executor_unset executor_utils \
 	expander expander_dollar expander_metadata expander_quotes expander_rebuild \
 	expander_redir expander_split expander_tilde get_next_line get_next_line_utils \
-	input input_cont input_prompt lexer lexer_list \
+	input input_continuation input_prompt lexer lexer_list \
 	lexer_type main parent parser parser_cmd \
 	parser_redir parser_tree parser_utils signal signal_handler \
 	signal_heredoc stack test variable_utils wildcard \

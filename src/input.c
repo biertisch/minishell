@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 23:10:58 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 23:20:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	process_input(t_data *data)
 	return (VALID);
 }
 
-int	prompt_input_cont(t_data *data, char target, int out_fd)
+int	prompt_continuation_input(t_data *data, char target, int out_fd)
 {
 	char	*line;
 
@@ -78,7 +78,10 @@ int	prompt_input_cont(t_data *data, char target, int out_fd)
 		else if (!line)
 			return (syntax_error(data, SYN_ERR_7, NULL));
 		if (is_quote(target) || *line)
-			write_to_pipe(line, target, out_fd);
+		{
+			write(out_fd, " ", 1);
+			write(out_fd, line, ft_strlen(line));
+		}
 		if ((target && ft_strchr(line, target)) || (!target && *line))
 		{
 			free(line);
