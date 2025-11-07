@@ -48,6 +48,8 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	*stack = new_head;
 }
 
+
+
 int	setup_next_to_top(t_data **data, t_stack **stack)
 {
 	if ((*stack)->type == NODE_SUBSHELL)
@@ -119,6 +121,24 @@ t_stack	**get_first_subshell(t_stack **stack)
 		head = &((*head)->next);
 	}
 	return (NULL);
+}
+
+int	is_last_cmd_in_pipe(t_stack **stack)
+{
+	t_stack **next_pipe;
+	t_stack **next_next_pipe;
+
+	if (!stack || !*stack)
+		return (0);
+	if ((*stack)->type != NODE_CMD)
+		return (0);
+	next_pipe = get_next_pipe(stack);
+	if (!next_pipe || !*next_pipe)
+		return (1);
+	next_next_pipe = get_next_pipe(next_pipe);
+	if (!next_next_pipe && (*next_pipe)->phase == LAUNCH_RIGHT)
+		return (1);
+	return (0);
 }
 
 t_stack **get_next_pipe_in_subshell(t_stack **stack)
