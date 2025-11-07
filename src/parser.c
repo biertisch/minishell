@@ -3,38 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 15:13:04 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 23:04:47 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //builds an abstract syntax tree based on operator precedence
-//checks for stray parentheses at the end
+//handles heredoc input, incomplete input, and stray parentheses
 int	parser(t_data *data, t_token *token, t_tree **parser_tree)
 {
 	int	res;
 
 	res = parse_and_or(data, &token, parser_tree);
-	if (check_for_heredoc(data))
-		return (setup_signals(data), INVALID);
 	if (res == INVALID)
 		return (res);
-	if (res == INCOMPLETE_PAREN || res == INCOMPLETE)
-		return (handle_incomplete_input(data, res));
-	if (token && token->type == RPAREN)
+	if (scan_heredocs(data, *parser_tree))
+		return (INVALID);
+	if (res == INCOMPLETE)
+		return (handle_incomplete_input(data));
+	if (token)
 		return (syntax_error(data, SYN_ERR_5, token->value));
-	if (token && token->type == LPAREN)
-	{
-		token = token->next;
-		if (!token)
-			return (syntax_error(data, SYN_ERR_5, "newline"));
-		else
-			return (syntax_error(data, SYN_ERR_5, token->value));
-	}
 	return (VALID);
 }
 
@@ -117,7 +109,6 @@ int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 
 	*token = (*token)->next;
 	if (!*token)
-		// return (INCOMPLETE_PAREN);
 		return (syntax_error(data, SYN_ERR_0, ")"));
 	node = create_parser_node(NODE_SUBSHELL, NULL, NULL);
 	validate_malloc(data, node, NULL);
@@ -125,13 +116,8 @@ int	parse_subshell(t_data *data, t_token **token, t_tree **root)
 	if (res)
 		return (empty_subshell(token, root, node, res));
 	if (!*token)
-		// return (*root = node, INCOMPLETE_PAREN);
 		return (*root = node, syntax_error(data, SYN_ERR_0, ")"));
-	if ((*token)->type != RPAREN)
-		return (invalid_sequence(data, *token, root, node));
 	*token = (*token)->next;
-	if (*token && ((*token)->type == WORD || (*token)->type == LPAREN))
-		return (invalid_sequence(data, *token, root, node));
 	if (*token && (is_redir_token((*token)->type) || (*token)->type == FD)
 		&& get_command_data(data, token, node))
 		return (*root = node, INVALID);

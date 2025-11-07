@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/05 19:33:45 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 22:55:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef enum e_outcome
 	VALID,
 	INVALID,
 	INCOMPLETE,
-	INCOMPLETE_PAREN,
 	INCOMPLETE_EOF
 }	t_outcome;
 

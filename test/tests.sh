@@ -14,8 +14,6 @@ foo
 /bin/echo "" hello
 /bin/echo hello "&&" /bin/echo bye
 /bin/echo hello '&& /bin/echo bye'
-
-# invalid/incomplete
 '/bin/echo hello &&' /bin/echo bye
 /bin/echo "hello
 
@@ -25,8 +23,13 @@ cat < test/file1
 /bin/echo "" > test/file1 && ls >> test/file1 && cat test/file1
 /bin/echo "" > test/file1 && grep main src/main.c >> test/file1 && cat test/file1
 /bin/echo "" > test/file2 && /bin/echo "hello" > test/file1 && cat test/file1 >> test/file2 && cat test/file2
-cat test/heredoc_block1.txt
-cat test/heredoc_block2.txt
+cat test/heredoc1.txt
+cat test/heredoc2.txt
+cat test/heredoc3.txt
+cat test/heredoc4.txt
+cat test/heredoc5.txt
+cat test/heredoc6.txt
+cat test/heredoc7.txt
 /bin/echo > test/file1 hello && cat test/file1
 /bin/echo "" > test/file1 hello
 >test/file1 /bin/echo hello && cat test/file1
@@ -37,8 +40,6 @@ grep main < src/main.c
 wc -l < test/file1
 /bin/echo "" > test/file2 && cat < test/file1 >> test/file2 && cat test/file2
 > test/file1 && cat test/file1
-
-# invalid/incomplete
 ls >
 cat <
 
@@ -117,8 +118,6 @@ exit 2
 exit -2
 exit p
 exit a 1
-
-# invalid/incomplete
 env hello
 env -w
 unset -w
@@ -141,8 +140,6 @@ cat Makefile | tr a-z A-Z | grep SRC | wc -c
 ls /bin | grep sh | head -n 3 | tail -n 1
 seq 1 100 | grep 42 | wc -l
 yes | head -n 100 | wc -l
-
-# invalid/incomplete
 | ls
 ls | | wc
 ls |
@@ -163,8 +160,6 @@ cat foo || echo "not found"
 ( (ls))
 /bin/echo a && /bin/echo b || /bin/echo c
 /bin/echo a || /bin/echo b && /bin/echo c
-
-# invalid/incomplete
 ()
 ls)
 (ls) /bin/echo hello

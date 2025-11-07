@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 14:41:47 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 23:07:47 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,15 @@ char		*ft_gnl_realloc(char *result, int i, int *r);
 int			prompt_input(t_data *data);
 int			read_input(t_data *data);
 int			process_input(t_data *data);
-int			prompt_input_cont(t_data *data, char target, int fd);
+int			prompt_input_cont(t_data *data, char target, int out_fd);
 
 //input_cont.c
-int			handle_incomplete_input(t_data *data, int status);
+int			handle_incomplete_input(t_data *data);
 int			run_incomplete_child(t_data *data, char target, int *pipe_fd);
 int			write_to_pipe(char *line, char target, int fd);
-int			run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid, char **input);
-char		*copy_continuation_input(t_data *data, int *pipe_fd);
+int			run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid,
+				char **input);
+char		*copy_continuation_input(t_data *data, int in_fd);
 int			append_to_tree(t_data *data, char *cont_input);
 
 //input_prompt.c

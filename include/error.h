@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:29:00 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 13:57:45 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 19:25:12 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@
 # define SYN_ERR_5 "syntax error near unexpected token"
 # define SYN_ERR_6 "unexpected EOF while looking for matching"
 # define SYN_ERR_7 "syntax error: unexpected end of file"
+# define SYN_ERR_8 "warning: here-document delimited by \
+end-of-file (wanted "
 
 # define INT_ERR_0 "invalid environment variable"
 # define INT_ERR_1 "ambiguous redirect"
-# define INT_ERR_2 "warning: here-document delimited by \
-end-of-file (wanted "
 # define INT_ERR_3 "invalid option"
 # define INT_ERR_4 "too many arguments"
 # define INT_ERR_5 "No such file or directory"
