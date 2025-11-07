@@ -48,7 +48,8 @@ int	execute_cd(t_data *data, t_stack **stack)
 	}
 	if ((*stack)->exit_status != 0)
 		free(curr_pwd);
-	undo_duplicate_std(1);
+	if (has_node_type_ancestor(*stack, NODE_PIPE))
+		undo_duplicate_std(1);
 	execute_builtin_check_for_pipe(data, stack);
 	return (0);
 }
