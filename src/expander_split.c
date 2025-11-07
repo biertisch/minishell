@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_split.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 22:02:28 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 22:03:33 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 11:46:14 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	split_on_ifs(char **dest, char *src, t_metadata *src_info,
 		end = has_ifs(src, src_info, start);
 		if (end == -1)
 			end = ft_strlen(src);
-		dest[i] = ft_substr(src, start, end);
+		dest[i] = ft_substr(src, start, end - start);
 		if (!dest[i] || copy_arg_info(dest_info + i, src_info, start, end))
 			return (-1);
 		i++;
