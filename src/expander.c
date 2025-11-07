@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 22:09:38 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/06 18:36:30 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int	expand_argv(t_data *data, t_tree *node)
 	i = 0;
 	while (node->argv[i])
 	{
-		remove_quotes(data, &node->argv[i], &node->argv_info[i]);
 		expand_dollar(data, &node->argv[i], &node->argv_info[i]);
 		expand_tilde(data, &node->argv[i], &node->argv_info[i]);
+		remove_quotes(data, &node->argv[i], &node->argv_info[i]);
 		i++;
 	}
 	node->argv = build_expanded_argv(data, node->argv, &node->argv_info);
@@ -64,10 +64,10 @@ int	expand_single_redir(t_data *data, t_redir *redir)
 {
 	if (!redir || !redir->file)
 		return (0);
-	remove_quotes(data, &redir->file, &redir->info);
 	if (expand_dollar_redir(data, redir))
 		return (-1);
 	expand_tilde(data, &redir->file, &redir->info);
+	remove_quotes(data, &redir->file, &redir->info);
 	if (expand_wildcard_redir(data, redir))
 		return (-1);
 	return (0);
@@ -75,15 +75,18 @@ int	expand_single_redir(t_data *data, t_redir *redir)
 
 int	expand_dollar(t_data *data, char **arg, t_metadata *info)
 {
-	int	i;
+	int		i;
+	char	quote;
 
 	if (!arg || !*arg || !info)
 		return (0);
-	init_expand_metadata(data, info);
+	init_expand_metadata(data, info, *arg);
+	quote = 0;
 	i = 0;
 	while ((*arg) && (*arg)[i])
 	{
-		if (is_dollar_expansion(*arg, info->quote_map, i))
+		toggle_quote((*arg)[i], &quote);
+		if (is_dollar_expansion(*arg, quote, i))
 		{
 			*arg = expand_variable(data, *arg, info, i);
 			i = -1;
