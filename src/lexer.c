@@ -6,14 +6,14 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:21 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 14:10:07 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 14:48:41 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //converts user raw input into a list of tokens
-int	lexer(t_data *data, char *input)
+int	lexer(t_data *data, char *input, t_token **lexer_list)
 {
 	t_token_type	type;
 	char			*value;
@@ -24,7 +24,7 @@ int	lexer(t_data *data, char *input)
 	while (input[i])
 	{
 		value = NULL;
-		while (ft_isspace(data->input[i]))
+		while (ft_isspace(input[i]))
 			i++;
 		if (!input[i])
 			break ;
@@ -32,7 +32,7 @@ int	lexer(t_data *data, char *input)
 		if (res)
 			return (res);
 		type = get_token_type(input + i);
-		add_token(data, &data->lexer_list, type, value);
+		add_token(data, lexer_list, type, value);
 		i += ft_strlen(value);
 	}
 	return (VALID);

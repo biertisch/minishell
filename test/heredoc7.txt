@@ -1,0 +1,4 @@
+cat << EOF >> test/file1 | |
+1
+2
+EOF

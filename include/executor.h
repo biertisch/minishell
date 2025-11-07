@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 13:13:49 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/06 14:07:40 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 23:38:44 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,6 @@
 # define EXECUTOR_H
 
 # include "minishell.h"
-
-typedef struct s_stack
-{
-	t_phase		phase;
-	t_node_type	type;
-	t_tree		*node;
-	int			in_fd;
-	int			out_fd;
-	int			pipe[2];
-	int			child_count;
-	int			exit_status;
-	pid_t		child_pid[2];
-	struct s_stack		*next;
-}	t_stack;
 
 // builtin.c
 int			is_builtin(char *cmd);
@@ -175,13 +161,6 @@ int			get_first_command(t_data *data, t_stack **stack);
 int			has_command(t_data *data, t_stack **stack);
 int			variable_key_not_found(t_data *data, t_stack **stack, char **kv_split);
 
-//executor_heredoc.c
-int			check_for_heredoc(t_data *data);
-int			check_heredoc_right(t_data *data);
-int			check_heredoc_left(t_data *data);
-int			execute_heredoc(t_data *data, t_redir *redir);
-t_redir		*get_last_heredoc(t_redir *redir);
-
 //executor_redirect.c
 int			traverse_redir_in(t_data *data, t_stack **stack);
 int			open_redir_in(t_data *data, t_redir *redir);
@@ -190,13 +169,6 @@ void		handle_open_errors(t_redir *redir);
 int			check_redir_in_left(t_data *data, t_stack **stack);
 int			check_redir_in_right(t_data *data, t_stack **stack);
 int			push_left_until_cmd_redir(t_data *data, t_stack **stack);
-
-//executor_heredoc2.c
-int			run_heredoc_child(t_data *data, t_redir *redir);
-int			heredoc(t_data *data, t_redir *redir);
-int 		run_heredoc_parent(t_data *data, t_redir *redir, pid_t pid);
-int			copy_heredoc_input(t_data *data, t_redir *redir);
-int			wait_for_heredoc(t_data *data, pid_t pid);
 
 //executo_builtins_utils.c
 int			*duplicate_std(void);

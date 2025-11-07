@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:16:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 14:45:03 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 19:27:46 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	syntax_error(t_data *data, char *desc, char *token)
 	if (desc)
 		ft_strlcat(err_msg, desc, ERR_BUFFER_SIZE);
 	append_postfix(err_msg, token);
+	if (!ft_strcmp(desc, SYN_ERR_8))
+		ft_strlcat(err_msg, ")", ERR_BUFFER_SIZE);
 	ft_strlcat(err_msg, "\n", ERR_BUFFER_SIZE);
 	write(2, err_msg, ft_strlen(err_msg));
 	data->exit_status = 2;
@@ -84,10 +86,10 @@ void	append_postfix(char *msg, char *label)
 	if (label)
 	{
 		ft_strlcat(msg, " ", ERR_BUFFER_SIZE);
-		if (label[0] != '\'')
+		if (!is_quote(label[0]) || !label[1])
 			ft_strlcat(msg, "\'", ERR_BUFFER_SIZE);
 		ft_strlcat(msg, label, ERR_BUFFER_SIZE);
-		if (label[0] != '\'')
+		if (!is_quote(label[0]) || !label[1])
 			ft_strlcat(msg, "'", ERR_BUFFER_SIZE);
 	}
 }
