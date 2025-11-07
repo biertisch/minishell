@@ -71,6 +71,7 @@ void		child_no_redir(t_data *data, t_stack **stack, char *cmd);
 void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
 void	check_no_cmd(t_data *data, t_stack **stack);
 void		handle_redirects(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
+int		has_failed_redirect(t_redir *redir);
 
 
 //executor_utils.c
@@ -163,6 +164,7 @@ int			execute_export_val_found(t_data *data, t_stack **stack, char **kv_split, t
 void			execute_export_invalid_var(t_stack **stack, int cmd_i);
 int			execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split);
 int			execute_export_no_option(t_data *data, t_stack **stack);
+void		execute_export_handle_underscore(t_data *data, t_stack **stack);
 
 //executor_sort_env.c
 void			sort_env(t_data **data);

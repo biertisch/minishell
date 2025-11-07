@@ -75,6 +75,21 @@ int	execute_export_val_found(t_data *data, t_stack **stack,
 	return (1);
 }
 
+void	execute_export_handle_underscore(t_data *data, t_stack **stack)
+{
+	char	*value;
+	int	i;
+
+	if (!(*stack)->node->argv)
+		return ;
+	i = 0;
+	while ((*stack)->node->argv[i])
+		i++;
+	value = ft_strdup((*stack)->node->argv[i - 1]);
+	validate_malloc_execute(data, stack, value, NULL);
+	set_env_value(data->env_list, "_", value);
+}
+
 void	execute_export_invalid_var(t_stack **stack, int cmd_i)
 {
 	write(STDERR_FILENO, "minishell: export: `", 20);

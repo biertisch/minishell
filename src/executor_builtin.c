@@ -26,6 +26,7 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 	pid_t	pid;
 	int		cmd_i;
 
+	execute_export_handle_underscore(data, stack);
 	cmd_i = get_first_command(data, stack);
 	(*stack)->phase = DONE;
 	//if (!validate_builtin(data, (*stack)->node, cmd_i))
@@ -40,7 +41,7 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 			else
 				parent(stack, pid);
 		}
-//	}
+	//}
 	return (0);
 }
 
