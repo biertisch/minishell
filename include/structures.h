@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/08 11:57:38 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/08 12:07:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,13 @@ typedef struct s_env
 
 typedef struct s_metadata
 {
-	int		*quote_map;
-	int		*expand_map;
-	char	*key;
-	int		key_len;
-	char	*value;
-	int		value_len;
-	int		total_len;
+	int				*quote_map;
+	int				*expand_map;
+	char			*key;
+	int				key_len;
+	char			*value;
+	int				value_len;
+	int				total_len;
 }	t_metadata;
 
 typedef struct s_redir
