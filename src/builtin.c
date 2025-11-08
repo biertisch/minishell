@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:17:33 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 14:08:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/08 11:36:33 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,14 @@ int	validate_env(t_data *data, char **argv)
 {
 	if (argv[1] && argv[1][0] == '-')
 	{
-		internal_error(INT_ERR_3, argv[0], argv[1]);
+		internal_error(INT_ERR_2, argv[0], argv[1]);
 		data->exit_status = 125;
 		print_builtin_usage(argv[0]);
 		return (-1);
 	}
 	if (argv[1])
 	{
-		internal_error(INT_ERR_5, argv[0], argv[1]);
+		internal_error(INT_ERR_4, argv[0], argv[1]);
 		data->exit_status = 127;
 		return (-1);
 	}
@@ -83,15 +83,18 @@ int	validate_env(t_data *data, char **argv)
 
 int	print_builtin_usage(char *cmd)
 {
-	write(2, cmd, ft_strlen(cmd));
-	write(2, ": usage: ", 9);
-	write(2, cmd, ft_strlen(cmd));
+	char	usage[ERR_BUFFER_SIZE];
+
+	ft_strlcpy(usage, cmd, ft_strlen(cmd));
+	ft_strlcat(usage, ": usage: ", ERR_BUFFER_SIZE);
+	ft_strlcat(usage, cmd, ERR_BUFFER_SIZE);
 	if (!ft_strcmp(cmd, "cd"))
-		write(2, " [dir]", 6);
+		ft_strlcat(usage, " [dir]", ERR_BUFFER_SIZE);
 	else if (!ft_strcmp(cmd, "export"))
-		write(2, " [name[=value]...]", 19);
+		ft_strlcat(usage, " [name[=value]...]", ERR_BUFFER_SIZE);
 	else if (!ft_strcmp(cmd, "unset"))
-		write(2, " [name...]", 10);
-	write(2, "\n", 1);
+		ft_strlcat(usage, " [name...]", ERR_BUFFER_SIZE);
+	ft_strlcat(usage, "\n", ERR_BUFFER_SIZE);
+	write(STDOUT_FILENO, usage, ft_strlen(usage));
 	return (INVALID);
 }

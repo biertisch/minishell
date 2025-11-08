@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:29:00 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 23:34:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/08 11:32:23 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ end-of-file (wanted "
 
 # define INT_ERR_0 "invalid environment variable"
 # define INT_ERR_1 "ambiguous redirect"
-# define INT_ERR_3 "invalid option"
-# define INT_ERR_4 "too many arguments"
-# define INT_ERR_5 "No such file or directory"
+# define INT_ERR_2 "invalid option"
+# define INT_ERR_3 "too many arguments"
+# define INT_ERR_4 "No such file or directory"
 
 //error.c
 int		syntax_error(t_data *data, char *desc, char *token);
