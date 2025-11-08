@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/08 12:07:38 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/08 12:08:42 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,6 @@ typedef enum e_phase
 	WAIT,
 	DONE
 }	t_phase;
-
-typedef enum e_error
-{
-	SYSTEM_ERR,
-	SYN_ERR,
-	INTERNAL_ERR
-}	t_error;
 
 typedef struct s_token
 {
