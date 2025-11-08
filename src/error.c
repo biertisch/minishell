@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:16:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 19:27:46 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/08 11:48:08 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,58 +72,11 @@ int	system_error(char *desc, char *function)
 	return (INVALID);
 }
 
-void	append_prefix(char *msg, char *label)
-{
-	if (label)
-	{
-		ft_strlcat(msg, label, ERR_BUFFER_SIZE);
-		ft_strlcat(msg, ": ", ERR_BUFFER_SIZE);
-	}
-}
-
-void	append_postfix(char *msg, char *label)
-{
-	if (label)
-	{
-		ft_strlcat(msg, " ", ERR_BUFFER_SIZE);
-		if (!is_quote(label[0]) || !label[1])
-			ft_strlcat(msg, "\'", ERR_BUFFER_SIZE);
-		ft_strlcat(msg, label, ERR_BUFFER_SIZE);
-		if (!is_quote(label[0]) || !label[1])
-			ft_strlcat(msg, "'", ERR_BUFFER_SIZE);
-	}
-}
-
-void	validate_malloc_execute(t_data *data, t_stack **stack,
-	void *ptr, void *to_free)
-{
-	if (!ptr)
-	{
-		close_all_open_redir_ends(data);
-		close_all_pipe_ends(stack);
-		system_error(strerror(errno), "malloc");
-		if (to_free)
-			free(to_free);
-		error_exit(data, stack);
-	}
-}
-
 void	validate_malloc(t_data *data, void *ptr, void *to_free)
 {
-	if (!ptr)
-	{
-		system_error(strerror(errno), "malloc");
-		free(to_free);
-		error_exit(data, NULL);
-	}
-}
-
-void	validate_malloc_env(t_data *data, void *ptr, t_env *node)
-{
-	if (!ptr)
-	{
-		system_error(strerror(errno), "malloc");
-		free_env_node(&node);
-		error_exit(data, NULL);
-	}
+	if (ptr)
+		return ;
+	system_error(strerror(errno), "malloc");
+	free(to_free);
+	error_exit(data, NULL);
 }

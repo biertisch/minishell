@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/07 23:41:27 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/08 11:57:38 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,16 +111,16 @@ typedef struct s_tree
 
 typedef struct s_stack
 {
-	t_phase		phase;
-	t_node_type	type;
-	t_tree		*node;
-	int			in_fd;
-	int			out_fd;
-	int			pipe[2];
-	int			child_count;
-	int			exit_status;
-	pid_t		child_pid[2];
-	struct s_stack		*next;
+	t_phase			phase;
+	t_node_type		type;
+	t_tree			*node;
+	int				in_fd;
+	int				out_fd;
+	int				pipe[2];
+	int				child_count;
+	int				exit_status;
+	pid_t			child_pid[2];
+	struct s_stack	*next;
 }	t_stack;
 
 typedef struct s_data

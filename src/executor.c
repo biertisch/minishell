@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 12:37:51 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/07 12:28:38 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/08 11:54:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	execute_cmd(t_data *data, t_stack **stack)
 
 	if ((*stack)->phase == ENTERED)
 	{
-		if (expand(data, (*stack)->node))
+		if (expand(data, (*stack)->node)) // change to expand_argv only, right?
 		{
 			if ((*stack)->next)
 				(*stack)->next->exit_status = 1;

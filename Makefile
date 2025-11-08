@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/11/07 23:24:42 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/11/08 11:48:48 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SRC_FILES = \
 	parser_redir parser_tree parser_utils signal signal_handler \
 	signal_heredoc stack test variable_utils wildcard \
 	wildcard_match wildcard_rebuild \
-	parser_heredoc_scan parser_heredoc_collect
+	parser_heredoc_scan parser_heredoc_collect error_executor error_utils
 
 
 SRC_DIR     = src

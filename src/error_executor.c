@@ -1,38 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_expander.c                                   :+:      :+:    :+:   */
+/*   error_executor.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 22:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/08 11:46:37 by beatde-a         ###   ########.fr       */
+/*   Created: 2025/11/08 11:47:52 by beatde-a          #+#    #+#             */
+/*   Updated: 2025/11/08 11:48:12 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_malloc_failure_expansion(t_data *data, char **argv, t_metadata *info,
-	int argc)
-{
-	free_metadata(&info, argc);
-	free_string_array(&argv);
-	validate_malloc(data, NULL, NULL);
-	return (-1);
-}
-
-int	handle_wildcard_rebuild_failure(char **argv, t_metadata *info, int argc)
-{
-	free_metadata(&info, argc);
-	free_string_array(&argv);
-	return (-1);
-}
-
-void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node)
+void	validate_malloc_execute(t_data *data, t_stack **stack,
+	void *ptr, void *to_free)
 {
 	if (ptr)
 		return ;
+	close_all_open_redir_ends(data);
+	close_all_pipe_ends(stack);
 	system_error(strerror(errno), "malloc");
-	ft_lstclear(&node, free);
-	error_exit(data, NULL);
+	if (to_free)
+		free(to_free);
+	error_exit(data, stack);
 }
