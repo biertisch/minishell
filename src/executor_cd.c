@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 12:14:33 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 22:10:35 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/10 14:36:53 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	execute_cd(t_data *data, t_stack **stack)
 		handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	(*stack)->exit_status = 0;
 	chdir_res = 0;
-	if (!getcwd(NULL, 0) && !ft_strncmp((*stack)->node->argv[1], "..", 2))
+	if (!getcwd(NULL, 0) && !ft_strncmp((*stack)->node->argv[1], "..", 2)) //free pointer from getcwd
 	{
 		write(STDERR_FILENO, "placeholder fucking shit\n", 25);
 		(*stack)->exit_status = 1;
@@ -96,6 +96,6 @@ int	cd_fail(t_stack **stack, char *dir)
 		write(STDERR_FILENO, ": Not a directory\n", 18);
 	else if (errno == EACCES)
 		write(STDERR_FILENO, ": Permission denied\n", 20);
-	
+
 	return (1);
 }

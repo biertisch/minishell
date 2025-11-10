@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:57:53 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/10 13:02:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/10 14:41:08 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	run_incomplete_child(t_data *data, char target, int *pipe_fd)
 	read_continuation_input(data, target, pipe_fd[1]);
 	close(pipe_fd[1]);
 	free_all(data);
-	rl_clear_history();
 	exit(data->exit_status);
 }
 

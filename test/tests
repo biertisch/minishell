@@ -1,0 +1,328 @@
+###
+ls -l
+###
+cat Makefile
+###
+foo
+###
+/bin/echo "hello world " he"ll"o "'world'" 'hello "world"'
+###
+/bin/echo ""
+###
+/bin/echo "" hello
+###
+/bin/echo hello "&&" /bin/echo bye
+###
+/bin/echo hello '&& /bin/echo bye'
+###
+'/bin/echo hello &&' /bin/echo bye
+###
+/bin/echo "hello
+###
+/bin/echo hel"lo"'
+###
+/bin/echo hello > test/file1
+cat < test/file1
+###
+/bin/echo "hi" > test/file1
+ls >> test/file1
+cat test/file1
+###
+rm test/file1 test/file2
+grep main src/main.c >> test/file1
+cat test/file1 >> test/file2
+cat test/file1
+cat test/file2
+###
+/bin/echo > test/file1 hello
+cat test/file1
+###
+/bin/echo "" > test/file1 hello
+cat test/file1
+###
+>test/file1 /bin/echo hello
+cat test/file1
+###
+>test/file1
+cat test/file1
+###
+grep main < src/main.c
+###
+wc -l < Makefile
+###
+wc -l < foo
+###
+rm test/file1
+/bin/echo -e "4\n2\n1\n3" > test/file1
+sort < test/file1
+###
+rm test/file1
+echo hello > test/file2
+cat < Makefile > test/file1 >> test/file2
+###
+foo > test/file1 2> test/file2
+cat test/file1
+cat test/file2
+###
+ls >
+###
+cat <
+###
+cat test/heredoc1.txt > test/file1
+cat test/file1
+###
+cat test/heredoc2.txt
+###
+cat test/heredoc3.txt
+###
+cat << test/heredoc1.txt &&
+###
+(cat << test/heredoc1.txt)(
+###
+cat << test/heredoc1.txt | |
+###
+cat << test/heredoc1.txt)
+###
+| cat << test/heredoc1.txt
+###
+/bin/echo $USER "$USER" '$USER' hel"l"o$USER $USER'$USER'
+###
+/bin/echo "hello $USER" $USER$USER "$"USER "$US"ER "$""USER"
+###
+/bin/echo $ "$" '$'
+###
+/bin/echo $"hello"
+###
+/bin/echo $?
+###
+/bin/echo "hello $NONE" hello $NONE
+###
+$NONE /bin/echo hello
+###
+$(echo echo hello)
+###
+echo $((1+2))
+###
+/bin/echo -e "~\n~+\n~-\n~/hi\n~bhb\n"~"\n'~'\na~"
+###
+export VAR="ls src"
+$VAR
+###
+export VAR="ls src"
+"$VAR"
+###
+export VAR="hi"
+export VAR2=$VAR
+/bin/echo $VAR2
+###
+export VAR=""
+/bin/echo $VAR
+###
+export VAR='"echo hello"'
+$VAR
+###
+export VAR=~
+echo $VAR
+###
+export VAR="echo bye"
+echo hi"$VAR"
+###
+export VAR="ho bye"
+ec$VAR
+ec"$VAR"
+###
+export VAR="this is a beautiful shell"
+/bin/echo $VAR
+###
+/bin/echo hello > $USER
+/bin/echo hello > $NONE
+rm $USER
+###
+"$NONE" /bin/echo hello
+###
+/bin/echo "$NONE""Makefile"
+###
+/bin/echo $1HOME
+/bin/echo $42HOME
+###
+ls *f
+###
+ls *f*
+###
+ls **f**
+###
+ls *
+###
+ls .*
+###
+ls "*"
+###
+/bin/echo *ile *in*
+cat < *ile
+###
+/bin/echo Make*
+/bin/echo Make"*"
+###
+/bin/echo *on*
+###
+export VAR=*ile
+/bin/echo $VAR
+###
+export VAR=*in*
+/bin/echo $VAR
+###
+/bin/echo hello > *in*
+###
+export VAR="hi *file"
+/bin/echo $VAR
+/bin/echo "$VAR"
+###
+export VAR=""*ile""
+/bin/echo $VAR
+export VAR="'*ile'"
+/bin/echo $VAR
+###
+echo hello "wondeful 'person'"
+###
+echo -n bye
+###
+echo -nnn hello
+###
+echo -f hello
+###
+echo -nn -nt hello
+###
+cd
+pwd
+cd -
+pwd
+###
+cd ~/Documents
+pwd
+cd -
+###
+cd test
+pwd
+cd ..
+pwd
+###
+export VAR=42
+export | grep VAR
+unset VAR
+###
+env | grep PATH
+###
+exit
+###
+exit 2
+###
+exit -2
+###
+exit p
+###
+exit a 1
+###
+env hello
+###
+env -w
+###
+unset -w
+###
+export -l
+###
+pwd -f
+###
+cd -f
+###
+cd . include
+###
+ls | grep minishell
+###
+ls | wc -l
+###
+cat Makefile | head -n 5
+###
+grep -i include src/main.c | sort | uniq
+###
+cat Makefile | grep SRC | cut -d'=' -f2 | tr ' ' '\n' | wc -l
+###
+find . -type f | wc -l
+###
+ls | sort | uniq | rev | rev
+###
+cat Makefile | tr a-z A-Z | grep SRC | wc -c
+###
+ls /bin | grep sh | head -n 3 | tail -n 1
+###
+seq 1 100 | grep 42 | wc -l
+###
+| ls
+###
+ls | | wc
+###
+ls |
+###
+| | |
+###
+foo | wc -l
+###
+ls | foo
+###
+a | b | c | d | e | f | g
+###
+ls && cat Makefile
+###
+cat foo || echo "not found"
+###
+(/bin/echo hello && /bin/echo world) | wc -l
+###
+/bin/echo hello && /bin/echo world | wc -l
+###
+(ls)
+###
+((ls))
+###
+( (ls) )
+###
+((ls) )
+###
+( (ls))
+###
+/bin/echo a && /bin/echo b || /bin/echo c
+###
+/bin/echo a || /bin/echo b && /bin/echo c
+###
+()
+###
+ls)
+###
+(ls) /bin/echo hello
+###
+(ls) (ls)
+###
+|| ls
+###
+&& ls
+###
+|| && |
+###
+ls ||| wc
+###
+/bin/echo "start" && (ls -l | grep minishell) >
+###
+(ls
+###
+/bin/echo (
+###
+ls &&
+###
+ls ||
+###
+/bin/echo "start" && (ls -l | grep minishell) && /bin/echo end
+###
+/bin/echo "start" && (ls -l | grep minishell) > test/file1 && cat test/file1
+###
+/bin/echo "start" && (ls -l | grep minishell) | /bin/echo end
+###
+ls -l > test/file1 && (cat < test/file1 || echo fail) | wc -l
+##

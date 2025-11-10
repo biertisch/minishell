@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/11/08 11:48:48 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/11/10 11:06:27 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -112,18 +112,14 @@ fclean: clean
 	@$(RM) -r $(LIBFT_DIR)
 	@$(RM) -r $(PRINTF_DIR)
 	@$(RM) outfile*
-	@$(RM) -rf test/bash
-	@$(RM) -rf test/diffs
-	@$(RM) -rf test/minishell
-	@$(RM) -rf test/leaks
-	@$(RM) test/tests
+	@$(RM) -rf test/results
 	@$(RM) err.tmp
 
 valgrind: $(NAME)
 	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --show-leak-kinds=all --trace-children=yes ./${NAME}
-test: re
-	@chmod 755 test/run_tests.sh
-	@./test/run_tests.sh
+test: $(NAME)
+	@chmod 755 test/tester.sh
+	@./test/tester.sh
 
 run:	$(NAME)
 	@./minishell

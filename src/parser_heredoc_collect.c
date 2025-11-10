@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:20:08 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/10 12:52:53 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/10 14:40:47 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	run_heredoc_child(t_data *data, t_redir *redir, int *pipe_fd)
 	collect_heredoc(data, redir, pipe_fd[1]);
 	close(pipe_fd[1]);
 	free_all(data);
-	rl_clear_history();
 	exit(0);
 }
 
