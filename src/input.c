@@ -6,40 +6,23 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 23:20:44 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/10 13:02:02 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// non-interactive mode
 int	read_input(t_data *data)
-{
-	int	flags;
-
-	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
-		return (prompt_input(data));
-	flags = 1;
-	ioctl(STDIN_FILENO, FIONBIO, &flags);
-	data->input = get_next_line(STDIN_FILENO);
-	while (data->input)
-	{
-		if (*data->input && process_input(data) == INCOMPLETE_EOF)
-			break ;
-		free_command_data(data);
-		data->input = get_next_line(STDIN_FILENO);
-	}
-	eof_abort(data);
-	return (0);
-}
-
-// interactive mode
-int	prompt_input(t_data *data)
 {
 	while (1)
 	{
-		update_prompt(data);
-		data->input = readline(data->prompt);
+		if (isatty(STDIN_FILENO))
+		{
+			update_prompt(data);
+			data->input = readline(data->prompt);
+		}
+		else
+			data->input = get_next_line(STDIN_FILENO);
 		if (!data->input)
 			eof_abort(data);
 		if (g_sig == SIGINT)
@@ -66,13 +49,16 @@ int	process_input(t_data *data)
 	return (VALID);
 }
 
-int	prompt_continuation_input(t_data *data, char target, int out_fd)
+int	read_continuation_input(t_data *data, char target, int out_fd)
 {
 	char	*line;
 
 	while (1)
 	{
-		line = readline(CONTINUE_PROMPT);
+		if (isatty(STDIN_FILENO))
+			line = readline(CONTINUE_PROMPT);
+		else
+			line = get_next_line(STDIN_FILENO);
 		if (g_sig == SIGINT)
 			return (sigint_abort(data, line, 1));
 		else if (!line)

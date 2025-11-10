@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:20:08 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 22:52:20 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/10 12:52:53 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	collect_heredoc(t_data *data, t_redir *redir, int out_fd)
 
 	while (1)
 	{
-		line = readline(CONTINUE_PROMPT);
+		if (isatty(STDIN_FILENO))
+			line = readline(CONTINUE_PROMPT);
+		else
+			line = get_next_line(STDIN_FILENO);
 		if (!line)
 		{
 			if (g_sig == SIGINT)
@@ -68,8 +71,7 @@ int	copy_heredoc_input(t_data *data, t_redir *redir, int in_fd)
 	ssize_t	read_bytes;
 
 	ft_bzero(buffer, sizeof(buffer));
-	if (redir->heredoc_input)
-		free(redir->heredoc_input);
+	free(redir->heredoc_input);
 	redir->heredoc_input = malloc(1);
 	validate_malloc(data, redir->heredoc_input, NULL);
 	redir->heredoc_input[0] = '\0';

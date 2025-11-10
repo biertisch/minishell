@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 23:48:37 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/10 13:02:02 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,9 @@ char		*get_next_line_cont(int fd, char *buffer, char *result,
 char		*ft_gnl_realloc(char *result, int i, int *r);
 
 //input.c
-int			prompt_input(t_data *data);
 int			read_input(t_data *data);
 int			process_input(t_data *data);
-int			prompt_continuation_input(t_data *data, char target, int out_fd);
+int			read_continuation_input(t_data *data, char target, int out_fd);
 
 //input_continuation.c
 int			handle_incomplete_input(t_data *data);
