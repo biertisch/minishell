@@ -81,7 +81,7 @@ void	execute_export_handle_underscore(t_data *data, t_stack **stack)
 	char	*value;
 	int		i;
 
-	if (!(*stack)->node->argv)
+	if (!(*stack) || !(*stack)->node || !(*stack)->node->argv)
 		return ;
 	i = 0;
 	while ((*stack)->node->argv[i])

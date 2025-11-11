@@ -30,6 +30,8 @@ int			execute_cmd(t_data *data, t_stack **stack);
 int			execute_pipe(t_data *data, t_stack **stack);
 int			execute_cmd_entered(t_data *data, t_stack **stack);
 int			execute_cmd_done(t_data **data, t_stack **stack);
+int			execute_cmd_no_cmd(t_data *data, t_stack **stack);
+int			execute_cmd_pre_processing(t_data *data, t_stack **stack);
 
 //stack.c
 t_stack		*create_stack(t_data *data);
@@ -55,10 +57,11 @@ void		child_redir_in(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_redir_out(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 void		child_no_redir(t_data *data, t_stack **stack, char *cmd);
-void		clean_execve_failure(t_data *data, t_stack **stack, char *cmd);
+void		clean_execve_failure(t_data *data, t_stack **stack);
 void	check_no_cmd(t_data *data, t_stack **stack);
 void		handle_redirects(t_data *data, t_stack **stack, char *cmd, t_redir *redir);
 int		has_failed_redirect(t_redir *redir);
+void		child_execute(t_data *data, t_stack **stack, char *cmd);
 
 
 //executor_utils.c
@@ -164,12 +167,15 @@ int			variable_key_not_found(t_data *data, t_stack **stack, char **kv_split);
 
 //executor_redirect.c
 int			traverse_redir_in(t_data *data, t_stack **stack);
-int			open_redir_in(t_data *data, t_redir *redir);
+int			open_redir(t_data *data, t_redir *redir);
 int			close_redir_in(t_redir *redir);
 void		handle_open_errors(t_redir *redir);
 int			check_redir_in_left(t_data *data, t_stack **stack);
 int			check_redir_in_right(t_data *data, t_stack **stack);
 int			push_left_until_cmd_redir(t_data *data, t_stack **stack);
+int		open_redir_out_ok(t_data *data, t_redir *redir, t_list *new, int *fd);
+int	open_redir_out(t_data *data, t_redir *redir, t_list *new, int *fd);
+int	open_redir_in(t_data *data, t_redir *redir, t_list *new, int *fd);
 
 //executo_builtins_utils.c
 int			*duplicate_std(void);

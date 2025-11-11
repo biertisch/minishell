@@ -14,6 +14,8 @@
 
 int	is_builtin(char *cmd)
 {
+	if (!cmd)
+		return (0);
 	return (!ft_strcmp(cmd, "echo") || !ft_strcmp(cmd, "cd")
 		|| !ft_strcmp(cmd, "pwd") || !ft_strcmp(cmd, "export")
 		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "env")
@@ -23,32 +25,9 @@ int	is_builtin(char *cmd)
 int	is_builtin_no_fork(char *cmd)
 {
 	return (!ft_strcmp(cmd, "cd") || !ft_strcmp(cmd, "export")
-	 	|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "exit"));
+		|| !ft_strcmp(cmd, "unset") || !ft_strcmp(cmd, "exit"));
 }
-/**
-int	validate_builtin(t_data *data, t_tree *node, int i)
-{
-	if (!node || node->type != NODE_CMD)
-		return (0);
-	if (!ft_strcmp(node->argv[i], "pwd") || !ft_strcmp(node->argv[i], "export")
-		|| !ft_strcmp(node->argv[i], "unset"))
-			return (-1);
-	if (!ft_strcmp(node->argv[i], "env") && validate_env(data, node->argv))
-		return (-1);
-	if (!ft_strcmp(node->argv[i], "cd"))
-	{
-		if (node->argv[i + 1] && node->argv[i + 2])
-			return (internal_error(data, ERR_4, node->argv[i], NULL));
-		if (node->argv[1] && node->argv[i + 1][0] == '-'
-			&& node->argv[i + 1][1])
-		{
-			internal_error(data, ERR_3, node->argv[i], node->argv[i + 1]);
-			return (print_builtin_usage(node->argv[i]));
-		}
-	}
-	return (0);
-}
-**/
+
 int	has_builtin_flag(char **argv)
 {
 	int	i;

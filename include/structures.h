@@ -132,7 +132,7 @@ typedef struct s_data
 	t_tree			*parser_tree;
 	t_stack			*stack;
 	int				exit_status;
-	t_list			*open_redir_ins;
+	t_list			*open_redirs;
 }	t_data;
 
 #endif

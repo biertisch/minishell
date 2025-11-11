@@ -202,7 +202,7 @@ void	close_all_open_redir_ends(t_data *data)
 {
 	t_list	*node;
 
-	node = data->open_redir_ins;
+	node = data->open_redirs;
 	while (node)
 	{
 		if (*(int *)node->content != -1)

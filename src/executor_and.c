@@ -29,7 +29,7 @@ int	execute_and_entered(t_data *data, t_stack **stack)
 {
 	(*stack)->phase = LAUNCH_LEFT;
 	push_stack(stack, (*stack)->node->left, get_fd_pair((*stack)->in_fd,
-		(*stack)->out_fd), data);
+			(*stack)->out_fd), data);
 	return (0);
 }
 
@@ -38,7 +38,8 @@ int	execute_and_launch_left(t_data *data, t_stack **stack)
 	(*stack)->phase = LAUNCH_RIGHT;
 	if (!(*stack)->exit_status)
 	{
-		push_stack(&data->stack, (*stack)->node->right, get_fd_pair(0, 0), data);
+		push_stack(&data->stack, (*stack)->node->right,
+			get_fd_pair(0, 0), data);
 		traverse_redir_in(data, &data->stack);
 		push_stack(stack, (*stack)->node->right,
 			get_fd_pair((*stack)->in_fd, (*stack)->out_fd), data);

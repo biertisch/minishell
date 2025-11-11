@@ -14,10 +14,9 @@
 
 int	cmd_has_variable(t_data *data, t_stack **stack)
 {
-	int	i;
-	char	**kv_split;
 	t_env	**env;
-	int	found;
+	char	**kv_split;
+	int		i;
 
 	if (!(*stack)->node->argv)
 		return (0);
@@ -28,31 +27,27 @@ int	cmd_has_variable(t_data *data, t_stack **stack)
 	{
 		kv_split = split_by_first_equal((*stack)->node->argv[i]);
 		validate_malloc_execute(data, stack, kv_split, NULL);
-		if (is_valid_var_name(kv_split[0]) && kv_split[1])
+		if (!is_valid_var_name(kv_split[0]) || !kv_split[1])
+			return (ft_splitfree(kv_split), 0);
+		else 
 		{
 			env = &(data->env_list);
-			found = 0;
-			while (env && *env)
-			{
-				if (!ft_strcmp((*env)->key, kv_split[0]))
-				{
-					found = 1;
-					if ((*env)->value)
-						free((*env)->value);
-					(*env)->value = ft_strdup(kv_split[1]);
-					if (!(*env)->value)
-					{
-						ft_splitfree(kv_split);
-						validate_malloc_execute(data, stack, (*env)->value, NULL);
-					}
-				}
+			while (*env && ft_strcmp((*env)->key, kv_split[0]))
 				env = &(*env)->next;
+			if (*env)
+			{
+				if ((*env)->value)
+					free((*env)->value);
+				(*env)->value = ft_strdup(kv_split[1]);
+				if (!(*env)->value)
+				{
+					ft_splitfree(kv_split);
+					validate_malloc_execute(data, stack, (*env)->value, NULL);
+				}
 			}
-			if (!found)
+			else
 				variable_key_not_found(data, stack, kv_split);
 		}
-		else
-			return (ft_splitfree(kv_split), 0);
 		ft_splitfree(kv_split);
 		i++;
 	}

@@ -24,8 +24,9 @@ SRC_FILES = \
 	lexer_type main parent parser parser_cmd \
 	parser_redir parser_tree parser_utils signal signal_handler \
 	signal_heredoc stack test variable_utils wildcard \
-	wildcard_match wildcard_rebuild executor_export2\
-	parser_heredoc_scan parser_heredoc_collect error_executor error_utils
+	wildcard_match wildcard_rebuild executor_export2 executor2\
+	parser_heredoc_scan parser_heredoc_collect error_executor error_utils\
+	executor_pipe2 executor_redirect2 child2
 
 
 SRC_DIR     = src
