@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.h                                              :+:      :+:    :+:   */
+/*   environment.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:32:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 15:11:20 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 23:48:43 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_H
-# define ENV_H
+#ifndef ENVIRONMENT_H
+# define ENVIRONMENT_H
 
 # include "minishell.h"
-
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	int				exported;
-	struct s_env	*next;
-}	t_env;
 
 //env.c
 int			generate_minimal_env(t_data *data, char **argv);

@@ -1,67 +1,70 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_heredoc.c                                 :+:      :+:    :+:   */
+/*   parser_heredoc_scan.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:49:01 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 22:11:01 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/10 12:43:16 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_for_heredoc(t_data *data)
+int	scan_heredocs(t_data *data, t_tree *parser_tree)
 {
-	push_stack(&data->stack, data->parser_tree, 0, 0, data);
-	if (check_heredoc_left(data))
+	if (!parser_tree)
+		return (0);
+	push_stack(&data->stack, parser_tree, 0, 0, data);
+	if (scan_heredocs_left(data))
 		return (-1);
-	if (check_heredoc_right(data))
+	if (scan_heredocs_right(data))
 		return (-1);
 	free_stack(&data->stack);
 	data->stack = NULL;
 	return (0);
 }
 
-int	check_heredoc_left(t_data *data)
+int	scan_heredocs_left(t_data *data)
 {
 	if (!data->stack || !data->stack->node)
 		return (0);
 	if (push_left_until_cmd(data))
 		return (-1);
-	if (execute_heredoc(data, data->stack->node->redir))
+	if (setup_heredoc(data, data->stack->node->redir))
 		return (-1);
 	pop(&data->stack);
 	return (0);
 }
 
-int	check_heredoc_right(t_data *data)
+int	scan_heredocs_right(t_data *data)
 {
 	if (!data->stack || !data->stack->node)
 		return (0);
 	while (data->stack)
 	{
-		if (data->stack->phase == DONE)
+		if (data->stack->phase == DONE || !data->stack->node->right)
 		{
-			if (execute_heredoc(data, data->stack->node->redir))
+			if (setup_heredoc(data, data->stack->node->redir))
 				return (-1);
 			pop(&data->stack);
 		}
-		else if (data->stack->node->right)
+		else
 		{
 			data->stack->phase = DONE;
 			if (data->stack->node->right)
 				push_stack(&data->stack, data->stack->node->right, 0, 0, data);
-			if (check_heredoc_left(data))
+			if (scan_heredocs_left(data))
 				return (-1);
 		}
 	}
 	return (0);
 }
 
-int	execute_heredoc(t_data *data, t_redir *redir)
+int	setup_heredoc(t_data *data, t_redir *redir)
 {
+	int		pipe_fd[2];
 	pid_t	pid;
 
 	if (!redir)
@@ -70,14 +73,14 @@ int	execute_heredoc(t_data *data, t_redir *redir)
 	{
 		if (redir->type == HEREDOC)
 		{
-			if (validate_pipe(pipe(data->stack->pipe), &data->stack))
-				return (-1);
+			if (pipe(pipe_fd))
+				return (system_error(strerror(errno), "pipe"));
 			pid = fork();
 			if (pid < 0)
-				return (validate_fork(data, &data->stack));
+				return (system_error(strerror(errno), "fork"));
 			else if (pid == 0)
-				run_heredoc_child(data, redir);
-			else if (run_heredoc_parent(data, redir, pid))
+				run_heredoc_child(data, redir, pipe_fd);
+			else if (run_heredoc_parent(data, redir, pipe_fd, pid))
 				return (-1);
 		}
 		redir = redir->next;

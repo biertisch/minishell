@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 12:31:48 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 19:35:30 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 19:25:06 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,8 @@ int	heredoc_sigint_abort(t_data *data, char *line)
 
 int	heredoc_eof_abort(t_data *data, char *target)
 {
-	char	*tmp;
-	char	*error_msg;
-
-	tmp = ft_strjoin(INT_ERR_2, target);
-	validate_malloc(data, tmp, NULL);
-	error_msg = ft_strjoin(tmp, "')\n");
-	validate_malloc(data, error_msg, tmp);
-	free(tmp);
-	write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
+	syntax_error(data, SYN_ERR_8, target);
 	close(data->stack->pipe[1]);
-	free(error_msg);
 	free_all(data);
 	rl_clear_history();
 	exit(0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:33:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 14:04:42 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/08 11:46:51 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,10 @@ int	check_unsupported_syntax(t_data *data, char *input)
 void	validate_malloc_parser(t_data *data, void *ptr, t_tree *left,
 	t_tree *right)
 {
-	if (!ptr)
-	{
-		system_error(strerror(errno), "malloc");
-		free_parser_tree(&left);
-		free_parser_tree(&right);
-		error_exit(data, NULL);
-	}
+	if (ptr)
+		return ;
+	system_error(strerror(errno), "malloc");
+	free_parser_tree(&left);
+	free_parser_tree(&right);
+	error_exit(data, NULL);
 }

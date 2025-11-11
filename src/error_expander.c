@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_expander.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 22:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 14:02:40 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/08 11:46:37 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@ int	handle_wildcard_rebuild_failure(char **argv, t_metadata *info, int argc)
 
 void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node)
 {
-	if (!ptr)
-	{
-		system_error(strerror(errno), "malloc");
-		ft_lstclear(&node, free);
-		error_exit(data, NULL);
-	}
+	if (ptr)
+		return ;
+	system_error(strerror(errno), "malloc");
+	ft_lstclear(&node, free);
+	error_exit(data, NULL);
 }

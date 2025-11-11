@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error_executor.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/20 10:38:10 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/10 13:02:13 by beatde-a         ###   ########.fr       */
+/*   Created: 2025/11/08 11:47:52 by beatde-a          #+#    #+#             */
+/*   Updated: 2025/11/08 11:48:12 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-volatile sig_atomic_t	g_sig;
-
-int	main(int argc, char **argv, char **envp)
+void	validate_malloc_execute(t_data *data, t_stack **stack,
+	void *ptr, void *to_free)
 {
-	t_data	data;
-
-	(void)argc;
-	ft_bzero(&data, sizeof(data));
-	setup_signals(&data);
-	envp_to_list(&data, envp, argv);
-	read_input(&data);
-	free_all(&data);
-	return (data.exit_status);
+	if (ptr)
+		return ;
+	close_all_open_redir_ends(data);
+	close_all_pipe_ends(stack);
+	system_error(strerror(errno), "malloc");
+	if (to_free)
+		free(to_free);
+	error_exit(data, stack);
 }

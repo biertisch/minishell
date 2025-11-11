@@ -1,0 +1,6 @@
+cat << "EOF"
+$USER
+"$USER"
+~
+*file
+EOF

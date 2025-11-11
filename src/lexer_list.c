@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 13:13:12 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/10/30 22:39:25 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/07 14:51:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_token	*get_last_lexer_node(t_token *head)
 {
 	if (!head)
 		return (NULL);
-	while (head->next)
+	while (head && head->next)
 		head = head->next;
 	return (head);
 }

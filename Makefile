@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+         #
+#    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/11/05 12:37:32 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/11/10 11:06:27 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,15 +16,16 @@ SRC_FILES = \
 	env_list env_utils error error_expander error_parser \
 	executor executor_and executor_builtin executor_builtin_utils executor_cd \
 	executor_echo executor_env executor_error executor_exit executor_export \
-	executor_heredoc executor_heredoc2 executor_or executor_pipe executor_pwd \
+	executor_or executor_pipe executor_pwd \
 	executor_redirect executor_sort_env executor_subshell executor_unset executor_utils \
 	expander expander_dollar expander_metadata expander_quotes expander_rebuild \
 	expander_redir expander_split expander_tilde get_next_line get_next_line_utils \
-	input input_cont input_prompt lexer lexer_list \
+	input input_continuation input_prompt lexer lexer_list \
 	lexer_type main parent parser parser_cmd \
 	parser_redir parser_tree parser_utils signal signal_handler \
 	signal_heredoc stack test variable_utils wildcard \
-	wildcard_match wildcard_rebuild
+	wildcard_match wildcard_rebuild \
+	parser_heredoc_scan parser_heredoc_collect error_executor error_utils
 
 
 SRC_DIR     = src
@@ -111,18 +112,14 @@ fclean: clean
 	@$(RM) -r $(LIBFT_DIR)
 	@$(RM) -r $(PRINTF_DIR)
 	@$(RM) outfile*
-	@$(RM) -rf test/bash
-	@$(RM) -rf test/diffs
-	@$(RM) -rf test/minishell
-	@$(RM) -rf test/leaks
-	@$(RM) test/tests
+	@$(RM) -rf test/results
 	@$(RM) err.tmp
 
 valgrind: $(NAME)
 	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --show-leak-kinds=all --trace-children=yes ./${NAME}
-test: re
-	@chmod 755 test/run_tests.sh
-	@./test/run_tests.sh
+test: $(NAME)
+	@chmod 755 test/tester.sh
+	@./test/tester.sh
 
 run:	$(NAME)
 	@./minishell
