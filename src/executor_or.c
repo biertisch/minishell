@@ -19,7 +19,7 @@ int	execute_or(t_data *data, t_stack **stack)
 	if ((*stack)->phase == LAUNCH_LEFT)
 		return (execute_or_launch_left(data, stack));
 	if ((*stack)->phase == LAUNCH_RIGHT)
-		return (execute_or_launch_right(data, stack));
+		return (execute_or_launch_right(stack));
 	if ((*stack)->phase == DONE)
 		return (execute_or_done(&data, stack));
 	return (1);
@@ -50,9 +50,8 @@ int	execute_or_launch_left(t_data *data, t_stack **stack)
 	return (0);
 }
 
-int	execute_or_launch_right(t_data *data, t_stack **stack)
+int	execute_or_launch_right(t_stack **stack)
 {
-	(void)data;
 	(*stack)->phase = DONE;
 	return (0);
 }

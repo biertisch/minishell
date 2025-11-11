@@ -33,6 +33,9 @@ end-of-file (wanted "
 # define INT_ERR_2 "invalid option"
 # define INT_ERR_3 "too many arguments"
 # define INT_ERR_4 "No such file or directory"
+# define INT_ERR_5 "arguments not supported :("
+# define INT_ERR_6 "command not found"
+# define INT_ERR_7 "cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory"
 
 //error.c
 int		syntax_error(t_data *data, char *desc, char *token);

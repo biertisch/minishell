@@ -81,7 +81,7 @@ void	check_err_output(t_data *data, t_stack **stack,
 					| O_CREAT | O_TRUNC, 0644);
 			if (redir->out_fd == -1)
 			{
-				handle_open_errors(redir);
+				system_error(strerror(errno), redir->file);
 				ft_splitfree(paths);
 				executor_cleanup(data, stack, slash_path);
 				exit(1);
@@ -98,9 +98,7 @@ char	*cmd_not_found(t_data *data, t_stack **stack,
 			char **paths, char *slash_path)
 {
 	check_err_output(data, stack, paths, slash_path);
-	write(STDERR_FILENO, (*stack)->node->argv[get_first_command(data, stack)],
-		ft_strlen((*stack)->node->argv[get_first_command(data, stack)]));
-	write(STDERR_FILENO, ": command not found\n", 20);
+	internal_error(INT_ERR_6, (*stack)->node->argv[get_first_command(data, stack)], NULL);
 	if ((*stack)->node->redir)
 	{
 		if ((*stack)->node->redir->type == REDIR_OUT)

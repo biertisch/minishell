@@ -85,7 +85,7 @@ int			parent_heredoc(t_stack **stack, pid_t pid);
 //executor_pipe.c
 int			execute_pipe_entered(t_data *data, t_stack **stack);
 int			execute_pipe_launch_left(t_data *data, t_stack **stack);
-int			execute_pipe_launch_right(t_data *data, t_stack **stack);
+int			execute_pipe_launch_right(t_stack **stack);
 int			execute_pipe_wait(t_stack **stack);
 int			execute_pipe_done(t_data **data, t_stack **stack);
 
@@ -93,14 +93,14 @@ int			execute_pipe_done(t_data **data, t_stack **stack);
 int			execute_and(t_data *data, t_stack **stack);
 int			execute_and_entered(t_data *data, t_stack **stack);
 int			execute_and_launch_left(t_data *data, t_stack **stack);
-int			execute_and_launch_right(t_data *data, t_stack **stack);
+int			execute_and_launch_right(t_stack **stack);
 int			execute_and_done(t_data **data, t_stack **stack);
 
 //executor_or.c
 int			execute_or(t_data *data, t_stack **stack);
 int			execute_or_entered(t_data *data, t_stack **stack);
 int			execute_or_launch_left(t_data *data, t_stack **stack);
-int			execute_or_launch_right(t_data *data, t_stack **stack);
+int			execute_or_launch_right(t_stack **stack);
 int			execute_or_done(t_data **data, t_stack **stack);
 
 //executor_builtin.c
@@ -129,8 +129,8 @@ int			execute_env(t_data *data, t_stack **stack);
 
 //executor_cd.c
 int			execute_cd(t_data *data, t_stack **stack);
-int			execute_cd_option(t_data *data, t_stack **stack, int cmd_i, int *chdir_res);
-int			cd_fail(t_stack **stack, char *dir);
+int			execute_cd_option(t_data *data, t_stack **stack, int cmd_i);
+int			cd_fail(t_data *data, t_stack **stack, char *dir);
 int		execute_cd_continue(t_data *data, t_stack **stack, char *curr_pwd);
 
 //executor_pwd.c
@@ -159,7 +159,7 @@ int			execute_export_option(t_data *data, t_stack **stack, int cmd_i);
 int			execute_export_val_found(t_data *data, t_stack **stack, char **kv_split, t_env **env);
 void			execute_export_invalid_var(t_stack **stack, int cmd_i);
 int			execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split);
-int			execute_export_no_option(t_data *data, t_stack **stack);
+int			execute_export_no_option(t_data *data);
 void		execute_export_handle_underscore(t_data *data, t_stack **stack);
 
 //executor_sort_env.c
@@ -176,7 +176,6 @@ void		cmd_has_valid_variable(t_data *data, t_stack **stack, char **kv_split);
 int			traverse_redir_in(t_data *data, t_stack **stack);
 int			open_redir(t_data *data, t_redir *redir);
 int			close_redir_in(t_redir *redir);
-void		handle_open_errors(t_redir *redir);
 int			check_redir_in_left(t_data *data, t_stack **stack);
 int			check_redir_in_right(t_data *data, t_stack **stack);
 int			push_left_until_cmd_redir(t_data *data, t_stack **stack);

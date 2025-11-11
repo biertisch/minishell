@@ -19,7 +19,7 @@ int	execute_pipe(t_data *data, t_stack **stack)
 	if ((*stack)->phase == LAUNCH_LEFT)
 		return (execute_pipe_launch_left(data, stack));
 	if ((*stack)->phase == LAUNCH_RIGHT)
-		return (execute_pipe_launch_right(data, stack));
+		return (execute_pipe_launch_right(stack));
 	if ((*stack)->phase == WAIT)
 		return (execute_pipe_wait(stack));
 	if ((*stack)->phase == DONE)
@@ -70,9 +70,8 @@ int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 	return (0);
 }
 
-int	execute_pipe_launch_right(t_data *data, t_stack **stack)
+int	execute_pipe_launch_right(t_stack **stack)
 {
-	(void)data;
 	close((*stack)->pipe[0]);
 	close((*stack)->pipe[1]);
 	(*stack)->phase = WAIT;

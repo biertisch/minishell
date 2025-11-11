@@ -31,11 +31,10 @@ int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split)
 	return (1);
 }
 
-int	execute_export_no_option(t_data *data, t_stack **stack)
+int	execute_export_no_option(t_data *data)
 {
 	t_env	*env;
 
-	(void)stack;
 	env = data->env_list;
 	while (env)
 	{

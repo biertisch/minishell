@@ -25,7 +25,7 @@ int	open_redir_out_ok(t_data *data, t_redir *redir, t_list *new, int *fd)
 		ft_lstadd_back(&data->open_redirs, new);
 	if (redir->out_fd == -1)
 	{
-		handle_open_errors(redir);
+		system_error(strerror(errno), redir->file);
 		return (2);
 	}
 	return (1);
@@ -90,16 +90,4 @@ int	close_redir_in(t_redir *redir)
 		redir = redir->next;
 	}
 	return (1);
-}
-
-void	handle_open_errors(t_redir *redir)
-{
-	write(STDERR_FILENO, "minishell: ", 11);
-	write(STDERR_FILENO, redir->file, ft_strlen(redir->file));
-	if (errno == ENOENT)
-		write(STDERR_FILENO, ": No such file or directory\n", 28);
-	else if (errno == EACCES)
-		write(STDERR_FILENO, ": Permission denied\n", 20);
-	else if (errno == EISDIR)
-		write(STDERR_FILENO, ": Is a directory\n", 17);
 }

@@ -84,7 +84,6 @@ int	get_first_command(t_data *data, t_stack **stack)
 	char	**kv_split;
 	int		i;
 
-	(void)data;
 	if (!(*stack)->node->argv)
 		return (-1);
 	i = 0;

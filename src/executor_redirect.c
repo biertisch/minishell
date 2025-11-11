@@ -94,7 +94,7 @@ int	open_redir_in(t_data *data, t_redir *redir, t_list *new, int *fd)
 		ft_lstadd_back(&data->open_redirs, new);
 	if (redir->in_fd == -1)
 	{
-		handle_open_errors(redir);
+		system_error(strerror(errno), redir->file);
 		return (2);
 	}
 	return (1);

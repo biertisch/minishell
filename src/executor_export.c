@@ -22,7 +22,7 @@ int	execute_export(t_data *data, t_stack **stack)
 		handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	sort_env(&data);
 	if (!(*stack)->node->argv[cmd_i + 1])
-		execute_export_no_option(data, stack);
+		execute_export_no_option(data);
 	else
 		execute_export_option(data, stack, cmd_i);
 	undo_duplicate_std(1);
