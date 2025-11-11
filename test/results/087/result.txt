@@ -1,6 +1,0 @@
-Test: 087
-Command: env hello
-Bash exit: 127
-Mini exit: 0
-stdout differs
-stderr differs

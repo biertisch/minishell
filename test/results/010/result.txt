@@ -1,5 +1,0 @@
-Test: 010
-Command: /bin/echo "hello
-Bash exit: 2
-Mini exit: 2
-stderr differs

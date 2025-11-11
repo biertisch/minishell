@@ -1,5 +1,0 @@
-Test: 128
-Command: || && |
-Bash exit: 2
-Mini exit: 2
-stderr differs

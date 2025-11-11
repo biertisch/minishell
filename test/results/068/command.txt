@@ -1,2 +1,0 @@
-export VAR=*in*
-/bin/echo $VAR

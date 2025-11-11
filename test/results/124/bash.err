@@ -1,2 +1,0 @@
-test/test_block_124.sh: line 1: syntax error near unexpected token `/bin/echo'
-test/test_block_124.sh: line 1: `(ls) /bin/echo hello'

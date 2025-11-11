@@ -1,4 +1,0 @@
-Test: 100
-Command: ls | sort | uniq | rev | rev
-Bash exit: 0
-Mini exit: 0

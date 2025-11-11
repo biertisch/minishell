@@ -1,6 +1,0 @@
-Test: 088
-Command: env -w
-Bash exit: 125
-Mini exit: 0
-stdout differs
-stderr differs

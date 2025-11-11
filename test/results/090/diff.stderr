@@ -1,6 +1,0 @@
---- test/results/090/bash.err	2025-11-11 21:54:09.665433218 +0000
-+++ test/results/090/mini.err	2025-11-11 21:54:10.701609115 +0000
-@@ -1,2 +1 @@
--test/test_block_090.sh: line 1: export: -l: invalid option
--export: usage: export [-fn] [name[=value] ...] or export -p
-+minishell: export: `-l': not a valid identifier

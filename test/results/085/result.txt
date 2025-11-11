@@ -1,5 +1,0 @@
-Test: 085
-Command: exit p
-Bash exit: 2
-Mini exit: 2
-stderr differs

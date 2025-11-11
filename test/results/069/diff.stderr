@@ -1,5 +1,0 @@
---- test/results/069/bash.err	2025-11-11 21:53:50.808108964 +0000
-+++ test/results/069/mini.err	2025-11-11 21:53:51.523018028 +0000
-@@ -1 +1 @@
--test/test_block_069.sh: line 1: *in*: ambiguous redirect
-+minishell: *in*: ambiguous redirect

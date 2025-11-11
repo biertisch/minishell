@@ -1,1 +1,0 @@
-cat Makefile | tr a-z A-Z | grep SRC | wc -c

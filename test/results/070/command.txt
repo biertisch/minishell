@@ -1,3 +1,0 @@
-export VAR="hi *file"
-/bin/echo $VAR
-/bin/echo "$VAR"

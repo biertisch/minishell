@@ -1,4 +1,0 @@
-Test: 004
-Command: /bin/echo "hello world " he"ll"o "'world'" 'hello "world"'
-Bash exit: 0
-Mini exit: 0

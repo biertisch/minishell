@@ -1,5 +1,0 @@
-Test: 133
-Command: ls &&
-Bash exit: 2
-Mini exit: 2
-stderr differs

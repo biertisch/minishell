@@ -1,5 +1,0 @@
-Test: 092
-Command: cd -f
-Bash exit: 2
-Mini exit: 2
-stderr differs

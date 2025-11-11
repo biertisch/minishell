@@ -1,4 +1,0 @@
-Test: 114
-Command: /bin/echo hello && /bin/echo world | wc -l
-Bash exit: 0
-Mini exit: 0

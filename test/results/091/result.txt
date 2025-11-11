@@ -1,6 +1,0 @@
-Test: 091
-Command: pwd -f
-Bash exit: 2
-Mini exit: 0
-stdout differs
-stderr differs

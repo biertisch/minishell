@@ -1,4 +1,0 @@
-Test: 002
-Command: cat Makefile
-Bash exit: 0
-Mini exit: 0

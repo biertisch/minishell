@@ -1,4 +1,0 @@
-Test: 080
-Command: export VAR=42 // export | grep VAR // unset VAR
-Bash exit: 0
-Mini exit: 0

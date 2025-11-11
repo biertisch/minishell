@@ -1,1 +1,0 @@
-/bin/echo $USER "$USER" '$USER' hel"l"o$USER $USER'$USER'

@@ -1,2 +1,0 @@
-minishell: cd: -: invalid option
-cd: usage: cd [dir]

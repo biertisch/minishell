@@ -1,2 +1,0 @@
-test/test_block_030.sh: line 1: warning: here-document at line 1 delimited by end-of-file (wanted `test/heredoc1.txt')
-test/test_block_030.sh: line 2: syntax error: unexpected end of file

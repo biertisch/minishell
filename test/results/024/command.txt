@@ -1,3 +1,0 @@
-foo > test/file1 2> test/file2
-cat test/file1
-cat test/file2

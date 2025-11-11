@@ -1,5 +1,0 @@
-Test: 046
-Command: export VAR="ls src" // "$VAR"
-Bash exit: 127
-Mini exit: 127
-stderr differs

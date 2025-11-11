@@ -1,4 +1,0 @@
-Test: 059
-Command: ls *f*
-Bash exit: 0
-Mini exit: 0

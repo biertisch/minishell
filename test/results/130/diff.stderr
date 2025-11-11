@@ -1,6 +1,0 @@
---- test/results/130/bash.err	2025-11-11 21:54:55.818216069 +0000
-+++ test/results/130/mini.err	2025-11-11 21:54:56.633317055 +0000
-@@ -1,2 +1 @@
--test/test_block_130.sh: line 1: syntax error near unexpected token `newline'
--test/test_block_130.sh: line 1: `/bin/echo "start" && (ls -l | grep minishell) >'
-+minishell: syntax error near unexpected token 'newline'

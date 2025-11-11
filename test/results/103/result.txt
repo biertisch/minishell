@@ -1,4 +1,0 @@
-Test: 103
-Command: seq 1 100 | grep 42 | wc -l
-Bash exit: 0
-Mini exit: 0

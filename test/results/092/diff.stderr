@@ -1,7 +1,0 @@
---- test/results/092/bash.err	2025-11-11 21:54:12.049017334 +0000
-+++ test/results/092/mini.err	2025-11-11 21:54:13.042007583 +0000
-@@ -1,2 +1,2 @@
--test/test_block_092.sh: line 1: cd: -f: invalid option
--cd: usage: cd [-L|[-P [-e]] [-@]] [dir]
-+minishell: cd: -f: invalid option
-+cd: usage: cd [dir]

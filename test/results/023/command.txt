@@ -1,3 +1,0 @@
-rm test/file1
-echo hello > test/file2
-cat < Makefile > test/file1 >> test/file2

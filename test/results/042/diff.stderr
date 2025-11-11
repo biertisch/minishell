@@ -1,4 +1,0 @@
---- test/results/042/bash.err	2025-11-11 21:53:25.098152119 +0000
-+++ test/results/042/mini.err	2025-11-11 21:53:26.078160754 +0000
-@@ -0,0 +1 @@
-+minishell: command substitution not supported

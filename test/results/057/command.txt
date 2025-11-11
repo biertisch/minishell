@@ -1,2 +1,0 @@
-/bin/echo $1HOME
-/bin/echo $42HOME

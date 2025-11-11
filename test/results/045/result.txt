@@ -1,4 +1,0 @@
-Test: 045
-Command: export VAR="ls src" // $VAR
-Bash exit: 0
-Mini exit: 0

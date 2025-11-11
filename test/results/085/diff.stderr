@@ -1,6 +1,0 @@
---- test/results/085/bash.err	2025-11-11 21:54:04.746444342 +0000
-+++ test/results/085/mini.err	2025-11-11 21:54:05.532116176 +0000
-@@ -1 +1,2 @@
--test/test_block_085.sh: line 1: exit: p: numeric argument required
-+exit
-+minishell: exit: p: numeric argument required

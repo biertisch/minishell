@@ -1,6 +1,0 @@
---- test/results/127/bash.err	2025-11-11 21:54:50.392246182 +0000
-+++ test/results/127/mini.err	2025-11-11 21:54:51.181614073 +0000
-@@ -1,2 +1 @@
--test/test_block_127.sh: line 1: syntax error near unexpected token `&&'
--test/test_block_127.sh: line 1: `&& ls'
-+minishell: syntax error near unexpected token '&&'

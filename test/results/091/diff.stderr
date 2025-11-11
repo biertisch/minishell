@@ -1,5 +1,0 @@
---- test/results/091/bash.err	2025-11-11 21:54:10.845838727 +0000
-+++ test/results/091/mini.err	2025-11-11 21:54:10.849634243 +0000
-@@ -1,2 +0,0 @@
--test/test_block_091.sh: line 1: pwd: -f: invalid option
--pwd: usage: pwd [-LP]

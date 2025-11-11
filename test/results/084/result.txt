@@ -1,4 +1,0 @@
-Test: 084
-Command: exit -2
-Bash exit: 254
-Mini exit: 254

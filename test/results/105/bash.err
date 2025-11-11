@@ -1,2 +1,0 @@
-test/test_block_105.sh: line 1: syntax error near unexpected token `|'
-test/test_block_105.sh: line 1: `ls | | wc'

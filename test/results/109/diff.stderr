@@ -1,5 +1,0 @@
---- test/results/109/bash.err	2025-11-11 21:54:33.598959272 +0000
-+++ test/results/109/mini.err	2025-11-11 21:54:34.908964943 +0000
-@@ -1 +1 @@
--test/test_block_109.sh: line 1: foo: command not found
-+minishell: foo: command not found

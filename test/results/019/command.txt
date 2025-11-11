@@ -1,1 +1,0 @@
-grep main < src/main.c

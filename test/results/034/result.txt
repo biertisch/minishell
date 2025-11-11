@@ -1,5 +1,0 @@
-Test: 034
-Command: | cat << test/heredoc1.txt
-Bash exit: 2
-Mini exit: 2
-stderr differs

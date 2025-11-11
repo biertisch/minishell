@@ -1,5 +1,0 @@
---- test/results/009/bash.err	2025-11-11 21:52:50.054639970 +0000
-+++ test/results/009/mini.err	2025-11-11 21:52:50.691259147 +0000
-@@ -1 +1 @@
--test/test_block_009.sh: line 1: /bin/echo hello &&: No such file or directory
-+/bin/echo hello &&: No such file or directory

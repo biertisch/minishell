@@ -1,5 +1,0 @@
-Test: 105
-Command: ls | | wc
-Bash exit: 2
-Mini exit: 2
-stderr differs

@@ -1,3 +1,0 @@
-export VAR=42
-export | grep VAR
-unset VAR

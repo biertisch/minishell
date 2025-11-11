@@ -1,5 +1,0 @@
---- test/results/089/bash.err	2025-11-11 21:54:08.693781095 +0000
-+++ test/results/089/mini.err	2025-11-11 21:54:08.693781095 +0000
-@@ -1,2 +0,0 @@
--test/test_block_089.sh: line 1: unset: -w: invalid option
--unset: usage: unset [-f] [-v] [-n] [name ...]

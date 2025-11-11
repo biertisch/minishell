@@ -1,2 +1,0 @@
-test/test_block_089.sh: line 1: unset: -w: invalid option
-unset: usage: unset [-f] [-v] [-n] [name ...]

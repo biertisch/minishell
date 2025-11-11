@@ -1,6 +1,0 @@
---- test/results/104/bash.err	2025-11-11 21:54:28.294781895 +0000
-+++ test/results/104/mini.err	2025-11-11 21:54:29.246005272 +0000
-@@ -1,2 +1 @@
--test/test_block_104.sh: line 1: syntax error near unexpected token `|'
--test/test_block_104.sh: line 1: `| ls'
-+minishell: syntax error near unexpected token '|'

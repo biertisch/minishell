@@ -1,4 +1,0 @@
-export VAR=""*ile""
-/bin/echo $VAR
-export VAR="'*ile'"
-/bin/echo $VAR

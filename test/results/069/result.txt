@@ -1,5 +1,0 @@
-Test: 069
-Command: /bin/echo hello > *in*
-Bash exit: 1
-Mini exit: 1
-stderr differs

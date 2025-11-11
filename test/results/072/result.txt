@@ -1,4 +1,0 @@
-Test: 072
-Command: echo hello "wondeful 'person'"
-Bash exit: 0
-Mini exit: 0

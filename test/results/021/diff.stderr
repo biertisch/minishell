@@ -1,5 +1,0 @@
---- test/results/021/bash.err	2025-11-11 21:53:02.885251801 +0000
-+++ test/results/021/mini.err	2025-11-11 21:53:03.840828673 +0000
-@@ -1 +1 @@
--test/test_block_021.sh: line 1: foo: No such file or directory
-+minishell: foo: No such file or directory

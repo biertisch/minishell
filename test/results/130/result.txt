@@ -1,5 +1,0 @@
-Test: 130
-Command: /bin/echo "start" && (ls -l | grep minishell) >
-Bash exit: 2
-Mini exit: 2
-stderr differs

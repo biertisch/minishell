@@ -1,4 +1,0 @@
-Test: 012
-Command: /bin/echo hello > test/file1 // cat < test/file1
-Bash exit: 0
-Mini exit: 0

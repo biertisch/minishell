@@ -1,4 +1,0 @@
-Test: 120
-Command: /bin/echo a && /bin/echo b || /bin/echo c
-Bash exit: 0
-Mini exit: 0

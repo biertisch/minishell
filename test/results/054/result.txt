@@ -1,5 +1,0 @@
-Test: 054
-Command: /bin/echo hello > $USER // /bin/echo hello > $NONE // rm $USER
-Bash exit: 0
-Mini exit: 0
-stderr differs

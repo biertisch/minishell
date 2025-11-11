@@ -1,5 +1,0 @@
-Test: 055
-Command: "$NONE" /bin/echo hello
-Bash exit: 127
-Mini exit: 127
-stderr differs

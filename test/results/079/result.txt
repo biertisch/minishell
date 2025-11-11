@@ -1,4 +1,0 @@
-Test: 079
-Command: cd test // pwd // cd .. // pwd
-Bash exit: 0
-Mini exit: 0

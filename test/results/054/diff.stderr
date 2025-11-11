@@ -1,5 +1,0 @@
---- test/results/054/bash.err	2025-11-11 21:53:36.226299897 +0000
-+++ test/results/054/mini.err	2025-11-11 21:53:36.960195478 +0000
-@@ -1 +1 @@
--test/test_block_054.sh: line 2: $NONE: ambiguous redirect
-+minishell: $NONE: ambiguous redirect

@@ -1,4 +1,0 @@
-Test: 111
-Command: ls && cat Makefile
-Bash exit: 0
-Mini exit: 0

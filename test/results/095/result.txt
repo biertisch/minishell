@@ -1,4 +1,0 @@
-Test: 095
-Command: ls | wc -l
-Bash exit: 0
-Mini exit: 0

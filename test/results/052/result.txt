@@ -1,5 +1,0 @@
-Test: 052
-Command: export VAR="ho bye" // ec$VAR // ec"$VAR"
-Bash exit: 127
-Mini exit: 127
-stderr differs

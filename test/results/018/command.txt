@@ -1,2 +1,0 @@
->test/file1
-cat test/file1

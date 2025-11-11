@@ -1,4 +1,0 @@
-cd test
-pwd
-cd ..
-pwd
