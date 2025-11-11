@@ -54,7 +54,8 @@ int	scan_heredocs_right(t_data *data)
 		{
 			data->stack->phase = DONE;
 			if (data->stack->node->right)
-				push_stack(&data->stack, data->stack->node->right, get_fd_pair(0, 0), data);
+				push_stack(&data->stack, data->stack->node->right,
+					get_fd_pair(0, 0), data);
 			if (scan_heredocs_left(data))
 				return (-1);
 		}

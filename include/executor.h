@@ -68,12 +68,14 @@ void		child_execute(t_data *data, t_stack **stack, char *cmd);
 char		*correct_path(t_data * data, t_stack **stack,char *cmd);
 char		*run_curr_dir(t_data *data, t_stack **stack, char *cmd);
 void		check_for_variables(t_data *data, t_stack **stack);
-void		executor_child_errno(t_data *data, t_stack **stack, char *cmd);
+void		executor_child_errno(t_data *data, t_stack **stack, char *to_free, char **also_to_free);
 void		executor_cleanup(t_data *data, t_stack **stack, char *cmd);
 char		**split_by_first_equal(char *var);
-void		cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path);
+char		*cmd_not_found(t_data *data, t_stack **stack, char **paths, char *slash_path);
 void		cmd_is_directory(t_data *data, t_stack **stack, int fd);
 void		check_err_output(t_data *data, t_stack **stack, char **paths, char *slash_path);
+char		**get_path_split(t_data *data, t_stack **stack, char *slash_path);
+char		*get_slash_path(t_data *data, t_stack **stack, char *cmd);
 
 //parent.c
 int			parent(t_stack **stack, pid_t pid);
@@ -118,8 +120,9 @@ int			is_echo_option(char *opt);
 int			execute_subshell(t_data *data, t_stack **stack);
 int			execute_subshell_entered(t_data **data, t_stack **stack);
 int			execute_subshell_done(t_data **data, t_stack **stack);
-int			subshell_redir(t_data **data, t_stack **stack);
-int		check_redir_in_subshell(t_stack **stack);
+int			subshell_redir(t_stack **stack, t_redir *redir);
+int			check_redir_in_subshell(t_stack **stack);
+void		execute_subshell_entered_parent(t_stack **stack, pid_t pid);
 
 //executor_env.c
 int			execute_env(t_data *data, t_stack **stack);
@@ -128,6 +131,7 @@ int			execute_env(t_data *data, t_stack **stack);
 int			execute_cd(t_data *data, t_stack **stack);
 int			execute_cd_option(t_data *data, t_stack **stack, int cmd_i, int *chdir_res);
 int			cd_fail(t_stack **stack, char *dir);
+int		execute_cd_continue(t_data *data, t_stack **stack, char *curr_pwd);
 
 //executor_pwd.c
 int			execute_pwd(t_data *data, t_stack **stack);
@@ -139,6 +143,8 @@ void		check_exit_input(t_data *data, t_stack **stack, int *exit_code, int cmd_i)
 //executor_unset.c
 int			execute_unset(t_data *data, t_stack **stack);
 int			check_unset_input(t_stack **stack);
+t_unset_vars		get_begginer_u_v(t_data *data, int i);
+int	found_victim(t_data *data, t_unset_vars *v);
 
 //executor_error.c
 int			validate_fork(t_data *data, t_stack **stack);
@@ -164,6 +170,7 @@ int			cmd_has_variable(t_data *data, t_stack **stack);
 int			get_first_command(t_data *data, t_stack **stack);
 int			has_command(t_data *data, t_stack **stack);
 int			variable_key_not_found(t_data *data, t_stack **stack, char **kv_split);
+void		cmd_has_valid_variable(t_data *data, t_stack **stack, char **kv_split);
 
 //executor_redirect.c
 int			traverse_redir_in(t_data *data, t_stack **stack);

@@ -14,25 +14,33 @@
 
 int	execute_cd(t_data *data, t_stack **stack)
 {
-	int		chdir_res;
 	char	*curr_pwd;
-	char	*new_pwd;
-	int		cmd_i;
 
-	cmd_i = get_first_command(data, stack);
 	duplicate_std();
 	if (!has_node_type_ancestor(*stack, NODE_PIPE))
 		handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	(*stack)->exit_status = 0;
-	chdir_res = 0;
-	if (!getcwd(NULL, 0) && !ft_strncmp((*stack)->node->argv[1], "..", 2)) //free pointer from getcwd
+	curr_pwd = getcwd(NULL, 0);
+	if (!curr_pwd && !ft_strncmp((*stack)->node->argv[1], "..", 2))
 	{
+		free(curr_pwd);
 		write(STDERR_FILENO, "placeholder fucking shit\n", 25);
 		(*stack)->exit_status = 1;
 		return (0);
 	}
+	free(curr_pwd);
 	curr_pwd = ft_strdup(getcwd(NULL, 0));
 	validate_malloc_execute(data, stack, curr_pwd, NULL);
+	return (execute_cd_continue(data, stack, curr_pwd));
+}
+
+int	execute_cd_continue(t_data *data, t_stack **stack, char *curr_pwd)
+{
+	char	*new_pwd;
+	int		chdir_res;
+	int		cmd_i;
+
+	cmd_i = get_first_command(data, stack);
 	if (!(*stack)->node->argv[cmd_i + 1])
 		chdir_res = chdir(get_env_value(data->env_list, "HOME"));
 	else
@@ -96,6 +104,5 @@ int	cd_fail(t_stack **stack, char *dir)
 		write(STDERR_FILENO, ": Not a directory\n", 18);
 	else if (errno == EACCES)
 		write(STDERR_FILENO, ": Permission denied\n", 20);
-
 	return (1);
 }

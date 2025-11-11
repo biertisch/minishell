@@ -53,10 +53,11 @@ int	execute_stack(t_data *data, t_stack **stack)
 
 int	execute_cmd(t_data *data, t_stack **stack)
 {
-	if ((*stack)->phase == ENTERED && execute_cmd_pre_processing(data, stack) == 1)
+	if ((*stack)->phase == ENTERED
+		&& execute_cmd_pre_processing(data, stack) == 1)
 		return (1);
-	if ((*stack)->node && (*stack)->node->argv && is_builtin((*stack)->node->argv[
-				get_first_command(data, stack)]))
+	if ((*stack)->node && (*stack)->node->argv
+		&& is_builtin((*stack)->node->argv[get_first_command(data, stack)]))
 		return (execute_builtin(data, stack));
 	else if ((*stack)->phase == ENTERED)
 		return (execute_cmd_entered(data, stack));

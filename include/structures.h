@@ -98,6 +98,16 @@ typedef struct s_fd_pair
 	int	out_fd;
 }	t_fd_pair;
 
+typedef struct s_unset_vars
+{
+	t_env **first;
+	t_env **second;
+	t_env **third;
+	t_env	*victim;
+	t_env	*next;
+	int	i;
+}	t_unset_vars;
+
 typedef struct s_tree
 {
 	t_node_type		type;
