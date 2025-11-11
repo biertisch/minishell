@@ -1,0 +1,2 @@
+test/test_block_090.sh: line 1: export: -l: invalid option
+export: usage: export [-fn] [name[=value] ...] or export -p

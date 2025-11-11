@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/10 12:42:56 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:38:36 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ t_redir		*get_last_heredoc(t_redir *redir);
 int			get_redir(t_data *data, t_token **token, t_tree *node);
 t_redir		*parse_single_redir(t_data *data, t_token **token, t_redir *head);
 t_redir		*create_redir(t_token_type type, int fd, char *file);
+void		free_redir(t_redir *redir);
 
 //parser_tree.c
 t_tree		*create_parser_node(t_node_type type, t_tree *left, t_tree *right);

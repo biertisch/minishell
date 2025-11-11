@@ -1,0 +1,67 @@
+==53336== Syscall param close(fd) contains uninitialised byte(s)
+==53336==    at 0x49CD724: close (close.c:27)
+==53336==    by 0x11406B: heredoc_eof_abort (signal_heredoc.c:48)
+==53336==    by 0x1164EC: collect_heredoc (parser_heredoc_collect.c:42)
+==53336==    by 0x11643C: run_heredoc_child (parser_heredoc_collect.c:21)
+==53336==    by 0x116318: setup_heredoc (parser_heredoc_scan.c:83)
+==53336==    by 0x1160FA: scan_heredocs_left (parser_heredoc_scan.c:35)
+==53336==    by 0x11604A: scan_heredocs (parser_heredoc_scan.c:20)
+==53336==    by 0x112B84: parser (parser.c:24)
+==53336==    by 0x1115A1: process_input (input.c:45)
+==53336==    by 0x111508: read_input (input.c:30)
+==53336==    by 0x112814: main (main.c:26)
+==53336== 
+==53336== FILE DESCRIPTORS: 7 open (2 std) at exit.
+==53336== Open file descriptor 5:
+==53336==    at 0x49D244D: pipe (pipe.c:29)
+==53336==    by 0x11629C: setup_heredoc (parser_heredoc_scan.c:77)
+==53336==    by 0x1160FA: scan_heredocs_left (parser_heredoc_scan.c:35)
+==53336==    by 0x11604A: scan_heredocs (parser_heredoc_scan.c:20)
+==53336==    by 0x112B84: parser (parser.c:24)
+==53336==    by 0x1115A1: process_input (input.c:45)
+==53336==    by 0x111508: read_input (input.c:30)
+==53336==    by 0x112814: main (main.c:26)
+==53336== 
+==53336== Open file descriptor 27: /home/almei/.vscode-server/data/logs/20251111T203249/remoteagent.log
+==53336==    <inherited from parent>
+==53336== 
+==53336== Open file descriptor 23: /home/almei/.vscode-server/data/logs/20251111T203249/remoteTelemetry.log
+==53336==    <inherited from parent>
+==53336== 
+==53336== Open file descriptor 22: /home/almei/.vscode-server/data/logs/20251111T203249/ptyhost.log
+==53336==    <inherited from parent>
+==53336== 
+==53336== Open file descriptor 3: /home/almei/42/common_core/rank_03/minishell/test/results/031/valgrind.log
+==53336==    <inherited from parent>
+==53336== 
+==53336== 
+==53336== 4,016 bytes in 1 blocks are still reachable in loss record 1 of 1
+==53336==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==53336==    by 0x489E0EC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.2)
+==53336==    by 0x489761F: add_history (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.2)
+==53336==    by 0x111549: process_input (input.c:41)
+==53336==    by 0x111508: read_input (input.c:30)
+==53336==    by 0x112814: main (main.c:26)
+==53336== 
+==53335== FILE DESCRIPTORS: 7 open (3 std) at exit.
+==53335== Open file descriptor 27: /home/almei/.vscode-server/data/logs/20251111T203249/remoteagent.log
+==53335==    <inherited from parent>
+==53335== 
+==53335== Open file descriptor 23: /home/almei/.vscode-server/data/logs/20251111T203249/remoteTelemetry.log
+==53335==    <inherited from parent>
+==53335== 
+==53335== Open file descriptor 22: /home/almei/.vscode-server/data/logs/20251111T203249/ptyhost.log
+==53335==    <inherited from parent>
+==53335== 
+==53335== Open file descriptor 3: /home/almei/42/common_core/rank_03/minishell/test/results/031/valgrind.log
+==53335==    <inherited from parent>
+==53335== 
+==53335== 
+==53335== 4,016 bytes in 1 blocks are still reachable in loss record 1 of 1
+==53335==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==53335==    by 0x489E0EC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.2)
+==53335==    by 0x489761F: add_history (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.2)
+==53335==    by 0x111549: process_input (input.c:41)
+==53335==    by 0x111508: read_input (input.c:30)
+==53335==    by 0x112814: main (main.c:26)
+==53335== 

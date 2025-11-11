@@ -1,0 +1,5 @@
+Test: 011
+Command: /bin/echo hel"lo"'
+Bash exit: 2
+Mini exit: 2
+stderr differs

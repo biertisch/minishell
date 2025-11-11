@@ -1,0 +1,5 @@
+--- test/results/088/bash.err	2025-11-11 21:54:07.585490391 +0000
++++ test/results/088/mini.err	2025-11-11 21:54:07.585490391 +0000
+@@ -1,2 +0,0 @@
+-env: invalid option -- 'w'
+-Try 'env --help' for more information.

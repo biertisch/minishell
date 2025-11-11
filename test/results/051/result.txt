@@ -1,0 +1,4 @@
+Test: 051
+Command: export VAR="echo bye" // echo hi"$VAR"
+Bash exit: 0
+Mini exit: 0

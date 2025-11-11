@@ -1,0 +1,44 @@
+==52933== FILE DESCRIPTORS: 7 open (3 std) at exit.
+==52933== Open file descriptor 27: /home/almei/.vscode-server/data/logs/20251111T203249/remoteagent.log
+==52933==    <inherited from parent>
+==52933== 
+==52933== Open file descriptor 23: /home/almei/.vscode-server/data/logs/20251111T203249/remoteTelemetry.log
+==52933==    <inherited from parent>
+==52933== 
+==52933== Open file descriptor 22: /home/almei/.vscode-server/data/logs/20251111T203249/ptyhost.log
+==52933==    <inherited from parent>
+==52933== 
+==52933== Open file descriptor 3: /home/almei/42/common_core/rank_03/minishell/test/results/018/valgrind.log
+==52933==    <inherited from parent>
+==52933== 
+==52933== 
+==52933== 4,016 bytes in 1 blocks are still reachable in loss record 1 of 1
+==52933==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52933==    by 0x489E0EC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.2)
+==52933==    by 0x489761F: add_history (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.2)
+==52933==    by 0x111549: process_input (input.c:41)
+==52933==    by 0x111508: read_input (input.c:30)
+==52933==    by 0x112814: main (main.c:26)
+==52933== 
+==52926== FILE DESCRIPTORS: 7 open (3 std) at exit.
+==52926== Open file descriptor 27: /home/almei/.vscode-server/data/logs/20251111T203249/remoteagent.log
+==52926==    <inherited from parent>
+==52926== 
+==52926== Open file descriptor 23: /home/almei/.vscode-server/data/logs/20251111T203249/remoteTelemetry.log
+==52926==    <inherited from parent>
+==52926== 
+==52926== Open file descriptor 22: /home/almei/.vscode-server/data/logs/20251111T203249/ptyhost.log
+==52926==    <inherited from parent>
+==52926== 
+==52926== Open file descriptor 3: /home/almei/42/common_core/rank_03/minishell/test/results/018/valgrind.log
+==52926==    <inherited from parent>
+==52926== 
+==52926== 
+==52926== 4,016 bytes in 1 blocks are still reachable in loss record 1 of 1
+==52926==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52926==    by 0x489E0EC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.2)
+==52926==    by 0x489761F: add_history (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.2)
+==52926==    by 0x111549: process_input (input.c:41)
+==52926==    by 0x111508: read_input (input.c:30)
+==52926==    by 0x112814: main (main.c:26)
+==52926== 

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:37:43 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 21:52:05 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:50:46 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	free_all(t_data *data)
 {
-	free_string_array(&data->env);
+	ft_splitfree(data->env);
+	data->env = NULL;
 	free_env_list(&data->env_list);
 	free_command_data(data);
 	rl_clear_history();
@@ -49,40 +50,6 @@ void	free_stack(t_stack **stack)
 	}
 	free(old_next);
 	*stack = NULL;
-}
-
-void	free_redir(t_redir *redir)
-{
-	t_redir	*tmp;
-
-	while (redir)
-	{
-		tmp = redir->next;
-		free(redir->file);
-		free(redir->heredoc_input);
-		free(redir->info.quote_map);
-		free(redir->info.expand_map);
-		free(redir->info.key);
-		free(redir->info.value);
-		free(redir);
-		redir = tmp;
-	}
-}
-
-void	free_string_array(char ***arr)
-{
-	int	i;
-
-	if (!arr || !*arr)
-		return ;
-	i = 0;
-	while ((*arr)[i])
-	{
-		free((*arr)[i]);
-		i++;
-	}
-	free(*arr);
-	*arr = NULL;
 }
 
 void	free_metadata(t_metadata **info, int size)

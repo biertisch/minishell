@@ -1,0 +1,5 @@
+Test: 086
+Command: exit a 1
+Bash exit: 2
+Mini exit: 2
+stderr differs

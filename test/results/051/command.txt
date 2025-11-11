@@ -1,0 +1,2 @@
+export VAR="echo bye"
+echo hi"$VAR"

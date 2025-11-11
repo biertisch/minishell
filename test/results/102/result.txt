@@ -1,0 +1,4 @@
+Test: 102
+Command: ls /bin | grep sh | head -n 3 | tail -n 1
+Bash exit: 0
+Mini exit: 0

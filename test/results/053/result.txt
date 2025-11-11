@@ -1,0 +1,4 @@
+Test: 053
+Command: export VAR="this is a beautiful shell" // /bin/echo $VAR
+Bash exit: 0
+Mini exit: 0

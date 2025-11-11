@@ -1,0 +1,2 @@
+/bin/echo *ile *in*
+cat < *ile

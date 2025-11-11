@@ -1,0 +1,5 @@
+Test: 090
+Command: export -l
+Bash exit: 2
+Mini exit: 1
+stderr differs

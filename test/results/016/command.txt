@@ -1,0 +1,2 @@
+/bin/echo "" > test/file1 hello
+cat test/file1

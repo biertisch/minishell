@@ -1,0 +1,5 @@
+--- test/results/077/bash.err	2025-11-11 21:53:57.691947944 +0000
++++ test/results/077/mini.err	2025-11-11 21:53:58.483994569 +0000
+@@ -0,0 +1,2 @@
++minishell: cd: -: invalid option
++cd: usage: cd [dir]

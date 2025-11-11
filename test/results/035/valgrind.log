@@ -1,0 +1,22 @@
+==53431== FILE DESCRIPTORS: 7 open (3 std) at exit.
+==53431== Open file descriptor 27: /home/almei/.vscode-server/data/logs/20251111T203249/remoteagent.log
+==53431==    <inherited from parent>
+==53431== 
+==53431== Open file descriptor 23: /home/almei/.vscode-server/data/logs/20251111T203249/remoteTelemetry.log
+==53431==    <inherited from parent>
+==53431== 
+==53431== Open file descriptor 22: /home/almei/.vscode-server/data/logs/20251111T203249/ptyhost.log
+==53431==    <inherited from parent>
+==53431== 
+==53431== Open file descriptor 3: /home/almei/42/common_core/rank_03/minishell/test/results/035/valgrind.log
+==53431==    <inherited from parent>
+==53431== 
+==53431== 
+==53431== 4,016 bytes in 1 blocks are still reachable in loss record 1 of 1
+==53431==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==53431==    by 0x489E0EC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.2)
+==53431==    by 0x489761F: add_history (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.2)
+==53431==    by 0x111549: process_input (input.c:41)
+==53431==    by 0x111508: read_input (input.c:30)
+==53431==    by 0x112814: main (main.c:26)
+==53431== 

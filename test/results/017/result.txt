@@ -1,0 +1,4 @@
+Test: 017
+Command: >test/file1 /bin/echo hello // cat test/file1
+Bash exit: 0
+Mini exit: 0

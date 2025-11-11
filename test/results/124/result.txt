@@ -1,0 +1,5 @@
+Test: 124
+Command: (ls) /bin/echo hello
+Bash exit: 2
+Mini exit: 2
+stderr differs

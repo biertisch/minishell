@@ -1,0 +1,4 @@
+--- test/results/087/bash.err	2025-11-11 21:54:06.583474138 +0000
++++ test/results/087/mini.err	2025-11-11 21:54:06.583474138 +0000
+@@ -1 +0,0 @@
+-env: ‘hello’: No such file or directory

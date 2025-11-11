@@ -1,0 +1,6 @@
+Test: 078
+Command: cd ~/Documents // pwd // cd -
+Bash exit: 1
+Mini exit: 2
+stdout differs
+stderr differs

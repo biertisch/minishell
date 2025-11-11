@@ -1,0 +1,3 @@
+/bin/echo hello > $USER
+/bin/echo hello > $NONE
+rm $USER

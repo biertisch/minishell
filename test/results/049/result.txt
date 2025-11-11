@@ -1,0 +1,5 @@
+Test: 049
+Command: export VAR='"echo hello"' // $VAR
+Bash exit: 127
+Mini exit: 127
+stderr differs

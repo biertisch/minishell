@@ -1,0 +1,5 @@
+Test: 021
+Command: wc -l < foo
+Bash exit: 1
+Mini exit: 1
+stderr differs

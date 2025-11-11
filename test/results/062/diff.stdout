@@ -1,0 +1,29 @@
+--- test/results/062/bash.out	2025-11-11 21:53:45.233741016 +0000
++++ test/results/062/mini.out	2025-11-11 21:53:45.875694545 +0000
+@@ -1,6 +1,26 @@
+ .gitattributes
+ .gitignore
+ 
++.:
++Makefile
++README.md
++ft_printf
++include
++minishell
++minishell_en_subject.pdf
++minishell_tester
++obj
++parser_example.png
++readline.supp
++src
++tags
++test
++
++..:
++exam_rank_03
++minishell
++philosophers
++
+ .git:
+ COMMIT_EDITMSG
+ FETCH_HEAD

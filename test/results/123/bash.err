@@ -1,0 +1,2 @@
+test/test_block_123.sh: line 1: syntax error near unexpected token `)'
+test/test_block_123.sh: line 1: `ls)'

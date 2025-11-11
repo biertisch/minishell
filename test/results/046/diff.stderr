@@ -1,0 +1,5 @@
+--- test/results/046/bash.err	2025-11-11 21:53:28.807392343 +0000
++++ test/results/046/mini.err	2025-11-11 21:53:29.606191834 +0000
+@@ -1 +1 @@
+-test/test_block_046.sh: line 2: ls src: command not found
++minishell: ls src: command not found

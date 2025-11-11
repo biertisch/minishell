@@ -1,0 +1,1 @@
+/bin/echo -e "~\n~+\n~-\n~/hi\n~bhb\n"~"\n'~'\na~"

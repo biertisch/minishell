@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 11:16:36 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/08 12:08:42 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:40:22 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,18 +94,18 @@ typedef struct s_redir
 
 typedef struct s_fd_pair
 {
-	int	in_fd;
-	int	out_fd;
+	int				in_fd;
+	int				out_fd;
 }	t_fd_pair;
 
 typedef struct s_unset_vars
 {
-	t_env **first;
-	t_env **second;
-	t_env **third;
-	t_env	*victim;
-	t_env	*next;
-	int	i;
+	t_env			**first;
+	t_env			**second;
+	t_env			**third;
+	t_env			*victim;
+	t_env			*next;
+	int				i;
 }	t_unset_vars;
 
 typedef struct s_tree

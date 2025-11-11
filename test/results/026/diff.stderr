@@ -1,0 +1,6 @@
+--- test/results/026/bash.err	2025-11-11 21:53:11.054087090 +0000
++++ test/results/026/mini.err	2025-11-11 21:53:11.946950550 +0000
+@@ -1,2 +1 @@
+-test/test_block_026.sh: line 1: syntax error near unexpected token `newline'
+-test/test_block_026.sh: line 1: `cat <'
++minishell: syntax error near unexpected token 'newline'

@@ -1,0 +1,1 @@
+cat Makefile | grep SRC | cut -d'=' -f2 | tr ' ' '\n' | wc -l

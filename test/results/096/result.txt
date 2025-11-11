@@ -1,0 +1,4 @@
+Test: 096
+Command: cat Makefile | head -n 5
+Bash exit: 0
+Mini exit: 0

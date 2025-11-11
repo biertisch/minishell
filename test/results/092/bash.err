@@ -1,0 +1,2 @@
+test/test_block_092.sh: line 1: cd: -f: invalid option
+cd: usage: cd [-L|[-P [-e]] [-@]] [dir]

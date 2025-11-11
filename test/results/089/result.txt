@@ -1,0 +1,5 @@
+Test: 089
+Command: unset -w
+Bash exit: 2
+Mini exit: 0
+stderr differs

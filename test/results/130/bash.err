@@ -1,0 +1,2 @@
+test/test_block_130.sh: line 1: syntax error near unexpected token `newline'
+test/test_block_130.sh: line 1: `/bin/echo "start" && (ls -l | grep minishell) >'

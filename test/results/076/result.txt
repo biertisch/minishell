@@ -1,0 +1,4 @@
+Test: 076
+Command: echo -nn -nt hello
+Bash exit: 0
+Mini exit: 0

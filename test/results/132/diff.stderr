@@ -1,0 +1,6 @@
+--- test/results/132/bash.err	2025-11-11 21:54:57.491408298 +0000
++++ test/results/132/mini.err	2025-11-11 21:54:58.119653674 +0000
+@@ -1,2 +1 @@
+-test/test_block_132.sh: line 1: syntax error near unexpected token `newline'
+-test/test_block_132.sh: line 1: `/bin/echo ('
++minishell: syntax error near unexpected token '('

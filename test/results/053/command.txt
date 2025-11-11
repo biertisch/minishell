@@ -1,0 +1,2 @@
+export VAR="this is a beautiful shell"
+/bin/echo $VAR

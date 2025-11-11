@@ -1,0 +1,4 @@
+--- test/results/116/bash.err	2025-11-11 21:54:40.907892572 +0000
++++ test/results/116/mini.err	2025-11-11 21:54:41.604141599 +0000
+@@ -0,0 +1 @@
++minishell: arithmetic operations not supported

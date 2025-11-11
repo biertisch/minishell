@@ -1,0 +1,2 @@
+test/test_block_034.sh: line 1: syntax error near unexpected token `|'
+test/test_block_034.sh: line 1: `| cat << test/heredoc1.txt'

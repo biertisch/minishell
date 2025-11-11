@@ -1,0 +1,4 @@
+--- test/results/014/bash.err	2025-11-11 21:52:54.770063427 +0000
++++ test/results/014/mini.err	2025-11-11 21:52:54.777465976 +0000
+@@ -1 +0,0 @@
+-rm: cannot remove 'test/file2': No such file or directory

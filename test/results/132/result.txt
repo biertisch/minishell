@@ -1,0 +1,5 @@
+Test: 132
+Command: /bin/echo (
+Bash exit: 2
+Mini exit: 2
+stderr differs

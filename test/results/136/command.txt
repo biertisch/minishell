@@ -1,0 +1,1 @@
+/bin/echo "start" && (ls -l | grep minishell) > test/file1 && cat test/file1

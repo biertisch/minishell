@@ -1,0 +1,5 @@
+--- test/results/049/bash.err	2025-11-11 21:53:31.389433684 +0000
++++ test/results/049/mini.err	2025-11-11 21:53:32.199380622 +0000
+@@ -1 +1 @@
+-test/test_block_049.sh: line 2: "echo: command not found
++minishell: "echo: command not found

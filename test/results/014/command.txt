@@ -1,0 +1,5 @@
+rm test/file1 test/file2
+grep main src/main.c >> test/file1
+cat test/file1 >> test/file2
+cat test/file1
+cat test/file2

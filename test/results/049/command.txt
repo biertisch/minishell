@@ -1,0 +1,2 @@
+export VAR='"echo hello"'
+$VAR

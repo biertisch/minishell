@@ -1,0 +1,6 @@
+--- test/results/034/bash.err	2025-11-11 21:53:17.999069734 +0000
++++ test/results/034/mini.err	2025-11-11 21:53:18.760579028 +0000
+@@ -1,2 +1 @@
+-test/test_block_034.sh: line 1: syntax error near unexpected token `|'
+-test/test_block_034.sh: line 1: `| cat << test/heredoc1.txt'
++minishell: syntax error near unexpected token '|'

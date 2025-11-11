@@ -1,0 +1,4 @@
+Test: 027
+Command: cat test/heredoc1.txt > test/file1 // cat test/file1
+Bash exit: 0
+Mini exit: 0

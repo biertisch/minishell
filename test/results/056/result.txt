@@ -1,0 +1,4 @@
+Test: 056
+Command: /bin/echo "$NONE""Makefile"
+Bash exit: 0
+Mini exit: 0

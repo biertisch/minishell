@@ -1,0 +1,5 @@
+--- test/results/093/bash.err	2025-11-11 21:54:13.109637453 +0000
++++ test/results/093/mini.err	2025-11-11 21:54:14.274374109 +0000
+@@ -1 +1 @@
+-test/test_block_093.sh: line 1: cd: too many arguments
++minishell: .: Inappropriate ioctl for device

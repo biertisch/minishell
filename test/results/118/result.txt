@@ -1,0 +1,4 @@
+Test: 118
+Command: ((ls) )
+Bash exit: 0
+Mini exit: 0

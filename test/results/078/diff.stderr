@@ -1,0 +1,8 @@
+--- test/results/078/bash.err	2025-11-11 21:53:58.602431446 +0000
++++ test/results/078/mini.err	2025-11-11 21:53:59.398179226 +0000
+@@ -1,2 +1,3 @@
+-test/test_block_078.sh: line 1: cd: /home/almei/Documents: No such file or directory
+-test/test_block_078.sh: line 3: cd: OLDPWD not set
++minishell: /home/almei/Documents: No such file or directory
++minishell: cd: -: invalid option
++cd: usage: cd [dir]

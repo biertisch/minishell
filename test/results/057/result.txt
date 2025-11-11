@@ -1,0 +1,4 @@
+Test: 057
+Command: /bin/echo $1HOME // /bin/echo $42HOME
+Bash exit: 0
+Mini exit: 0

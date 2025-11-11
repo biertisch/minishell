@@ -1,0 +1,6 @@
+--- test/results/123/bash.err	2025-11-11 21:54:47.392648197 +0000
++++ test/results/123/mini.err	2025-11-11 21:54:48.057972563 +0000
+@@ -1,2 +1 @@
+-test/test_block_123.sh: line 1: syntax error near unexpected token `)'
+-test/test_block_123.sh: line 1: `ls)'
++minishell: syntax error near unexpected token ')'

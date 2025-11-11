@@ -1,0 +1,5 @@
+--- test/results/134/bash.err	2025-11-11 21:54:59.065852502 +0000
++++ test/results/134/mini.err	2025-11-11 21:54:59.839666928 +0000
+@@ -1 +1 @@
+-test/test_block_134.sh: line 2: syntax error: unexpected end of file
++minishell: syntax error: unexpected end of file

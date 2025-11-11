@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:16:22 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/08 11:48:08 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:36:33 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	error_exit(t_data *data, t_stack **stack)
 {
-	write(2, "fatal error: leaving minishell...\n", 34);
+	write(STDERR_FILENO, "fatal error: leaving minishell...\n", 34);
 	free_stack(stack);
 	free_all(data);
 	exit(EXIT_FAILURE);
@@ -33,7 +33,7 @@ int	syntax_error(t_data *data, char *desc, char *token)
 	if (!ft_strcmp(desc, SYN_ERR_8))
 		ft_strlcat(err_msg, ")", ERR_BUFFER_SIZE);
 	ft_strlcat(err_msg, "\n", ERR_BUFFER_SIZE);
-	write(2, err_msg, ft_strlen(err_msg));
+	write(STDERR_FILENO, err_msg, ft_strlen(err_msg));
 	data->exit_status = 2;
 	return (INVALID);
 }
@@ -53,7 +53,7 @@ int	internal_error(char *desc, char *cmd, char *arg)
 	if (arg && arg[0] == '\'')
 		append_postfix(err_msg, arg);
 	ft_strlcat(err_msg, "\n", ERR_BUFFER_SIZE);
-	write(2, err_msg, ft_strlen(err_msg));
+	write(STDERR_FILENO, err_msg, ft_strlen(err_msg));
 	return (INVALID);
 }
 
@@ -68,7 +68,7 @@ int	system_error(char *desc, char *function)
 	if (desc)
 		ft_strlcat(err_msg, desc, ERR_BUFFER_SIZE);
 	ft_strlcat(err_msg, "\n", ERR_BUFFER_SIZE);
-	write(2, err_msg, ft_strlen(err_msg));
+	write(STDERR_FILENO, err_msg, ft_strlen(err_msg));
 	return (INVALID);
 }
 

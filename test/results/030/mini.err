@@ -1,0 +1,2 @@
+minishell: warning: here-document delimited by end-of-file (wanted  'test/heredoc1.txt')
+minishell: syntax error: unexpected end of file

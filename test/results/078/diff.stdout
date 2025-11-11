@@ -1,0 +1,5 @@
+--- test/results/078/bash.out	2025-11-11 21:53:58.602431446 +0000
++++ test/results/078/mini.out	2025-11-11 21:53:59.394478073 +0000
+@@ -1 +1,2 @@
+ /home/almei/42/common_core/rank_03/minishell
++

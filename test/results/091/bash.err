@@ -1,0 +1,2 @@
+test/test_block_091.sh: line 1: pwd: -f: invalid option
+pwd: usage: pwd [-LP]

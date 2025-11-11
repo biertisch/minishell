@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_prompt.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 19:24:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 14:44:36 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:33:08 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*get_prompt_pwd(t_data *data)
 		return (ft_strdup("unknown"));
 	home = get_env_value(data->env_list, "HOME");
 	home_len = ft_strlen(home);
-	if (!home && ft_strncmp(pwd, home, home_len))
+	if (!home || ft_strncmp(pwd, home, home_len))
 		return (ft_strdup(pwd));
 	pwd_len = ft_strlen(pwd);
 	display = ft_calloc(pwd_len - home_len + 2, sizeof(char));

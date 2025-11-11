@@ -1,0 +1,4 @@
+Test: 047
+Command: export VAR="hi" // export VAR2=$VAR // /bin/echo $VAR2
+Bash exit: 0
+Mini exit: 0

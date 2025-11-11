@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 12:46:30 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/11 12:46:31 by pedde-so         ###   ########.fr       */
+/*   Updated: 2025/11/11 20:36:35 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,10 @@ void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 
 void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
 {
-	int	cmd_i;
+	// int	cmd_i;
 
-	cmd_i = get_first_command(data, stack);
+	// cmd_i = get_first_command(data, stack);
+	get_first_command(data, stack);
 	if ((*stack)->in_fd == -1)
 	{
 		if ((*stack)->node->argv && !has_node_type_ancestor(*stack, NODE_PIPE)

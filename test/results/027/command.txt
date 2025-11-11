@@ -1,0 +1,2 @@
+cat test/heredoc1.txt > test/file1
+cat test/file1

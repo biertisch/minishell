@@ -1,0 +1,6 @@
+--- test/results/124/bash.err	2025-11-11 21:54:48.106838194 +0000
++++ test/results/124/mini.err	2025-11-11 21:54:48.794715927 +0000
+@@ -1,2 +1 @@
+-test/test_block_124.sh: line 1: syntax error near unexpected token `/bin/echo'
+-test/test_block_124.sh: line 1: `(ls) /bin/echo hello'
++minishell: syntax error near unexpected token '/bin/echo'

@@ -1,0 +1,4 @@
+Test: 101
+Command: cat Makefile | tr a-z A-Z | grep SRC | wc -c
+Bash exit: 0
+Mini exit: 0

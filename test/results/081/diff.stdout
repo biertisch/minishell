@@ -1,0 +1,5 @@
+--- test/results/081/bash.out	2025-11-11 21:54:01.182134707 +0000
++++ test/results/081/mini.out	2025-11-11 21:54:02.022296314 +0000
+@@ -1 +1,2 @@
++LD_LIBRARY_PATH=/usr/lib/debug
+ PATH=/home/almei/.vscode-server/bin/7d842fb85a0275a4a8e4d7e040d2625abbf7f084/bin/remote-cli:/home/almei/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/HP/HP One Agent:/mnt/c/Program Files/dotnet/:/mnt/c/msys64/mingw64/bin:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Git/cmd:/mnt/c/Users/almei/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/almei/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/almei/.dotnet/tools:/mnt/c/Users/almei/AppData/Local/gitkraken/bin:/snap/bin:/home/almei/.dotnet/tools:/home/almei/.local/bin

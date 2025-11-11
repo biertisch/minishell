@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:29:00 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/08 11:47:44 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:41:32 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ end-of-file (wanted "
 # define INT_ERR_4 "No such file or directory"
 # define INT_ERR_5 "arguments not supported :("
 # define INT_ERR_6 "command not found"
-# define INT_ERR_7 "cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory"
+# define INT_ERR_7 "cd: error retrieving current directory: getcwd: \
+cannot access parent directories: No such file or directory"
 # define INT_ERR_8 "numeric argument required"
 
 //error.c

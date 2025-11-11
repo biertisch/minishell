@@ -1,0 +1,4 @@
+Test: 083
+Command: exit 2
+Bash exit: 2
+Mini exit: 2
