@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+t_fd_pair get_fd_pair(int in_fd, int out_fd)
+{
+	return ((t_fd_pair){in_fd, out_fd});
+}
+
 t_stack	*create_stack(t_data *data)
 {
 	t_stack	*head;
@@ -31,7 +36,7 @@ t_stack	*create_stack(t_data *data)
 	return (head);
 }
 
-void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *data)
+void	push_stack(t_stack **stack, t_tree *node, t_fd_pair fds, t_data *data)
 {
 	t_stack *new_head;
 
@@ -40,8 +45,8 @@ void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *da
 	new_head->phase = ENTERED;
 	new_head->type = node->type;
 	new_head->node = node;
-	new_head->in_fd = in_fd;
-	new_head->out_fd = out_fd;
+	new_head->in_fd = fds.in_fd;
+	new_head->out_fd = fds.out_fd;
 	new_head->child_count = 0;
 	new_head->next = *stack;
 	new_head->exit_status = 0;

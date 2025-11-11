@@ -37,7 +37,7 @@ int	execute_pipe_entered(t_data *data, t_stack **stack)
 	left_in = (*stack)->in_fd;
 	left_out = ((*stack)->pipe)[1];
 	(*stack)->phase = LAUNCH_LEFT;
-	push_stack(stack, (*stack)->node->left, left_in, left_out, data);
+	push_stack(stack, (*stack)->node->left, get_fd_pair(left_in, left_out), data);
 	return (0);
 }
 
@@ -66,7 +66,7 @@ int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 	}
 	right_in = (*stack)->pipe[0];
 	(*stack)->phase = LAUNCH_RIGHT;
-	push_stack(stack, (*stack)->node->right, right_in, right_out, data);
+	push_stack(stack, (*stack)->node->right, get_fd_pair(right_in, right_out), data);
 	return (0);
 }
 

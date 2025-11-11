@@ -17,7 +17,7 @@ int	execute(t_data *data)
 	t_stack	*stack;
 
 	setup_signals_parent(data);
-	push_stack(&data->stack, data->parser_tree, 0, 0, data);
+	push_stack(&data->stack, data->parser_tree, get_fd_pair(0, 0), data);
 	traverse_redir_in(data, &data->stack);
 	stack = create_stack(data);
 	execute_stack(data, &stack);

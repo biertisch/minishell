@@ -26,7 +26,6 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	pid_t	pid;
 	int		status;
 
-	//delete contents of redir_out files
 	(*stack)->phase = DONE;
 	if (check_redir_in_subshell(stack))
 	{
@@ -40,9 +39,8 @@ int	execute_subshell_entered(t_data **data, t_stack **stack)
 	{
 		setup_signals_child(*data);
 		subshell_redir(data, stack);
-		//add_redir_out but change to append, if it redir_in mantain
 		(*stack)->child_count = -42;
-		push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, *data);
+		push_stack(stack, (*stack)->node->left, get_fd_pair((*stack)->in_fd, (*stack)->out_fd), *data);
 	}
 	else
 	{

@@ -15,9 +15,9 @@
 int	execute_export(t_data *data, t_stack **stack)
 {
 	int	cmd_i;
-	
+
 	cmd_i = get_first_command(data, stack);
-	duplicate_std();	
+	duplicate_std();
 	if (!has_node_type_ancestor(*stack, NODE_PIPE))
 		handle_redirects(data, stack, NULL, (*stack)->node->redir);
 	sort_env(&data);
@@ -39,7 +39,8 @@ int	execute_export_option(t_data *data, t_stack **stack, int cmd_i)
 	{
 		kv_split = ft_split((*stack)->node->argv[cmd_i + 1], '=');
 		validate_malloc_execute(data, stack, kv_split, NULL);
-		if (*((*stack)->node->argv[cmd_i + 1]) != '=' && is_valid_var_name(kv_split[0]))
+		if (*((*stack)->node->argv[cmd_i + 1]) != '='
+			&& is_valid_var_name(kv_split[0]))
 		{
 			env = &(data->env_list);
 			while (env && *env && ft_strcmp((*env)->key, kv_split[0]))
@@ -78,7 +79,7 @@ int	execute_export_val_found(t_data *data, t_stack **stack,
 void	execute_export_handle_underscore(t_data *data, t_stack **stack)
 {
 	char	*value;
-	int	i;
+	int		i;
 
 	if (!(*stack)->node->argv)
 		return ;
@@ -97,48 +98,4 @@ void	execute_export_invalid_var(t_stack **stack, int cmd_i)
 		ft_strlen((*stack)->node->argv[cmd_i + 1]));
 	write(STDERR_FILENO, "': not a valid identifier\n", 26);
 	(*stack)->exit_status = 1;
-}
-
-int	execute_export_val_not_found(t_data *data, t_stack **stack, char **kv_split)
-{
-	char	*str1;
-	char	*str2;
-
-	str1 = ft_strdup(kv_split[0]);
-	str2 = ft_strdup(kv_split[1]);
-	if (!str1 || (kv_split[1] && !str2))
-	{
-		ft_splitfree(kv_split);
-		if (!str1)
-			validate_malloc_execute(data, stack, str1, str2);
-		else
-			validate_malloc_execute(data, stack, str2, str1);
-	}
-	add_env_node(&data->env_list, create_env_node(str1, str2, 1));
-	return (1);
-}
-
-int	execute_export_no_option(t_data *data, t_stack **stack)
-{
-	t_env	*env;
-
-	(void)stack;
-	env = data->env_list;
-	while (env)
-	{
-		if (env->exported)
-		{
-			write(STDOUT_FILENO, "declare -x ", 11);
-			write(STDOUT_FILENO, env->key, ft_strlen(env->key));
-			if (env->value && ft_strcmp(env->value, ""))
-			{
-				write(STDOUT_FILENO, "=\"", 2);
-				write(STDOUT_FILENO, env->value, ft_strlen(env->value));
-				write(STDOUT_FILENO, "\"", 1);
-			}
-			write(STDOUT_FILENO, "\n", 1);
-		}
-		env = env->next;
-	}
-	return (0);
 }

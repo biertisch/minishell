@@ -92,6 +92,12 @@ typedef struct s_redir
 	struct s_redir	*next;
 }	t_redir;
 
+typedef struct s_fd_pair
+{
+	int	in_fd;
+	int	out_fd;
+}	t_fd_pair;
+
 typedef struct s_tree
 {
 	t_node_type		type;

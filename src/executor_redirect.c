@@ -15,7 +15,7 @@
 int	traverse_redir_in(t_data *data, t_stack **stack)
 {
 	while ((*stack)->node->type == NODE_AND || (*stack)->node->type == NODE_OR)
-		push_stack(stack, (*stack)->node->left, 0, 0, data);
+		push_stack(stack, (*stack)->node->left, get_fd_pair(0, 0), data);
 	if (check_redir_in_left(data, stack))
 		return (-1);
 	if (check_redir_in_right(data, stack))
@@ -51,7 +51,7 @@ int	check_redir_in_right(t_data *data, t_stack **stack)
 			(*stack)->phase = DONE;
 			if ((*stack)->node->type == NODE_PIPE)
 			{
-				push_stack(stack, (*stack)->node->right, 0, 0, data);
+				push_stack(stack, (*stack)->node->right, get_fd_pair(0, 0), data);
 				if (check_redir_in_left(data, stack))
 					return (-1);
 			}
@@ -72,7 +72,7 @@ int	push_left_until_cmd_redir(t_data *data, t_stack **stack)
 			if (open_redir_in(data, (*stack)->node->redir) == 2)
 				return (-1);
 		}
-		push_stack(stack, (*stack)->node->left, 0, 0, data);
+		push_stack(stack, (*stack)->node->left, get_fd_pair(0, 0), data);
 	}
 	return (0);
 }

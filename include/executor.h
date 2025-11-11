@@ -33,7 +33,7 @@ int			execute_cmd_done(t_data **data, t_stack **stack);
 
 //stack.c
 t_stack		*create_stack(t_data *data);
-void		push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *data);
+void		push_stack(t_stack **stack, t_tree *node, t_fd_pair fds, t_data *data);
 void		pop(t_stack **stack);
 t_stack		**get_first_pipe(t_stack **stack);
 void		print_stack(t_stack *stack);
@@ -47,6 +47,7 @@ t_stack		**get_first_subshell(t_stack **stack);
 int			has_node_type_ancestor(t_stack *stack, t_node_type type);
 t_stack 	**get_next_pipe_in_subshell(t_stack **stack);
 void		close_all_open_redir_ends(t_data *data);
+t_fd_pair	get_fd_pair(int in_fd, int out_fd);
 
 //child.c
 void		child(t_data *data, t_stack **stack);

@@ -14,7 +14,7 @@
 
 void	sort_env(t_data **data)
 {
-	int	sorted;
+	int		sorted;
 	t_env	**env;
 	t_env	*a;
 	t_env	*b;
