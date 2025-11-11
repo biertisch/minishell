@@ -16,7 +16,7 @@ int	scan_heredocs(t_data *data, t_tree *parser_tree)
 {
 	if (!parser_tree)
 		return (0);
-	push_stack(&data->stack, parser_tree, 0, 0, data);
+	push_stack(&data->stack, parser_tree, get_fd_pair(0, 0), data);
 	if (scan_heredocs_left(data))
 		return (-1);
 	if (scan_heredocs_right(data))
@@ -54,7 +54,8 @@ int	scan_heredocs_right(t_data *data)
 		{
 			data->stack->phase = DONE;
 			if (data->stack->node->right)
-				push_stack(&data->stack, data->stack->node->right, 0, 0, data);
+				push_stack(&data->stack, data->stack->node->right,
+					get_fd_pair(0, 0), data);
 			if (scan_heredocs_left(data))
 				return (-1);
 		}

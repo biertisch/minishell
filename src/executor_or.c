@@ -19,7 +19,7 @@ int	execute_or(t_data *data, t_stack **stack)
 	if ((*stack)->phase == LAUNCH_LEFT)
 		return (execute_or_launch_left(data, stack));
 	if ((*stack)->phase == LAUNCH_RIGHT)
-		return (execute_or_launch_right(data, stack));
+		return (execute_or_launch_right(stack));
 	if ((*stack)->phase == DONE)
 		return (execute_or_done(&data, stack));
 	return (1);
@@ -28,7 +28,8 @@ int	execute_or(t_data *data, t_stack **stack)
 int	execute_or_entered(t_data *data, t_stack **stack)
 {
 	(*stack)->phase = LAUNCH_LEFT;
-	push_stack(stack, (*stack)->node->left, (*stack)->in_fd, (*stack)->out_fd, data);
+	push_stack(stack, (*stack)->node->left,
+		get_fd_pair((*stack)->in_fd, (*stack)->out_fd), data);
 	return (0);
 }
 
@@ -38,18 +39,19 @@ int	execute_or_launch_left(t_data *data, t_stack **stack)
 	if ((*stack)->exit_status && (*stack)->exit_status != 130
 		&& (*stack)->exit_status != 131)
 	{
-		push_stack(&data->stack, (*stack)->node->right, 0, 0, data);
+		push_stack(&data->stack, (*stack)->node->right,
+			get_fd_pair(0, 0), data);
 		traverse_redir_in(data, &data->stack);
-		push_stack(stack, (*stack)->node->right, (*stack)->in_fd, (*stack)->out_fd, data);
+		push_stack(stack, (*stack)->node->right,
+			get_fd_pair((*stack)->in_fd, (*stack)->out_fd), data);
 	}
 	else
 		return (count_tree_nodes((*stack)->node->right));
 	return (0);
 }
 
-int	execute_or_launch_right(t_data *data, t_stack **stack)
+int	execute_or_launch_right(t_stack **stack)
 {
-	(void)data;
 	(*stack)->phase = DONE;
 	return (0);
 }

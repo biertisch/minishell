@@ -18,7 +18,8 @@ int	parent(t_stack **stack, pid_t pid)
 	if ((*stack)->next && (*stack)->next->type == NODE_SUBSHELL)
 		return (parent_single_command(stack, pid));
 	if (get_first_pipe(stack))
-		(*get_first_pipe(stack))->child_pid[(*get_first_pipe(stack))->child_count++] = pid;
+		(*get_first_pipe(stack))->child_pid[
+			(*get_first_pipe(stack))->child_count++] = pid;
 	else
 		return (parent_single_command(stack, pid));
 	return (1);
@@ -28,7 +29,9 @@ int	parent_single_command(t_stack **stack, pid_t pid)
 {
 	int		status;
 
-	if ((*stack)->next && (*stack)->next->phase != LAUNCH_LEFT && ((*stack)->next->type != NODE_AND && (*stack)->next->type != NODE_OR))
+	if ((*stack)->next && (*stack)->next->phase != LAUNCH_LEFT
+		&& ((*stack)->next->type != NODE_AND
+			&& (*stack)->next->type != NODE_OR))
 	{
 		if ((*stack)->in_fd != STDIN_FILENO)
 			close((*stack)->in_fd);

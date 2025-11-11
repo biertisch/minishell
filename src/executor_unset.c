@@ -14,45 +14,53 @@
 
 int	execute_unset(t_data *data, t_stack **stack)
 {
-	t_env **first;
-	t_env **second;
-	t_env **third;
-	t_env	*victim;
-	t_env	*next;
-	int	i;
+	t_unset_vars	v;
 
-	i = get_first_command(data, stack) + 1;
 	duplicate_std();
 	if (!has_node_type_ancestor(*stack, NODE_PIPE))
 		handle_redirects(data, stack, NULL, (*stack)->node->redir);
-	while ((*stack)->node->argv[i])
+	v.i = get_first_command(data, stack) + 1;
+	while ((*stack)->node->argv[v.i])
 	{
-		first = NULL;
-		second = &(data->env_list);
-		third = NULL;
-		victim = NULL;
-		next = NULL;
-		while (second && *second)
+		v = get_begginer_u_v(data, v.i);
+		while (v.second && *v.second)
 		{
-			third = &((*second)->next);
-			if (!ft_strcmp((*second)->key, (*stack)->node->argv[i]))
-			{
-				victim = *second;
-				next = *third;
-				if (first)
-					(*first)->next = next;
-				else
-					data->env_list = next;
-				free_env_node(&victim);
+			v.third = &((*v.second)->next);
+			if (!ft_strcmp((*v.second)->key, (*stack)->node->argv[v.i])
+				&& found_victim(data, &v))
 				break ;
-			}
-			first = second;
-			second = third;
-			third = NULL;
+			v.first = v.second;
+			v.second = v.third;
+			v.third = NULL;
 		}
-		i++;
+		v.i++;
 	}
 	undo_duplicate_std(1);
 	execute_builtin_check_for_pipe(data, stack);
 	return (0);
+}
+
+t_unset_vars	get_begginer_u_v(t_data *data, int i)
+{
+	t_unset_vars	v;
+
+	v.i = i;
+	v.first = NULL;
+	v.second = &(data->env_list);
+	v.third = NULL;
+	v.victim = NULL;
+	v.next = NULL;
+	return (v);
+}
+
+int	found_victim(t_data *data, t_unset_vars *v)
+{
+	v->victim = *(v->second);
+	v->next = *(v->third);
+	if (v->first)
+		(*(v->first))->next = v->next;
+	else
+		data->env_list = v->next;
+	free_env_node(&(v->victim));
+	return (1);
 }

@@ -19,7 +19,7 @@ int	execute_pipe(t_data *data, t_stack **stack)
 	if ((*stack)->phase == LAUNCH_LEFT)
 		return (execute_pipe_launch_left(data, stack));
 	if ((*stack)->phase == LAUNCH_RIGHT)
-		return (execute_pipe_launch_right(data, stack));
+		return (execute_pipe_launch_right(stack));
 	if ((*stack)->phase == WAIT)
 		return (execute_pipe_wait(stack));
 	if ((*stack)->phase == DONE)
@@ -37,13 +37,13 @@ int	execute_pipe_entered(t_data *data, t_stack **stack)
 	left_in = (*stack)->in_fd;
 	left_out = ((*stack)->pipe)[1];
 	(*stack)->phase = LAUNCH_LEFT;
-	push_stack(stack, (*stack)->node->left, left_in, left_out, data);
+	push_stack(stack, (*stack)->node->left,
+		get_fd_pair(left_in, left_out), data);
 	return (0);
 }
 
 int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 {
-	int	right_in;
 	int	right_out;
 
 	if ((*stack)->node->right->type == NODE_SUBSHELL
@@ -51,11 +51,11 @@ int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 		right_out = -1;
 	else
 	{
-		if (get_next_pipe(stack) && (*get_next_pipe(stack))->phase != LAUNCH_RIGHT)
+		if (get_next_pipe(stack)
+			&& (*get_next_pipe(stack))->phase != LAUNCH_RIGHT)
 			right_out = (*get_next_pipe(stack))->pipe[1];
 		else if ((*stack)->out_fd == -1)
 		{
-			//should it be the first pipe after the node_subshell????
 			if (get_next_pipe(stack) && (get_next_pipe(get_next_pipe(stack))))
 				right_out = (*get_next_pipe(get_next_pipe(stack)))->pipe[1];
 			else
@@ -64,15 +64,14 @@ int	execute_pipe_launch_left(t_data *data, t_stack **stack)
 		else
 			right_out = (*stack)->out_fd;
 	}
-	right_in = (*stack)->pipe[0];
 	(*stack)->phase = LAUNCH_RIGHT;
-	push_stack(stack, (*stack)->node->right, right_in, right_out, data);
+	push_stack(stack, (*stack)->node->right,
+		get_fd_pair((*stack)->pipe[0], right_out), data);
 	return (0);
 }
 
-int	execute_pipe_launch_right(t_data *data, t_stack **stack)
+int	execute_pipe_launch_right(t_stack **stack)
 {
-	(void)data;
 	close((*stack)->pipe[0]);
 	close((*stack)->pipe[1]);
 	(*stack)->phase = WAIT;
@@ -84,7 +83,6 @@ int	execute_pipe_wait(t_stack **stack)
 	int		status;
 
 	status = 0;
-	//why???
 	if (!get_next_pipe_in_subshell(stack))
 	{
 		close_all_pipe_ends(stack);
@@ -100,22 +98,4 @@ int	execute_pipe_wait(t_stack **stack)
 	}
 	(*stack)->phase = DONE;
 	return (0);
-}
-
-int	execute_pipe_done(t_data **data, t_stack **stack)
-{
-	int	status;
-
-	status = 0;
-	if (!get_next_pipe_in_subshell(stack))
-	{
-		while (waitpid(-1, &status, 0) > 0)
-			handle_child_exit(status);
-	}
-	if ((*stack)->next)
-		setup_next_to_top(data, stack);
-	else
-		(*data)->exit_status = (*stack)->exit_status;
-	pop(stack);
-	return (1);
 }

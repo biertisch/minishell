@@ -15,8 +15,8 @@
 int	execute_parent_redir(t_data *data, t_stack **stack)
 {
 	t_redir	*redir;
-	int	saved_fd;
-	int	res;
+	int		saved_fd;
+	int		res;
 
 	res = 1;
 	saved_fd = -1;
@@ -26,11 +26,11 @@ int	execute_parent_redir(t_data *data, t_stack **stack)
 			res = execute_parent_redir_in(data, stack, redir, &saved_fd);
 		else if (redir->type == REDIR_OUT || redir->type == APPEND)
 			res = execute_parent_redir_out(data, stack, redir);
-		
 	}
 }
 
-int	execute_parent_redir_in(tdata *data, t_stack **stack, t_redir *redir, int *saved_fd)
+int	execute_parent_redir_in(t_data *data, t_stack **stack,
+			t_redir *redir, int *saved_fd)
 {
 	int	s;
 

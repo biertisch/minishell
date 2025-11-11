@@ -17,7 +17,7 @@ int	execute(t_data *data)
 	t_stack	*stack;
 
 	setup_signals_parent(data);
-	push_stack(&data->stack, data->parser_tree, 0, 0, data);
+	push_stack(&data->stack, data->parser_tree, get_fd_pair(0, 0), data);
 	traverse_redir_in(data, &data->stack);
 	stack = create_stack(data);
 	execute_stack(data, &stack);
@@ -40,7 +40,7 @@ int	execute_stack(t_data *data, t_stack **stack)
 			i += execute_pipe(data, stack);
 		else if ((*stack)->type == NODE_CMD)
 			i += execute_cmd(data, stack);
-		else if	((*stack)->type == NODE_AND)
+		else if ((*stack)->type == NODE_AND)
 			i += execute_and(data, stack);
 		else if ((*stack)->type == NODE_OR)
 			i += execute_or(data, stack);
@@ -53,39 +53,11 @@ int	execute_stack(t_data *data, t_stack **stack)
 
 int	execute_cmd(t_data *data, t_stack **stack)
 {
-	pid_t	pid;
-
-	if ((*stack)->phase == ENTERED)
-	{
-		if (expand(data, (*stack)->node)) // change to expand_argv only, right?
-		{
-			if ((*stack)->next)
-				(*stack)->next->exit_status = 1;
-			pop(stack);
-			return (1);
-		}
-		if ((*stack)->node->argv && !(*stack)->node->argv[get_first_command(data, stack)])
-		{
-			if (has_node_type_ancestor(*stack, NODE_PIPE))
-			{
-				pid = fork();
-				if (pid == 0)
-				{
-					close_all_pipe_ends(stack);
-					free_stack(stack);
-					free_all(data);
-					exit(0);
-				}
-				else
-					parent(stack, pid);
-			}
-			cmd_has_variable(data, stack);
-			pop(stack);
-			return (1);
-		}
-		execute_export_handle_underscore(data, stack);
-	}
-	if ((*stack)->node->argv && is_builtin((*stack)->node->argv[get_first_command(data, stack)]))
+	if ((*stack)->phase == ENTERED
+		&& execute_cmd_pre_processing(data, stack) == 1)
+		return (1);
+	if ((*stack)->node && (*stack)->node->argv
+		&& is_builtin((*stack)->node->argv[get_first_command(data, stack)]))
 		return (execute_builtin(data, stack));
 	else if ((*stack)->phase == ENTERED)
 		return (execute_cmd_entered(data, stack));
@@ -101,7 +73,6 @@ int	execute_cmd_entered(t_data *data, t_stack **stack)
 	(*stack)->phase = DONE;
 	if (get_last_heredoc((*stack)->node->redir) && !(*stack)->node->argv)
 		return (0);
-	//check this shit out
 	if (get_last_heredoc((*stack)->node->redir))
 		if (validate_pipe(pipe((*stack)->pipe), stack))
 			return (0);
