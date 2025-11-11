@@ -63,8 +63,9 @@ int	validate_env(t_data *data, char **argv)
 int	print_builtin_usage(char *cmd)
 {
 	char	usage[ERR_BUFFER_SIZE];
-
-	ft_strlcpy(usage, cmd, ft_strlen(cmd));
+	
+	usage[0] = '\0';
+	ft_strlcpy(usage, cmd, ft_strlen(cmd) + 1);
 	ft_strlcat(usage, ": usage: ", ERR_BUFFER_SIZE);
 	ft_strlcat(usage, cmd, ERR_BUFFER_SIZE);
 	if (!ft_strcmp(cmd, "cd"))
@@ -74,6 +75,6 @@ int	print_builtin_usage(char *cmd)
 	else if (!ft_strcmp(cmd, "unset"))
 		ft_strlcat(usage, " [name...]", ERR_BUFFER_SIZE);
 	ft_strlcat(usage, "\n", ERR_BUFFER_SIZE);
-	write(STDOUT_FILENO, usage, ft_strlen(usage));
+	write(STDERR_FILENO, usage, ft_strlen(usage));
 	return (INVALID);
 }

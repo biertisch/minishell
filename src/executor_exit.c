@@ -26,9 +26,8 @@ int	execute_exit(t_data *data, t_stack **stack)
 	else if ((*stack)->node->argv[cmd_i] && !(*stack)->node->argv[cmd_i + 1])
 		exit_code = data->exit_status;
 	check_exit_input(data, stack, &exit_code, cmd_i);
-	if (!has_node_type_ancestor(*stack, NODE_PIPE) && !get_first_subshell(stack)
-		&& !((*stack)->node->argv[1] && ((*stack)->node->argv[2])))
-		write(STDOUT_FILENO, "exit\n", 5);
+	if (isatty(STDIN_FILENO) && !has_node_type_ancestor(*stack, NODE_PIPE) && !get_first_subshell(stack) && (!(*stack)->node->argv[1] || ((*stack)->node->argv[1] && !((*stack)->node->argv[2]))))
+		write(STDERR_FILENO, "exit\n", 5);
 	(*stack)->exit_status = exit_code;
 	if (!(*stack)->node->argv[1] || !(*stack)->node->argv[2])
 	{
@@ -56,10 +55,7 @@ void	check_exit_input(t_data *data, t_stack **stack,
 			if (!ft_isdigit(*((*stack)->node->argv[cmd_i + 1] + i)))
 			{
 				write(STDERR_FILENO, "exit\n", 5);
-				write(STDERR_FILENO, "minishell : exit: ", 18);
-				write(STDERR_FILENO, (*stack)->node->argv[1],
-					ft_strlen((*stack)->node->argv[1]));
-				write(STDERR_FILENO, ": numeric argument required\n", 28);
+				internal_error(INT_ERR_8, "exit", (*stack)->node->argv[1]);
 				undo_duplicate_std(1);
 				free_stack(stack);
 				free_all(data);
@@ -70,7 +66,7 @@ void	check_exit_input(t_data *data, t_stack **stack,
 		if ((*stack)->node->argv[cmd_i + 2])
 		{
 			write(STDERR_FILENO, "exit\n", 5);
-			write(STDERR_FILENO, "minishell : exit: too many arguments\n", 37);
+			internal_error(INT_ERR_3, "exit", NULL);
 			*exit_code = 1;
 			undo_duplicate_std(1);
 		}

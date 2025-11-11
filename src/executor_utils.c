@@ -19,6 +19,8 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	char	**paths;
 	char	*slash_path;
 
+	if (ft_strchr(cmd, '/'))
+		return (run_curr_dir(data, stack, cmd));
 	slash_path = get_slash_path(data, stack, cmd);
 	paths = get_path_split(data, stack, slash_path);
 	i = 0;
@@ -45,8 +47,6 @@ char	*get_slash_path(t_data *data, t_stack **stack, char *cmd)
 
 	if (!cmd)
 		return (NULL);
-	if (ft_strchr(cmd, '/'))
-		return (run_curr_dir(data, stack, cmd));
 	slash_path = ft_strjoin("/", cmd);
 	validate_malloc_execute(data, stack, slash_path, cmd);
 	if (!ft_strcmp(slash_path, "/") || !ft_strcmp(slash_path, "/.."))
