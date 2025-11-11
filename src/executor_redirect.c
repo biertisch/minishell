@@ -15,7 +15,7 @@
 int	traverse_redir_in(t_data *data, t_stack **stack)
 {
 	while ((*stack)->node->type == NODE_AND || (*stack)->node->type == NODE_OR)
-		push_stack(stack, (*stack)->node->left, 0, 0, data);
+		push_stack(stack, (*stack)->node->left, get_fd_pair(0, 0), data);
 	if (check_redir_in_left(data, stack))
 		return (-1);
 	if (check_redir_in_right(data, stack))
@@ -32,10 +32,9 @@ int	check_redir_in_left(t_data *data, t_stack **stack)
 		return (-1);
 	if (push_left_until_cmd_redir(data, stack))
 		return (-1);
-	open_redir_in(data, (*stack)->node->redir);
+	open_redir(data, (*stack)->node->redir);
 	pop(stack);
 	return (0);
-
 }
 
 int	check_redir_in_right(t_data *data, t_stack **stack)
@@ -51,7 +50,8 @@ int	check_redir_in_right(t_data *data, t_stack **stack)
 			(*stack)->phase = DONE;
 			if ((*stack)->node->type == NODE_PIPE)
 			{
-				push_stack(stack, (*stack)->node->right, 0, 0, data);
+				push_stack(stack, (*stack)->node->right,
+					get_fd_pair(0, 0), data);
 				if (check_redir_in_left(data, stack))
 					return (-1);
 			}
@@ -60,8 +60,6 @@ int	check_redir_in_right(t_data *data, t_stack **stack)
 	return (0);
 }
 
-
-
 int	push_left_until_cmd_redir(t_data *data, t_stack **stack)
 {
 	while ((*stack)->node->left)
@@ -69,111 +67,35 @@ int	push_left_until_cmd_redir(t_data *data, t_stack **stack)
 		if ((*stack)->node->type == NODE_SUBSHELL)
 		{
 			(*stack)->phase = DONE;
-			if (open_redir_in(data, (*stack)->node->redir) == 2)
+			if (open_redir(data, (*stack)->node->redir) == 2)
 				return (-1);
 		}
-		push_stack(stack, (*stack)->node->left, 0, 0, data);
+		push_stack(stack, (*stack)->node->left, get_fd_pair(0, 0), data);
 	}
 	return (0);
 }
 
-int	open_redir_in(t_data *data, t_redir *redir)
+int	open_redir_in(t_data *data, t_redir *redir, t_list *new, int *fd)
 {
-	int	*fd;
-	t_list	*new;
-
-	if (!redir)
-		return (0);
-	while (redir)
+	if (expand_single_redir(data, redir))
 	{
-		if (redir->type == REDIR_IN)
-		{
-			
-			if (expand_single_redir(data, redir))
-			{
-				redir->in_fd = -1;
-				return (2);	
-			}
-			fd = malloc(sizeof(int));
-			validate_malloc(data, fd, NULL);
-			redir->in_fd = open(redir->file, O_RDONLY);
-			*fd = redir->in_fd;
-			new = ft_lstnew(fd);
-			validate_malloc(data, new, fd);
-			if (!data->open_redir_ins)
-				data->open_redir_ins = new;
-			else
-				ft_lstadd_back(&data->open_redir_ins, new);
-			if (redir->in_fd == -1)
-			{
-				handle_open_errors(redir);
-				return (2);
-			}
-		}
-		if (redir->type == REDIR_OUT || redir->type == APPEND)
-		{
-			if (expand_single_redir(data, redir))
-			{
-				redir->out_fd = -1;
-				return (2);	
-			}
-			if (redir->type == REDIR_OUT)
-				redir->out_fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			else	
-				redir->out_fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if(redir->fd != -1)
-			{
-				duplicate_std();
-				dup2(redir->out_fd, redir->fd);
-				close(redir->out_fd);
-			}
-			else
-			{
-				fd = malloc(sizeof(int));
-				validate_malloc(data, fd, NULL);
-				*fd = redir->out_fd;
-				new = ft_lstnew(fd);
-				validate_malloc(data, new, fd);
-				if (!data->open_redir_ins)
-					data->open_redir_ins = new;
-				else
-					ft_lstadd_back(&data->open_redir_ins, new);
-				if (redir->out_fd == -1)
-				{
-					handle_open_errors(redir);
-					return (2);
-				}
-			}
-
-		}
-		redir = redir->next;
+		redir->in_fd = -1;
+		return (2);
+	}
+	fd = malloc(sizeof(int));
+	validate_malloc(data, fd, NULL);
+	redir->in_fd = open(redir->file, O_RDONLY);
+	*fd = redir->in_fd;
+	new = ft_lstnew(fd);
+	validate_malloc(data, new, fd);
+	if (!data->open_redirs)
+		data->open_redirs = new;
+	else
+		ft_lstadd_back(&data->open_redirs, new);
+	if (redir->in_fd == -1)
+	{
+		system_error(strerror(errno), redir->file);
+		return (2);
 	}
 	return (1);
-}
-
-int	close_redir_in(t_redir *redir)
-{
-	while (redir)
-	{
-		if (redir->type == REDIR_IN)
-		{
-			if (redir->in_fd == -1)
-				break ;
-			close(redir->in_fd);
-		}
-		redir = redir->next;
-	}
-	return (1);
-}
-
-void	handle_open_errors(t_redir *redir)
-{
-	write(STDERR_FILENO, "minishell: ", 11);
-	write(STDERR_FILENO, redir->file, ft_strlen(redir->file));
-	if (errno == ENOENT)
-		write(STDERR_FILENO, ": No such file or directory\n", 28);
-	else if (errno == EACCES)
-		write(STDERR_FILENO, ": Permission denied\n", 20);
-	else if (errno == EISDIR)
-		write(STDERR_FILENO, ": Is a directory\n", 17);
 }

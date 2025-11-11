@@ -24,7 +24,7 @@ void	free_all(t_data *data)
 //called after every iteration of main loop
 void	free_command_data(t_data *data)
 {
-	ft_lstclear(&data->open_redir_ins, free);
+	ft_lstclear(&data->open_redirs, free);
 	free(data->input);
 	data->input = NULL;
 	free_lexer_list(&data->lexer_list);

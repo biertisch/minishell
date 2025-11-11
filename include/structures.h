@@ -92,6 +92,22 @@ typedef struct s_redir
 	struct s_redir	*next;
 }	t_redir;
 
+typedef struct s_fd_pair
+{
+	int	in_fd;
+	int	out_fd;
+}	t_fd_pair;
+
+typedef struct s_unset_vars
+{
+	t_env **first;
+	t_env **second;
+	t_env **third;
+	t_env	*victim;
+	t_env	*next;
+	int	i;
+}	t_unset_vars;
+
 typedef struct s_tree
 {
 	t_node_type		type;
@@ -126,7 +142,7 @@ typedef struct s_data
 	t_tree			*parser_tree;
 	t_stack			*stack;
 	int				exit_status;
-	t_list			*open_redir_ins;
+	t_list			*open_redirs;
 }	t_data;
 
 #endif

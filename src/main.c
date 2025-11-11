@@ -18,7 +18,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	(void)argc;
+	if (argc != 1)
+		internal_error(INT_ERR_5, NULL, NULL);
 	ft_bzero(&data, sizeof(data));
 	setup_signals(&data);
 	envp_to_list(&data, envp, argv);

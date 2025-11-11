@@ -17,6 +17,7 @@ void	validate_malloc_execute(t_data *data, t_stack **stack,
 {
 	if (ptr)
 		return ;
+	undo_duplicate_std(0);
 	close_all_open_redir_ends(data);
 	close_all_pipe_ends(stack);
 	system_error(strerror(errno), "malloc");

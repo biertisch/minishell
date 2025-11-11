@@ -56,7 +56,8 @@ int	push_left_until_cmd(t_data *data)
 	{
 		if (data->stack->node->type == NODE_SUBSHELL)
 			data->stack->phase = DONE;
-		push_stack(&data->stack, data->stack->node->left, 0, 0, data);
+		push_stack(&data->stack, data->stack->node->left,
+			get_fd_pair(0, 0), data);
 	}
 	return (0);
 }

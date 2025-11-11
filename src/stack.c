@@ -31,24 +31,22 @@ t_stack	*create_stack(t_data *data)
 	return (head);
 }
 
-void	push_stack(t_stack **stack, t_tree *node, int in_fd, int out_fd, t_data *data)
+void	push_stack(t_stack **stack, t_tree *node, t_fd_pair fds, t_data *data)
 {
-	t_stack *new_head;
+	t_stack	*new_head;
 
 	new_head = malloc(sizeof(t_stack));
 	validate_malloc_execute(data, stack, new_head, NULL);
 	new_head->phase = ENTERED;
 	new_head->type = node->type;
 	new_head->node = node;
-	new_head->in_fd = in_fd;
-	new_head->out_fd = out_fd;
+	new_head->in_fd = fds.in_fd;
+	new_head->out_fd = fds.out_fd;
 	new_head->child_count = 0;
 	new_head->next = *stack;
 	new_head->exit_status = 0;
 	*stack = new_head;
 }
-
-
 
 int	setup_next_to_top(t_data **data, t_stack **stack)
 {
@@ -58,14 +56,15 @@ int	setup_next_to_top(t_data **data, t_stack **stack)
 		(*stack)->next->exit_status = (*stack)->exit_status;
 	else if ((*stack)->next->type == NODE_OR)
 		(*stack)->next->exit_status = (*stack)->exit_status;
-	else if (!((*stack)->type == NODE_SUBSHELL && ((*stack)->next->type == NODE_PIPE)))
+	else if (!((*stack)->type == NODE_SUBSHELL
+			&& ((*stack)->next->type == NODE_PIPE)))
 		(*stack)->next->exit_status = (*stack)->exit_status;
 	return (0);
 }
 
 t_stack	**get_first_log_operator(t_stack **stack)
 {
-	t_stack **head;
+	t_stack	**head;
 
 	head = stack;
 	while (head && (*head))
@@ -89,186 +88,4 @@ int	has_node_type_ancestor(t_stack *stack, t_node_type type)
 		curr = curr->next;
 	}
 	return (0);
-}
-
-void	pop(t_stack **stack)
-{
-	t_stack *new_head;
-
-	if (stack == NULL || *stack == NULL)
-		return ;
-	new_head = (*stack)->next;
-	free((*stack));
-	*stack = new_head;
-}
-
-t_stack	*peek(t_stack **stack)
-{
-	if (stack == NULL || *stack == NULL)
-		return (NULL);
-	return (*stack);
-}
-
-t_stack	**get_first_subshell(t_stack **stack)
-{
-	t_stack	**head;
-
-	head = stack;
-	while (head && (*head))
-	{
-		if ((*head)->type == NODE_SUBSHELL)
-			return (head);
-		head = &((*head)->next);
-	}
-	return (NULL);
-}
-
-int	is_last_cmd_in_pipe(t_stack **stack)
-{
-	t_stack **next_pipe;
-	t_stack **next_next_pipe;
-
-	if (!stack || !*stack)
-		return (0);
-	if ((*stack)->type != NODE_CMD)
-		return (0);
-	next_pipe = get_next_pipe(stack);
-	if (!next_pipe || !*next_pipe)
-		return (1);
-	next_next_pipe = get_next_pipe(next_pipe);
-	if (!next_next_pipe && (*next_pipe)->phase == LAUNCH_RIGHT)
-		return (1);
-	return (0);
-}
-
-t_stack **get_next_pipe_in_subshell(t_stack **stack)
-{
-	t_stack	**head;
-
-  	if (!stack || !*stack)
-		return NULL;
-	head = &((*stack)->next);
-	while (head && (*head))
-	{
-		if ((*head)->type == NODE_SUBSHELL)
-			return (NULL);
-		if ((*head)->type == NODE_PIPE)
-			return (head);
-		head = &((*head)->next);
-	}
-	return (NULL);
-}
-
-t_stack	**get_first_pipe(t_stack **stack)
-{
-	t_stack	**head;
-
-	head = stack;
-	while (head && (*head))
-	{
-		if ((*head)->type == NODE_PIPE)
-			return (head);
-		head = &((*head)->next);
-	}
-	return (NULL);
-}
-
-t_stack **get_next_pipe(t_stack **stack)
-{
-  	if (!stack || !*stack)
-		return NULL;
-	return (get_first_pipe(&(*stack)->next));
-}
-
-int	stack_size(t_stack *stack)
-{
-	int	size;
-
-	size = 0;
-	while (stack)
-	{
-		stack = stack->next;
-		size++;
-	}
-	return (size);
-}
-
-void	close_all_open_redir_ends(t_data *data)
-{
-	t_list	*node;
-
-	node = data->open_redir_ins;
-	while (node)
-	{
-		if (*(int *)node->content != -1)
-			close(*(int *)node->content);
-		node = node->next;
-	}
-	
-}
-
-void	close_all_pipe_ends(t_stack **stack)
-{
-	t_stack **head;
-
-	head = stack;
-	while (head && (*head))
-	{
-		if ((*head)->type == NODE_PIPE)
-		{
-			close((*head)->pipe[0]);
-			close((*head)->pipe[1]);
-		}
-		head = &((*head)->next);
-	}
-}
-
-static char	*type_to_string(t_node_type type)
-{
-	if (type == NODE_CMD)
-		return "NODE_CMD";
-	if (type == NODE_PIPE)
-		return "NODE_PIPE";
-	else
-		return "ERROR_TYPE";
-}
-
-static char	*phase_to_string(t_phase phase)
-{
-	if (phase == ENTERED)
-		return "ENTERED";
-	if (phase == LAUNCH_LEFT)
-		return "LAUNCH_LEFT";
-	if (phase == LAUNCH_RIGHT)
-		return "LAUNCH_RIGHT";
-	if (phase == WAIT)
-		return "WAIT";
-	if (phase == DONE)
-		return "DONE";
-	else
-		return "ERROR_PHASE";
-}
-
-void	print_top(t_stack *stack)
-{
-
-	ft_printf("STACK TOP: [TYPE=%s PHASE=%s PIPE[0]=%d PIPE[1]=%d]\n", type_to_string(stack->type), phase_to_string(stack->phase), stack->pipe[0], stack->pipe[1]);
-}
-
-void	print_stack(t_stack *stack)
-{
-	int	i;
-
-	i = 0;
-	while (stack)
-	{
-		printf("\nlevel %d: TYPE=%s PHASE=%s", i, type_to_string(stack->type), phase_to_string(stack->phase));
-		if (stack->type == NODE_PIPE)
-			printf(" PIPE[0]=%d PIPE[1]=%d\n", stack->pipe[0], stack->pipe[1]);
-		else
-			printf("\n");
-		i++;
-		stack = stack->next;
-	}
-	ft_printf("STACK DONE!\n");
 }
