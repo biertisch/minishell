@@ -177,7 +177,8 @@ int				execute_export_val_found(t_data *data,
 int				execute_export_val_not_found(t_data *data,
 					t_stack **stack, char **kv_split);
 int				execute_export_no_option(t_data *data);
-void			execute_export_invalid_var(t_stack **stack, int cmd_i);
+int				execute_export_invalid_var(t_stack **stack,
+					int cmd_i, char **kv_split);
 void			execute_export_handle_underscore(t_data *data, t_stack **stack);
 
 //executor_sort_env.c

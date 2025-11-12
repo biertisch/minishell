@@ -12,22 +12,21 @@
 
 NAME        = minishell
 SRC_FILES = \
-	builtin child cleanup env env_convert \
-	env_list env_utils error error_expander error_parser \
-	executor executor_and executor_builtin executor_builtin_utils executor_cd \
-	executor_echo executor_env executor_exit executor_export \
-	executor_or executor_pipe executor_pwd \
-	executor_redirect executor_sort_env executor_subshell executor_unset executor_utils \
-	expander expander_dollar expander_metadata expander_quotes expander_rebuild \
-	expander_redir expander_split expander_tilde get_next_line get_next_line_utils \
-	input input_continuation input_prompt lexer lexer_list \
-	lexer_type main parent parser parser_cmd \
-	parser_redir parser_tree parser_utils signal signal_handler \
-	signal_heredoc stack test variable_utils wildcard \
-	wildcard_match wildcard_rebuild executor_export2 executor2\
-	parser_heredoc_scan parser_heredoc_collect error_executor error_utils\
-	executor_pipe2 executor_redirect2 child2 stack2 stack3 executor_utils2\
-	executor_subshell2
+	builtin child child2 cleanup env \
+	env_convert env_list env_utils error error_expander \
+	error_executor error_parser error_utils executor executor2 \
+	executor_and executor_builtin executor_builtin_utils executor_cd executor_echo \
+	executor_env executor_exit executor_export executor_export2 executor_or \
+	executor_pipe executor_pipe2 executor_pwd executor_redirect executor_redirect2 \
+	executor_sort_env executor_subshell executor_subshell2 executor_unset executor_utils \
+	executor_utils2 expander expander_dollar expander_metadata expander_quotes \
+	expander_rebuild expander_redir expander_split expander_tilde get_next_line \
+	get_next_line_utils input input_continuation input_prompt lexer \
+	lexer_list lexer_type main parent parser \
+	parser_cmd parser_heredoc_collect parser_heredoc_scan parser_redir parser_tree \
+	parser_utils signal signal_handler signal_heredoc stack \
+	stack2 stack3 test variable_utils wildcard \
+	wildcard_match wildcard_rebuild
 
 
 SRC_DIR     = src
@@ -41,7 +40,7 @@ PRINTF_LIB  = $(PRINTF_DIR)/libftprintf.a
 LIBFT_DIR = libft
 
 CC          = cc -g -O0
-CFLAGS      = -Wall -Wextra -Werror -I$(INC_DIR)
+CFLAGS      = -Wall -Wextra -Werror -I$(INC_DIR) -MMD -MP
 RM          = rm -rf
 
 RED=\033[0;31m
@@ -58,8 +57,7 @@ DEF_COLOUR=\033[0m
 
 SRC         = $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_FILES)))
 OBJ         = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
-HDRS        = $(INC_DIR)/minishell.h $(INC_DIR)/printf.h $(INC_DIR)/libft.h $(INC_DIR)/parser.h $(INC_DIR)/executor.h
-
+DEP	    = $(addprefix $(OBJ_DIR)/, $(addsuffix .d, $(SRC_FILES)))
 
 .PHONY: all clean fclean re headers test valgrind run
 
@@ -82,7 +80,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	@echo "* text=auto eol=lf" > .gitattributes
 
 $(OBJ_DIR):
-	@echo "$(CURSIVE)$(GREEN)Compiling minishell$(DEF_COLOUR)"
+	@echo "Compiling minishell..."
 	@mkdir -p $@
 
 $(NAME): $(OBJ) $(PRINTF_LIB)
@@ -127,3 +125,5 @@ run:	$(NAME)
 	@./minishell
 
 re: fclean all
+
+-include $(DEP)

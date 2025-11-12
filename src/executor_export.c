@@ -28,7 +28,8 @@ int	execute_export(t_data *data, t_stack **stack)
 			execute_export_option(data, stack, cmd_i);
 	}
 	undo_duplicate_std(1);
-	(*stack)->exit_status = exit_status;
+	if (!(*stack)->exit_status)
+		(*stack)->exit_status = exit_status;
 	execute_builtin_check_for_pipe(data, stack);
 	return (0);
 }
@@ -54,7 +55,7 @@ int	execute_export_option(t_data *data, t_stack **stack, int cmd_i)
 				execute_export_val_not_found(data, stack, kv_split);
 		}
 		else
-			execute_export_invalid_var(stack, cmd_i);
+			return (execute_export_invalid_var(stack, cmd_i, kv_split));
 		ft_splitfree(kv_split);
 		cmd_i++;
 	}
@@ -94,8 +95,10 @@ void	execute_export_handle_underscore(t_data *data, t_stack **stack)
 	set_env_value(data->env_list, "_", value);
 }
 
-void	execute_export_invalid_var(t_stack **stack, int cmd_i)
+int	execute_export_invalid_var(t_stack **stack, int cmd_i, char **kv_split)
 {
 	internal_error(INT_ERR_10, "export", (*stack)->node->argv[cmd_i + 1]);
 	(*stack)->exit_status = 1;
+	ft_splitfree(kv_split);
+	return (0);
 }
