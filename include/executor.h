@@ -156,6 +156,8 @@ int				execute_pwd(t_data *data, t_stack **stack);
 int				execute_exit(t_data *data, t_stack **stack);
 void			check_exit_input(t_data *data, t_stack **stack,
 					int *exit_code, int cmd_i);
+void			checking_really_hard(t_data *data, t_stack **stack,
+					int cmd_i, int i);
 
 //executor_unset.c
 int				execute_unset(t_data *data, t_stack **stack);
@@ -164,12 +166,6 @@ int				found_victim(t_data *data, t_unset_vars *v);
 int				validate_unset_export(t_data *data, t_stack **stack,
 					int cmd_i, char *cmd);
 t_unset_vars	get_begginer_u_v(t_data *data, int i);
-
-//executor_error.c
-int				validate_fork(t_data *data, t_stack **stack);
-int				validate_pipe(int pipe_res, t_stack **stack);
-void			print_fork_err_mess(void);
-void			print_pipe_err_mess(void);
 
 //executor_export.c
 int				execute_export(t_data *data, t_stack **stack);

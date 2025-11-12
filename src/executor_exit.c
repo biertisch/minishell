@@ -26,7 +26,9 @@ int	execute_exit(t_data *data, t_stack **stack)
 	else if ((*stack)->node->argv[cmd_i] && !(*stack)->node->argv[cmd_i + 1])
 		exit_code = data->exit_status;
 	check_exit_input(data, stack, &exit_code, cmd_i);
-	if (isatty(STDIN_FILENO) && !has_node_type_ancestor(*stack, NODE_PIPE) && !get_first_subshell(stack) && (!(*stack)->node->argv[1] || ((*stack)->node->argv[1] && !((*stack)->node->argv[2]))))
+	if (isatty(STDIN_FILENO) && !has_node_type_ancestor(*stack, NODE_PIPE)
+		&& !get_first_subshell(stack) && (!(*stack)->node->argv[1]
+			|| ((*stack)->node->argv[1] && !((*stack)->node->argv[2]))))
 		write(STDERR_FILENO, "exit\n", 5);
 	(*stack)->exit_status = exit_code;
 	if (!(*stack)->node->argv[1] || !(*stack)->node->argv[2])
@@ -52,23 +54,32 @@ void	check_exit_input(t_data *data, t_stack **stack,
 			i++;
 		while (*((*stack)->node->argv[cmd_i + 1] + i))
 		{
-			if (!ft_isdigit(*((*stack)->node->argv[cmd_i + 1] + i)))
-			{
-				write(STDERR_FILENO, "exit\n", 5);
-				internal_error(INT_ERR_8, "exit", (*stack)->node->argv[1]);
-				undo_duplicate_std(1);
-				free_stack(stack);
-				free_all(data);
-				exit(2);
-			}
+			checking_really_hard(data, stack, cmd_i, i);
 			i++;
 		}
 		if ((*stack)->node->argv[cmd_i + 2])
 		{
-			write(STDERR_FILENO, "exit\n", 5);
+			if (isatty(STDIN_FILENO))
+				write(STDERR_FILENO, "exit\n", 5);
 			internal_error(INT_ERR_3, "exit", NULL);
 			*exit_code = 1;
 			undo_duplicate_std(1);
 		}
+	}
+}
+
+void	checking_really_hard(t_data *data, t_stack **stack,
+			int cmd_i, int i)
+{
+	if (!ft_isdigit(*((*stack)->node->argv[cmd_i + 1] + i)))
+	{
+		if (isatty(STDIN_FILENO))
+			write(STDERR_FILENO, "exit\n", 5);
+		internal_error(INT_ERR_8, "exit",
+			(*stack)->node->argv[cmd_i + 1]);
+		undo_duplicate_std(1);
+		free_stack(stack);
+		free_all(data);
+		exit(2);
 	}
 }

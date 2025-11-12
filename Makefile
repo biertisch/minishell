@@ -15,7 +15,7 @@ SRC_FILES = \
 	builtin child cleanup env env_convert \
 	env_list env_utils error error_expander error_parser \
 	executor executor_and executor_builtin executor_builtin_utils executor_cd \
-	executor_echo executor_env executor_error executor_exit executor_export \
+	executor_echo executor_env executor_exit executor_export \
 	executor_or executor_pipe executor_pwd \
 	executor_redirect executor_sort_env executor_subshell executor_unset executor_utils \
 	expander expander_dollar expander_metadata expander_quotes expander_rebuild \

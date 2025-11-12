@@ -96,9 +96,6 @@ void	execute_export_handle_underscore(t_data *data, t_stack **stack)
 
 void	execute_export_invalid_var(t_stack **stack, int cmd_i)
 {
-	write(STDERR_FILENO, "minishell: export: `", 20);
-	write(STDERR_FILENO, (*stack)->node->argv[cmd_i + 1],
-		ft_strlen((*stack)->node->argv[cmd_i + 1]));
-	write(STDERR_FILENO, "': not a valid identifier\n", 26);
+	internal_error(INT_ERR_10, "export", (*stack)->node->argv[cmd_i + 1]);
 	(*stack)->exit_status = 1;
 }

@@ -16,15 +16,10 @@ void	cmd_is_directory(t_data *data, t_stack **stack, int fd)
 {
 	if (fd != -1)
 	{
-		write(STDERR_FILENO, (*stack)->node->argv[
-			get_first_command(data, stack)], ft_strlen((*stack)->node->argv[
-				get_first_command(data, stack)]));
-		write(STDERR_FILENO, ": Is a directory\n", 17);
+		internal_error(INT_ERR_11,
+			(*stack)->node->argv[get_first_command(data, stack)], NULL);
 		close(fd);
-		close_all_open_redir_ends(data);
-		close_all_pipe_ends(stack);
-		free_stack(stack);
-		free_all(data);
+		executor_cleanup(data, stack, NULL);
 		exit(126);
 	}
 }
@@ -44,28 +39,9 @@ char	*run_curr_dir(t_data *data, t_stack **stack, char *cmd)
 void	executor_child_errno(t_data *data, t_stack **stack,
 		char *to_free, char **also_to_free)
 {
-	write(STDERR_FILENO, (*stack)->node->argv[0],
-		ft_strlen((*stack)->node->argv[0]));
-	if (to_free)
-		free(to_free);
-	if (also_to_free)
-		ft_splitfree(also_to_free);
-	free_all(data);
-	free_stack(stack);
-	if (errno == EACCES)
-		write(STDERR_FILENO, ": Permission denied\n", 20);
-	else if (errno == ENOENT)
-	{
-		write(STDERR_FILENO, ": No such file or directory\n", 28);
-		exit(127);
-	}
-	else if (errno == ENOTDIR)
-		write(STDERR_FILENO, ": Not a directory\n", 18);
-	else if (errno == ELOOP)
-		write(STDERR_FILENO, ": Too many levels of symbolic links\n", 36);
-	else if (errno == ENAMETOOLONG)
-		write(STDERR_FILENO, ": File name too long\n", 21);
-	exit(126);
+	free(to_free);
+	ft_splitfree(also_to_free);
+	clean_execve_failure(data, stack);
 }
 
 void	check_for_variables(t_data *data, t_stack **stack)
@@ -96,8 +72,7 @@ void	executor_cleanup(t_data *data, t_stack **stack, char *cmd)
 	undo_duplicate_std(0);
 	close_all_open_redir_ends(data);
 	close_all_pipe_ends(stack);
-	if (cmd)
-		free(cmd);
+	free(cmd);
 	free_stack(stack);
 	free_all(data);
 }

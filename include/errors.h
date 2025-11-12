@@ -39,6 +39,8 @@ end-of-file (wanted "
 cannot access parent directories: No such file or directory"
 # define INT_ERR_8 "numeric argument required"
 # define INT_ERR_9 "unrecognized option"
+# define INT_ERR_10 "not a valid identifier"
+# define INT_ERR_11 "Is a directory"
 
 //error.c
 int		syntax_error(t_data *data, char *desc, char *token);
@@ -50,6 +52,8 @@ void	validate_malloc(t_data *data, void *ptr, void *to_free);
 //error_executor.c
 void	validate_malloc_execute(t_data *data, t_stack **stack, void *ptr,
 			void *to_free);
+int		validate_fork(t_data *data, t_stack **stack);
+int		validate_pipe(int pipe_res, t_stack **stack);
 
 //error_expander.c
 int		handle_malloc_failure_expansion(t_data *data, char **argv,
