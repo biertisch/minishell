@@ -15,17 +15,20 @@
 int	execute_export(t_data *data, t_stack **stack)
 {
 	int	cmd_i;
+	int	exit_status;
 
 	cmd_i = get_first_command(data, stack);
-	duplicate_std();
-	if (!has_node_type_ancestor(*stack, NODE_PIPE))
-		handle_redirects(data, stack, NULL, (*stack)->node->redir);
-	sort_env(&data);
-	if (!(*stack)->node->argv[cmd_i + 1])
-		execute_export_no_option(data);
-	else
-		execute_export_option(data, stack, cmd_i);
+	exit_status = validate_unset_export(data, stack, cmd_i, "export");
+	if (!exit_status)
+	{
+		sort_env(&data);
+		if (!(*stack)->node->argv[cmd_i + 1])
+			execute_export_no_option(data);
+		else
+			execute_export_option(data, stack, cmd_i);
+	}
 	undo_duplicate_std(1);
+	(*stack)->exit_status = exit_status;
 	execute_builtin_check_for_pipe(data, stack);
 	return (0);
 }

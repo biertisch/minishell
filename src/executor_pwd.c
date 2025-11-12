@@ -14,16 +14,26 @@
 
 int	execute_pwd(t_data *data, t_stack **stack)
 {
+	int		exit_status;
+	int		cmd_i;
 	char	*pwd;
 
+	cmd_i = get_first_command(data, stack);
+	exit_status = 0;
+	if ((*stack)->node->argv[cmd_i + 1]
+		&& *(*stack)->node->argv[cmd_i + 1] == '-')
+	{
+		internal_error(INT_ERR_2, "pwd", (*stack)->node->argv[cmd_i + 1]);
+		print_builtin_usage("pwd");
+		exit_status = 2;
+	}
 	pwd = get_env_value(data->env_list, "PWD");
-	if (pwd)
+	if (!exit_status)
 	{
 		write((*stack)->out_fd, pwd, ft_strlen(pwd));
 		write((*stack)->out_fd, "\n", 1);
-		free_stack(stack);
-		free_all(data);
-		exit(0);
 	}
+	executor_cleanup(data, stack, NULL);
+	exit(exit_status);
 	return (1);
 }

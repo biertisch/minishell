@@ -19,7 +19,6 @@
 int				is_builtin(char *cmd);
 int				is_builtin_no_fork(char *cmd);
 int				validate_builtin(t_data *data, t_tree *node, int i);
-int				validate_env(t_data *data, char **argv);
 int				print_builtin_usage(char *cmd);
 int				has_builtin_flag(char **argv);
 
@@ -162,6 +161,8 @@ void			check_exit_input(t_data *data, t_stack **stack,
 int				execute_unset(t_data *data, t_stack **stack);
 int				check_unset_input(t_stack **stack);
 int				found_victim(t_data *data, t_unset_vars *v);
+int				validate_unset_export(t_data *data, t_stack **stack,
+					int cmd_i, char *cmd);
 t_unset_vars	get_begginer_u_v(t_data *data, int i);
 
 //executor_error.c
