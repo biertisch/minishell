@@ -68,21 +68,21 @@ int	execute_builtin_done(t_data **data, t_stack **stack)
 	return (1);
 }
 
-int	choose_and_execute_builtin(t_data *data, t_stack **stack)
+int	choose_and_execute_builtin(t_data *data, t_stack **stack, int cmd_i)
 {
-	if (!ft_strcmp((*stack)->node->argv[0], "echo"))
+	if (!ft_strcmp((*stack)->node->argv[cmd_i], "echo"))
 		execute_echo(data, stack);
-	if (!ft_strcmp((*stack)->node->argv[0], "env"))
+	if (!ft_strcmp((*stack)->node->argv[cmd_i], "env"))
 		execute_env(data, stack);
-	if (!ft_strcmp((*stack)->node->argv[0], "cd"))
+	if (!ft_strcmp((*stack)->node->argv[cmd_i], "cd"))
 		execute_cd(data, stack);
-	if (!ft_strcmp((*stack)->node->argv[0], "pwd"))
+	if (!ft_strcmp((*stack)->node->argv[cmd_i], "pwd"))
 		execute_pwd(data, stack);
-	if (!ft_strcmp((*stack)->node->argv[0], "exit"))
+	if (!ft_strcmp((*stack)->node->argv[cmd_i], "exit"))
 		execute_exit(data, stack);
-	if (!ft_strcmp((*stack)->node->argv[0], "unset"))
+	if (!ft_strcmp((*stack)->node->argv[cmd_i], "unset"))
 		execute_unset(data, stack);
-	if (!ft_strcmp((*stack)->node->argv[0], "export"))
+	if (!ft_strcmp((*stack)->node->argv[cmd_i], "export"))
 		execute_export(data, stack);
 	return (0);
 }

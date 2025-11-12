@@ -96,5 +96,5 @@ void	child_execute(t_data *data, t_stack **stack, char *cmd)
 	}
 	else if (has_node_type_ancestor(*stack, NODE_PIPE)
 		|| !is_builtin_no_fork((*stack)->node->argv[0]))
-		choose_and_execute_builtin(data, stack);
+		choose_and_execute_builtin(data, stack, cmd_i);
 }

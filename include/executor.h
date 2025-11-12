@@ -117,7 +117,8 @@ int				execute_builtin_entered(t_data *data, t_stack **stack);
 int				execute_builtin_should_run_child(t_data *data,
 					t_stack **stack, int cmd_i);
 int				execute_builtin_done(t_data **data, t_stack **stack);
-int				choose_and_execute_builtin(t_data *data, t_stack **stack);
+int				choose_and_execute_builtin(t_data *data, t_stack **stack,
+					int cmd_i);
 
 //executor_echo       	
 int				execute_echo(t_data *data, t_stack **stack);
@@ -136,6 +137,11 @@ void			execute_subshell_entered_parent(t_stack **stack, pid_t pid);
 
 //executor_env.c
 int				execute_env(t_data *data, t_stack **stack);
+int				is_env_option(t_stack **stack, int cmd_i);
+void			print_env_args(t_stack **stack,
+					int exit_status, int cmd_i);
+void			pre_print_env_args(t_stack **stack,
+					int exit_status, int cmd_i);
 
 //executor_cd.c
 int				execute_cd(t_data *data, t_stack **stack);

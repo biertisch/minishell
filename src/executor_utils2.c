@@ -93,8 +93,8 @@ void	check_for_variables(t_data *data, t_stack **stack)
 
 void	executor_cleanup(t_data *data, t_stack **stack, char *cmd)
 {
-	close_all_open_redir_ends(data);
 	undo_duplicate_std(0);
+	close_all_open_redir_ends(data);
 	close_all_pipe_ends(stack);
 	if (cmd)
 		free(cmd);
