@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 12:17:33 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/08 11:36:33 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:42:15 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	validate_env(t_data *data, char **argv)
 int	print_builtin_usage(char *cmd)
 {
 	char	usage[ERR_BUFFER_SIZE];
-	
+
 	usage[0] = '\0';
 	ft_strlcpy(usage, cmd, ft_strlen(cmd) + 1);
 	ft_strlcat(usage, ": usage: ", ERR_BUFFER_SIZE);

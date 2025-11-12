@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_convert.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:51:27 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 13:59:56 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:50:06 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	env_list_to_array(t_data *data)
 	int		counter;
 	int		i;
 
-	free_string_array(&data->env);
+	ft_splitfree(data->env);
 	trav = data->env_list;
 	counter = count_env_nodes(trav);
 	data->env = malloc(sizeof(char *) * (counter + 1));

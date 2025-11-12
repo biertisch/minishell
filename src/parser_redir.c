@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 10:22:02 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 14:06:06 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:38:00 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,22 @@ t_redir	*create_redir(t_token_type type, int fd, char *file)
 	ft_bzero(&redir->info, sizeof(t_metadata));
 	redir->next = NULL;
 	return (redir);
+}
+
+void	free_redir(t_redir *redir)
+{
+	t_redir	*tmp;
+
+	while (redir)
+	{
+		tmp = redir->next;
+		free(redir->file);
+		free(redir->heredoc_input);
+		free(redir->info.quote_map);
+		free(redir->info.expand_map);
+		free(redir->info.key);
+		free(redir->info.value);
+		free(redir);
+		redir = tmp;
+	}
 }

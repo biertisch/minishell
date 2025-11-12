@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 19:23:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 20:25:31 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:47:28 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	**build_expanded_argv(t_data *data, char **argv, t_metadata **info)
 		handle_malloc_failure_expansion(data, new_argv, new_info, new_argc);
 	free_metadata(info, old_argc);
 	*info = new_info;
-	free_string_array(&argv);
+	ft_splitfree(argv);
 	return (new_argv);
 }
 

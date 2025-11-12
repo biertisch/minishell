@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/11/10 11:06:27 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/11/11 22:04:43 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@ctags -R .
 	@echo "tags\n.gitignore\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\
-		\noutfile*\n*.pdf\n*.png\ntest/bash\ntest/minishell\ntest/diffs\ntest/file1\ntest/file2\ntest/leaks\nminishell_tester/\nminishell_testerv2/" > .gitignore
+		\noutfile*\n*.pdf\n*.png\ntest/results\ntest/file1\ntest/file2\nminishell_tester/\nminishell_testerv2/" > .gitignore
 	@echo "* text=auto eol=lf" > .gitattributes
 
 $(OBJ_DIR):

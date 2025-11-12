@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:30:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/04 22:13:44 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:46:26 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	build_wildcard_argv(t_tree *node, t_list *entries, int star_index)
 	if (copy_after_star(node, new_argv + i, new_info + i, star_index + 1))
 		return (handle_wildcard_rebuild_failure(new_argv, new_info, count));
 	free_metadata(&node->argv_info, get_argc(node->argv));
-	free_string_array(&node->argv);
+	ft_splitfree(node->argv);
 	node->argv_info = new_info;
 	node->argv = new_argv;
 	return (0);

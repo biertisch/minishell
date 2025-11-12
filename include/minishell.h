@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/10 13:02:02 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:50:25 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ void		test_builtin_validation(t_data *data, t_tree *head);
 void		free_all(t_data *data);
 void		free_command_data(t_data *data);
 void		free_stack(t_stack **stack);
-void		free_redir(t_redir *redir);
-void		free_string_array(char ***arr);
 void		free_metadata(t_metadata **info, int size);
 
 //get_next_line.c

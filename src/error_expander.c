@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 22:04:39 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/08 11:46:37 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/11 21:49:07 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	handle_malloc_failure_expansion(t_data *data, char **argv, t_metadata *info,
 	int argc)
 {
 	free_metadata(&info, argc);
-	free_string_array(&argv);
+	ft_splitfree(argv);
 	validate_malloc(data, NULL, NULL);
 	return (-1);
 }
@@ -24,7 +24,7 @@ int	handle_malloc_failure_expansion(t_data *data, char **argv, t_metadata *info,
 int	handle_wildcard_rebuild_failure(char **argv, t_metadata *info, int argc)
 {
 	free_metadata(&info, argc);
-	free_string_array(&argv);
+	ft_splitfree(argv);
 	return (-1);
 }
 
