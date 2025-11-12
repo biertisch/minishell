@@ -22,9 +22,9 @@ char	*correct_path(t_data *data, t_stack **stack, char *cmd)
 	if (ft_strchr(cmd, '/'))
 		return (run_curr_dir(data, stack, cmd));
 	slash_path = get_slash_path(data, stack, cmd);
-	paths = get_path_split(data, stack, slash_path);
+	paths = get_path_split(data);
 	i = 0;
-	while (paths[i])
+	while (paths && paths[i])
 	{
 		full_path = ft_strjoin(paths[i++], slash_path);
 		if (!full_path || !access(full_path, F_OK | X_OK))
@@ -54,16 +54,13 @@ char	*get_slash_path(t_data *data, t_stack **stack, char *cmd)
 	return (slash_path);
 }
 
-char	**get_path_split(t_data *data, t_stack **stack, char *slash_path)
+char	**get_path_split(t_data *data)
 {
 	char	**paths;
 
+	paths = NULL;
 	if (get_env_value(data->env_list, "PATH"))
 		paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
-	else
-		paths = ft_split("/usr/local/bin:/usr/bin:/bin", ':');
-	if (!paths)
-		validate_malloc_execute(data, stack, paths, slash_path);
 	return (paths);
 }
 
