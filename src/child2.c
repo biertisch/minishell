@@ -75,14 +75,14 @@ void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 
 void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
 {
-	// int	cmd_i;
+	int	cmd_i;
 
-	// cmd_i = get_first_command(data, stack);
+	cmd_i = get_first_command(data, stack);
 	get_first_command(data, stack);
 	if ((*stack)->in_fd == -1)
 	{
 		if ((*stack)->node->argv && !has_node_type_ancestor(*stack, NODE_PIPE)
-			&& is_builtin_no_fork((*stack)->node->argv[0]))
+			&& is_builtin_no_fork((*stack)->node->argv[cmd_i]))
 			return ;
 		executor_cleanup(data, stack, cmd);
 		exit(1);

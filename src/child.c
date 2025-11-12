@@ -23,7 +23,7 @@ void	child(t_data *data, t_stack **stack)
 	cmd_has_variable(data, stack);
 	cmd_i = get_first_command(data, stack);
 	cmd = NULL;
-	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[0])
+	if ((*stack)->node->argv && !is_builtin((*stack)->node->argv[cmd_i])
 		&& !has_failed_redirect((*stack)->node->redir))
 	{
 		cmd = correct_path(data, stack, (*stack)->node->argv[cmd_i]);
@@ -82,11 +82,14 @@ void	check_no_cmd(t_data *data, t_stack **stack)
 
 void	child_execute(t_data *data, t_stack **stack, char *cmd)
 {
+	int	cmd_i;
+
+	cmd_i = get_first_command(data, stack);
 	close_all_pipe_ends(stack);
 	check_no_cmd(data, stack);
 	close_all_open_redir_ends(data);
 	undo_duplicate_std(1);
-	if (!is_builtin((*stack)->node->argv[0]))
+	if (!is_builtin((*stack)->node->argv[cmd_i]))
 	{
 		execve(cmd, (*stack)->node->argv, data->env);
 		clean_execve_failure(data, stack);
