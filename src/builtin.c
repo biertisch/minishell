@@ -42,24 +42,6 @@ int	has_builtin_flag(char **argv)
 	return (0);
 }
 
-int	validate_env(t_data *data, char **argv)
-{
-	if (argv[1] && argv[1][0] == '-')
-	{
-		internal_error(INT_ERR_2, argv[0], argv[1]);
-		data->exit_status = 125;
-		print_builtin_usage(argv[0]);
-		return (-1);
-	}
-	if (argv[1])
-	{
-		internal_error(INT_ERR_4, argv[0], argv[1]);
-		data->exit_status = 127;
-		return (-1);
-	}
-	return (0);
-}
-
 int	print_builtin_usage(char *cmd)
 {
 	char	usage[ERR_BUFFER_SIZE];
