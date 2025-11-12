@@ -73,8 +73,7 @@ char			*run_curr_dir(t_data *data, t_stack **stack, char *cmd);
 char			**split_by_first_equal(char *var);
 char			*cmd_not_found(t_data *data, t_stack **stack,
 					char **paths, char *slash_path);
-char			**get_path_split(t_data *data, t_stack **stack,
-					char *slash_path);
+char			**get_path_split(t_data *data);
 char			*get_slash_path(t_data *data, t_stack **stack, char *cmd);
 void			check_for_variables(t_data *data, t_stack **stack);
 void			executor_child_errno(t_data *data, t_stack **stack,
