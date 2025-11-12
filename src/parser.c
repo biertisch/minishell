@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:24 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 23:04:47 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/12 12:02:21 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	parse_and_or(t_data *data, t_token **token, t_tree **root)
 	t_node_type	type;
 	int			res;
 
+	left = NULL;
 	res = parse_pipe(data, token, &left);
 	if (res)
 		return (*root = left, res);
@@ -45,6 +46,7 @@ int	parse_and_or(t_data *data, t_token **token, t_tree **root)
 	{
 		type = get_node_type((*token)->type);
 		*token = (*token)->next;
+		right = NULL;
 		res = parse_pipe(data, token, &right);
 		tmp = create_parser_node(type, left, right);
 		validate_malloc_parser(data, tmp, left, right);
@@ -63,12 +65,14 @@ int	parse_pipe(t_data *data, t_token **token, t_tree **root)
 	t_tree	*tmp;
 	int		res;
 
+	left = NULL;
 	res = parse_command(data, token, &left);
 	if (res)
 		return (*root = left, res);
 	while (*token && (*token)->type == PIPE)
 	{
 		*token = (*token)->next;
+		right = NULL;
 		res = parse_command(data, token, &right);
 		tmp = create_parser_node(NODE_PIPE, left, right);
 		validate_malloc_parser(data, tmp, left, right);

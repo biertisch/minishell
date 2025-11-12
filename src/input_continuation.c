@@ -3,34 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   input_continuation.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:57:53 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/10 14:41:08 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/12 12:10:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	handle_incomplete_input(t_data *data)
-{
-	int		pipe_fd[2];
-	pid_t	pid;
-	int		res;
-	char	*input;
-
-	if (pipe(pipe_fd))
-		return (system_error(strerror(errno), "pipe"));
-	pid = fork();
-	if (pid < 0)
-		return (system_error(strerror(errno), "fork"));
-	else if (pid == 0)
-		run_incomplete_child(data, 0, pipe_fd);
-	res = run_incomplete_parent(data, pipe_fd, pid, &input);
-	if (res)
-		return (res);
-	return (merge_continuation_tree(data, input));
-}
 
 int	run_incomplete_child(t_data *data, char target, int *pipe_fd)
 {
@@ -92,26 +72,43 @@ char	*receive_continuation_input(t_data *data, int in_fd)
 	return (new_input);
 }
 
-int	merge_continuation_tree(t_data *data, char *cont_input)
+int	rebuild_tree(t_data *data, char *cont_input)
 {
 	t_token	*sub_list;
 	t_tree	*sub_tree;
+	int		res;
 
 	sub_list = NULL;
 	sub_tree = NULL;
-	if (lexer(data, cont_input, &sub_list))
+	res = parse_sub_tree(data, cont_input, sub_list, &sub_tree);
+	if (res == INVALID)
 		return (INVALID);
-	if (parser(data, sub_list, &sub_tree))
-	{
-		free(cont_input);
-		free_lexer_list(&sub_list);
-		return (INVALID);
-	}
+	merge_sub_tree(data, sub_tree);
+	if (res == INCOMPLETE)
+		return (handle_incomplete_input(data));
+	return (VALID);
+}
+
+int	merge_sub_tree(t_data *data, t_tree *sub_tree)
+{
+	t_tree	*far_left;
+	t_tree	*far_left_parent;
+
 	if (!data->parser_tree)
 		data->parser_tree = sub_tree;
-	else
+	else if (!sub_tree->left)
 		data->parser_tree->right = sub_tree;
-	free(cont_input);
-	free_lexer_list(&sub_list);
+	else
+	{
+		far_left = sub_tree;
+		while (far_left && far_left->left)
+		{
+			far_left_parent = far_left;
+			far_left = far_left->left;
+		}
+		data->parser_tree->right = far_left;
+		far_left_parent->left = data->parser_tree;
+		data->parser_tree = sub_tree;
+	}
 	return (VALID);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 10:58:05 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/11/11 21:38:36 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/12 12:10:09 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int			is_redir_token(t_token_type token_type);
 int			empty_subshell(t_token **token, t_tree **root,
 				t_tree *node, int res);
 int			is_command_token(t_token_type token_type);
-int			invalid_sequence(t_data *data, t_token *token, t_tree **root,
-				t_tree *node);
+int			parse_sub_tree(t_data *data, char *input, t_token *token,
+				t_tree **root);
 
 #endif

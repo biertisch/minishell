@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 11:00:45 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 12:57:16 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/12 12:11:31 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,28 @@ int	empty_subshell(t_token **token, t_tree **root, t_tree *node, int res)
 	return (res);
 }
 
-int	invalid_sequence(t_data *data, t_token *token, t_tree **root, t_tree *node)
+int	parse_sub_tree(t_data *data, char *input, t_token *token, t_tree **root)
 {
-	*root = node;
-	return (syntax_error(data, SYN_ERR_5, token->value));
+	t_token	*tmp;
+	int		res;
+
+	if (lexer(data, input, &token) || !token)
+	{
+		free(input);
+		return (INVALID);
+	}
+	tmp = token;
+	res = parse_and_or(data, &token, root);
+	if (res == INVALID || !*root || scan_heredocs(data, *root) || token)
+	{
+		if (res != INVALID && token)
+			syntax_error(data, SYN_ERR_5, token->value);
+		free(input);
+		free_lexer_list(&tmp);
+		free_parser_tree(root);
+		return (INVALID);
+	}
+	free(input);
+	free_lexer_list(&tmp);
+	return (res);
 }
