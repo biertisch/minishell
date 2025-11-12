@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/11 21:50:25 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/12 12:09:20 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,15 @@ char		*ft_gnl_realloc(char *result, int i, int *r);
 int			read_input(t_data *data);
 int			process_input(t_data *data);
 int			read_continuation_input(t_data *data, char target, int out_fd);
+int			handle_incomplete_input(t_data *data);
 
 //input_continuation.c
-int			handle_incomplete_input(t_data *data);
 int			run_incomplete_child(t_data *data, char target, int *pipe_fd);
 int			run_incomplete_parent(t_data *data, int *pipe_fd, pid_t pid,
 				char **input);
 char		*receive_continuation_input(t_data *data, int in_fd);
-int			merge_continuation_tree(t_data *data, char *cont_input);
+int			rebuild_tree(t_data *data, char *cont_input);
+int			merge_sub_tree(t_data *data, t_tree *sub_tree);
 
 //input_prompt.c
 void		update_prompt(t_data *data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/11 22:01:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/12 12:05:13 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,26 @@ int	process_input(t_data *data)
 		return (res);
 	execute(data);
 	return (VALID);
+}
+
+int	handle_incomplete_input(t_data *data)
+{
+	int		pipe_fd[2];
+	pid_t	pid;
+	int		res;
+	char	*input;
+
+	if (pipe(pipe_fd))
+		return (system_error(strerror(errno), "pipe"));
+	pid = fork();
+	if (pid < 0)
+		return (system_error(strerror(errno), "fork"));
+	else if (pid == 0)
+		run_incomplete_child(data, 0, pipe_fd);
+	res = run_incomplete_parent(data, pipe_fd, pid, &input);
+	if (res)
+		return (res);
+	return (rebuild_tree(data, input));
 }
 
 int	read_continuation_input(t_data *data, char target, int out_fd)
