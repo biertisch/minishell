@@ -15,17 +15,21 @@
 int	execute_export(t_data *data, t_stack **stack)
 {
 	int	cmd_i;
+	int	exit_status;
 
 	cmd_i = get_first_command(data, stack);
-	duplicate_std();
-	if (!has_node_type_ancestor(*stack, NODE_PIPE))
-		handle_redirects(data, stack, NULL, (*stack)->node->redir);
-	sort_env(&data);
-	if (!(*stack)->node->argv[cmd_i + 1])
-		execute_export_no_option(data);
-	else
-		execute_export_option(data, stack, cmd_i);
+	exit_status = validate_unset_export(data, stack, cmd_i, "export");
+	if (!exit_status)
+	{
+		sort_env(&data);
+		if (!(*stack)->node->argv[cmd_i + 1])
+			execute_export_no_option(data);
+		else
+			execute_export_option(data, stack, cmd_i);
+	}
 	undo_duplicate_std(1);
+	if (!(*stack)->exit_status)
+		(*stack)->exit_status = exit_status;
 	execute_builtin_check_for_pipe(data, stack);
 	return (0);
 }
@@ -51,7 +55,7 @@ int	execute_export_option(t_data *data, t_stack **stack, int cmd_i)
 				execute_export_val_not_found(data, stack, kv_split);
 		}
 		else
-			execute_export_invalid_var(stack, cmd_i);
+			return (execute_export_invalid_var(stack, cmd_i, kv_split));
 		ft_splitfree(kv_split);
 		cmd_i++;
 	}
@@ -91,11 +95,10 @@ void	execute_export_handle_underscore(t_data *data, t_stack **stack)
 	set_env_value(data->env_list, "_", value);
 }
 
-void	execute_export_invalid_var(t_stack **stack, int cmd_i)
+int	execute_export_invalid_var(t_stack **stack, int cmd_i, char **kv_split)
 {
-	write(STDERR_FILENO, "minishell: export: `", 20);
-	write(STDERR_FILENO, (*stack)->node->argv[cmd_i + 1],
-		ft_strlen((*stack)->node->argv[cmd_i + 1]));
-	write(STDERR_FILENO, "': not a valid identifier\n", 26);
+	internal_error(INT_ERR_10, "export", (*stack)->node->argv[cmd_i + 1]);
 	(*stack)->exit_status = 1;
+	ft_splitfree(kv_split);
+	return (0);
 }

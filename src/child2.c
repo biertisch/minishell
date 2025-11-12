@@ -75,14 +75,14 @@ void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 
 void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
 {
-	// int	cmd_i;
+	int	cmd_i;
 
-	// cmd_i = get_first_command(data, stack);
+	cmd_i = get_first_command(data, stack);
 	get_first_command(data, stack);
 	if ((*stack)->in_fd == -1)
 	{
 		if ((*stack)->node->argv && !has_node_type_ancestor(*stack, NODE_PIPE)
-			&& is_builtin_no_fork((*stack)->node->argv[0]))
+			&& is_builtin_no_fork((*stack)->node->argv[cmd_i]))
 			return ;
 		executor_cleanup(data, stack, cmd);
 		exit(1);
@@ -104,30 +104,15 @@ void	clean_execve_failure(t_data *data, t_stack **stack)
 	char	*sh_argv[3];
 
 	sh_argv[0] = "sh";
-	sh_argv[1] = (*stack)->node->argv[0];
+	sh_argv[1] = (*stack)->node->argv[get_first_command(data, stack)];
 	sh_argv[2] = NULL;
 	exit_status = 126;
-	if (errno != ENOEXEC)
-		write(STDERR_FILENO, (*stack)->node->argv[0],
-			ft_strlen((*stack)->node->argv[0]));
-	if (errno == ENOENT)
-	{
-		write(STDERR_FILENO, ": command not found\n", 20);
-		exit_status = 127;
-	}
-	else if (errno == EACCES || errno == EISDIR)
-		write(STDERR_FILENO, ": Permission denied\n", 20);
-	else if (errno == ENOEXEC)
-	{
+	if (errno == ENOEXEC)
 		execve("/bin/sh", sh_argv, data->env);
-		write(STDERR_FILENO, (*stack)->node->argv[0],
-			ft_strlen((*stack)->node->argv[0]));
-		write(STDERR_FILENO, ": Exec format error\n", 20);
-	}
-	else
-		perror((*stack)->node->argv[0]);
-	undo_duplicate_std(1);
-	free_stack(stack);
-	free_all(data);
+	if (errno == ENOENT)
+		exit_status = 127;
+	system_error(strerror(errno), (*stack)->node->argv[
+		get_first_command(data, stack)]);
+	executor_cleanup(data, stack, NULL);
 	exit(exit_status);
 }
