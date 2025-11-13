@@ -6,7 +6,7 @@
 #    By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/02 12:39:36 by pedde-so          #+#    #+#              #
-#    Updated: 2025/11/13 15:51:43 by beatde-a         ###   ########.fr        #
+#    Updated: 2025/11/13 19:44:08 by beatde-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,7 @@ DEP			=	$(addprefix $(OBJ_DIR)/, $(addsuffix .d, $(SRC_FILES)))
 
 .PHONY: all clean fclean re headers test valgrind run
 
-all: $(PRINTF_LIB) headers $(NAME)
+all: $(NAME)
 	@echo "	\n\
 		$(RED) ___ ___  ____  ____   ____ _____ __ __    ___  _      _     $(DEF_COLOUR)\n\
 		$(ORANGE)|   |   ||    ||    \ |    / ___/|  |  |  /  _]| |    | |    $(DEF_COLOUR)\n\
@@ -71,7 +71,7 @@ all: $(PRINTF_LIB) headers $(NAME)
 		$(VIOLET)|___|___||____||__|__||____|\___||__|__||_____||_____||_____|$(DEF_COLOUR)\n"
 	@printf "$(BLINK)$(CURSIVE)$(GREEN)\t\t\t\t\t\t- Minishell ready :)$(DEF_COLOUR)\n"
 
-$(NAME): $(OBJ) $(PRINTF_LIB)
+$(NAME): $(PRINTF_LIB) $(OBJ)
 	@echo "Linking minishell..."
 	@$(CC) $(CFLAGS) $(OBJ) -L$(PRINTF_DIR) -lftprintf -lreadline -o $(NAME)
 
@@ -81,7 +81,7 @@ $(PRINTF_DIR):
 $(PRINTF_LIB): | $(PRINTF_DIR)
 	@$(MAKE) --no-print-directory -C $(PRINTF_DIR)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR) headers
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@ctags -R .
 	@echo "tags\n.gitignore\n.vscode\nft_printf\ninclude/libft.h\ninclude/printf.h\nminishell\nobj\n.gitattributes\
@@ -115,15 +115,16 @@ fclean: clean
 	@$(RM) -rf test/results
 	@$(RM) err.tmp
 
+re: fclean all
+
 valgrind: $(NAME)
 	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --show-leak-kinds=all --trace-children=yes ./${NAME}
+
 test: $(NAME)
 	@chmod 755 test/tester.sh
 	@./test/tester.sh
 
-run:	$(NAME)
+run: $(NAME)
 	@./minishell
-
-re: fclean all
 
 -include $(DEP)

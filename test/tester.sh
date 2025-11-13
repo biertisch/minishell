@@ -4,7 +4,9 @@ MINISHELL=./minishell
 TEST_DIR=test
 TESTS=$TEST_DIR/tests
 RESULTS_DIR=$TEST_DIR/results
-TEST_FILES="$TEST_DIR/file1 $TEST_DIR/file2"
+touch $TEST_DIR/no_permission
+chmod 000 $TEST_DIR/no_permission
+TEST_FILES="$TEST_DIR/file1 $TEST_DIR/file2 $TEST_DIR/no_permission"
 
 mkdir -p "$RESULTS_DIR"
 
