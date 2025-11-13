@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/13 20:07:33 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/13 20:27:11 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ int	is_dollar_expansion(char *input, char quote, int start)
 		&& input[start + 1]
 		&& (ft_isalnum(input[start + 1])
 			|| input[start + 1] == '_'
-			|| input[start + 1] == '?'
-			|| (is_quote(input[start + 1])
-				&& !quote)));
+			|| input[start + 1] == '?'));
 }
 
 int	get_key_value(t_data *data, char *arg, t_metadata *info, int i)

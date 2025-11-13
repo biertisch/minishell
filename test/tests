@@ -256,15 +256,15 @@ cat test/heredoc2.txt
 ###
 cat test/heredoc3.txt
 ###
-cat << test/heredoc1.txt &&
+cat test/heredoc9.txt
 ###
-(cat << test/heredoc1.txt)(
+cat test/heredoc10.txt
 ###
-cat << test/heredoc1.txt | |
+cat test/heredoc11.txt
 ###
-cat << test/heredoc1.txt)
+cat test/heredoc12.tx
 ###
-| cat << test/heredoc1.txt
+cat test/heredoc13.txt
 ###
 cat test/heredoc4.txt
 ###
