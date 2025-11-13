@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:30:49 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 23:35:21 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/13 21:41:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void		setup_handler(t_data *data, int signum, void (*handler)(int),
 //signal_handler.c
 void		sigint_handler(int sig);
 void		handle_child_exit(int status);
+void		handle_child_exit_background(int status);
 int			sigint_abort(t_data *data, char *line, int cont);
 void		eof_abort(t_data *data);
 

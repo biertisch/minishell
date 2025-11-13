@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 10:25:47 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/11 21:37:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/13 21:40:34 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,18 @@ void	handle_child_exit(int status)
 			write(STDOUT_FILENO, "\n", 1);
 		else if (signal == SIGQUIT)
 			write(STDERR_FILENO, "Quit (core dumped)\n", 20);
+	}
+}
+
+void	handle_child_exit_background(int status)
+{
+	int	signal;
+
+	if (WIFSIGNALED(status))
+	{
+		signal = WTERMSIG(status);
+		if (signal == SIGINT)
+			write(STDOUT_FILENO, "\n", 1);
 	}
 }
 
