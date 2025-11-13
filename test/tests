@@ -246,7 +246,7 @@ grep -i include src/main.c | sort | uniq
 ###
 cat Makefile | grep SRC | cut -d'=' -f2 | tr ' ' '\n' | wc -l
 ###
-find . -type f | wc -l
+find ~ -type f | wc -l
 ###
 ls | sort | uniq | rev | rev
 ###
@@ -325,4 +325,175 @@ ls ||
 /bin/echo "start" && (ls -l | grep minishell) | /bin/echo end
 ###
 ls -l > test/file1 && (cat < test/file1 || echo fail) | wc -l
-##
+###
+echo "" a
+###
+echo hi"" """" """" "''"
+###
+echo hi"" "" "" ""there
+###
+""
+###
+echo "a' "
+###
+echo "(a' )"
+###
+echo $SHLVL "$SHLVL" '$SHLVL' "$SH''LVL"
+###
+a=1
+b=2
+echo $a $b
+###
+echo "smth"'$PATH'
+###
+echo smth$PATH$HOME
+###
+echo $??
+###
+echo $LOL hi
+###
+echo "echo $'LOL'"
+###
+echo 'echo $"LOL"'
+###
+ls"-l"
+###
+echo      $       ?
+###
+EOF'A'"'|'"
+###
+echo hi >">" lol
+ls
+rm '>'
+###
+< Makefile
+###
+cmd > |
+###
+hello ||||
+###
+echo HI >    > out
+###
+< file cat
+###
+ls > file1 file2
+rm file1
+###
+ls > file | ls
+cat file
+rm file
+###
+hello | ls
+###
+ls | hello
+###
+echo hiiiiiii > lal | ls | cat lal
+cat lal
+rm lal
+###
+echo hi | ls | grep Makefile | wc -l > out2 | cat out2
+cat out2
+rm out2
+###
+touch aaa
+chmod 000 aaa
+< aaa  wc | echo Hi
+rm -f aaa
+###
+ls | wc | echo > out.txt | wc -l
+cat out.txt
+rm out.txt
+###
+export A="hi there"
+echo $A > out | unset A | echo $A >> out | export A=FUCK | echo $A >> out
+cat out
+rm out
+###
+ls >txt -l
+cat txt
+rm txt
+###
+echo hi >txt lol
+cat txt
+rm txt
+###
+echo hi >"file1" > file2
+cat file1
+cat file2
+rm file1 file2
+###
+echo "> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<"
+###
+'echo a'
+###
+ls -l "" "HI'LOL'|" | >> hi echo cat $HOME
+cat hi
+rm hi
+###
+cat file.txt | grep 'error' | wc -l
+###
+echo $>?
+rm ?
+###
+cd >> lol
+cd -
+cat lol
+rm lol
+###
+cd "some folder"
+###
+cd some folder
+###
+echo --n World
+###
+echo export a = b
+###
+export A="h   e    l l      o"
+echo $A
+###
+export AA=asd AAA=asd = AAAAAA 123=123 AA123_123=@@@ AA@@=asd=asd
+###
+unset AAA
+export AAA=
+env | grep AAA
+unset AAA
+###
+export AAA=BBB=CCC
+echo $AAA
+###
+export asd@@@
+###
+export asd=asd@@@
+echo $asd
+unset asd
+###
+unset HOME
+cd
+###
+exit a 1
+###
+exit 42
+###
+exit -42
+###
+exit 424242
+###
+exit 0 a
+###
+exit a
+###
+exit a a
+###
+cat test/heredoc4.txt
+###
+cat test/heredoc5.txt
+###
+cat test/heredoc6.txt
+###
+unset PATH
+ls
+###
+touch ls
+ls
+rm ls
+###

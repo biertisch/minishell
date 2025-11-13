@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:29:00 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/11 21:41:32 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/13 15:22:28 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define SYN_ERR_6 "unexpected EOF while looking for matching"
 # define SYN_ERR_7 "syntax error: unexpected end of file"
 # define SYN_ERR_8 "warning: here-document delimited by \
-end-of-file (wanted "
+end-of-file (wanted"
 
 # define INT_ERR_0 "invalid environment variable"
 # define INT_ERR_1 "ambiguous redirect"

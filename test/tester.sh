@@ -8,6 +8,15 @@ TEST_FILES="$TEST_DIR/file1 $TEST_DIR/file2"
 
 mkdir -p "$RESULTS_DIR"
 
+# --- Handle Ctrl+C cleanly ---
+cleanup() {
+    echo ""
+    echo "Interrupted. Cleaning up..."
+    rm -f "$TEST_DIR"/test_block_*.sh $TEST_FILES
+    exit 1
+}
+trap cleanup INT
+
 # --- Split tests into numbered blocks ---
 awk '
   BEGIN { i = 0 }
