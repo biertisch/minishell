@@ -262,7 +262,7 @@ cat test/heredoc10.txt
 ###
 cat test/heredoc11.txt
 ###
-cat test/heredoc12.tx
+cat test/heredoc12.txt
 ###
 cat test/heredoc13.txt
 ###
@@ -669,3 +669,5 @@ ls ||
 /bin/echo "start" && (ls -l | grep minishell) | /bin/echo end
 ###
 ls -l > test/file1 && (cat < test/file1 || echo fail) | wc -l
+###
+(exit 99) || echo $?

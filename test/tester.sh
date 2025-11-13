@@ -74,8 +74,9 @@ for f in "$TEST_DIR"/test_block_*.sh; do
 
     # --- Run in minishell (under valgrind) ---
     VALGRIND_LOG="$test_dir/valgrind.log"
-    timeout 3s valgrind --quiet \
-        --leak-check=full --show-leak-kinds=all --track-fds=yes \
+    timeout 7s valgrind --quiet \
+        --suppressions=readline.supp --leak-check=full --track-fds=yes \
+		--show-leak-kinds=all --trace-children=yes \
         --log-file="$VALGRIND_LOG" \
         "$MINISHELL" <"$f" >"$test_dir/mini.out" 2>"$test_dir/mini.err"
     echo $? >"$test_dir/mini.status"
@@ -86,16 +87,30 @@ for f in "$TEST_DIR"/test_block_*.sh; do
     stdout_diff=$(diff -q "$test_dir/bash.out" "$test_dir/mini.out")
     stderr_diff=$(diff -q "$test_dir/bash.err" "$test_dir/mini.err")
 
-   # --- Memory leaks detection ---
-	valgrind_errors=0
-	if ! grep -q "ERROR SUMMARY: 0 errors" "$VALGRIND_LOG"; then
-		valgrind_errors=1
-	fi
+    # --- Memory analysis ---
+    valgrind_errors=0
 
-	definitely_lost=$(grep -Po "(?<=definitely lost: )\d+" "$VALGRIND_LOG" | head -1)
-	if [ -n "$definitely_lost" ] && [ "$definitely_lost" -gt 0 ]; then
-		valgrind_errors=1
-	fi
+    # Count summaries (always produce integers)
+    total_summaries=$(grep -c "ERROR SUMMARY:" "$VALGRIND_LOG")
+    clean_summaries=$(grep -c "ERROR SUMMARY: 0 errors" "$VALGRIND_LOG")
+
+    # If grep finds nothing, it returns 0 lines → OK
+    # total_summaries and clean_summaries are guaranteed integers
+
+    # 1. Any non-clean summary = error
+    if [ "$total_summaries" -gt 0 ] && [ "$total_summaries" -ne "$clean_summaries" ]; then
+        valgrind_errors=1
+    fi
+
+    # 2. Any non-zero definitely lost = error
+    if grep -Po "(?<=definitely lost: )\d+" "$VALGRIND_LOG" | grep -vq "^0$"; then
+        valgrind_errors=1
+    fi
+
+    # 3. Timeout / crash = empty log = error
+    if [ ! -s "$VALGRIND_LOG" ]; then
+        valgrind_errors=1
+    fi
 
 	# --- Build warning reasons ---
 	warn_reasons=()
