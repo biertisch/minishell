@@ -23,7 +23,10 @@ trap cleanup INT
 awk '
   BEGIN { i = 0 }
   /^###/ { i++; x = sprintf("'"$TEST_DIR"'/test_block_%03d.sh", i); next }
-  !/^#/ { print > x }   # optional: skip comment lines
+  # Skip comment-only lines and empty lines
+  /^[[:space:]]*#/ { next }
+  /^[[:space:]]*$/ { next }
+  { print > x }
 ' "$TESTS"
 
 i=1
