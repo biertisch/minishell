@@ -29,13 +29,16 @@ int	execute(t_data *data)
 
 int	execute_stack(t_data *data, t_stack **stack)
 {
-	int	i;
-	int	tree_nodes_count;
+	int			i;
+	static int	tree_nodes_count;
 
-	tree_nodes_count = count_tree_nodes(data->parser_tree);
+	if (!tree_nodes_count)
+		tree_nodes_count = count_tree_nodes(data->parser_tree);
 	i = 0;
 	while (i < tree_nodes_count)
 	{
+		if (!stack || !(*stack))
+			return (0);
 		if ((*stack)->type == NODE_PIPE)
 			i += execute_pipe(data, stack);
 		else if ((*stack)->type == NODE_CMD)

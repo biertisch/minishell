@@ -50,7 +50,7 @@ void	check_exit_input(t_data *data, t_stack **stack,
 	{
 		i = 0;
 		if (*(*stack)->node->argv[cmd_i + 1] == '-'
-			|| *(*stack)->node->argv[1] == '+')
+			|| *(*stack)->node->argv[cmd_i + 1] == '+')
 			i++;
 		while (*((*stack)->node->argv[cmd_i + 1] + i))
 		{
@@ -71,7 +71,8 @@ void	check_exit_input(t_data *data, t_stack **stack,
 void	checking_really_hard(t_data *data, t_stack **stack,
 			int cmd_i, int i)
 {
-	if (!ft_isdigit(*((*stack)->node->argv[cmd_i + 1] + i)))
+	if (!ft_isdigit(*((*stack)->node->argv[cmd_i + 1] + i))
+		|| best_lloverflow_checker_ever((*stack)->node->argv[cmd_i + 1]))
 	{
 		if (isatty(STDIN_FILENO))
 			write(STDERR_FILENO, "exit\n", 5);
@@ -82,4 +83,18 @@ void	checking_really_hard(t_data *data, t_stack **stack,
 		free_all(data);
 		exit(2);
 	}
+}
+
+int	best_lloverflow_checker_ever(char *str)
+{
+	if ((*str == '-') && ft_strlen(str) < 20)
+		return (0);
+	if (*str == '+')
+		str++;
+	if (ft_strlen(str) < 19)
+		return (0);
+	return ((*str != '-' && (ft_strlen(str) > 19
+				|| ft_strcmp(str, "9223372036854775807") > 0))
+		|| (*str == '-' && (ft_strlen(str) > 20
+				|| ft_strcmp(str + 1, "9223372036854775808") < 0)));
 }

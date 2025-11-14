@@ -26,6 +26,9 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 	pid_t	pid;
 	int		cmd_i;
 
+	if (get_last_heredoc((*stack)->node->redir))
+		if (validate_pipe(pipe((*stack)->pipe), stack))
+			return (0);
 	execute_export_handle_underscore(data, stack);
 	cmd_i = get_first_command(data, stack);
 	(*stack)->phase = DONE;
@@ -36,6 +39,8 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 			return (validate_fork(data, stack));
 		if (pid == 0)
 			child(data, stack);
+		else if (get_last_heredoc((*stack)->node->redir))
+			parent_heredoc(stack, pid);
 		else
 			parent(stack, pid);
 	}
@@ -45,7 +50,10 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 int	execute_builtin_should_run_child(t_data *data, t_stack **stack, int cmd_i)
 {
 	if (has_failed_redirect((*stack)->node->redir))
+	{
+		(*stack)->exit_status = 1;
 		return (0);
+	}
 	if (has_node_type_ancestor(*stack, NODE_PIPE))
 		return (1);
 	if (!has_node_type_ancestor(*stack, NODE_SUBSHELL)

@@ -100,6 +100,7 @@ int	execute_export_invalid_var(t_stack **stack, int cmd_i, char **kv_split)
 {
 	internal_error(INT_ERR_10, "export", (*stack)->node->argv[cmd_i + 1]);
 	(*stack)->exit_status = 1;
-	ft_splitfree(kv_split);
+	if (kv_split)
+		ft_splitfree(kv_split);
 	return (0);
 }
