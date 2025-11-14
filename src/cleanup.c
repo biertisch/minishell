@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 12:37:43 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/13 22:45:51 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/14 11:02:18 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	free_all(t_data *data)
 	free_command_data(data);
 	rl_clear_history();
 	free(data->prompt);
+	free(data->default_path);
 }
 
 //called after every iteration of main loop
