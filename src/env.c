@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:15 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 14:01:52 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/14 11:40:50 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	generate_minimal_env(t_data *data, char **argv)
 	underscore->value = ft_strdup(argv[0]);
 	validate_malloc_env(data, underscore->value, underscore);
 	add_env_node(&data->env_list, underscore);
+	data->default_path = ft_strdup(DEFAULT_PATH);
+	validate_malloc(data, data->default_path, NULL);
 	return (0);
 }
 

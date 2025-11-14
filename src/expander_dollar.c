@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_dollar.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 12:43:04 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/13 20:27:11 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/14 11:43:18 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,28 +26,24 @@ int	get_key_value(t_data *data, char *arg, t_metadata *info, int i)
 {
 	char	*tmp;
 
-	free(info->key);
-	free(info->value);
 	if (arg[i + 1] == '?')
 	{
 		info->key = ft_strdup("$?");
 		validate_malloc(data, info->key, NULL);
 		info->value = ft_itoa(data->exit_status);
 		validate_malloc(data, info->value, NULL);
+		return (0);
 	}
+	info->key = get_env_key(arg, i);
+	validate_malloc(data, info->key, NULL);
+	tmp = get_env_value(data->env_list, info->key + 1);
+	if (!tmp && !ft_strcmp(info->key, "$PATH") && data->default_path)
+		info->value = ft_strdup(data->default_path);
+	else if (!tmp)
+		info->value = ft_strdup("");
 	else
-	{
-		info->key = get_env_key(arg, i);
-		validate_malloc(data, info->key, NULL);
-		tmp = get_env_value(data->env_list, info->key + 1);
-		if (!tmp)
-			info->value = ft_strdup("");
-		else
-			info->value = ft_strdup(tmp);
-		validate_malloc(data, info->value, NULL);
-	}
-	info->key_len = ft_strlen(info->key);
-	info->value_len = ft_strlen(info->value);
+		info->value = ft_strdup(tmp);
+	validate_malloc(data, info->value, NULL);
 	return (0);
 }
 
@@ -77,7 +73,11 @@ char	*expand_variable(t_data *data, char *arg, t_metadata *info, int i)
 {
 	char	*new_arg;
 
+	free(info->key);
+	free(info->value);
 	get_key_value(data, arg, info, i);
+	info->key_len = ft_strlen(info->key);
+	info->value_len = ft_strlen(info->value);
 	info->total_len = ft_strlen(arg) - info->key_len + info->value_len;
 	rebuild_expand_map(data, info, i, 1);
 	new_arg = apply_expansion(arg, info, i);

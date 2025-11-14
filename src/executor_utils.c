@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 13:34:32 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 22:11:43 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/14 11:20:16 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,14 @@ char	*get_slash_path(t_data *data, t_stack **stack, char *cmd)
 char	**get_path_split(t_data *data)
 {
 	char	**paths;
+	char	*tmp;
 
 	paths = NULL;
-	if (get_env_value(data->env_list, "PATH"))
-		paths = ft_split(get_env_value(data->env_list, "PATH"), ':');
+	tmp = get_env_value(data->env_list, "PATH");
+	if (!tmp && data->default_path)
+		tmp = data->default_path;
+	if (tmp)
+		paths = ft_split(tmp, ':');
 	return (paths);
 }
 
