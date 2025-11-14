@@ -56,6 +56,9 @@ void	child_redir_out(t_data *data, t_stack **stack,
 
 void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 {
+	int	cmd_i;
+
+	cmd_i = get_first_command(data, stack);
 	dup2((*stack)->pipe[0], STDIN_FILENO);
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		dup2((*stack)->out_fd, STDOUT_FILENO);
@@ -64,13 +67,7 @@ void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 	close((*stack)->pipe[0]);
 	close((*stack)->pipe[1]);
 	if (!redir->next)
-	{
-		undo_duplicate_std(1);
-		close_all_open_redir_ends(data);
-		close_all_pipe_ends(stack);
-		execve(cmd, (*stack)->node->argv, data->env);
-		clean_execve_failure(data, stack);
-	}
+		child_execute(data, stack, cmd);
 }
 
 void	child_no_redir(t_data *data, t_stack **stack, char *cmd)
