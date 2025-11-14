@@ -59,7 +59,14 @@ int	execute_export_check_equal(t_stack **stack, int *cmd_i)
 {
 	while ((*stack)->node->argv[*cmd_i + 1]
 		&& !ft_strchr((*stack)->node->argv[*cmd_i + 1], '='))
+	{
+		if (!is_valid_var_name((*stack)->node->argv[*cmd_i + 1]))
+		{
+			execute_export_invalid_var(stack, *cmd_i, NULL);
+			return (-1);
+		}
 		(*cmd_i)++;
+	}
 	if ((*stack)->node->argv[*cmd_i + 1])
 		return (*cmd_i);
 	else
