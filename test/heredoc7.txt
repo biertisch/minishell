@@ -1,0 +1,5 @@
+cat <<HERE <<DOC
+oi
+HERE
+time
+DOC

@@ -1,13 +1,5 @@
-###
-ls -l
-###
-cat Makefile
-###
-foo
-###
+### QUOTES ###
 /bin/echo "hello world " he"ll"o "'world'" 'hello "world"'
-###
-/bin/echo ""
 ###
 /bin/echo "" hello
 ###
@@ -21,9 +13,32 @@ foo
 ###
 /bin/echo hel"lo"'
 ###
-/bin/echo hello > test/file1
-cat < test/file1
+echo hi"" "" "" ""there
 ###
+""
+###
+echo "a' "
+###
+echo "(a' )"
+###
+ls"-l"
+###
+EOF'A'"'|'"
+###
+echo hello'world'
+###
+echo hello""world
+###
+echo "> >> < * ? [ ] | ; [ ] || && ( ) & # $ \ <<"
+
+### SIMPLE COMMANDS ###
+ls -l
+###
+cat Makefile
+###
+foo
+
+### REDIRECTIONS ###
 /bin/echo "hi" > test/file1
 ls >> test/file1
 cat test/file1
@@ -33,9 +48,6 @@ grep main src/main.c >> test/file1
 cat test/file1 >> test/file2
 cat test/file1
 cat test/file2
-###
-/bin/echo > test/file1 hello
-cat test/file1
 ###
 /bin/echo "" > test/file1 hello
 cat test/file1
@@ -68,6 +80,175 @@ ls >
 ###
 cat <
 ###
+echo hi >">" test/file1
+ls
+rm '>'
+###
+< Makefile
+###
+cmd > |
+###
+hello ||||
+###
+echo HI >    > out
+###
+< file cat
+###
+ls > file1 file2
+rm file1
+###
+ls > file | ls
+cat file
+rm file
+###
+export A="hi there"
+echo $A > out | unset A | echo $A >> out | export A=FUCK | echo $A >> out
+cat out
+rm out
+###
+ls >txt -l
+cat txt
+rm txt
+###
+echo hi >txt banana
+cat txt
+rm txt
+###
+echo hi >"file1" > file2
+cat file1
+cat file2
+rm file1 file2
+###
+grep hi < Makefile
+###
+grep hi "<infile" < Makefile
+###
+echo hi < Makefile bye bye
+###
+grep h < Makefile < src/main
+###
+echo < Makefile "bonjour       42"
+###
+touch "file with spaces"
+cat <"file with spaces"
+rm "file with spaces"
+###
+cat <"1""2""3""4""5"
+###
+echo <Makefile <missing <src/main.c
+###
+echo <missing <src/main.c <missing
+###
+echo <Makefile | cat < src/main.c
+###
+echo <Makefile | cat src/main.c
+###
+echo <Makefile | echo <src/main.c
+###
+echo hi | cat <src/main.c
+###
+cat < src/main | echo hi
+###
+cat <missing
+###
+cat <missing | cat
+###
+cat <missing | echo oi
+###
+cat <missing | cat <Makefile
+###
+echo <123 <456 hi | echo 42
+###
+ls >test/file1 >test/no_permission
+cat test/file1
+cat test/no_permission
+rm test/file1
+###
+ls >test/no_permission >test/file1
+cat test/no_permission
+cat test/file1
+rm test/file1
+###
+echo hi >file | echo bye
+cat file
+rm file
+###
+echo hi | echo >file
+cat file
+rm file
+###
+echo hi >file1 | echo bye >file2
+cat file1
+cat file2
+rm file1 file2
+###
+cat <Makefile >file
+cat file
+rm file
+###
+cat >file <missing
+cat file
+rm file
+###
+cat <missing >file
+cat file
+rm file
+###
+echo hi > file
+ls >>     file
+cat file
+rm file
+###
+ls >file >>file
+cat file
+rm file
+###
+ls >file >>file >file
+cat file
+rm file
+###
+ls >>file1 >>file2
+cat file1
+cat file2
+rm file1 file2
+###
+ls <missing >>test/no_permission >>test/file1
+cat test/file1
+rm test/file1
+ls >>test/no_permission >>test/file1 <missing
+cat test/file1
+rm test/file1
+###
+cat < Makefile|ls
+###
+echo $>?
+rm ?
+###
+cd >> test/file1
+cd -
+cat test/file1
+rm test/file1
+###
+>
+###
+>>
+###
+>>>
+###
+<
+###
+<<
+###
+<<<
+###
+echo hi |    |  < >>
+###
+echo hi |  < >>   |  |
+###
+&
+
+### HEREDOCS ###
+###
 cat test/heredoc1.txt > test/file1
 cat test/file1
 ###
@@ -75,25 +256,32 @@ cat test/heredoc2.txt
 ###
 cat test/heredoc3.txt
 ###
-cat << test/heredoc1.txt &&
+cat test/heredoc9.txt
 ###
-(cat << test/heredoc1.txt)(
+cat test/heredoc10.txt
 ###
-cat << test/heredoc1.txt | |
+cat test/heredoc11.txt
 ###
-cat << test/heredoc1.txt)
+cat test/heredoc12.txt
 ###
-| cat << test/heredoc1.txt
+cat test/heredoc13.txt
 ###
-/bin/echo $USER "$USER" '$USER' hel"l"o$USER $USER'$USER'
+cat test/heredoc4.txt
 ###
-/bin/echo "hello $USER" $USER$USER "$"USER "$US"ER "$""USER"
+cat test/heredoc5.txt
 ###
-/bin/echo $ "$" '$'
+cat test/heredoc6.txt
 ###
-/bin/echo $"hello"
+cat test/heredoc7.txt
 ###
-/bin/echo $?
+cat test/heredoc8.txt
+
+### VARIABLE EXPANSION ###
+/bin/echo $USER "$USER" '$USER' "hello $USER" "$"USER "$US"ER "$""USER"
+###
+/bin/echo $ "$" '$' $"hello"
+###
+/bin/echo $? $?? $       ? $?HELLO
 ###
 /bin/echo "hello $NONE" hello $NONE
 ###
@@ -107,8 +295,6 @@ echo $((1+2))
 ###
 export VAR="ls src"
 $VAR
-###
-export VAR="ls src"
 "$VAR"
 ###
 export VAR="hi"
@@ -123,9 +309,6 @@ $VAR
 ###
 export VAR=~
 echo $VAR
-###
-export VAR="echo bye"
-echo hi"$VAR"
 ###
 export VAR="ho bye"
 ec$VAR
@@ -145,6 +328,20 @@ rm $USER
 /bin/echo $1HOME
 /bin/echo $42HOME
 ###
+echo $SHLVL "$SHLVL" '$SHLVL' "$SH''LVL"
+###
+a=1
+b=2
+echo $a $b
+###
+echo "echo $'NONE'" 'echo $"NONE"'
+###
+cd obj
+echo $PWD $OLDPWD
+cd ..
+###
+
+### WILDCARDS ###
 ls *f
 ###
 ls *f*
@@ -179,11 +376,17 @@ export VAR="hi *file"
 ###
 export VAR=""*ile""
 /bin/echo $VAR
+###
 export VAR="'*ile'"
 /bin/echo $VAR
 ###
-echo hello "wondeful 'person'"
+echo 'bye *' mini* bye
 ###
+"*"
+###
+echo * | awk -v RS=" " '{print}' | sort
+
+### ECHO ###
 echo -n bye
 ###
 echo -nnn hello
@@ -192,6 +395,12 @@ echo -f hello
 ###
 echo -nn -nt hello
 ###
+echo --n World
+###
+echo - "" "  " hello
+###
+
+### CD & PWD ###
 cd
 pwd
 cd -
@@ -206,12 +415,105 @@ pwd
 cd ..
 pwd
 ###
+pwd -f
+###
+cd -f
+###
+cd src include
+###
+cd none
+###
+pwd oi
+###
+cd "some folder"
+###
+cd $PWD
+###
+cd $PWD hi
+###
+cd 123123
+###
+
+## EXPORT, UNSET & ENV ###
 export VAR=42
 export | grep VAR
 unset VAR
 ###
-env | grep PATH
+env hello
 ###
+env -w
+###
+unset -w
+###
+export -l
+###
+export a = b
+###
+export VAR="h   e    l l      o"
+echo $VAR
+unset VAR
+###
+export AAA=
+env | grep AAA
+unset AAA
+###
+export AAA=BBB=CCC
+echo $AAA
+unset AAA
+###
+export VAR@@@
+###
+export VAR=var@@@
+echo $VAR
+unset VAR
+###
+unset HOME
+cd
+###
+touch ls
+ls
+rm ls
+###
+unset USER
+unset PATH
+unset PWD
+ls
+/bin/ls
+###
+export var
+echo $var
+unset var
+###
+export A-
+###
+export HELLO=123 A
+echo $HELLO
+unset HELLO
+###
+export HELLO="123 A-"
+echo $HELLO
+unset HELLO
+###
+export hello world
+echo $hello $world
+env | grep hello
+env | grep world
+###
+export HELLO-=123
+###
+export 123
+###
+unset
+###
+unset NONE
+###
+unset SHELL
+env | grep SHELL
+###
+a==1
+echo $a
+
+### EXIT ###
 exit
 ###
 exit 2
@@ -222,21 +524,22 @@ exit p
 ###
 exit a 1
 ###
-env hello
+exit 298
 ###
-env -w
+exit +100
 ###
-unset -w
+exit "+100"
 ###
-export -l
+exit +"100"
 ###
-pwd -f
+exit 9223372036854775808
 ###
-cd -f
-###
-cd . include
-###
+exit a a
+
+### PIPES ###
 ls | grep minishell
+###
+cat include/minishell.h | grep ");"$
 ###
 ls | wc -l
 ###
@@ -246,7 +549,7 @@ grep -i include src/main.c | sort | uniq
 ###
 cat Makefile | grep SRC | cut -d'=' -f2 | tr ' ' '\n' | wc -l
 ###
-find . -type f | wc -l
+find ~ -type f | wc -l
 ###
 ls | sort | uniq | rev | rev
 ###
@@ -270,6 +573,47 @@ ls | foo
 ###
 a | b | c | d | e | f | g
 ###
+hello | ls
+###
+ls | hello
+###
+echo hiiiiiii > lal | ls | cat lal
+cat lal
+rm lal
+###
+echo hi | ls | grep Makefile | wc -l > out2 | cat out2
+rm out2
+###
+touch aaa
+chmod 000 aaa
+< aaa  wc | echo Hi
+rm -f aaa
+###
+ls | wc | echo > out.txt | wc -l
+cat out.txt
+rm out.txt
+###
+cat    <| ls
+###
+echo hi | >
+###
+echo hi | > >>
+###
+echo hi | < |
+###
+echo hi |   |
+###
+echo hi |  "|"
+###
+ls -l "" "HI'LOL'|" | >> hi echo cat $HOME
+cat hi
+rm hi
+###
+cat file.txt | grep 'error' | wc -l
+###
+|
+
+### LOGICAL OPERATORS & PARENTHESES ###
 ls && cat Makefile
 ###
 cat foo || echo "not found"
@@ -325,4 +669,5 @@ ls ||
 /bin/echo "start" && (ls -l | grep minishell) | /bin/echo end
 ###
 ls -l > test/file1 && (cat < test/file1 || echo fail) | wc -l
-##
+###
+(exit 99) || echo $?

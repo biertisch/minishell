@@ -1,4 +1,4 @@
-# Minishell (beta version)
+# Minishell
 
 ![C](https://img.shields.io/badge/language-C-blue.svg)
 
@@ -10,7 +10,6 @@ A **shell** allows users to interact with the operating system by entering comma
 
 Developed as part of the 42 curriculum, the project strengthens students' understanding of **process control** and **file manipulation** in C, while providing hands-on experience in **systems programming**.
 
->**Note**: Minishell is in **testing phase** - some features may malfunction in specific cases.
 
 ---
 ### Features

@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 14:57:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 20:24:37 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/13 20:43:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	count_quotes(char *arg, int *expand_map)
 	{
 		if (toggle_quote(arg[i], &quote) && !expand_map[i])
 			count++;
+		if (is_dollar_quote(arg + i, quote))
+			count++;
 		i++;
 	}
 	return (count);
@@ -66,7 +68,8 @@ int	copy_without_quotes(char *dest, char *src, t_metadata *info)
 	j = 0;
 	while (src[i])
 	{
-		if (!toggle_quote(src[i], &quote) || info->expand_map[i])
+		if ((!toggle_quote(src[i], &quote) && !is_dollar_quote(src + i, quote))
+			|| info->expand_map[i])
 		{
 			dest[j] = src[i];
 			info->quote_map[j] = is_quote(quote);
@@ -89,4 +92,9 @@ int	has_quotes(char *s)
 		s++;
 	}
 	return (0);
+}
+
+int	is_dollar_quote(char *s, char quote)
+{
+	return (s[0] == '$' && s[1] && is_quote(s[1]) && !quote);
 }

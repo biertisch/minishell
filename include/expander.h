@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 23:21:17 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 20:42:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/13 20:31:07 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int			remove_quotes(t_data *data, char **arg, t_metadata *info);
 int			count_quotes(char *arg, int *expand_map);
 int			copy_without_quotes(char *dest, char *src, t_metadata *info);
 int			has_quotes(char *s);
+int			is_dollar_quote(char *s, char quote);
 
 //expander_rebuild.c
 char		**build_expanded_argv(t_data *data, char **argv, t_metadata **info);

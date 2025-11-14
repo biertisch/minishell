@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/09 11:20:51 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/12 12:05:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/13 21:55:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	handle_incomplete_input(t_data *data)
 	int		res;
 	char	*input;
 
+	input = NULL;
 	if (pipe(pipe_fd))
 		return (system_error(strerror(errno), "pipe"));
 	pid = fork();

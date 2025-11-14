@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 12:31:48 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/07 19:25:06 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/13 22:05:54 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,19 @@ void	heredoc_sigint_handler(int sig)
 	close(STDIN_FILENO);
 }
 
-int	heredoc_sigint_abort(t_data *data, char *line)
+int	heredoc_sigint_abort(t_data *data, char *line, int out_fd)
 {
-	close(data->stack->pipe[1]);
+	close(out_fd);
 	free(line);
 	free_all(data);
 	rl_clear_history();
 	exit(128 + g_sig);
 }
 
-int	heredoc_eof_abort(t_data *data, char *target)
+int	heredoc_eof_abort(t_data *data, char *target, int out_fd)
 {
 	syntax_error(data, SYN_ERR_8, target);
-	close(data->stack->pipe[1]);
+	close(out_fd);
 	free_all(data);
 	rl_clear_history();
 	exit(0);

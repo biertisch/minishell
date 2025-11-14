@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 14:20:08 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/10 14:40:47 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/13 22:06:36 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int	collect_heredoc(t_data *data, t_redir *redir, int out_fd)
 		if (!line)
 		{
 			if (g_sig == SIGINT)
-				return (heredoc_sigint_abort(data, line));
+				return (heredoc_sigint_abort(data, line, out_fd));
 			else
-				return (heredoc_eof_abort(data, redir->file));
+				return (heredoc_eof_abort(data, redir->file, out_fd));
 		}
 		else if (!ft_strcmp(line, redir->file))
 		{
