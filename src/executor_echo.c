@@ -36,7 +36,7 @@ int	is_echo_option(char *opt)
 	int	i;
 
 	i = 1;
-	if (*opt == '-')
+	if (*opt == '-' && ft_strlen(opt) != 1)
 	{
 		while (*(opt + i) == 'n')
 			i++;

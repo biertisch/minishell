@@ -62,7 +62,7 @@ void	check_exit_input(t_data *data, t_stack **stack,
 			if (isatty(STDIN_FILENO))
 				write(STDERR_FILENO, "exit\n", 5);
 			internal_error(INT_ERR_3, "exit", NULL);
-			*exit_code = 1;
+			*exit_code = 1;;
 			undo_duplicate_std(1);
 		}
 	}
@@ -71,7 +71,8 @@ void	check_exit_input(t_data *data, t_stack **stack,
 void	checking_really_hard(t_data *data, t_stack **stack,
 			int cmd_i, int i)
 {
-	if (!ft_isdigit(*((*stack)->node->argv[cmd_i + 1] + i)))
+	if (!ft_isdigit(*((*stack)->node->argv[cmd_i + 1] + i)) 
+		|| best_lloverflow_checker_ever((*stack)->node->argv[cmd_i + 1]))
 	{
 		if (isatty(STDIN_FILENO))
 			write(STDERR_FILENO, "exit\n", 5);
@@ -82,4 +83,12 @@ void	checking_really_hard(t_data *data, t_stack **stack,
 		free_all(data);
 		exit(2);
 	}
+}
+
+int 	best_lloverflow_checker_ever(char *str)
+{
+	return ((*str != '-' && (ft_strlen(str) > 19 
+		|| ft_strcmp(str, "9223372036854775807") > 0))
+     		|| (*str == '-' && (ft_strlen(str) > 20
+		|| ft_strcmp(str + 1, "9223372036854775808") < 0)));
 }

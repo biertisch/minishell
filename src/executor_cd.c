@@ -46,8 +46,7 @@ int	execute_cd_continue(t_data *data, t_stack **stack, char *curr_pwd)
 	else
 		chdir_res = execute_cd_option(data, stack, cmd_i);
 	if (chdir_res)
-		(*stack)->exit_status = cd_fail(data, stack,
-				(*stack)->node->argv[cmd_i + 1]);
+		(*stack)->exit_status = cd_fail(data, stack, cmd_i);
 	else
 	{
 		new_pwd = getcwd(NULL, 0);
@@ -83,7 +82,7 @@ int	execute_cd_option(t_data *data, t_stack **stack, int cmd_i)
 	return (chdir_res);
 }
 
-int	cd_fail(t_data *data, t_stack **stack, char *dir)
+int	cd_fail(t_data *data, t_stack **stack, int cmd_i)
 {
 	if (has_builtin_flag((*stack)->node->argv))
 	{
@@ -92,9 +91,11 @@ int	cd_fail(t_data *data, t_stack **stack, char *dir)
 		print_builtin_usage("cd");
 		return (2);
 	}
-	if (!dir)
-		internal_error(INT_ERR_3, dir, NULL);
+	if (!(*stack)->node->argv[cmd_i + 1])
+		system_error(strerror(errno), "cd");
+	else if ((*stack)->node->argv[cmd_i + 1] && (*stack)->node->argv[cmd_i + 2])
+		internal_error(INT_ERR_3, "cd", NULL);
 	else
-		system_error(strerror(errno), dir);
+		internal_error(INT_ERR_4, "cd", (*stack)->node->argv[cmd_i + 1]);
 	return (1);
 }

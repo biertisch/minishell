@@ -144,15 +144,17 @@ void			pre_print_env_args(t_stack **stack,
 //executor_cd.c
 int				execute_cd(t_data *data, t_stack **stack);
 int				execute_cd_option(t_data *data, t_stack **stack, int cmd_i);
-int				cd_fail(t_data *data, t_stack **stack, char *dir);
+int				cd_fail(t_data *data, t_stack **stack, int cmd_i);
 int				execute_cd_continue(t_data *data, t_stack **stack,
 					char *curr_pwd);
 
 //executor_pwd.c      	
 int				execute_pwd(t_data *data, t_stack **stack);
+void			execute_unset_path(t_data *data, t_stack **stack);
 
 //executor_exit.c       	
 int				execute_exit(t_data *data, t_stack **stack);
+int 				best_lloverflow_checker_ever(char *str);
 void			check_exit_input(t_data *data, t_stack **stack,
 					int *exit_code, int cmd_i);
 void			checking_really_hard(t_data *data, t_stack **stack,

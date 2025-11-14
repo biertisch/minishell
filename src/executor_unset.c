@@ -17,6 +17,7 @@ int	execute_unset(t_data *data, t_stack **stack)
 	t_unset_vars	v;
 	int				exit_status;
 
+	execute_unset_path(data, stack);
 	v.i = get_first_command(data, stack) + 1;
 	exit_status = validate_unset_export(data, stack, v.i - 1, "unset");
 	while (!exit_status && (*stack)->node->argv[v.i])
