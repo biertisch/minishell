@@ -54,3 +54,14 @@ int	execute_export_no_option(t_data *data)
 	}
 	return (0);
 }
+
+int	execute_export_check_equal(t_stack **stack, int *cmd_i)
+{
+	while ((*stack)->node->argv[*cmd_i + 1]
+		&& !ft_strchr((*stack)->node->argv[*cmd_i + 1], '='))
+		(*cmd_i)++;
+	if ((*stack)->node->argv[*cmd_i + 1])
+		return (*cmd_i);
+	else
+		return (-1);
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 17:18:10 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 22:10:57 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/14 11:40:29 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,10 @@ int	execute_export_option(t_data *data, t_stack **stack, int cmd_i)
 	t_env	**env;
 	char	**kv_split;
 
-	while ((*stack)->node->argv[cmd_i + 1])
+	while ((*stack)->node->argv[cmd_i + 1]
+		&& execute_export_check_equal(stack, &cmd_i) + 1)
 	{
-		kv_split = ft_split((*stack)->node->argv[cmd_i + 1], '=');
+		kv_split = split_by_first_equal((*stack)->node->argv[cmd_i + 1]);
 		validate_malloc_execute(data, stack, kv_split, NULL);
 		if (*((*stack)->node->argv[cmd_i + 1]) != '='
 			&& is_valid_var_name(kv_split[0]))

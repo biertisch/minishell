@@ -44,6 +44,8 @@ int	execute_builtin_entered(t_data *data, t_stack **stack)
 
 int	execute_builtin_should_run_child(t_data *data, t_stack **stack, int cmd_i)
 {
+	if (has_failed_redirect((*stack)->node->redir))
+		return (0);
 	if (has_node_type_ancestor(*stack, NODE_PIPE))
 		return (1);
 	if (!has_node_type_ancestor(*stack, NODE_SUBSHELL)

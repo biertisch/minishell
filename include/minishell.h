@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:04:14 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/12 12:09:20 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/14 11:14:56 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@
 
 # define CONTINUE_PROMPT "> "
 # define BUFFER_SIZE 20
+# define DEFAULT_PATH "/usr/local/sbin:/usr/local/bin:\
+/usr/sbin:/usr/bin:/sbin:/bin"
 
 extern volatile sig_atomic_t	g_sig;
 

@@ -72,7 +72,6 @@ all: $(NAME)
 	@printf "$(BLINK)$(CURSIVE)$(GREEN)\t\t\t\t\t\t- Minishell ready :)$(DEF_COLOUR)\n"
 
 $(NAME): $(PRINTF_LIB) $(OBJ)
-	@echo "Linking minishell..."
 	@$(CC) $(CFLAGS) $(OBJ) -L$(PRINTF_DIR) -lftprintf -lreadline -o $(NAME)
 
 $(PRINTF_DIR):
