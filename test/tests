@@ -43,7 +43,7 @@ foo
 ls >> test/file1
 cat test/file1
 ###
-rm test/file1 test/file2
+rm -f test/file1 test/file2
 grep main src/main.c >> test/file1
 cat test/file1 >> test/file2
 cat test/file1
@@ -64,11 +64,11 @@ wc -l < Makefile
 ###
 wc -l < foo
 ###
-rm test/file1
+rm -f test/file1
 /bin/echo -e "4\n2\n1\n3" > test/file1
 sort < test/file1
 ###
-rm test/file1
+rm -f test/file1
 echo hello > test/file2
 cat < Makefile > test/file1 >> test/file2
 ###
@@ -162,12 +162,12 @@ echo <123 <456 hi | echo 42
 ls >test/file1 >test/no_permission
 cat test/file1
 cat test/no_permission
-rm test/file1
+rm -f test/file1
 ###
 ls >test/no_permission >test/file1
 cat test/no_permission
 cat test/file1
-rm test/file1
+rm -f test/file1
 ###
 echo hi >file | echo bye
 cat file
@@ -214,10 +214,10 @@ rm file1 file2
 ###
 ls <missing >>test/no_permission >>test/file1
 cat test/file1
-rm test/file1
+rm -f test/file1
 ls >>test/no_permission >>test/file1 <missing
 cat test/file1
-rm test/file1
+rm -f test/file1
 ###
 cat < Makefile|ls
 ###
@@ -227,7 +227,7 @@ rm ?
 cd >> test/file1
 cd -
 cat test/file1
-rm test/file1
+rm -f test/file1
 ###
 >
 ###
@@ -339,6 +339,8 @@ echo "echo $'NONE'" 'echo $"NONE"'
 cd obj
 echo $PWD $OLDPWD
 cd ..
+###
+echo "'$USER'"'"$USER"'
 ###
 
 ### WILDCARDS ###
@@ -611,7 +613,9 @@ rm hi
 ###
 cat file.txt | grep 'error' | wc -l
 ###
-|
+(echo ola) | cat | cat | cat
+(echo ola) | cat | cat | ls
+(echo ola) | cat | cat | ls | wc -l
 
 ### LOGICAL OPERATORS & PARENTHESES ###
 ls && cat Makefile
@@ -671,3 +675,5 @@ ls ||
 ls -l > test/file1 && (cat < test/file1 || echo fail) | wc -l
 ###
 (exit 99) || echo $?
+###
+((echo ola && adsdsa) || ((echo ola && aedsffds) || echo done))

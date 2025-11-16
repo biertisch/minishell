@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:23:13 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/05 12:40:13 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/16 15:31:09 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,27 @@ int	is_fd(char *input)
 
 int	is_arithmetic_op(char *input)
 {
+	int	open;
+	int	i;
+
 	if (ft_strncmp(input, "((", 2))
 		return (0);
-	input += 2;
-	while (*input && ft_strncmp(input, "))", 2))
-		input++;
-	if (!*input)
-		return (0);
-	return (1);
+	i = 2;
+	open = 2;
+	while (input[i])
+	{
+		if (input[i] == '(')
+			open++;
+		if (input[i] == ')')
+		{
+			if (open == 2 && !ft_strncmp(input + i, "))", 2))
+				return (1);
+			else
+				open--;
+		}
+		if (open < 2)
+			return (0);
+		i++;
+	}
+	return (0);
 }
