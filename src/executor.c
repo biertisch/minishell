@@ -29,11 +29,10 @@ int	execute(t_data *data)
 
 int	execute_stack(t_data *data, t_stack **stack)
 {
-	int			i;
-	static int	tree_nodes_count;
+	int	i;
+	int	tree_nodes_count;
 
-	if (!tree_nodes_count)
-		tree_nodes_count = count_tree_nodes(data->parser_tree);
+	tree_nodes_count = count_tree_nodes(data->parser_tree);
 	i = 0;
 	while (i < tree_nodes_count)
 	{
@@ -50,7 +49,6 @@ int	execute_stack(t_data *data, t_stack **stack)
 		else if ((*stack)->type == NODE_SUBSHELL)
 			i += execute_subshell(data, stack);
 	}
-	pop(stack);
 	return (0);
 }
 
