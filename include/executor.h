@@ -140,6 +140,7 @@ void			print_env_args(t_stack **stack,
 					int exit_status, int cmd_i);
 void			pre_print_env_args(t_stack **stack,
 					int exit_status, int cmd_i);
+void				print_env(t_env *env);
 
 //executor_cd.c
 int				execute_cd(t_data *data, t_stack **stack);
