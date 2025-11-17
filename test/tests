@@ -341,7 +341,6 @@ echo $PWD $OLDPWD
 cd ..
 ###
 echo "'$USER'"'"$USER"'
-###
 
 ### WILDCARDS ###
 ls *f
@@ -400,7 +399,6 @@ echo -nn -nt hello
 echo --n World
 ###
 echo - "" "  " hello
-###
 
 ### CD & PWD ###
 cd
@@ -434,7 +432,6 @@ cd $PWD
 cd $PWD hi
 ###
 cd 123123
-###
 
 ## EXPORT, UNSET & ENV ###
 export VAR=42
@@ -514,6 +511,10 @@ env | grep SHELL
 ###
 a==1
 echo $a
+###
+export a
+export
+env
 
 ### EXIT ###
 exit
