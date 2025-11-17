@@ -56,3 +56,35 @@ int	validate_pipe(int pipe_res, t_stack **stack)
 	system_error(strerror(errno), "pipe");
 	return (1);
 }
+
+int	env_too_long(t_data *data, t_stack **stack)
+{
+	long	count;
+	t_env	*env;
+	long	len;
+
+	env = data->env_list;
+	count = 0;
+	while (env)
+	{
+		len = ft_strlen(env->key) + 2;
+		if (len > MAX_ARG_STRLEN)
+			return (env_not_good_very_bad(stack));
+		count += (len);
+		len = ft_strlen(env->value) + 2;
+		if (len > MAX_ARG_STRLEN)
+			return (env_not_good_very_bad(stack));
+		count += (len);
+		env = env->next;
+	}
+	if (count > ARG_MAX)
+		return (env_not_good_very_bad(stack));
+	return (0);
+}
+
+int	env_not_good_very_bad(t_stack **stack)
+{
+	internal_error(INT_ERR_12, "/usr/bin/env", NULL);
+	(*stack)->exit_status = 126;
+	return (126);
+}
