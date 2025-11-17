@@ -56,9 +56,6 @@ void	child_redir_out(t_data *data, t_stack **stack,
 
 void	child_heredoc(t_data *data, t_stack **stack, char *cmd, t_redir *redir)
 {
-	// int	cmd_i;
-
-	// cmd_i = get_first_command(data, stack);
 	dup2((*stack)->pipe[0], STDIN_FILENO);
 	if ((*stack)->out_fd != STDOUT_FILENO)
 		dup2((*stack)->out_fd, STDOUT_FILENO);

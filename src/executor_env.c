@@ -26,10 +26,8 @@ int	execute_env(t_data *data, t_stack **stack)
 	{
 		if (env->key && ft_strcmp(env->key, "") && env->exported)
 		{
-			write(STDOUT_FILENO, env->key, ft_strlen(env->key));
-			write(STDOUT_FILENO, "=", 1);
-			write(STDOUT_FILENO, env->value, ft_strlen(env->value));
-			write(STDOUT_FILENO, "\n", 1);
+			if (env->value)
+				print_env(env);
 		}
 		env = env->next;
 	}
@@ -37,6 +35,14 @@ int	execute_env(t_data *data, t_stack **stack)
 	executor_cleanup(data, stack, NULL);
 	exit(exit_status);
 	return (1);
+}
+
+void	print_env(t_env *env)
+{
+	write(STDOUT_FILENO, env->key, ft_strlen(env->key));
+	write(STDOUT_FILENO, "=", 1);
+	write(STDOUT_FILENO, env->value, ft_strlen(env->value));
+	write(STDOUT_FILENO, "\n", 1);
 }
 
 void	pre_print_env_args(t_stack **stack,

@@ -30,8 +30,8 @@ int	execute_pwd(t_data *data, t_stack **stack)
 	pwd = get_env_value(data->env_list, "PWD");
 	if (!exit_status)
 	{
-		write((*stack)->out_fd, pwd, ft_strlen(pwd));
-		write((*stack)->out_fd, "\n", 1);
+		write(STDOUT_FILENO, pwd, ft_strlen(pwd));
+		write(STDOUT_FILENO, "\n", 1);
 	}
 	executor_cleanup(data, stack, NULL);
 	exit(exit_status);

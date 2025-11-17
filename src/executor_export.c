@@ -39,8 +39,7 @@ int	execute_export_option(t_data *data, t_stack **stack, int cmd_i)
 	t_env	**env;
 	char	**kv_split;
 
-	while ((*stack)->node->argv[cmd_i + 1]
-		&& execute_export_check_equal(stack, &cmd_i) + 1)
+	while ((*stack)->node->argv[cmd_i + 1])
 	{
 		kv_split = split_by_first_equal((*stack)->node->argv[cmd_i + 1]);
 		validate_malloc_execute(data, stack, kv_split, NULL);
