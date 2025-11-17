@@ -18,20 +18,24 @@ int	execute_env(t_data *data, t_stack **stack)
 	int		exit_status;
 	int		cmd_i;
 
-	cmd_i = get_first_command(data, stack);
-	exit_status = is_env_option(stack, cmd_i);
-	pre_print_env_args(stack, exit_status, cmd_i);
-	env = data->env_list;
-	while (!exit_status && env)
+	exit_status = env_too_long(data, stack);
+	if (!exit_status)
 	{
-		if (env->key && ft_strcmp(env->key, "") && env->exported)
+		cmd_i = get_first_command(data, stack);
+		exit_status = is_env_option(stack, cmd_i);
+		pre_print_env_args(stack, exit_status, cmd_i);
+		env = data->env_list;
+		while (!exit_status && env)
 		{
-			if (env->value)
-				print_env(env);
+			if (env->key && ft_strcmp(env->key, "") && env->exported)
+			{
+				if (env->value)
+					print_env(env);
+			}
+			env = env->next;
 		}
-		env = env->next;
+		print_env_args(stack, exit_status, cmd_i);
 	}
-	print_env_args(stack, exit_status, cmd_i);
 	executor_cleanup(data, stack, NULL);
 	exit(exit_status);
 	return (1);
