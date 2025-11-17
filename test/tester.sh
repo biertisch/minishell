@@ -85,7 +85,13 @@ for f in "$TEST_DIR"/test_block_*.sh; do
     mini_status=$(cat "$test_dir/mini.status")
 
     stdout_diff=$(diff -q "$test_dir/bash.out" "$test_dir/mini.out")
-    stderr_diff=$(diff -q "$test_dir/bash.err" "$test_dir/mini.err")
+
+	# Normalize Bash stderr in-place: remove "script_name: line N: " prefix
+	sed -i -E 's|^[^:]+: line [0-9]+: ||' "$test_dir/bash.err"
+	# Normalize minishell stderr in-place: remove "minishell: " prefix
+	sed -i -E 's|^minishell: ||' "$test_dir/mini.err"
+	stderr_diff=$(diff -q "$test_dir/bash.err" "$test_dir/mini.err")
+
 
     # --- Memory analysis ---
     valgrind_errors=0

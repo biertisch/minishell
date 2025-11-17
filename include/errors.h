@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 12:29:00 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/13 15:22:28 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/16 15:36:01 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 # define SYN_ERR_0 "syntax error: missing matching"
 # define SYN_ERR_1 "command separator ';' not supported"
-# define SYN_ERR_2 "arithmetic operations not supported"
+# define SYN_ERR_2 "arithmetic evaluation not supported"
 # define SYN_ERR_3 "arithmetic expansion not supported"
 # define SYN_ERR_4 "command substitution not supported"
 # define SYN_ERR_5 "syntax error near unexpected token"
@@ -27,6 +27,7 @@
 # define SYN_ERR_7 "syntax error: unexpected end of file"
 # define SYN_ERR_8 "warning: here-document delimited by \
 end-of-file (wanted"
+# define SYN_ERR_9 "parameter expansion not supported"
 
 # define INT_ERR_0 "invalid environment variable"
 # define INT_ERR_1 "ambiguous redirect"
@@ -64,7 +65,7 @@ void	validate_malloc_wildcard(t_data *data, void *ptr, t_list *node);
 
 //error_parser.c
 int		missing_quote(t_data *data, char quote);
-int		check_unsupported_syntax(t_data *data, char *input);
+int		check_unsupported_syntax(t_data *data, char *input, char quote);
 void	validate_malloc_parser(t_data *data, void *ptr, t_tree *left,
 			t_tree *right);
 

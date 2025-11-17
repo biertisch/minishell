@@ -6,7 +6,7 @@
 /*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 10:38:18 by beatde-a          #+#    #+#             */
-/*   Updated: 2025/11/06 18:36:30 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/16 15:43:03 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int	expand_dollar(t_data *data, char **arg, t_metadata *info)
 		{
 			*arg = expand_variable(data, *arg, info, i);
 			i = -1;
+			quote = 0;
 		}
 		i++;
 	}
