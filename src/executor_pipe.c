@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: beatde-a <beatde-a@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: beatde-a <beatde-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 10:50:31 by pedde-so          #+#    #+#             */
-/*   Updated: 2025/10/29 22:11:15 by beatde-a         ###   ########.fr       */
+/*   Updated: 2025/11/17 13:52:04 by beatde-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	execute_pipe_launch_right(t_stack **stack)
 
 int	execute_pipe_wait(t_stack **stack)
 {
-	int		status;
+	int	status;
 
 	status = 0;
 	if (!get_next_pipe_in_subshell(stack))
@@ -94,7 +94,12 @@ int	execute_pipe_wait(t_stack **stack)
 			(*stack)->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 			(*stack)->exit_status = WTERMSIG(status) + 128;
-		handle_child_exit(status);
+		if (WIFSIGNALED(status))
+		{
+			g_sig = WTERMSIG(status);
+			if (g_sig == SIGQUIT)
+				write(STDERR_FILENO, "Quit (core dumped)\n", 20);
+		}
 	}
 	(*stack)->phase = DONE;
 	return (0);
