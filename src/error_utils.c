@@ -14,7 +14,7 @@
 
 void	append_prefix(char *msg, char *label)
 {
-	if (!label)
+	if (!label || ft_strlen(label) > MAX_ARG_STRLEN)
 		return ;
 	ft_strlcat(msg, label, ERR_BUFFER_SIZE);
 	ft_strlcat(msg, ": ", ERR_BUFFER_SIZE);
@@ -22,7 +22,7 @@ void	append_prefix(char *msg, char *label)
 
 void	append_postfix(char *msg, char *label)
 {
-	if (!label)
+	if (!label || ft_strlen(label) > MAX_ARG_STRLEN)
 		return ;
 	ft_strlcat(msg, " ", ERR_BUFFER_SIZE);
 	if (!is_quote(label[0]) || !label[1])

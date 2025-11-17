@@ -41,6 +41,8 @@
 # include "parser.h"
 # include "signals.h"
 
+# define ARG_MAX 2097152
+# define MAX_ARG_STRLEN 131072
 # define CONTINUE_PROMPT "> "
 # define BUFFER_SIZE 20
 # define DEFAULT_PATH "/usr/local/sbin:/usr/local/bin:\

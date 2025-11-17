@@ -42,6 +42,7 @@ cannot access parent directories: No such file or directory"
 # define INT_ERR_9 "unrecognized option"
 # define INT_ERR_10 "not a valid identifier"
 # define INT_ERR_11 "Is a directory"
+# define INT_ERR_12 "Argument list too long"
 
 //error.c
 int		syntax_error(t_data *data, char *desc, char *token);
@@ -55,6 +56,8 @@ void	validate_malloc_execute(t_data *data, t_stack **stack, void *ptr,
 			void *to_free);
 int		validate_fork(t_data *data, t_stack **stack);
 int		validate_pipe(int pipe_res, t_stack **stack);
+int		env_not_good_very_bad(t_stack **stack);
+int		env_too_long(t_data *data, t_stack **stack);
 
 //error_expander.c
 int		handle_malloc_failure_expansion(t_data *data, char **argv,
