@@ -99,7 +99,7 @@ char	*cmd_not_found(t_data *data, t_stack **stack,
 			char **paths, char *slash_path)
 {
 	check_err_output(data, stack, paths, slash_path);
-	if (paths)
+	if (paths || !ft_strcmp(slash_path, "/"))
 		internal_error(INT_ERR_6,
 			(*stack)->node->argv[get_first_command(data, stack)], NULL);
 	else
